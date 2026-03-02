@@ -1,4 +1,3 @@
---- mit_ai | I checked out one of the biggest anti-AI protests ever | score=92.40 ---
 Pull the plug! Pull the plug! Stop the slop! Stop the slop!
 For a few hours this Saturday, February 28, I watched as a couple hundred anti-AI protesters marched through London’s King’s Cross tech hub, home to the UK headquarters of OpenAI, Meta and Google DeepMind, chanting slogans and waving signs. The march was organized by a coalition of two separate activist groups, Pause AI and Pull the Plug, who billed it as the largest protest of its kind yet.
 The range of concerns on show covered everything from online slop and abusive images to killer robots and human extinction. One woman wore a large homemade billboard on her head that read “WHO WILL BE WHOSE TOOL?” (with the Os in “TOOL” cut out as eye holes). There were signs that said “Pause before there’s cause” and “EXTINCTION=BAD” and “Demis the Menace” (referring to Demis Hassabis, the CEO of Google DeepMind). Another simply stated: “Stop using AI.”
@@ -22,4 +21,3 @@ He thought the concerns around AI were hard for anyone to fully oppose. It’s n
 After winding its way through King’s Cross, the march ended in a church hall in Bloomsbury, where tables and chairs had been set up in rows. The protestors wrote their names on stickers, stuck them to their chests and made awkward introductions to their neighbors. They were here to figure out how to save the world. But I had a train to catch and I left them to it. I checked out London’s biggest anti-AI protest march
 
 KAYNAK : https://www.technologyreview.com/2026/03/02/1133814/i-checked-out-londons-biggest-ever-anti-ai-protest/
-

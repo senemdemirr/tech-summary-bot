@@ -1,0 +1,32 @@
+<div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
+  <h1>GraphRAG: CPU-Tabanlı Çoklu Adım Soru Yanıtlamada Yenilikçi Yaklaşım</h1>
+  <p>GraphRAG sistemleri, çoklu adımda bilgi getirme süreçlerini yapılandırarak geliştirir. Ancak, birçok yaklaşım pahalı LLM tabanlı grafik yapımı ve GPU ağırlıklı çıkarım gerektirir. Bu çalışmada, SPRIG (Seeded Propagation for Retrieval In Graphs) adı verilen, sadece CPU kullanan, doğrusal zamanlı, token gerektirmeyen bir GraphRAG hattı sunulmaktadır. Bu sistem, LLM grafik yapımını hafif NER tabanlı eş-oluşum grafikleri ile değiştirir ve bilgi getirme için Kişiselleştirilmiş PageRank (PPR) kullanır.</p>
+  <p>HotpotQA ve 2WikiMultiHopQA veri setleri üzerinde BM25, yoğun getirme, karşılıklı sıralama füzyonu (RRF) ve bir TF–IDF PPR temel çizgisi ile değerlendirilen sistem, bilgi getirme kalitesi ve sistem verimliliğine odaklanır. Hafif takma ad çözümleme ve merkez budama, sorgu süresini %16–28 oranında azaltırken Recall@10 üzerinde ihmal edilebilir değişiklikler sağlar.</p>
+  
+  <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
+  <p>Bu çalışma, GraphRAG sistemlerini daha erişilebilir hale getirmeyi amaçlamaktadır. LLM tabanlı grafik yapımı ve GPU gereksinimlerinden kaçınarak, düşük maliyetli ve CPU tabanlı bir çözüm sunar. Bu, akademik ve düşük kaynaklı ortamlarda yaygın olarak benimsenemeyen mevcut sistemlerin yerine daha uygun bir alternatif sunar. Ayrıca, bu yaklaşım, bilgi getirme kalitesi ile hesaplama maliyeti arasındaki somut dengeyi ortaya koyar.</p>
+  
+  <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
+  <p>SPRIG, hafif bir varlık-belge eş-oluşum grafiği ve seyrek Kişiselleştirilmiş PageRank (PPR) kullanır. Bu yapı, doğrusal inşa, seyrek hesaplama ve pratik tekrarlanabilirlik üzerine odaklanır. Grafik yapımı, hafif NER (SpaCy veya regex) kullanılarak gerçekleştirilir ve sorgu varlıklarından veya yoğun getirme sonuçlarından tohumlanan PPR uygulanır.</p>
+  <p>Grafik yapımında, varlık-belge iki parçalı bir grafik oluşturulur. Her belge geçişi için, hafif NER kullanılarak varlıklar çıkarılır. Ayrıca, başlık-takma ad çözümleme ve merkez budama gibi hafif grafik iyileştirmeleri de uygulanır.</p>
+  
+  <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
+  <p>Bu çalışma, akademik ve endüstriyel ekipler için önemli bir dağıtım darboğazını ele alır. LLM tabanlı grafik yapımı ve GPU tabanlı grafik çıkarımı, birçok ekip için maliyetli ve erişilemezdir. CPU tabanlı, tamamen tekrarlanabilir bir temel sunarak, gelecekteki çalışmalar için verimli GraphRAG ve yeşil AI üzerine bir referans noktası sağlar.</p>
+  
+  <h2>Kısa Özet</h2>
+  <ul>
+    <li>SPRIG, CPU tabanlı, doğrusal zamanlı, token gerektirmeyen bir GraphRAG hattıdır.</li>
+    <li>Hafif NER tabanlı eş-oluşum grafikleri ve Kişiselleştirilmiş PageRank (PPR) kullanılır.</li>
+    <li>Hafif takma ad çözümleme ve merkez budama, sorgu süresini %16–28 oranında azaltır.</li>
+    <li>GraphRAG sistemlerinin daha erişilebilir hale getirilmesi hedeflenmektedir.</li>
+    <li>Akademik ve endüstriyel ekipler için maliyet ve donanım gereksinimlerini azaltır.</li>
+  </ul>
+  
+  <p>Metin, şu konularda detay vermiyor: eğitmenler ve bakış açısı, sınırlamalar ve belirsizlikler.</p>
+  
+  <h2>Kapanış</h2>
+  <p>Bu çalışma, LLM tabanlı grafik yapımından kaçınarak çoklu adım bilgi getirme kalitesini artıran bir CPU tabanlı, doğrusal zamanlı GraphRAG hattı sunmaktadır. Sonuçlar ve ablation çalışmaları, basit eş-oluşum grafikleri ve PPR'nin GraphRAG'i demokratikleştirme yolunda pratik ve tekrarlanabilir bir yol sunduğunu göstermektedir.</p>
+  
+  <h2>Kaynak</h2>
+  <p>Detaylı okumak için: <a href="https://arxiv.org/abs/2602.23372" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2602.23372</a></p>
+</div>
