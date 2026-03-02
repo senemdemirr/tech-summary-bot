@@ -1,4 +1,4 @@
---- java | Java 26 for DevOps | score=90.75 ---
+--- java | Java 26 for DevOps | score=89.09 ---
 With every release of Java comes updates to the underlying runtime, and how JVM applications can be administered and observed. In this article we will review changes to this area that are coming Java 26, which is scheduled for release on March 17th.
 Ahead-of-Time Computation for ZGC Users
 JEP 516

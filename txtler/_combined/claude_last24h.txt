@@ -1,4 +1,4 @@
---- claude | Elevated errors on claude.ai, console, and claude code | score=74.23 ---
+--- claude | Elevated errors on claude.ai, console, and claude code | score=72.57 ---
 Mar
 2
 ,
@@ -58,7 +58,7 @@ Investigating
 
 KAYNAK : https://status.claude.com/incidents/0ghc53zpsfmt
 
---- claude | Elevated errors on Claude Opus 4.6 | score=63.09 ---
+--- claude | Elevated errors on Claude Opus 4.6 | score=61.43 ---
 Mar
 2
 ,
@@ -96,4 +96,10 @@ Investigating
 - We are currently investigating this issue.
 
 KAYNAK : https://status.claude.com/incidents/5zg05jnrqmzg
+
+--- claude | Elevated errors on Claude Opus 4.6 | score=61.15 ---
+Subscribe to updates for Elevated errors on Claude Opus 4.6 via email and/or text message. You'll receive email notifications when incidents are updated, and text message notifications whenever Claude creates or resolves an incident.
+To receive SMS updates, please verify your number. To proceed with just email click ‘Subscribe’
+
+KAYNAK : https://status.claude.com/incidents/0j8dkb38jymf
 

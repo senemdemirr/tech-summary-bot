@@ -1,34 +1,37 @@
 <div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
   <h1>Java 26: Yenilikler ve Güncellemeler</h1>
-  <p>Java'nın her yeni sürümü, çalışma zamanı ve Java Sanal Makinesi (JVM) uygulamalarının yönetimi ve gözlemlenmesiyle ilgili güncellemeler getirir. Bu makalede, 17 Mart'ta piyasaya sürülmesi planlanan Java 26 ile bu alanda gelen değişiklikleri inceleyeceğiz.</p>
-  <p>Java 26, özellikle Z Garbage Collector (ZGC) ve G1 Garbage Collector gibi çöp toplayıcılarıyla ilgili önemli yenilikler sunuyor. Ayrıca, JVM bayrakları ve JMX API'si gibi diğer alanlarda da değişiklikler mevcut.</p>
-  
+  <p>Java'nın her yeni sürümü, altta yatan çalışma zamanı ve JVM uygulamalarının yönetimi ve gözlemlenmesi konularında güncellemeler getirir. Bu makalede, Java 26 ile gelen değişiklikleri inceleyeceğiz. Java 26'nın 17 Mart'ta piyasaya sürülmesi planlanıyor.</p>
+  <p>Java 26, özellikle çöp toplayıcılar ve JVM bayrakları üzerinde önemli yenilikler sunuyor. Bu yenilikler, uygulama performansını artırmayı ve kaynak kullanımını optimize etmeyi hedefliyor.</p>
+
   <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
-  <p>Java 26, performansı artırmak ve kaynak yönetimini iyileştirmek için bir dizi yenilik getiriyor. Özellikle çöp toplama süreçlerinde yapılan iyileştirmeler, uygulamaların daha verimli çalışmasına olanak tanıyor. Bu değişiklikler, hem geliştiriciler hem de sistem yöneticileri için önemli avantajlar sunuyor.</p>
-  
+  <p>Java 26, çöp toplayıcılar ve JVM bayrakları üzerinde önemli iyileştirmeler sunarak, uygulama performansını artırmayı ve kaynak kullanımını optimize etmeyi hedefliyor. Bu güncellemeler, özellikle büyük veri işleme ve yüksek performans gerektiren uygulamalar için kritik önem taşıyor.</p>
+
   <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
-  <p>Ahead-of-Time (AOT) Object Caching, ZGC kullanıcılarına sunuluyor. Bu özellik, uygulamaların başlangıç ve ısınma sürelerini iyileştiriyor. G1 Garbage Collector, senkronizasyon sıklığını azaltarak ve yeni bir kart tablosu ekleyerek verimliliği artırıyor. Bu değişiklikler, uygulama iplikleriyle senkronizasyonu azaltarak %5-15 arasında bir performans artışı sağlıyor.</p>
-  <p>G1 ayrıca, büyük nesneleri daha hızlı geri kazanarak bellek kullanımını optimize ediyor. G1'in çöp toplama yükü belirli bir eşiği aştığında, OutOfMemoryException atarak sistemin kararlılığını artırıyor.</p>
-  <p>JVM bayraklarında da önemli değişiklikler var. Örneğin, InitialRAMPercentage varsayılan değeri kaldırıldı ve bazı bayraklar kaldırılmak üzere işaretlendi. JMX API'si, çöp toplayıcı CPU kullanımını izlemek için yeni yöntemler ekledi.</p>
-  
+  <ul>
+    <li><strong>Ahead-of-Time (AOT) Hesaplama:</strong> Z Garbage Collector (ZGC) kullanıcıları için AOT Nesne Önbellekleme, uygulamaların başlangıç ve ısınma performansını artırır.</li>
+    <li><strong>G1 Çöp Toplayıcı Güncellemeleri:</strong> G1 çöp toplayıcısının senkronizasyon sıklığını azaltarak verimlilik artırıldı. Bu değişiklik, yazma engellerini 50 talimattan 12 talimata düşürdü.</li>
+    <li><strong>JVM Bayrak Güncellemeleri:</strong> InitialRAMPercentage varsayılan değeri kaldırıldı ve MaxRAM gibi bayraklar kullanım dışı bırakıldı.</li>
+    <li><strong>JMX Güncellemeleri:</strong> Yeni bir yöntem olan getTotalGcCpuTime() eklendi ve JMXServiceURL sınıfı için protokol gereksinimi güncellendi.</li>
+    <li><strong>Diğer Değişiklikler:</strong> C2 JIT derleyici desteği ve Serial GC Eden alanı gibi çeşitli iyileştirmeler yapıldı.</li>
+  </ul>
+
   <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
-  <p>Bu güncellemeler, Java geliştiricileri ve sistem yöneticileri için performans iyileştirmeleri ve kaynak yönetimi açısından önemli fırsatlar sunuyor. Özellikle büyük ölçekli uygulamalar ve bellek yönetimi üzerinde çalışanlar, bu değişikliklerden doğrudan etkilenecek.</p>
-  <p>Ayrıca, Java 26'nın sunduğu yenilikler, uygulama performansını artırmak ve kaynak kullanımını optimize etmek isteyenler için yeni olanaklar sunuyor.</p>
-  
+  <p>Java 26, özellikle büyük veri işleme ve yüksek performans gerektiren uygulamalar geliştiren yazılım mühendisleri için önemli avantajlar sunuyor. Çöp toplayıcı güncellemeleri, uygulama performansını artırarak daha verimli kaynak kullanımı sağlıyor. Ayrıca, JVM bayraklarındaki değişiklikler, daha esnek ve optimize edilmiş bellek yönetimi sunarak geliştiricilere daha fazla kontrol sağlıyor.</p>
+
   <h2>Kısa Özet</h2>
   <ul>
-    <li>ZGC kullanıcıları için Ahead-of-Time Object Caching özelliği sunuluyor.</li>
-    <li>G1 Garbage Collector, senkronizasyonu azaltarak verimliliği artırıyor.</li>
-    <li>JVM bayraklarında önemli değişiklikler ve bazı bayraklar kaldırılmak üzere işaretlendi.</li>
-    <li>JMX API'si, çöp toplayıcı CPU kullanımını izlemek için yeni yöntemler ekledi.</li>
-    <li>Java 26, performans ve kaynak yönetimi açısından önemli yenilikler sunuyor.</li>
+    <li>Java 26, ZGC kullanıcıları için AOT Nesne Önbellekleme sunar.</li>
+    <li>G1 çöp toplayıcısı, senkronizasyon sıklığını azaltarak verimliliği artırır.</li>
+    <li>JVM bayraklarında önemli değişiklikler ve güncellemeler yapılmıştır.</li>
+    <li>JMX API'sinde yeni yöntemler ve güncellemeler mevcuttur.</li>
+    <li>Çeşitli performans iyileştirmeleri ve hata düzeltmeleri içerir.</li>
   </ul>
-  
-  <p>Metin, eğitmenler ve bakış açıları gibi konularda detay vermiyor.</p>
-  
+
+  <p>Metin, şu konularda detay vermiyor: Eğitmenler ve bakış açısı, sınırlamalar ve belirsizlikler.</p>
+
   <h2>Kapanış</h2>
-  <p>Java 26, birçok yenilik ve iyileştirme ile geliyor. Bu değişiklikler, Java uygulamalarının daha verimli ve etkili bir şekilde çalışmasına olanak tanıyor. JavaOne etkinliğinde bu yenilikleri daha yakından keşfetme fırsatını kaçırmayın.</p>
-  
+  <p>Java 26, çöp toplayıcılar ve JVM bayrakları üzerinde önemli yenilikler sunarak, uygulama performansını artırmayı ve kaynak kullanımını optimize etmeyi hedefliyor. Bu güncellemeler, özellikle büyük veri işleme ve yüksek performans gerektiren uygulamalar için kritik önem taşıyor.</p>
+
   <h2>Kaynak</h2>
   <p>Detaylı okumak için: <a href="https://inside.java/2026/03/02/jdk-26-rn-ops/" target="_blank" rel="noopener noreferrer">https://inside.java/2026/03/02/jdk-26-rn-ops/</a></p>
 </div>
