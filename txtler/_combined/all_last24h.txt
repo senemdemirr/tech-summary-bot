@@ -1,4 +1,74 @@
---- arxiv_ai | The Compulsory Imaginary: AGI and Corporate Authority | score=93.39 ---
+--- mit_ai | OpenAI’s “compromise” with the Pentagon is what Anthropic feared | score=94.88 ---
+On February 28, OpenAI announced it had reached a deal that will allow the US military to use its technologies in classified settings. CEO Sam Altman said the negotiations, which the company began pursuing only
+after
+the Pentagon’s public reprimand of Anthropic, were “
+definitely rushed
+.”
+In its announcements, OpenAI took great pains to say that it had not caved to allow the Pentagon to do whatever it wanted with its technology. The company published a
+blog post
+explaining that its agreement protected against use for autonomous weapons and mass domestic surveillance, and Altman
+said
+the company did not simply accept the same terms that Anthropic refused.
+You could read this to say that OpenAI won both the contract and the moral high ground, but reading between the lines and the legalese makes something else clear: Anthropic pursued a moral approach that won it many supporters but failed, while OpenAI pursued a pragmatic and legal approach that is ultimately softer on the Pentagon.
+It’s not yet clear if OpenAI can build in the safety precautions it promises as the military rushes out a politicized AI strategy during strikes on Iran, or if the deal will be seen as good enough by employees who wanted the company to take a harder line. Walking that tightrope will be tricky. (OpenAI did not immediately respond to requests for additional information about its agreement.)
+But the devil is also in the details. The reason OpenAI was able to make a deal when Anthropic could not was less about boundaries, Altman said, but about approach. “Anthropic seemed more focused on specific prohibitions in the contract, rather than citing applicable laws, which we felt comfortable with,” he
+wrote
+.
+OpenAI says one
+basis
+for its willingness to work with the Pentagon is simply an assumption that the government won’t break the law. The company, which has shared a
+limited excerpt
+of its contract, cites a number of laws and policies related to autonomous weapons and surveillance. They are as specific as a 2023
+directive
+from the Pentagon on autonomous weapons (which does not prohibit them but issues guidelines for their design and testing) and as broad as the Fourth Amendment, which has supported protections for Americans against mass surveillance.
+However, the published excerpt “does not give OpenAI an Anthropic-style, free-standing right to prohibit otherwise-lawful government use,”
+wrote
+Jessica Tillipman, associate dean for government procurement law studies at George Washington University’s law school. It simply states that the Pentagon can’t use OpenAI’s tech to break any of those laws and policies as they’re stated today.
+The whole reason Anthropic earned so many supporters in its fight—including some of OpenAI’s
+own employees
+—is that they don’t believe these rules are good enough to prevent the creation of AI-enabled autonomous weapons or mass surveillance. And an assumption that federal agencies won’t break the law is little assurance to anyone who remembers that the surveillance practices exposed by Edward Snowden had been deemed legal by internal agencies and were ruled unlawful only after drawn-out battles (not to mention the many surveillance tactics
+allowed under current law
+that AI could expand). On this front, we’ve essentially ended up back where we started: allowing the Pentagon to use its AI for any lawful use.
+OpenAI could say, as its head of national security partnerships
+wrote
+yesterday, that if you believe the government won’t follow the law, then you should also not be confident it would honor the red lines that Anthropic was proposing. But that’s not an argument against setting them. Imperfect enforcement doesn’t make constraints meaningless, and contract terms still shape behavior, oversight, and political consequences.
+OpenAI claims a second line of defense. The company says it maintains control over the safety rules governing its models and will not give the military a version of its AI stripped of those safety controls. “We can embed our red lines—no mass surveillance and no directing weapons systems without human involvement—directly into model behavior,”
+wrote
+Boaz Barak, an OpenAI employee Altman deputized to speak on the issue about X.
+But the company doesn’t specify how its safety rules for the military differ from its rules for normal users. Enforcement is also never perfect, and it is especially unlikely to be when OpenAI is rolling out these protections in a classified setting for the first time and is expected to do so in just six months.
+There’s another question beneath all this: Should it be down to tech companies to prohibit things that are legal but that they find morally objectionable? The government certainly viewed Anthropic’s willingness to play this role as
+unacceptable
+. On Friday evening, eight hours before the US launched strikes in Tehran, Defense Secretary Pete Hegseth issued harsh remarks on X. “Anthropic delivered a master class in arrogance and betrayal,” he wrote, and echoed President Trump’s order for the government to cease working with the AI company after Anthropic sought to keep its model Claude from being used for autonomous weapons or mass domestic surveillance. “The Department of War must have full, unrestricted access to Anthropic’s models for every LAWFUL purpose,” Hegseth wrote.
+But unless OpenAI’s full contract will reveal more, it’s hard not to see the company as sitting on an ideological seesaw, promising that it
+does
+have leverage it will proudly use to do what it sees as the right thing while deferring to the law as the main backstop for what the Pentagon can do with its tech.
+There are three things to be watching here. One is whether this position will be good enough for OpenAI’s most critical employees. With AI companies spending so heavily on talent, it’s possible that some at OpenAI see in Altman’s justification an unforgivable compromise.
+Second, there is the scorched-earth campaign that Hegseth has promised to wage against Anthropic. Going far beyond simply canceling the government’s contract with the company, he announced that it would be classified as a supply chain risk, and that “no contractor, supplier, or partner that does business with the United States military may conduct any commercial activity with Anthropic.” There is significant debate about whether this death blow is
+legally possible
+, and Anthropic has
+said
+it will sue if the threat is pursued. OpenAI has also come out
+against
+the move.
+Lastly, how will the Pentagon swap out Claude—the only AI model it actively uses in classified operations,
+including
+some in Venezuela—while it
+escalates
+strikes against Iran? Hegseth granted the agency six months to do so, during which the military will phase in OpenAI’s models as well as those from Elon Musk’s
+xAI
+.
+But Claude was reportedly
+used
+in the strikes on Iran hours after the ban was issued, suggesting that a phase-out will be anything but simple. Even if the months-long feud between Anthropic and the Pentagon is over (which I doubt it is), we are now seeing the Pentagon’s AI
+acceleration plan
+put pressure on companies to relinquish lines in the sand they had
+once drawn
+, with new tensions in the Middle East as the primary testing ground.
+If you have information to share about how this is unfolding, reach out to me via Signal (username: jamesodonnell.22).
+
+KAYNAK : https://www.technologyreview.com/2026/03/02/1133850/openais-compromise-with-the-pentagon-is-what-anthropic-feared/
+
+--- arxiv_ai | The Compulsory Imaginary: AGI and Corporate Authority | score=92.16 ---
 The Compulsory Imaginary: AGI and Corporate Authority
 Abstract
 The development of artificial general intelligence (AGI) is as much an imaginative project as a technical one. This paper argues that the two leading AGI firms—OpenAI and Anthropic—construct sociotechnical imaginaries through a structurally consistent rhetorical strategy, despite meaningful differences in execution. Drawing on Jasanoff and Kim (2015)’s framework of sociotechnical imaginaries, the sociology of expectations (Borup et al., 2006), and the concept of the vanguard vision (Hilgartner et al., 2015), the paper analyzes two essays published within weeks of each other in late 2024: Sam Altman’s The Intelligence Age and Dario Amodei’s Machines of Loving Grace. A close comparative reading identifies four rhetorical operations shared across both texts: the self-exemption move, which disavows prophetic authority while exercising it; teleological naturalization, which embeds AGI’s arrival in narratives of historical and moral inevitability; qualified acknowledgment, which absorbs genuine concessions to risk into an overarching optimistic frame; and implicit indispensability, which positions each firm as central to the imagined future without naming it as a commercial actor. That two competing institutions with different cultures, different risk philosophies, and leaders with notably different public personae nevertheless converge on the same underlying rhetorical architecture—despite strong competitive incentives to differentiate their public visions—suggests the imaginary is not only a firm-level communication strategy but also a feature of the institutional position these firms occupy. The paper makes three contributions: it extends the sociotechnical imaginaries framework from nation-states to private firms at the frontier of transformative technology development; it identifies the specific discursive mechanism through which corporate authority over technological futures is projected and oriented toward stabilization; and it demonstrates through comparative analysis that this mechanism is at minimum structural rather than purely idiosyncratic. The findings raise the question of what institutional arrangements would be required to make that authority contestable from outside the firms that produce it.
@@ -125,7 +195,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2602.23679
 
---- arxiv_ai | A Reduction of Input/Output Logics to SAT | score=93.39 ---
+--- arxiv_ai | A Reduction of Input/Output Logics to SAT | score=92.16 ---
 A Reduction of Input/Output Logics to SAT
 Abstract
 Deontic logics are formalisms for reasoning over norms, obligations, permissions and prohibitions. Input/Output (I/O) Logics are a particular family of so-called norm-based deontic logics that formalize conditional norms outside of the underlying object logic language, where conditional norms do not carry a truth-value themselves. In this paper, an automation approach for I/O logics is presented that makes use of suitable reductions to (sequences of) propositional satisfiability problems. A prototypical implementation, named rio (reasoner for input/output logics), of the proposed procedures is presented and applied to illustrative examples.
@@ -515,7 +585,7 @@ Appendix E Input Problem Preferred Output #3
 
 KAYNAK : https://arxiv.org/abs/2508.16242
 
---- arxiv_ai | QD-MAPPER: A Quality Diversity Framework to Automatically Evaluate Multi-Agent Path Finding Algorithms in Diverse Maps | score=93.16 ---
+--- arxiv_ai | QD-MAPPER: A Quality Diversity Framework to Automatically Evaluate Multi-Agent Path Finding Algorithms in Diverse Maps | score=91.93 ---
 ifaamas \acmConference[AAMAS ’26]Proc. of the 25th International Conference on Autonomous Agents and Multiagent Systems (AAMAS 2026)May 25 – 29, 2026 Paphos, CyprusC. Amato, L. Dennis, V. Mascardi, J. Thangarajah (eds.) \copyrightyear2026 \acmYear2026 \acmDOI \acmPrice \acmISBN \acmSubmissionID546\authornoteEqual contribution. \affiliation \institutionCarnegie Mellon University \cityPittsburgh \countryUnited States \authornotemark[1] \affiliation \institutionCarnegie Mellon University \cityPittsburgh \countryUnited States \affiliation\institutionUniversity of Southern California \cityLos Angeles \countryUnited States \affiliation\institutionUniversity of Southern California \cityLos Angeles \countryUnited States \affiliation\institutionUniversity of Southern California \cityLos Angeles \countryUnited States \affiliation\institutionCarnegie Mellon University \cityPittsburgh \countryUnited States
 QD-MAPPER: A Quality Diversity Framework to Automatically Evaluate Multi-Agent Path Finding Algorithms in Diverse Maps
 Abstract.
@@ -651,7 +721,7 @@ Figure 23 shows the archive of PIBT by generating maps of size 64 64.
 
 KAYNAK : https://arxiv.org/abs/2409.06888
 
---- arxiv_ai | Democratizing GraphRAG: Linear, CPU-Only Graph Retrieval for Multi-Hop QA | score=93.16 ---
+--- arxiv_ai | Democratizing GraphRAG: Linear, CPU-Only Graph Retrieval for Multi-Hop QA | score=91.93 ---
 Democratizing GraphRAG: Linear, CPU-Only Graph Retrieval for Multi-Hop QA
 Abstract
 GraphRAG systems improve multi-hop retrieval by modeling structure, but many approaches rely on expensive LLM-based graph construction and GPU-heavy inference. We present SPRIG (Seeded Propagation for Retrieval In Graphs), a CPU-only, linear-time, token-free GraphRAG pipeline that replaces LLM graph building with lightweight NER-driven co-occurrence graphs and uses Personalized PageRank (PPR) for retrieval. We evaluate on HotpotQA and 2WikiMultiHopQA with BM25, dense retrieval, reciprocal-rank fusion (RRF), and a TF–IDF PPR baseline, focusing on retrieval quality and system efficiency. We provide ablations over seed size, NER choice, and PPR parameters, plus scalability curves and end-to-end QA on a 1,000-query subset. Lightweight alias disambiguation and hub pruning reduce query time by 16–28% with negligible Recall@10 changes. The results characterize when CPU-friendly graph retrieval helps multi-hop recall and when strong lexical hybrids (RRF) are sufficient, outlining a realistic path to democratizing GraphRAG without token costs or GPU requirements.
@@ -742,7 +812,7 @@ Figures A.1–A.5 visualize the ablations. Reading tip: seed size/weighting plot
 
 KAYNAK : https://arxiv.org/abs/2602.23372
 
---- arxiv_ai | SALIENT: Frequency-Aware Paired Diffusion for Controllable Long-Tail CT Detection | score=93.16 ---
+--- arxiv_ai | SALIENT: Frequency-Aware Paired Diffusion for Controllable Long-Tail CT Detection | score=91.93 ---
 Department of Radiology and Nuclear Medicine,
 University of Maryland School of Medicine 22institutetext: Department of Radiology and Nuclear Medicine,
 University of Maryland School of Medicine
@@ -869,7 +939,7 @@ These findings suggest that frequency-aware diffusion provides a practical mecha
 
 KAYNAK : https://arxiv.org/abs/2602.23447
 
---- java | Java 26 for DevOps | score=89.09 ---
+--- java | Java 26 for DevOps | score=87.81 ---
 With every release of Java comes updates to the underlying runtime, and how JVM applications can be administered and observed. In this article we will review changes to this area that are coming Java 26, which is scheduled for release on March 17th.
 Ahead-of-Time Computation for ZGC Users
 JEP 516
@@ -1056,7 +1126,7 @@ Java 26 will be released on March 17th! If you are able to, be sure to attend Ja
 
 KAYNAK : https://inside.java/2026/03/02/jdk-26-rn-ops/
 
---- mit_ai | I checked out one of the biggest anti-AI protests ever | score=87.60 ---
+--- mit_ai | I checked out one of the biggest anti-AI protests ever | score=86.37 ---
 Pull the plug! Pull the plug! Stop the slop! Stop the slop!
 For a few hours this Saturday, February 28, I watched as a couple of hundred anti-AI protesters marched through London’s King’s Cross tech hub, home to the UK headquarters of OpenAI, Meta, and Google DeepMind, chanting slogans and waving signs. The march was organized by two separate activist groups, Pause AI and Pull the Plug, which billed it as the largest protest of its kind yet.
 The range of concerns on show covered everything from online slop and abusive images to killer robots and human extinction. One woman wore a large homemade billboard on her head that read “WHO WILL BE WHOSE TOOL?” (with the Os in “TOOL” cut out as eye holes). There were signs that said “Pause before there’s cause” and “EXTINCTION=BAD” and “Demis the Menace” (referring to Demis Hassabis, the CEO of Google DeepMind). Another simply stated: “Stop using AI.”
@@ -1085,7 +1155,7 @@ After winding its way through King’s Cross, the march ended in a church hall i
 
 KAYNAK : https://www.technologyreview.com/2026/03/02/1133814/i-checked-out-londons-biggest-ever-anti-ai-protest/
 
---- claude | Elevated errors on claude.ai, console, and claude code | score=72.57 ---
+--- claude | Elevated errors on claude.ai, console, and claude code | score=71.28 ---
 Mar
 2
 ,
@@ -1145,52 +1215,13 @@ Investigating
 
 KAYNAK : https://status.claude.com/incidents/0ghc53zpsfmt
 
---- claude | Elevated errors on Claude Opus 4.6 | score=61.43 ---
-Mar
-2
-,
-15:50
-UTC
-Resolved
-- This incident has been resolved.
-Mar
-2
-,
-15:49
-UTC
-Monitoring
-- A fix has been implemented and we are monitoring the results.
-Mar
-2
-,
-14:42
-UTC
-Identified
-- The issue has been identified and a fix is being implemented.
-Mar
-2
-,
-14:35
-UTC
-Update
-- We are continuing to investigate this issue.
-Mar
-2
-,
-14:35
-UTC
-Investigating
-- We are currently investigating this issue.
-
-KAYNAK : https://status.claude.com/incidents/5zg05jnrqmzg
-
---- claude | Elevated errors on Claude Opus 4.6 | score=61.15 ---
-Subscribe to updates for Elevated errors on Claude Opus 4.6 via email and/or text message. You'll receive email notifications when incidents are updated, and text message notifications whenever Claude creates or resolves an incident.
+--- claude | Elevated errors on Claude Haiku 4.5 | score=61.66 ---
+Subscribe to updates for Elevated errors on Claude Haiku 4.5 via email and/or text message. You'll receive email notifications when incidents are updated, and text message notifications whenever Claude creates or resolves an incident.
 To receive SMS updates, please verify your number. To proceed with just email click ‘Subscribe’
 
-KAYNAK : https://status.claude.com/incidents/0j8dkb38jymf
+KAYNAK : https://status.claude.com/incidents/vqnfq1179169
 
---- nextjs | v16.2.0-canary.71 | score=59.96 ---
+--- nextjs | v16.2.0-canary.71 | score=58.85 ---
 Core Changes
 fix(turbopack): use posix.join for client URL manifest paths on Windows:
 #90700
@@ -1233,7 +1264,103 @@ for helping!
 
 KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.71
 
---- nextjs | v16.2.0-canary.70 | score=36.14 ---
+--- claude | Elevated errors on Claude Opus 4.6 | score=54.06 ---
+Mar
+2
+,
+15:50
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+2
+,
+15:49
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+2
+,
+14:42
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+Mar
+2
+,
+14:35
+UTC
+Update
+- We are continuing to investigate this issue.
+Mar
+2
+,
+14:35
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/5zg05jnrqmzg
+
+--- claude | Elevated errors in claude.ai | score=53.59 ---
+Mar
+2
+,
+17:23
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+2
+,
+17:08
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/63943gpfb97z
+
+--- claude | Elevated errors on Claude Opus 4.6 | score=50.45 ---
+Mar
+2
+,
+17:55
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+2
+,
+17:24
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+2
+,
+17:15
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+Mar
+2
+,
+17:09
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+2
+,
+16:50
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/0j8dkb38jymf
+
+--- nextjs | v16.2.0-canary.70 | score=35.02 ---
 Core Changes
 [devtools] Stop blocking overlay on error details copy:
 #90698

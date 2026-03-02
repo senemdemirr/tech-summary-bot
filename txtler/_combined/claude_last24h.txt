@@ -1,4 +1,4 @@
---- claude | Elevated errors on claude.ai, console, and claude code | score=72.57 ---
+--- claude | Elevated errors on claude.ai, console, and claude code | score=71.28 ---
 Mar
 2
 ,
@@ -58,7 +58,13 @@ Investigating
 
 KAYNAK : https://status.claude.com/incidents/0ghc53zpsfmt
 
---- claude | Elevated errors on Claude Opus 4.6 | score=61.43 ---
+--- claude | Elevated errors on Claude Haiku 4.5 | score=61.66 ---
+Subscribe to updates for Elevated errors on Claude Haiku 4.5 via email and/or text message. You'll receive email notifications when incidents are updated, and text message notifications whenever Claude creates or resolves an incident.
+To receive SMS updates, please verify your number. To proceed with just email click ‘Subscribe’
+
+KAYNAK : https://status.claude.com/incidents/vqnfq1179169
+
+--- claude | Elevated errors on Claude Opus 4.6 | score=54.06 ---
 Mar
 2
 ,
@@ -97,9 +103,60 @@ Investigating
 
 KAYNAK : https://status.claude.com/incidents/5zg05jnrqmzg
 
---- claude | Elevated errors on Claude Opus 4.6 | score=61.15 ---
-Subscribe to updates for Elevated errors on Claude Opus 4.6 via email and/or text message. You'll receive email notifications when incidents are updated, and text message notifications whenever Claude creates or resolves an incident.
-To receive SMS updates, please verify your number. To proceed with just email click ‘Subscribe’
+--- claude | Elevated errors in claude.ai | score=53.59 ---
+Mar
+2
+,
+17:23
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+2
+,
+17:08
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/63943gpfb97z
+
+--- claude | Elevated errors on Claude Opus 4.6 | score=50.45 ---
+Mar
+2
+,
+17:55
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+2
+,
+17:24
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+2
+,
+17:15
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+Mar
+2
+,
+17:09
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+2
+,
+16:50
+UTC
+Investigating
+- We are currently investigating this issue.
 
 KAYNAK : https://status.claude.com/incidents/0j8dkb38jymf
 
