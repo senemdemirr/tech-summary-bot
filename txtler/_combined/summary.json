@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-03-02T14:58:12.496503+00:00",
-  "cutoff_utc": "2026-03-01T14:58:12.496503+00:00",
+  "generated_at_utc": "2026-03-02T15:55:43.341453+00:00",
+  "cutoff_utc": "2026-03-01T15:55:43.341453+00:00",
   "max_keep_per_site": 5,
   "all_combined": "txtler/_combined/all_last24h.txt",
   "sites": {
@@ -30,8 +30,8 @@
     },
     "java": {
       "feed": "https://inside.java/feed.xml",
-      "saved_initial_count": 0,
-      "kept_after_top5": 0,
+      "saved_initial_count": 1,
+      "kept_after_top5": 1,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/java",
       "site_combined": "txtler/_combined/java_last24h.txt"

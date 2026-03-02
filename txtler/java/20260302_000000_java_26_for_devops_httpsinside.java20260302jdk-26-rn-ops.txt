@@ -1,4 +1,3 @@
---- java | Java 26 for DevOps | score=90.75 ---
 With every release of Java comes updates to the underlying runtime, and how JVM applications can be administered and observed. In this article we will review changes to this area that are coming Java 26, which is scheduled for release on March 17th.
 Ahead-of-Time Computation for ZGC Users
 JEP 516
@@ -184,4 +183,3 @@ JDK-8368740
 Java 26 will be released on March 17th! If you are able to, be sure to attend JavaOne on March 17-19th, in Redwood Shores, California. A large part of the JDK Engineering team will be there, including some of the engineers who worked on the very issues covered in this article. It can be a great opportunity to learn about Java for the stewards of Java! For more check out https://javaone.com, hope you see you there!
 
 KAYNAK : https://inside.java/2026/03/02/jdk-26-rn-ops/
-

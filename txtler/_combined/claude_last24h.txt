@@ -1,4 +1,18 @@
---- claude | Elevated errors on claude.ai, console, and claude code | score=74.01 ---
+--- claude | Elevated errors on claude.ai, console, and claude code | score=74.23 ---
+Mar
+2
+,
+15:47
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+2
+,
+15:25
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
 Mar
 2
 ,
@@ -44,7 +58,21 @@ Investigating
 
 KAYNAK : https://status.claude.com/incidents/0ghc53zpsfmt
 
---- claude | Elevated errors on Claude Opus 4.6 | score=63.61 ---
+--- claude | Elevated errors on Claude Opus 4.6 | score=63.09 ---
+Mar
+2
+,
+15:50
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+2
+,
+15:49
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
 Mar
 2
 ,

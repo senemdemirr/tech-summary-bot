@@ -1,4 +1,4 @@
---- arxiv_ai | The Compulsory Imaginary: AGI and Corporate Authority | score=96.29 ---
+--- arxiv_ai | The Compulsory Imaginary: AGI and Corporate Authority | score=94.97 ---
 The Compulsory Imaginary: AGI and Corporate Authority
 Abstract
 The development of artificial general intelligence (AGI) is as much an imaginative project as a technical one. This paper argues that the two leading AGI firms—OpenAI and Anthropic—construct sociotechnical imaginaries through a structurally consistent rhetorical strategy, despite meaningful differences in execution. Drawing on Jasanoff and Kim (2015)’s framework of sociotechnical imaginaries, the sociology of expectations (Borup et al., 2006), and the concept of the vanguard vision (Hilgartner et al., 2015), the paper analyzes two essays published within weeks of each other in late 2024: Sam Altman’s The Intelligence Age and Dario Amodei’s Machines of Loving Grace. A close comparative reading identifies four rhetorical operations shared across both texts: the self-exemption move, which disavows prophetic authority while exercising it; teleological naturalization, which embeds AGI’s arrival in narratives of historical and moral inevitability; qualified acknowledgment, which absorbs genuine concessions to risk into an overarching optimistic frame; and implicit indispensability, which positions each firm as central to the imagined future without naming it as a commercial actor. That two competing institutions with different cultures, different risk philosophies, and leaders with notably different public personae nevertheless converge on the same underlying rhetorical architecture—despite strong competitive incentives to differentiate their public visions—suggests the imaginary is not only a firm-level communication strategy but also a feature of the institutional position these firms occupy. The paper makes three contributions: it extends the sociotechnical imaginaries framework from nation-states to private firms at the frontier of transformative technology development; it identifies the specific discursive mechanism through which corporate authority over technological futures is projected and oriented toward stabilization; and it demonstrates through comparative analysis that this mechanism is at minimum structural rather than purely idiosyncratic. The findings raise the question of what institutional arrangements would be required to make that authority contestable from outside the firms that produce it.
@@ -125,7 +125,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2602.23679
 
---- arxiv_ai | A Reduction of Input/Output Logics to SAT | score=96.29 ---
+--- arxiv_ai | A Reduction of Input/Output Logics to SAT | score=94.97 ---
 A Reduction of Input/Output Logics to SAT
 Abstract
 Deontic logics are formalisms for reasoning over norms, obligations, permissions and prohibitions. Input/Output (I/O) Logics are a particular family of so-called norm-based deontic logics that formalize conditional norms outside of the underlying object logic language, where conditional norms do not carry a truth-value themselves. In this paper, an automation approach for I/O logics is presented that makes use of suitable reductions to (sequences of) propositional satisfiability problems. A prototypical implementation, named rio (reasoner for input/output logics), of the proposed procedures is presented and applied to illustrative examples.
@@ -515,7 +515,7 @@ Appendix E Input Problem Preferred Output #3
 
 KAYNAK : https://arxiv.org/abs/2508.16242
 
---- arxiv_ai | QD-MAPPER: A Quality Diversity Framework to Automatically Evaluate Multi-Agent Path Finding Algorithms in Diverse Maps | score=96.07 ---
+--- arxiv_ai | QD-MAPPER: A Quality Diversity Framework to Automatically Evaluate Multi-Agent Path Finding Algorithms in Diverse Maps | score=94.75 ---
 ifaamas \acmConference[AAMAS ’26]Proc. of the 25th International Conference on Autonomous Agents and Multiagent Systems (AAMAS 2026)May 25 – 29, 2026 Paphos, CyprusC. Amato, L. Dennis, V. Mascardi, J. Thangarajah (eds.) \copyrightyear2026 \acmYear2026 \acmDOI \acmPrice \acmISBN \acmSubmissionID546\authornoteEqual contribution. \affiliation \institutionCarnegie Mellon University \cityPittsburgh \countryUnited States \authornotemark[1] \affiliation \institutionCarnegie Mellon University \cityPittsburgh \countryUnited States \affiliation\institutionUniversity of Southern California \cityLos Angeles \countryUnited States \affiliation\institutionUniversity of Southern California \cityLos Angeles \countryUnited States \affiliation\institutionUniversity of Southern California \cityLos Angeles \countryUnited States \affiliation\institutionCarnegie Mellon University \cityPittsburgh \countryUnited States
 QD-MAPPER: A Quality Diversity Framework to Automatically Evaluate Multi-Agent Path Finding Algorithms in Diverse Maps
 Abstract.
@@ -651,7 +651,7 @@ Figure 23 shows the archive of PIBT by generating maps of size 64 64.
 
 KAYNAK : https://arxiv.org/abs/2409.06888
 
---- arxiv_ai | Democratizing GraphRAG: Linear, CPU-Only Graph Retrieval for Multi-Hop QA | score=96.07 ---
+--- arxiv_ai | Democratizing GraphRAG: Linear, CPU-Only Graph Retrieval for Multi-Hop QA | score=94.75 ---
 Democratizing GraphRAG: Linear, CPU-Only Graph Retrieval for Multi-Hop QA
 Abstract
 GraphRAG systems improve multi-hop retrieval by modeling structure, but many approaches rely on expensive LLM-based graph construction and GPU-heavy inference. We present SPRIG (Seeded Propagation for Retrieval In Graphs), a CPU-only, linear-time, token-free GraphRAG pipeline that replaces LLM graph building with lightweight NER-driven co-occurrence graphs and uses Personalized PageRank (PPR) for retrieval. We evaluate on HotpotQA and 2WikiMultiHopQA with BM25, dense retrieval, reciprocal-rank fusion (RRF), and a TF–IDF PPR baseline, focusing on retrieval quality and system efficiency. We provide ablations over seed size, NER choice, and PPR parameters, plus scalability curves and end-to-end QA on a 1,000-query subset. Lightweight alias disambiguation and hub pruning reduce query time by 16–28% with negligible Recall@10 changes. The results characterize when CPU-friendly graph retrieval helps multi-hop recall and when strong lexical hybrids (RRF) are sufficient, outlining a realistic path to democratizing GraphRAG without token costs or GPU requirements.
@@ -742,7 +742,7 @@ Figures A.1–A.5 visualize the ablations. Reading tip: seed size/weighting plot
 
 KAYNAK : https://arxiv.org/abs/2602.23372
 
---- arxiv_ai | SALIENT: Frequency-Aware Paired Diffusion for Controllable Long-Tail CT Detection | score=96.07 ---
+--- arxiv_ai | SALIENT: Frequency-Aware Paired Diffusion for Controllable Long-Tail CT Detection | score=94.75 ---
 Department of Radiology and Nuclear Medicine,
 University of Maryland School of Medicine 22institutetext: Department of Radiology and Nuclear Medicine,
 University of Maryland School of Medicine
@@ -869,7 +869,194 @@ These findings suggest that frequency-aware diffusion provides a practical mecha
 
 KAYNAK : https://arxiv.org/abs/2602.23447
 
---- mit_ai | I checked out one of the biggest anti-AI protests ever | score=90.50 ---
+--- java | Java 26 for DevOps | score=90.75 ---
+With every release of Java comes updates to the underlying runtime, and how JVM applications can be administered and observed. In this article we will review changes to this area that are coming Java 26, which is scheduled for release on March 17th.
+Ahead-of-Time Computation for ZGC Users
+JEP 516
+Ahead-of-Time (AOT) Object Caching with Any GC, brings the benefits of AOT introduced in Java 24 (
+JEP 483
+) and 25 (JEPs
+514
+&
+515
+), to Z Garbage Collector (ZGC) users. AOT improves the startup and warm up performance of Java applications, by storing information from a previous run of an application in a cache that can be accessed on subsequent runs. To learn more about AOT,
+watch my video on this subject
+.
+JEP 516
+G1 Garbage Collector Updates
+G1, Java’s default garbage collector, remains under active development, and there are several notable changes coming in Java 26.
+G1 GC: Improve Throughput by Reducing Synchronization
+The throughput of the G1 garbage collector has been improved in Java 26 by reducing the frequency of synchronization with application threads. This was done by introducing a second card table allowing the optimizer and application threads to run freely. This also had the second order effect of reducing the write barriers in G1 from 50 intructions to 12.
+Testing has shown that these changes have improved throughput by 5-15% percent, with applications that do heavy modification to object-reference fields seeing the most benefit. Additionally this new design is more efficent that the previous auxillry data structure, which resulted in a slight descrease in pause times. Lastly the second card table can in some cases slightly reduce memory overhead; each card table requiring about 2MB of native meory per 1GB of heap capacity. In cases where it does consume more memory than before, the difference is trivial.
+JEP 522
+Humongous Object Reclamation
+The G1 garbage collector now eagerly reclaims eligible humongous objects (objects occupying more than half a heap region) containing references.
+This change allows for the prompt recovery of memory previously held by such objects, particularly if they are short-lived, improving garbage collection efficiency and reducing heap usage. Previously such humongous objects were only reclaimed during full gcs.
+This change applies to both discrete humongous objects, as well as to humongous arrays of references (i.e.
+Object[]
+).
+JDK-8048180
+G1 Overhead Limit
+The G1 garbage collector now throws an
+OutOfMemoryException
+when the garbage collection overhead is more than the
+GCTimeLimit
+percent  (default
+98
+) and the free Java heap is less than the
+GCHeapFreeLimit
+percent  (default
+2
+) for five consecutive garbage collections. This can help prevent GC thrashing in such scenarios and mirrors the behavior implemented in the Parallel GC.
+This feature is enabled by default. It can be disabled using the
+-XX:-UseGCOverheadLimit
+option.
+JDK-8212084
+Transparent Huge Pages Support
+G1 can again properly utilize Transparent Huge Pages (THP) on systems with the THP mode configured as
+madvise
+, this resolves an issue introduced in
+Java 25
+. This issue has also been backported to 25.0.2.
+JDK-8366434
+JVM Flag Updates
+There are a number of updates to JVM flags in Java 26.
+InitialRAMPercentage Default Value Removed
+InitialRAMPercentage
+is being changed from 1.5625 (1/64) to 0. The previous default value was last set in 2007. At that time, the value of 1.5625 was a reasonable assumption, but as available system memory has increased, it can result in excessively large heap sizes. This could result in wasted resources and slower startup performance.
+To address this the default value of
+InitialRAMPercentage
+has been removed (set to
+0
+), which matches with
+MinHeapSize
+and
+InitialHeapSize
+, which will default to using
+JVM ergonomics
+for setting these values. Users could, if needed, set these values using
+-Xms
+. It is also still possible to set
+InitialRAMPercentage
+explicitly;
+-XX: InitialRAMPercentage=[0.0-100]
+.
+JDK-8371986
+Server and Client Flags Deprecated for Removal
+The flags
+AlwaysActAsServerClassMachine
+and
+NeverActAsServerClassMachine
+are marked as deprecated for removal. The primary benefit of these flags was driving ergonomics for GC selection: G1 being used on server class machines, and Serial on client machines. However, with the future introduction of
+JEP 523
+, which makes G1 the default GC in all environments, there’s is little difference between the two JVM arguments.
+JDK-8370843
+AggressiveHeap Deprecated for Removal
+The flag
+AggressiveHeap
+has been marked as deprecated for removal.
+AggressiveHeap
+was originally added to satisfy specific benchmarks, but lacks transparency. If your application depended on the behavior of
+AggressiveHeap
+, you can recreate it with the following set of flags:
+-XX:+UseParallelGC -XX:+UseLargePages
+-XX:-ResizeTLAB -XX:TLABSize=256K
+-XX:YoungPLABSize=256K -XX:OldPLABSize=8K
+-XX:ThresholdTolerance=100
+And additionally set the following flags to the relevant values based on your systems resources:
+-Xmx
+and
+-Xms
+to half the available physical memory
+-XX:NewSize
+to 3/8 of available physical memory
+-XX:MaxNewSize
+to the value of
+-XX:NewSize
+JDK-8370813
+MaxRAM Deprecated for Removal
+The
+MaxRAM
+flag has been marked as deprecated for removal as the JVM can accurately detect physical RAM and set reasonable commit limits. Often times, users were setting other JVM flags:
+MaxRAMPercentage
+,
+MinRAMPercentage
+or
+InitialRAMPercentage
+as a means of getting around
+MaxRAM
+’s default of 128GB. Users should instead use
+-Xmx
+and
+-Xms
+for controlling heap size.
+JDK-8369346
+JMX Updates
+JMX, Java Management Extensions, is a technology that can be used to provide a view in the a running JVM. There were a number of updates and changes to the JMX API in Java 26.
+Garbage Collector CPU Usage
+A new method
+getTotalGcCpuTime()
+has been added to
+java.lang.management.MemoryMXBean
+, which returns a long result with the accumulated CPU time in nanoseconds during the critical section and/or after JIT warmup.
+JDK-8368527
+Protocal Requires for JMXServiceURL
+The class
+javax.management.remote.JMXServiceURL
+requires that a protocol is specified when using its String constructor. In prior releases when a
+null
+protocol was supplied to the constructor, the following exception was thrown:
+java.net.MalformedURLException: Unsupported protocol: jmxmp
+at java.management/
+...
+This is inaccurate as
+jmxmp
+was a default value, but isn’t part of the JDK. This has been updated to not select
+jmxmp
+and instead print out the follow and more clear message:
+java.net.MalformedURLException: Unsupported protocol: Misssing protocol name
+at java.management/
+...
+JDK-8347114
+The classes
+javax.management.AttributeList
+,
+javax.management.relation.RoleList
+, and
+RoleUnresolvedList
+, have been updated to reject objects of the wrong type, as previous those objects were only verified when the
+asList()
+method was called.
+JDK-8359809
+MBeanServer Exception Change
+The
+javax.management.MBeanServer:eregisterMBean()
+now throws a
+RuntimeOperationsException
+instead of
+NullPointerException
+when invoked with a
+null
+“object” parameter. This correction aligns the implementation with the specification.
+JDK-8364227
+Other Changes
+There are a couple of other updates that don’t neatly fit into the above catagories.
+C2 JIT Support Enhancement
+The C2 JIT compiler can now compile Java methods with a large number of parameters (greater than 30). Previously, C2 would bail out when it attempted to compile such methods, causing the JVM to fall back to C1-compiled code or the interpreter.
+JDK-8325467
+Serial GC Eden Space
+Prior to Java 26, the ordering of the young generation (YoungGen) in the Serial GC was eden follow by the to/from spaces (survivor regions). This meant that it was difficult for eden to expand to satisfy an allocation request, possibly resulting in a premature
+OutOfMemoryException
+(OOME).
+With Java 26, eden has been moved to be after the to/from space, allowing it to possibly grow to the end of YoungGen to satisfy an allocation request. This might mean it grows beyond the limit governed by
+SurvivorRatio
+. However this behavior is desirable as it can avoid an OOME and VM termination.
+JDK-8368740
+Java 26 will be released on March 17th! If you are able to, be sure to attend JavaOne on March 17-19th, in Redwood Shores, California. A large part of the JDK Engineering team will be there, including some of the engineers who worked on the very issues covered in this article. It can be a great opportunity to learn about Java for the stewards of Java! For more check out https://javaone.com, hope you see you there!
+
+KAYNAK : https://inside.java/2026/03/02/jdk-26-rn-ops/
+
+--- mit_ai | I checked out one of the biggest anti-AI protests ever | score=89.18 ---
 Pull the plug! Pull the plug! Stop the slop! Stop the slop!
 For a few hours this Saturday, February 28, I watched as a couple of hundred anti-AI protesters marched through London’s King’s Cross tech hub, home to the UK headquarters of OpenAI, Meta, and Google DeepMind, chanting slogans and waving signs. The march was organized by two separate activist groups, Pause AI and Pull the Plug, which billed it as the largest protest of its kind yet.
 The range of concerns on show covered everything from online slop and abusive images to killer robots and human extinction. One woman wore a large homemade billboard on her head that read “WHO WILL BE WHOSE TOOL?” (with the Os in “TOOL” cut out as eye holes). There were signs that said “Pause before there’s cause” and “EXTINCTION=BAD” and “Demis the Menace” (referring to Demis Hassabis, the CEO of Google DeepMind). Another simply stated: “Stop using AI.”
@@ -886,7 +1073,7 @@ It doesn’t have to be a
 rogue superintelligence
 , he said. You just needed someone to put AI in charge of nuclear weapons. “The more silly decisions that humanity makes, the less powerful the AI has to be before things go bad,” he said.
 After a week in which the US government tried to force Anthropic to let it use its LLM Claude for any “legal” military purposes, such fears seem a little less far-fetched. Anthropic stood its ground, but OpenAI signed a deal with the DOD instead. (OpenAI declined an invitation to comment on Saturday’s protest.)
-For Matilda da Rui, a member of Pause AI and co-organizer of the protest, AI is the last problem that humans will face. She thinks that either the technology will either allow us to solve—once and for all—every other problem that we have, or it will wipe us out and there will be nobody left to have problems anymore. “It’s a mystery to me that anyone would really focus on anything else if they actually understood the problem,” she told me.
+For Matilda da Rui, a member of Pause AI and co-organizer of the protest, AI is the last problem that humans will face. She thinks that either the technology will allow us to solve—once and for all—every other problem that we have, or it will wipe us out and there will be nobody left to have problems anymore. “It’s a mystery to me that anyone would really focus on anything else if they actually understood the problem,” she told me.
 And yet despite that urgency, the atmosphere at the march was pleasant, even fun. There was no sense of anger and little sense that lives—let alone the survival of our species—were at stake. That could be down to the broad range of interests and demands that protesters brought with them.
 A chemistry researcher I spoke to ticked off a litany of complaints, which ranged from the conspiracy-adjacent (that data centers emit infrasound below the threshold of human hearing, inducing paranoia in people who live near them) to the reasonable (that the spread of AI slop online is making it hard to find reliable academic sources). The researcher’s solution was to make it illegal for companies to profit from the technology: “If you couldn’t make money from AI, it wouldn’t be such a problem.”
 Most people I spoke to agreed that technology companies probably wouldn’t take any notice of this kind of protest. “I don’t think that the pressure on companies will ever work,” Maxime Fournes, the global head of Pause AI, told me when I bumped into him at the march. “They are optimized to just not care about this problem.”
@@ -898,7 +1085,21 @@ After winding its way through King’s Cross, the march ended in a church hall i
 
 KAYNAK : https://www.technologyreview.com/2026/03/02/1133814/i-checked-out-londons-biggest-ever-anti-ai-protest/
 
---- claude | Elevated errors on claude.ai, console, and claude code | score=74.01 ---
+--- claude | Elevated errors on claude.ai, console, and claude code | score=74.23 ---
+Mar
+2
+,
+15:47
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+2
+,
+15:25
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
 Mar
 2
 ,
@@ -944,7 +1145,21 @@ Investigating
 
 KAYNAK : https://status.claude.com/incidents/0ghc53zpsfmt
 
---- claude | Elevated errors on Claude Opus 4.6 | score=63.61 ---
+--- claude | Elevated errors on Claude Opus 4.6 | score=63.09 ---
+Mar
+2
+,
+15:50
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+2
+,
+15:49
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
 Mar
 2
 ,
@@ -969,7 +1184,7 @@ Investigating
 
 KAYNAK : https://status.claude.com/incidents/5zg05jnrqmzg
 
---- nextjs | v16.2.0-canary.70 | score=39.41 ---
+--- nextjs | v16.2.0-canary.70 | score=38.22 ---
 Core Changes
 [devtools] Stop blocking overlay on error details copy:
 #90698
