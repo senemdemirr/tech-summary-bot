@@ -1,0 +1,8 @@
+feedparser
+python-dateutil
+playwright
+trafilatura
+beautifulsoup4
+lxml
+requests
+openai

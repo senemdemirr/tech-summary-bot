@@ -1,0 +1,9 @@
+Misc Changes
+Ensure we only run main test mode with custom deploy script:
+#90665
+Credits
+Huge thanks to
+@ijjk
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.67

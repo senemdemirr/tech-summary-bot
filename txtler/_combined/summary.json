@@ -1,0 +1,88 @@
+{
+  "generated_at_utc": "2026-03-01T17:27:11.002192+00:00",
+  "cutoff_utc": "2026-02-27T17:27:11.002192+00:00",
+  "max_keep_per_site": 5,
+  "all_combined": "txtler/_combined/all_last24h.txt",
+  "sites": {
+    "angular": {
+      "feed": "https://blog.angular.dev/feed",
+      "saved_initial_count": 1,
+      "kept_after_top5": 1,
+      "removed_due_to_top5": 0,
+      "site_folder": "txtler/angular",
+      "site_combined": "txtler/_combined/angular_last24h.txt"
+    },
+    "nextjs": {
+      "feed": "https://github.com/vercel/next.js/releases.atom",
+      "saved_initial_count": 4,
+      "kept_after_top5": 4,
+      "removed_due_to_top5": 0,
+      "site_folder": "txtler/nextjs",
+      "site_combined": "txtler/_combined/nextjs_last24h.txt"
+    },
+    "react": {
+      "feed": "https://react.dev/rss.xml",
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
+      "removed_due_to_top5": 0,
+      "site_folder": "txtler/react",
+      "site_combined": "txtler/_combined/react_last24h.txt"
+    },
+    "openai": {
+      "feed": "https://openai.com/news/rss.xml",
+      "saved_initial_count": 1,
+      "kept_after_top5": 1,
+      "removed_due_to_top5": 0,
+      "site_folder": "txtler/openai",
+      "site_combined": "txtler/_combined/openai_last24h.txt"
+    },
+    "google_ai": {
+      "feed": "https://blog.google/technology/ai/rss/",
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
+      "removed_due_to_top5": 0,
+      "site_folder": "txtler/google_ai",
+      "site_combined": "txtler/_combined/google_ai_last24h.txt"
+    },
+    "deepmind": {
+      "feed": "https://deepmind.google/blog/rss.xml",
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
+      "removed_due_to_top5": 0,
+      "site_folder": "txtler/deepmind",
+      "site_combined": "txtler/_combined/deepmind_last24h.txt"
+    },
+    "arxiv_ai": {
+      "feed": "https://rss.arxiv.org/rss/cs.AI",
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
+      "removed_due_to_top5": 0,
+      "site_folder": "txtler/arxiv_ai",
+      "site_combined": "txtler/_combined/arxiv_ai_last24h.txt"
+    },
+    "mit_ai": {
+      "feed": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
+      "removed_due_to_top5": 0,
+      "site_folder": "txtler/mit_ai",
+      "site_combined": "txtler/_combined/mit_ai_last24h.txt"
+    },
+    "huggingface": {
+      "feed": "https://hf.co/blog/feed.xml",
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
+      "removed_due_to_top5": 0,
+      "site_folder": "txtler/huggingface",
+      "site_combined": "txtler/_combined/huggingface_last24h.txt"
+    },
+    "meta_ai": {
+      "feed": "https://rsshub.rssforever.com/meta/ai/blog",
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
+      "removed_due_to_top5": 0,
+      "site_folder": "txtler/meta_ai",
+      "site_combined": "txtler/_combined/meta_ai_last24h.txt"
+    }
+  }
+}

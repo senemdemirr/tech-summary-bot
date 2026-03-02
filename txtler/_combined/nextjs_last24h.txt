@@ -1,0 +1,118 @@
+--- nextjs | v16.2.0-canary.69 | score=36.32 ---
+Core Changes
+Turbopack: Allow turbopack-node backend to be swapped at runtime using an experimental config option:
+#90671
+Turbopack: Revert default loader runtime backend to child processes:
+#90675
+Misc Changes
+turbo-persistence: streaming SST writer for reduced memory usage:
+#90617
+Add custom cleanup script support for deploy tests:
+#90696
+Credits
+Huge thanks to
+@lukesandberg
+,
+@bgw
+, and
+@ijjk
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.69
+
+--- nextjs | v16.2.0-canary.66 | score=34.59 ---
+Core Changes
+refactor(turbopack-node): support execution by napi and worker_threads:
+#86266
+[instant] Allow providing user feedback for blocking route errors:
+#90498
+Allow Node.js' experimental inspector flags in
+next dev
+and
+next build
+:
+#90603
+tests: Assert dpl query string in all tests for Turbopack:
+#90592
+[instant] Don't add debug stack to random
+unstable_instant
+exports:
+#90273
+Adapter: STATIC_FILE.immutableHash:
+#90045
+Turbopack: experimental.immutableAssetToken:
+#88607
+remove runInContext callbacks from stream-ops:
+#90609
+Example Changes
+example: restore .next handling for with-docker examples:
+#90651
+Misc Changes
+test: Run Adapter e2e tests with Turbopack instead:
+#90600
+Add MemorySample to Turbopack trace infrastructure:
+#90597
+docs(deploying): add Hostinger Web Apps Hosting to Node.js deployment options:
+#90246
+Use
+VisitMut
+instead of
+Fold
+for debug_instant_stack transform:
+#90274
+docs: fix navigationType value and variable name in useReportWebVitals:
+#90599
+Accept header content negotiation:
+#90607
+Credits
+Huge thanks to
+@xusd320
+,
+@mischnic
+,
+@eps1lon
+,
+@sokra
+,
+@agneliutkiene
+,
+@Mimori256
+,
+@icyJoseph
+, and
+@lubieowoce
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.66
+
+--- nextjs | v16.2.0-canary.68 | score=23.85 ---
+Core Changes
+Turbopack: restrict server HMR to app pages:
+#90663
+Misc Changes
+Centralize test timings to fix shard divergence in CI:
+#90672
+tests: Fix immutableAssetToken extraction:
+#90668
+Credits
+Huge thanks to
+@ijjk
+,
+@mischnic
+, and
+@wbinnssmith
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.68
+
+--- nextjs | v16.2.0-canary.67 | score=20.80 ---
+Misc Changes
+Ensure we only run main test mode with custom deploy script:
+#90665
+Credits
+Huge thanks to
+@ijjk
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.67
+

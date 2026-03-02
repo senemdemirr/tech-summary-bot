@@ -1,0 +1,106 @@
+name: Tech Summary Bot
+
+on:
+  schedule:
+    - cron: "10 * * * *"
+  workflow_dispatch: {}
+
+concurrency:
+  group: tech-summary-bot-main
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # ✅ ÖNCE SYNC: çalışma ağacı temizken remote'u alıp rebase et
+      - name: Sync with remote main (clean)
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin main
+          git rebase origin/main || (git rebase --abort && git reset --hard origin/main)
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          python -m playwright install chromium
+
+      - name: Clean old generated files
+        run: |
+          rm -rf htmller/*
+          rm -rf txtler/*
+
+      - name: Run TXT generator
+        run: |
+          python create_txt.py
+
+      - name: Run HTML generator
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          EDITOR_PROMPT: ${{ secrets.EDITOR_PROMPT }}
+        run: |
+          python create_html.py
+
+      # ✅ SONRA COMMIT/PUSH: artık rebase yok, sadece retry’lı push var
+      - name: Commit and Push results (safe + retry)
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if ! git status --porcelain | grep -q .; then
+            echo "No changes."
+            exit 0
+          fi
+
+          git add .
+          git commit -m "auto: update content"
+
+          for i in 1 2 3 4 5; do
+            echo "Push attempt $i..."
+            if git push origin HEAD:main; then
+              echo "Push succeeded."
+              exit 0
+            fi
+
+            echo "Push rejected, syncing and retrying..."
+            git fetch origin main
+            # push reddedilince local commit var; rebase yerine merge --ff-only deneyelim
+            # eğer ff olmuyorsa remote'a göre resetleyip yeniden deneyeceğiz (bot repo için OK)
+            git merge --ff-only origin/main || (git reset --hard origin/main && exit 1)
+          done
+
+          echo "Push failed after retries."
+          exit 1
+
+      - name: Send Telegram message
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          PUBLIC_BASE_URL: ${{ secrets.PUBLIC_BASE_URL }}
+          HTML_ROOT_DIR: ${{ secrets.HTML_ROOT_DIR }}
+        run: |
+          node scripts/send_telegram.js
