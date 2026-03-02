@@ -17,9 +17,12 @@ from dateutil import parser as dtparser
 from bs4 import BeautifulSoup
 
 FEEDS: Dict[str, str] = {
-    "angular": "https://blog.angular.dev/feed",
-    "nextjs": "https://github.com/vercel/next.js/releases.atom",
     "react": "https://react.dev/rss.xml",
+    "nextjs": "https://github.com/vercel/next.js/releases.atom",
+    "angular": "https://blog.angular.dev/feed",
+    "java":"https://inside.java/feed.xml",
+    "dotnet":"https://devblogs.microsoft.com/dotnet/feed/",
+    "claude":"https://status.claude.com/history.rss",
     "openai": "https://openai.com/news/rss.xml",
     "google_ai": "https://blog.google/technology/ai/rss/",
     "deepmind": "https://deepmind.google/blog/rss.xml",
@@ -36,7 +39,7 @@ REQUEST_TIMEOUT = 25
 SLEEP_BETWEEN_REQUESTS_SEC = 0.5
 
 NOW_UTC = datetime.now(timezone.utc)
-CUTOFF_UTC = NOW_UTC - timedelta(hours=48)
+CUTOFF_UTC = NOW_UTC - timedelta(hours=24)
 
 MIN_FEED_TEXT_CHARS = 100
 
@@ -65,6 +68,9 @@ SITE_WEIGHT = {
     "react": 1.00,
     "nextjs": 1.00,
     "angular": 1.00,
+    "java":1.15,
+    "dotnet":1.15,
+    "claude":1.15
 }
 
 PATTERNS = [
