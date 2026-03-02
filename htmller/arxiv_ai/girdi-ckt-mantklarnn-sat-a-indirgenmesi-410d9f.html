@@ -1,29 +1,30 @@
 <div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
   <h1>Girdi/Çıktı Mantıklarının SAT'a İndirgenmesi</h1>
-  <p>Deontik mantık, normlar, yükümlülükler, izinler ve yasaklar üzerine akıl yürütme için kullanılan bir formalizmdir. Girdi/Çıktı (I/O) Mantıkları, koşullu normları temel mantık dilinin dışında formalize eden belirli bir norm tabanlı deontik mantık ailesidir. Bu makalede, I/O mantıkları için uygun indirgemeler kullanılarak önerilen bir otomasyon yaklaşımı sunulmaktadır. Bu yaklaşım, önermesel tatmin edilebilirlik problemlerine (SAT) indirgemeleri içerir. Önerilen prosedürlerin prototipik bir uygulaması olan "rio" (girdi/çıktı mantıkları için akıl yürütücü) tanıtılmakta ve örneklerle uygulanmaktadır.</p>
-  <p>Deontik mantık, klasik önermesel veya birinci dereceden mantık tarafından yeterince ele alınamayan akıl yürütme kalıplarını ve mantıksal özellikleri incelemektedir. Bu alanda modal mantıklara dayalı sistemler, diyadik deontik mantık ve norm tabanlı sistemler gibi çeşitli formalizmler önerilmiştir. I/O mantıkları, koşullu normların formüller çiftleriyle temsil edildiği ve bu çiftlerin kendilerinin bir doğruluk değeri taşımadığı norm tabanlı sistemlerdir. I/O mantıkları, çeşitli çıktı operatörleriyle formalize edilen farklı sistemlerle birlikte gelir.</p>
+  <p>Deontik mantıklar, normlar, yükümlülükler, izinler ve yasaklar üzerinde akıl yürütme için kullanılan formalizmlerdir. Girdi/Çıktı (I/O) Mantıkları, koşullu normları temel mantık dilinin dışında formalize eden ve kendileri bir doğruluk değeri taşımayan norm tabanlı deontik mantıkların bir ailesidir. Bu makalede, I/O mantıklarının uygun indirgemeler kullanılarak önerme tatmin edilebilirlik problemlerine (SAT) otomatikleştirilmesi ele alınmaktadır. Önerilen prosedürlerin prototipik bir uygulaması olan rio (girdi/çıkış mantıkları için akıl yürütücü) sunulmuş ve örneklerle uygulanmıştır.</p>
+  <p>Bu çalışma, I/O mantıklarının farklı formalizmleri için otomasyon sağlamayı amaçlamaktadır. Bu amaçla, I/O mantık akıl yürütmesinin önerme mantığında tatmin edilebilirlik karar problemine (SAT) indirgenmesi sağlanmış ve ortaya çıkan prosedürlerin rio adlı akıl yürütücü içinde uygulanması sunulmuştur.</p>
   
   <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
-  <p>Bu çalışma, I/O mantıklarının otomasyonunu sağlayarak normatif akıl yürütme süreçlerini daha verimli hale getirmeyi amaçlamaktadır. Özellikle, I/O mantıklarının SAT problemlerine indirgenmesi, bu mantıkların daha geniş bir uygulama alanında kullanılmasına olanak tanır. Bu, akademik ve endüstriyel paydaşlar için büyük ilgi çekmektedir. Özellikle, Avrupa Birliği'nin Genel Veri Koruma Yönetmeliği (GDPR) gibi düzenleyici çerçevelerin otomatik akıl yürütme sistemlerinde uygulanması, bu tür bir otomasyonun önemini artırmaktadır.</p>
+  <p>Makale, girdi/çıkış mantıklarının normatif akıl yürütme bağlamında nasıl kullanılabileceğini ele alıyor. Bu mantıklar, klasik mantık sistemlerinin ele alamadığı normatif ve deontik akıl yürütme modellerini incelemek için geliştirilmiştir. I/O mantıkları, özellikle yasal akıl yürütme ve Genel Veri Koruma Yönetmeliği (GDPR) gibi yasal bilgilerin kodlanmasında kullanışlıdır. Ancak, bu mantıklar için otomatik akıl yürütme yöntemleri sınırlıdır ve bu çalışma bu boşluğu doldurmayı amaçlamaktadır.</p>
   
   <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
-  <p>I/O mantıkları, koşullu normların formüller çiftleriyle temsil edildiği ve bu çiftlerin kendilerinin bir doğruluk değeri taşımadığı norm tabanlı sistemlerdir. I/O mantıkları, çeşitli çıktı operatörleriyle formalize edilen farklı sistemlerle birlikte gelir. Bu çalışmada, I/O mantıklarının SAT problemlerine indirgenmesi, bu mantıkların daha geniş bir uygulama alanında kullanılmasına olanak tanır. Bu, akademik ve endüstriyel paydaşlar için büyük ilgi çekmektedir.</p>
-  <p>Unconstrained I/O mantıkları, monoton olup norm çatışmalarını tutarlı bir şekilde ele alamazken, constrained I/O mantıkları bu eksiklikleri giderir ve non-monotonik normatif akıl yürütme için bir çerçeve sunar. Bu mantıklar, varsayılan mantıklar, koşullu mantıklar ve karşı-olgusal mantıklarla güçlü bağlantılara sahiptir.</p>
+  <p>Girdi/çıkış mantıkları, koşullu normların formüller çiftleriyle temsil edildiği bir sistemdir. Bu çiftler, kendileri bir doğruluk değeri taşımadıklarından, normatif sistemlerin soyut çalışması için kullanılır. Çalışma, I/O mantıklarının SAT problemlerine indirgenmesi üzerinde durmakta ve bu indirgemelerin nasıl yapılabileceğini açıklamaktadır. Bu süreç, SAT çözücülerinin kullanılmasıyla otomatikleştirilebilir ve bu da girdi/çıkış mantıklarının daha geniş bir uygulama alanına yayılmasını sağlar.</p>
   
   <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
-  <p>I/O mantıklarının otomasyonu, özellikle hukuk alanında, düzenleyici çerçevelerin otomatik akıl yürütme sistemlerinde uygulanmasını sağlar. Bu, akademik ve endüstriyel paydaşlar için büyük ilgi çekmektedir. Özellikle, Avrupa Birliği'nin Genel Veri Koruma Yönetmeliği (GDPR) gibi düzenleyici çerçevelerin otomatik akıl yürütme sistemlerinde uygulanması, bu tür bir otomasyonun önemini artırmaktadır.</p>
+  <p>Bu çalışma, akademik ve endüstriyel paydaşlar için önemlidir, çünkü normatif akıl yürütme ve yasal değerlendirme alanında otomasyon sağlar. Hukuki bilgi tabanları ve GDPR gibi düzenlemelerin kodlanması için kullanılabilir. Ayrıca, bu tür mantıkların otomatikleştirilmesi, uyum kontrolü ve yasal değerlendirme gibi alanlarda da faydalı olabilir.</p>
   
   <h2>Kısa Özet</h2>
   <ul>
-    <li>I/O mantıkları, koşullu normların formüller çiftleriyle temsil edildiği bir norm tabanlı sistemdir.</li>
-    <li>Bu çalışma, I/O mantıklarının SAT problemlerine indirgenmesini ele almaktadır.</li>
-    <li>Unconstrained I/O mantıkları, monoton olup norm çatışmalarını tutarlı bir şekilde ele alamazken, constrained I/O mantıkları bu eksiklikleri giderir.</li>
-    <li>I/O mantıklarının otomasyonu, özellikle hukuk alanında, düzenleyici çerçevelerin otomatik akıl yürütme sistemlerinde uygulanmasını sağlar.</li>
-    <li>Bu tür bir otomasyon, akademik ve endüstriyel paydaşlar için büyük ilgi çekmektedir.</li>
+    <li>Girdi/çıkış mantıkları, normatif ve deontik akıl yürütme için kullanılır.</li>
+    <li>Bu mantıklar, SAT problemlerine indirgenerek otomatikleştirilebilir.</li>
+    <li>Rio adlı bir akıl yürütücü, bu indirgemeleri uygulayarak örneklerle test edilmiştir.</li>
+    <li>Çalışma, yasal akıl yürütme ve GDPR gibi düzenlemelerin kodlanmasında kullanılabilir.</li>
+    <li>Otomasyon, uyum kontrolü ve yasal değerlendirme alanlarında fayda sağlar.</li>
   </ul>
   
+  <p>Metin, şu konularda detay vermiyor: Eğitmenler ve bakış açısı, sınırlamalar ve belirsizlikler.</p>
+  
   <h2>Kapanış</h2>
-  <p>Bu makale, I/O mantıklarının SAT problemlerine indirgenmesi yoluyla otomasyonunu ele alarak, normatif akıl yürütme süreçlerini daha verimli hale getirmeyi amaçlamaktadır. Bu tür bir otomasyon, özellikle hukuk alanında, düzenleyici çerçevelerin otomatik akıl yürütme sistemlerinde uygulanmasını sağlar ve bu da akademik ve endüstriyel paydaşlar için büyük ilgi çekmektedir.</p>
+  <p>Bu makale, girdi/çıkış mantıklarının SAT problemlerine indirgenmesi yoluyla otomatikleştirilmesi üzerine odaklanmaktadır. Bu yaklaşım, çeşitli normatif akıl yürütme senaryolarında faydalı olabilir ve yasal değerlendirme gibi alanlarda uygulanabilir. Gelecekte, bu yöntemlerin daha geniş bir uygulama alanına yayılması ve daha fazla otomasyon sağlanması hedeflenmektedir.</p>
   
   <h2>Kaynak</h2>
   <p>Detaylı okumak için: <a href="https://arxiv.org/abs/2508.16242" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2508.16242</a></p>

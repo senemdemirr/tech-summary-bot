@@ -1,0 +1,31 @@
+<div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
+  <h1>GraphRAG'ı Demokratikleştirmek: Çoklu Adım Soru Cevaplama için Doğrusal, Yalnızca CPU Tabanlı Grafik Erişimi</h1>
+  <p>Günümüzün bilgi çağında, çoklu adım soru cevaplama (QA) sistemleri, birden fazla belgeye yayılan kanıtları etkili bir şekilde birleştirebilme yeteneğiyle dikkat çekiyor. Ancak, bu sistemlerin çoğu, pahalı dil modeli tabanlı grafik yapımı ve GPU ağırlıklı çıkarım süreçlerine dayanıyor. Bu makale, CPU tabanlı, doğrusal zamanlı ve token içermeyen bir GraphRAG hattı olan SPRIG'i (Seeded Propagation for Retrieval In Graphs) tanıtarak bu durumu değiştirmeyi hedefliyor.</p>
+  <p>SPRIG, LLM tabanlı grafik yapımını hafif NER tabanlı eş-oluşum grafikleriyle değiştiriyor ve geri alma işlemi için Kişiselleştirilmiş PageRank (PPR) kullanıyor. HotpotQA ve 2WikiMultiHopQA veri setleri üzerinde BM25, yoğun geri alma, karşılıklı sıralama füzyonu (RRF) ve TF-IDF PPR taban çizgisi ile değerlendirme yapılıyor. Bu çalışma, geri alma kalitesi ve sistem verimliliği üzerinde odaklanıyor.</p>
+  
+  <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
+  <p>Bu çalışma, çoklu adım geri alma işlemlerinde grafik yapılandırmanın faydalarını ortaya koyuyor. Ancak, mevcut yöntemlerin çoğu, pahalı ve donanım yoğun süreçlere dayanıyor. SPRIG, bu durumu değiştirerek, düşük maliyetli ve yaygın olarak erişilebilir bir çözüm sunmayı amaçlıyor. Bu, akademik ve düşük kaynaklı ortamlarda geniş bir uygulama alanı bulabilir.</p>
+  
+  <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
+  <p>SPRIG, hafif bir varlık-belge eş-oluşum grafiği ve seyrek PPR geri alma kullanarak, grafik yapılandırma sürecini basitleştiriyor. Bu yaklaşım, doğrusal zamanlı bir indeksleme ve hafif hesaplama ile pratik bir yeniden üretilebilirlik sağlıyor. Ayrıca, hafif başlık-takma ad ayrıştırma ve merkez budama, sorgu süresini önemli ölçüde azaltıyor.</p>
+  
+  <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
+  <p>Bu yaklaşım, özellikle düşük maliyetli ve geniş erişilebilirlik arayan akademik ve endüstriyel ekipler için faydalı olabilir. Ayrıca, CPU tabanlı bir çözüm sunarak, güçlü donanım gereksinimlerini ortadan kaldırıyor ve daha geniş bir kullanıcı kitlesine hitap ediyor.</p>
+  
+  <h2>Kısa Özet</h2>
+  <ul>
+    <li>SPRIG, CPU tabanlı, doğrusal zamanlı bir GraphRAG hattı sunar.</li>
+    <li>Hafif NER tabanlı eş-oluşum grafikleri kullanılır.</li>
+    <li>Kişiselleştirilmiş PageRank (PPR) geri alma işlemleri için kullanılır.</li>
+    <li>Geri alma kalitesi ve sistem verimliliği üzerinde odaklanılır.</li>
+    <li>Hafif başlık-takma ad ayrıştırma ve merkez budama sorgu süresini azaltır.</li>
+  </ul>
+  
+  <p>Metin, eğitmenler ve bakış açısı gibi konularda detay vermiyor.</p>
+  
+  <h2>Kapanış</h2>
+  <p>Bu çalışma, LLM tabanlı grafik yapılandırma gereksinimlerini ortadan kaldırarak, çoklu adım geri alma kalitesini artıran bir CPU tabanlı, doğrusal zamanlı GraphRAG hattı sunuyor. Hafif eş-oluşum grafikleri ve PPR kullanımı, GraphRAG'ı demokratikleştirmek için pratik bir yol sunuyor.</p>
+  
+  <h2>Kaynak</h2>
+  <p>Detaylı okumak için: <a href="https://arxiv.org/abs/2602.23372" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2602.23372</a></p>
+</div>

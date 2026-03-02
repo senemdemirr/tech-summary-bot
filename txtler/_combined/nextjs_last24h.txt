@@ -1,4 +1,30 @@
---- nextjs | v16.2.0-canary.71 | score=55.38 ---
+--- nextjs | v16.2.0-canary.72 | score=60.59 ---
+Core Changes
+docs: error component
+unstable_retry()
+:
+#89732
+Misc Changes
+Update Rspack development test manifest:
+#90751
+Update Rspack production test manifest:
+#90750
+Turbopack: improve cell order lint rule for TraitRef::cell:
+#90756
+Add determinism test for static shell with asset preload headers:
+#89826
+Credits
+Huge thanks to
+@devjiwonchoi
+,
+@vercel-release-bot
+, and
+@mischnic
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.72
+
+--- nextjs | v16.2.0-canary.71 | score=50.92 ---
 Core Changes
 fix(turbopack): use posix.join for client URL manifest paths on Windows:
 #90700
@@ -40,32 +66,4 @@ Huge thanks to
 for helping!
 
 KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.71
-
---- nextjs | v16.2.0-canary.70 | score=31.55 ---
-Core Changes
-[devtools] Stop blocking overlay on error details copy:
-#90698
-feat: provide nextVersion to modifyConfig adapter hook:
-#90735
-experimental.prefetchInlining: bundle segment prefetches into a single response:
-#90555
-instant(): fix cookie handling for fresh page loads:
-#90613
-Misc Changes
-Use commit-based tarball URL in PR stats comment:
-#90709
-[ci] Use commit instead of PR number for preview builds in deploy tests:
-#90722
-Credits
-Huge thanks to
-@eps1lon
-,
-@devjiwonchoi
-,
-@pieh
-, and
-@acdlite
-for helping!
-
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.70
 

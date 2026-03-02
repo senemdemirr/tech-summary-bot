@@ -1,4 +1,4 @@
---- claude | Elevated errors on claude.ai, console, and claude code | score=67.29 ---
+--- claude | Elevated errors on claude.ai, console, and claude code | score=63.00 ---
 Mar
 2
 ,
@@ -58,7 +58,14 @@ Investigating
 
 KAYNAK : https://status.claude.com/incidents/0ghc53zpsfmt
 
---- claude | Elevated errors on Claude Haiku 4.5 | score=55.09 ---
+--- claude | Elevated errors on Claude Haiku 4.5 | score=53.19 ---
+Mar
+2
+,
+21:16
+UTC
+Resolved
+- This incident has been resolved.
 Mar
 2
 ,
@@ -90,7 +97,7 @@ Investigating
 
 KAYNAK : https://status.claude.com/incidents/vqnfq1179169
 
---- claude | Elevated errors on Claude Opus 4.6 | score=50.07 ---
+--- claude | Elevated errors on Claude Opus 4.6 | score=45.78 ---
 Mar
 2
 ,
@@ -129,7 +136,7 @@ Investigating
 
 KAYNAK : https://status.claude.com/incidents/5zg05jnrqmzg
 
---- claude | Elevated errors in claude.ai | score=48.78 ---
+--- claude | Elevated errors in claude.ai | score=44.49 ---
 Mar
 2
 ,
@@ -147,7 +154,7 @@ Investigating
 
 KAYNAK : https://status.claude.com/incidents/63943gpfb97z
 
---- claude | Elevated errors on Claude Opus 4.6 | score=46.46 ---
+--- claude | Elevated errors on Claude Opus 4.6 | score=42.17 ---
 Mar
 2
 ,
