@@ -20,6 +20,17 @@ if not key:
 
 client = OpenAI(api_key=key)
 
+def normalize_text(text):
+    text = text.lower()
+    
+    text = unicodedata.normalize("NFKD", text)
+    text = text.encode("ascii", "ignore").decode("utf-8")
+    
+    return text
+
+def contains_error(text):
+    normalized = normalize_text(text)
+    return bool(re.search(r"icerik islen(e)?medi", normalized))
 
 def remove_emoji(text: str) -> str:
     emoji_pattern = re.compile(
@@ -87,20 +98,24 @@ def process_all_txts():
         html_output = txt_to_html_via_gpt(user_text)
 
         title = extract_title_from_html(html_output)
-        slug = slugify(title)
-        
-        out_dir = HTML_ROOT / rel.parent
-        out_dir.mkdir(parents=True, exist_ok=True)
-        
-        out_path = out_dir / f"{slug}.html"
-
-        
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-
-        out_path.write_text(html_output, encoding="utf-8")
-
-        processed += 1
-        print(f"✅ {path}  ->  {out_path}")
+        data_check = contains_error(title)
+        if(not data_check):
+            slug = slugify(title)
+    
+            out_dir = HTML_ROOT / rel.parent
+            out_dir.mkdir(parents=True, exist_ok=True)
+            
+            out_path = out_dir / f"{slug}.html"
+    
+            
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+    
+            out_path.write_text(html_output, encoding="utf-8")
+    
+            processed += 1
+            print(f"✅ {path}  ->  {out_path}")
+        else:
+            print("veri anlamsız olduğu için işlenemedi")
 
     print("\n==== ÖZET ====")
     print(f"İşlenen dosya: {processed}")
