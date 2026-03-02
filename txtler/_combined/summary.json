@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-03-02T03:38:05.201106+00:00",
-  "cutoff_utc": "2026-03-01T03:38:05.201106+00:00",
+  "generated_at_utc": "2026-03-02T05:20:09.076676+00:00",
+  "cutoff_utc": "2026-03-01T05:20:09.076676+00:00",
   "max_keep_per_site": 5,
   "all_combined": "txtler/_combined/all_last24h.txt",
   "sites": {
@@ -78,9 +78,9 @@
     },
     "arxiv_ai": {
       "feed": "https://rss.arxiv.org/rss/cs.AI",
-      "saved_initial_count": 0,
-      "kept_after_top5": 0,
-      "removed_due_to_top5": 0,
+      "saved_initial_count": 273,
+      "kept_after_top5": 5,
+      "removed_due_to_top5": 268,
       "site_folder": "txtler/arxiv_ai",
       "site_combined": "txtler/_combined/arxiv_ai_last24h.txt"
     },
