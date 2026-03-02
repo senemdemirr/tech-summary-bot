@@ -1,23 +1,23 @@
 <div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
   <h1>Girdi/Çıktı Mantıklarının SAT'a İndirgenmesi</h1>
-  <p>Deontik mantıklar, normlar, yükümlülükler, izinler ve yasaklar üzerinde akıl yürütme için kullanılan formalizmlerdir. Girdi/Çıktı (I/O) Mantıkları, koşullu normları temel mantık dilinin dışında formalize eden, doğruluk değeri taşımayan özel bir norm tabanlı deontik mantık ailesidir. Bu çalışmada, I/O mantıkları için uygun indirgemeler kullanarak önerilen bir otomasyon yaklaşımı sunulmuştur. Bu yaklaşım, önerilen prosedürlerin prototipik bir uygulaması olan rio (girdi/çıktı mantıkları için akıl yürütücü) ile örnekler üzerinde uygulanmıştır.</p>
-  <p>Normlar, yükümlülükler, izinler ve yasaklar ile temsil ve akıl yürütme, deontik mantık alanında ele alınır. Bu alan, klasik önermeli veya birinci dereceden mantıkla uygun şekilde yakalanamayan akıl yürütme kalıplarını ve mantıksal özellikleri inceler. I/O mantıkları, koşullu normların formüller çiftleriyle temsil edildiği ve bu çiftlerin doğruluk değeri taşımadığı bir sistem ailesidir. Çeşitli farklı sistemlerle formalize edilmiş olan bu mantıklar, bağlam için geçerli yükümlülükleri temsil eden formüller üretir.</p>
+  <p>Deontik mantıklar, normlar, yükümlülükler, izinler ve yasaklar üzerine akıl yürütme için kullanılan biçimsel sistemlerdir. Girdi/Çıktı (I/O) Mantıkları, koşullu normları temel mantık dilinin dışında biçimlendiren ve bu normların kendine ait bir doğruluk değeri taşımadığı bir norm tabanlı deontik mantık ailesidir. Bu makalede, I/O mantıklarının otomasyonu için önerilen bir yaklaşım sunulmakta ve bu yaklaşım, uygun indirgemeler yoluyla önerme doyurulabilirlik problemlerine (SAT) dönüştürülmektedir. Önerilen prosedürlerin prototip bir uygulaması olan rio (girdi/çıktı mantıkları için akıl yürütücü) tanıtılmakta ve örneklerle uygulanmaktadır.</p>
+  <p>Deontik mantık, normlar, yükümlülükler, izinler ve yasaklarla ilgili akıl yürütmeyi ele alır. Bu alan, klasik önerme veya birinci dereceden mantıkla yeterince ele alınamayan akıl yürütme kalıplarını ve mantıksal özellikleri inceler. Modal mantıklara dayalı sistemler, diadik deontik mantık ve norm tabanlı sistemler gibi çeşitli mantık biçimleri, deontik ve normatif akıl yürütmeyi ele almak için önerilmiştir.</p>
   <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
-  <p>I/O mantıkları, normatif akıl yürütme için güçlü bir araçtır ve yasal akıl yürütme gibi alanlarda önemli uygulamalara sahiptir. Bu çalışmada, I/O mantıklarının otomasyonu için bir yaklaşım sunulmuş ve bu mantıkların SAT (Önerme Tatmin Edilebilirlik Problemi) problemlerine indirgenmesi üzerinde durulmuştur. Bu, normatif sistemlerin daha etkin bir şekilde analiz edilmesine olanak tanır ve hukuki bilgi tabanları gibi uygulamalarda kullanılabilir.</p>
+  <p>I/O mantıkları, koşullu normları formüller çiftleriyle temsil eden bir sistemdir. Bu mantıklar, koşullu normların doğruluk değerleri taşımadığı ve bağlamsal olarak ele alındığı bir yapı sunar. Önemli olan, I/O mantıklarının, özellikle norm çatışmalarını ele alırken, klasik mantığın ötesine geçerek daha karmaşık durumları modelleyebilmesidir. Bu çalışma, I/O mantıklarının otomasyonunu sağlayarak, normatif akıl yürütmenin daha etkili bir şekilde yapılabilmesine olanak tanır.</p>
   <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
-  <p>I/O mantıkları, koşullu normların çiftler halinde temsil edildiği ve bu çiftlerin doğruluk değeri taşımadığı bir sistemdir. Bu mantıklar, çeşitli çıktılar üreten operatörlerle çalışır. Çalışma, I/O mantıklarının SAT problemlerine indirgenmesi üzerine yoğunlaşır ve bu indirgeme ile normatif sistemlerin otomasyonu sağlanır. Prototip uygulama olan rio, bu prosedürleri uygulayarak örnekler üzerinde çalışır.</p>
+  <p>I/O mantıkları, belirli bir bağlamda geçerli olan yükümlülükleri temsil eden formüller kümesi üretir. Bu mantıklar, norm çatışmaları gibi durumları ele alırken, klasik mantığın ötesine geçer. Çalışma, I/O mantıklarının SAT problemlerine indirgenmesi yoluyla otomasyonunu sağlar. Rio adlı bir prototip uygulama, bu prosedürleri uygulayarak, I/O mantıklarının otomatik akıl yürütme süreçlerine entegre edilmesini mümkün kılar.</p>
   <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
-  <p>Bu çalışma, özellikle hukuk ve normatif sistemlerle ilgilenen akademik ve endüstriyel paydaşlar için önemlidir. I/O mantıklarının otomasyonu, yasal bilgi tabanlarının daha etkin bir şekilde yönetilmesine olanak tanır. Ayrıca, normatif akıl yürütme sistemlerinin geliştirilmesi ve uygulanması için bir temel sağlar.</p>
+  <p>Bu çalışma, normatif akıl yürütme ve hukuk alanında çalışan akademik ve endüstriyel paydaşlar için önemlidir. Özellikle, GDPR gibi yasal düzenlemelerin otomatik olarak analiz edilmesi ve uyum kontrolü gibi uygulamalar için kullanılabilir. Ayrıca, çok ajanlı sistemler ve eksik bilgiye sahip sistemler gibi alanlarda da uygulanabilir.</p>
   <h2>Kısa Özet</h2>
   <ul>
-    <li>I/O mantıkları, koşullu normları temsil eden bir sistemdir.</li>
-    <li>Bu mantıkların SAT problemlerine indirgenmesi, otomasyonu sağlar.</li>
-    <li>Prototip uygulama rio, bu prosedürleri uygulayarak örnekler üzerinde çalışır.</li>
-    <li>Çalışma, normatif sistemlerin daha etkin analizine olanak tanır.</li>
-    <li>Hukuki bilgi tabanları gibi uygulamalarda kullanılabilir.</li>
+    <li>I/O mantıkları, koşullu normları formüller çiftleriyle temsil eder.</li>
+    <li>Bu mantıklar, klasik mantığın ötesine geçerek daha karmaşık durumları ele alabilir.</li>
+    <li>Çalışma, I/O mantıklarının SAT problemlerine indirgenmesi yoluyla otomasyonunu sağlar.</li>
+    <li>Rio adlı prototip uygulama, bu prosedürleri uygulayarak otomatik akıl yürütme süreçlerine entegre eder.</li>
+    <li>Çalışma, normatif akıl yürütme ve hukuk alanında önemli uygulamalara sahiptir.</li>
   </ul>
-  <p>Metin, eğitmenler ve bakış açıları gibi konularda detay vermiyor.</p>
-  <p>Bu çalışma, I/O mantıklarının otomasyonu için önemli bir adımdır ve normatif sistemlerin daha etkin bir şekilde yönetilmesine olanak tanır. Gelecekte, bu yaklaşımın daha geniş uygulama alanları ve daha karmaşık normatif sistemlerle uyumlu hale getirilmesi hedeflenmektedir.</p>
+  <h2>Kapanış</h2>
+  <p>Bu makale, I/O mantıklarının otomasyonu için yeni bir yaklaşım sunarak, normatif akıl yürütmenin daha etkili bir şekilde yapılabilmesine olanak tanır. Çalışma, özellikle hukuk ve normatif sistemler alanında önemli uygulamalara sahiptir ve gelecekteki araştırmalar için bir temel oluşturur.</p>
   <h2>Kaynak</h2>
   <p>Detaylı okumak için: <a href="https://arxiv.org/abs/2508.16242" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2508.16242</a></p>
 </div>

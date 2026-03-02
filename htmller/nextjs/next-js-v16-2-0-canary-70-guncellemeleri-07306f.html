@@ -1,32 +1,36 @@
 <div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
   <h1>Next.js v16.2.0-canary.70 Güncellemeleri</h1>
-  <p>Next.js'in en son sürümü olan v16.2.0-canary.70, çeşitli çekirdek ve yardımcı değişikliklerle birlikte geliyor. Bu sürüm, geliştiricilerin deneyimlerini iyileştirmek ve performansı artırmak amacıyla bir dizi yenilik ve hata düzeltmesi içeriyor. Bu makalede, bu güncellemelerin detaylarına ve etkilerine odaklanacağız.</p>
-  <p>Özellikle, hata detaylarının kopyalanması, önceden yükleme işlemlerinin iyileştirilmesi ve çerez yönetimi gibi konularda yapılan değişiklikler dikkat çekiyor. Ayrıca, çeşitli deneysel özellikler ve yapılandırma adaptörleri de bu sürümde yer alıyor.</p>
+  <p>Next.js, web geliştirme dünyasında önemli bir yere sahip olan bir framework olarak, sürekli olarak yenilikler ve iyileştirmelerle güncelleniyor. En son sürüm olan v16.2.0-canary.70, çeşitli çekirdek ve ek değişikliklerle geliştiricilere daha iyi bir deneyim sunmayı hedefliyor.</p>
+  <p>Bu sürümde, hata detaylarının kopyalanması sırasında engelleyici katmanın durdurulması gibi önemli değişiklikler yer alıyor. Ayrıca, konfigürasyon adaptör kancası için yeni bir özellik ve deneysel prefetch inlining gibi yenilikler de mevcut.</p>
 
   <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
-  <p>Bu sürüm, Next.js kullanıcıları için önemli geliştirmeler sunuyor. Hata detaylarının daha etkin bir şekilde yönetilmesi, kullanıcı deneyimini iyileştirirken, ön yükleme işlemlerinin tek bir yanıt altında toplanması performansı artırıyor. Çerez yönetimindeki düzeltmeler ise web uygulamalarının daha tutarlı çalışmasını sağlıyor.</p>
+  <p>Bu güncelleme, Next.js kullanıcıları için daha verimli bir geliştirme ortamı sunmayı amaçlıyor. Özellikle hata yönetimi, konfigürasyon değişiklikleri ve performans iyileştirmeleri gibi alanlarda yapılan geliştirmeler, kullanıcı deneyimini artırmayı hedefliyor. Geliştiriciler, bu tür değişikliklerle daha hızlı ve hatasız uygulamalar geliştirebilirler.</p>
 
   <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
   <ul>
-    <li><strong>Hata Detayları Kopyalama:</strong> Hata detaylarının kopyalanması sırasında engelleme yapan katman kaldırıldı.</li>
-    <li><strong>Yapılandırma Adaptörü:</strong> "nextVersion" sağlamak için modifyConfig adaptör kancası eklendi.</li>
-    <li><strong>Ön Yükleme İyileştirmesi:</strong> Deneysel olarak, segment ön yüklemeler tek bir yanıt altında paketlendi.</li>
-    <li><strong>Çerez Yönetimi:</strong> Yeni sayfa yüklemelerinde çerez yönetimi düzeltildi.</li>
+    <li><strong>Hata Detayları Kopyalama:</strong> Hata detaylarının kopyalanması sırasında engelleyici katmanın durdurulması, hata ayıklama sürecini daha akıcı hale getiriyor.</li>
+    <li><strong>Konfigürasyon Adaptör Kancası:</strong> Yeni eklenen nextVersion özelliği, konfigürasyon adaptör kancasının daha esnek kullanılmasını sağlıyor.</li>
+    <li><strong>Prefetch Inlining:</strong> Deneysel olarak sunulan bu özellik, segment ön getirmelerini tek bir yanıtla paketleyerek performansı artırıyor.</li>
+    <li><strong>Çerez Yönetimi:</strong> instant() fonksiyonu, sayfa yenilemelerinde çerez yönetimini iyileştiriyor.</li>
+    <li><strong>PR İstatistikleri ve Dağıtım Testleri:</strong> Commit tabanlı tarball URL kullanımı ve önizleme yapıları için commit kullanımı, süreçleri daha tutarlı hale getiriyor.</li>
   </ul>
 
   <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
-  <p>Bu güncellemeler, Next.js kullanan geliştiriciler için önemli avantajlar sunuyor. Hata yönetimindeki iyileştirmeler, geliştiricilerin sorunları daha hızlı çözmesine yardımcı olurken, ön yükleme ve çerez yönetimindeki değişiklikler uygulamaların daha hızlı ve güvenilir çalışmasını sağlıyor. Bu da son kullanıcı deneyimini doğrudan etkileyerek daha memnun edici bir kullanım sunuyor.</p>
+  <p>Bu güncellemeler, özellikle Next.js ile uygulama geliştiren yazılımcılar için önemlidir. Hata ayıklama süreçlerinde daha az zaman harcanması, konfigürasyon değişikliklerinin daha kolay yapılabilmesi ve genel performans iyileştirmeleri, geliştiricilerin işlerini daha verimli yapmalarını sağlar. Ayrıca, deneysel özellikler sayesinde geliştiriciler, yeni teknolojileri deneme şansı bulabilirler.</p>
 
   <h2>Kısa Özet</h2>
   <ul>
-    <li>Hata detaylarının kopyalanması sırasında yaşanan sorunlar giderildi.</li>
-    <li>Yapılandırma adaptörleri için yeni bir kanca eklendi.</li>
-    <li>Ön yükleme işlemleri daha verimli hale getirildi.</li>
-    <li>Çerez yönetimi ile ilgili sorunlar düzeltildi.</li>
-    <li>Geliştirici deneyimini artıracak çeşitli küçük değişiklikler yapıldı.</li>
+    <li>Hata detaylarının kopyalanması sırasında engelleyici katman kaldırıldı.</li>
+    <li>Konfigürasyon adaptör kancası için nextVersion özelliği eklendi.</li>
+    <li>Deneysel prefetch inlining özelliği tanıtıldı.</li>
+    <li>Çerez yönetimi, sayfa yenilemelerinde iyileştirildi.</li>
+    <li>Commit tabanlı süreç iyileştirmeleri yapıldı.</li>
   </ul>
 
-  <p>Sonuç olarak, Next.js'in bu yeni sürümü, geliştiricilere daha iyi bir deneyim sunmayı ve uygulamaların performansını artırmayı hedefliyor. Güncellemelerin etkileri, hem geliştiriciler hem de son kullanıcılar için olumlu sonuçlar doğuracak şekilde tasarlandı.</p>
+  <p>Metin, şu konularda detay vermiyor: eğitmenler ve bakış açısı, sınırlamalar ve belirsizlikler.</p>
+
+  <h2>Kapanış</h2>
+  <p>Next.js v16.2.0-canary.70 sürümü, geliştiricilere daha iyi bir deneyim sunmak için çeşitli iyileştirmeler ve yeni özellikler içeriyor. Bu tür güncellemeler, yazılım geliştirme süreçlerini daha verimli hale getirirken, geliştiricilerin işlerini daha hızlı ve etkili bir şekilde yapmalarına olanak tanır.</p>
 
   <h2>Kaynak</h2>
   <p>Detaylı okumak için: <a href="https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.70" target="_blank" rel="noopener noreferrer">https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.70</a></p>
