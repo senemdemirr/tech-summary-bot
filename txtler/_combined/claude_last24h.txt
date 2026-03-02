@@ -1,4 +1,18 @@
---- claude | Elevated errors on claude.ai, console, and claude code | score=75.94 ---
+--- claude | Elevated errors on claude.ai, console, and claude code | score=74.01 ---
+Mar
+2
+,
+14:05
+UTC
+Update
+- We are continuing to work on a fix for this issue.
+Mar
+2
+,
+13:37
+UTC
+Update
+- We have discovered that some API methods are not working and we are investigating.
 Mar
 2
 ,
@@ -29,4 +43,29 @@ Investigating
 - We are currently investigating this issue.
 
 KAYNAK : https://status.claude.com/incidents/0ghc53zpsfmt
+
+--- claude | Elevated errors on Claude Opus 4.6 | score=63.61 ---
+Mar
+2
+,
+14:42
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+Mar
+2
+,
+14:35
+UTC
+Update
+- We are continuing to investigate this issue.
+Mar
+2
+,
+14:35
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/5zg05jnrqmzg
 

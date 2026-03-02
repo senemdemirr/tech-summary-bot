@@ -1,0 +1,23 @@
+Mar
+2
+,
+14:42
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+Mar
+2
+,
+14:35
+UTC
+Update
+- We are continuing to investigate this issue.
+Mar
+2
+,
+14:35
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/5zg05jnrqmzg

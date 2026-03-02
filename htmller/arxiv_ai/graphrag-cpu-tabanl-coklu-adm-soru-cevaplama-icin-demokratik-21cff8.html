@@ -1,0 +1,29 @@
+<div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
+  <h1>GraphRAG: CPU-Tabanlı Çoklu Adım Soru Cevaplama İçin Demokratikleşme</h1>
+  <p>GraphRAG sistemleri, çoklu adım geri getirme işlemlerini yapı modellemesiyle geliştirir. Ancak, birçok yaklaşım pahalı dil modeli tabanlı grafik yapımı ve GPU ağırlıklı çıkarım süreçlerine dayanır. Bu makalede, SPRIG (Grafiklerde Geri Getirme için Tohum Yayılımı) adlı, yalnızca CPU kullanan, lineer zamanlı, token içermeyen bir GraphRAG boru hattı sunulmaktadır. Bu sistem, dil modeli tabanlı grafik yapımını, hafif bir NER tabanlı eş-oluşum grafikleriyle değiştirir ve geri getirme için Kişiselleştirilmiş Sayfa Sıralaması (PPR) kullanır.</p>
+  <p>HotpotQA ve 2WikiMultiHopQA üzerinde BM25, yoğun geri getirme, karşılıklı sıralama füzyonu (RRF) ve TF–IDF PPR taban çizgisi ile değerlendirme yapılmıştır. Çalışma, geri getirme kalitesi ve sistem verimliliğine odaklanmaktadır. Hafif takma ad ayıklama ve merkez budama, sorgu süresini %16–28 oranında azaltırken, Recall@10 üzerinde ihmal edilebilir değişiklikler sağlar.</p>
+
+  <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
+  <p>Bu çalışma, dil modeli tabanlı grafik yapımına veya GPU tabanlı grafik çıkarımına dayanmayan, yalnızca CPU kullanan bir GraphRAG sisteminin ne kadar ileri gidebileceğini araştırıyor. Akademik ve düşük kaynaklı ortamlarda, CPU kısıtlamaları ve sıkı bellek bütçeleri yaygındır. Bu sistem, çoklu adım geri getirme avantajlarını korurken token maliyetlerinden kaçınmayı hedefler. Bu, yaygın donanımlarda çalıştırılabilen şeffaf bir temel sağlar ve geri getirme kalitesi ile hesaplama maliyeti arasındaki somut dengeyi ortaya koyar.</p>
+
+  <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
+  <p>SPRIG, hafif bir NER tabanlı eş-oluşum grafiği kullanarak bir varlık-belge iki parçalı grafik oluşturur ve ardından Kişiselleştirilmiş Sayfa Sıralaması (PPR) uygular. Bu tasarım, lineer yapım, seyrek hesaplama ve pratik tekrarlanabilirlik vurgular. Grafik yapımı, varlık-belge iki parçalı grafiklerin oluşturulması ve PPR ile sıralama yapılması gibi adımları içerir. Sistem, CPU dostu, hafif grafik iyileştirmeleri içerir: başlık-takma ad varlık ayıklama (SPRIG-EL), merkez budama/kenar sınırları (SPRIG-PRUNE) ve açık varlık-belge tohum karışımı (SPRIG-MIX).</p>
+
+  <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
+  <p>Bu çalışma, dil modeli tabanlı grafik yapımını karşılayamayan akademik ve endüstriyel ekipler için önemli bir dağıtım darboğazını ele alır. Ayrıca, tam olarak yeniden üretilebilir, yalnızca CPU kullanan bir temel sunarak, gelecekteki verimli GraphRAG ve yeşil yapay zeka çalışmaları için bir referans noktası sağlar. Hafif takma ad ayıklama ve merkez budama, sorgu süresini önemli ölçüde azaltır ve bu da CPU dağıtımları için pratik bir verimlilik düğmesi sağlar.</p>
+
+  <h2>Kısa Özet</h2>
+  <ul>
+    <li>SPRIG, yalnızca CPU kullanan, lineer zamanlı, token içermeyen bir GraphRAG boru hattıdır.</li>
+    <li>Hafif grafik iyileştirmeleri, CPU ayarlarında sorgu süresini %16–28 oranında azaltır.</li>
+    <li>GraphHybrid, BM25 üzerinden iyileştirme sağlar ve RRF ile rekabet eder.</li>
+    <li>GraphDense, her iki veri setinde de R@10 üzerinde hafif bir üstünlük sağlar.</li>
+    <li>RRF tohumlu PPR, RRF üzerinde ek kazanımlar sunar.</li>
+  </ul>
+
+  <h2>Kapanış</h2>
+  <p>Bu çalışma, dil modeli tabanlı grafik yapımını ortadan kaldırarak, çoklu adım geri getirme kalitesini artıran, yalnızca CPU kullanan, lineer zamanlı bir GraphRAG boru hattı sunmaktadır. Sonuçlar, basit eş-oluşum grafikleri ve PPR'nin GraphRAG'ı demokratikleştirmek için pratik ve tekrarlanabilir bir yol sağladığını göstermektedir.</p>
+
+  <h2>Kaynak</h2>
+  <p>Detaylı okumak için: <a href="https://arxiv.org/abs/2602.23372" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2602.23372</a></p>
+</div>

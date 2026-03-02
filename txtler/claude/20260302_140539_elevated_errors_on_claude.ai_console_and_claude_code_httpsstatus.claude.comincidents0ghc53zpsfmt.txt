@@ -1,6 +1,20 @@
 Mar
 2
 ,
+14:05
+UTC
+Update
+- We are continuing to work on a fix for this issue.
+Mar
+2
+,
+13:37
+UTC
+Update
+- We have discovered that some API methods are not working and we are investigating.
+Mar
+2
+,
 13:22
 UTC
 Identified
