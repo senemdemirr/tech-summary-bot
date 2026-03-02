@@ -1,25 +1,9 @@
 {
-  "generated_at_utc": "2026-03-01T17:27:11.002192+00:00",
-  "cutoff_utc": "2026-02-27T17:27:11.002192+00:00",
+  "generated_at_utc": "2026-03-02T00:55:57.853537+00:00",
+  "cutoff_utc": "2026-03-01T00:55:57.853537+00:00",
   "max_keep_per_site": 5,
   "all_combined": "txtler/_combined/all_last24h.txt",
   "sites": {
-    "angular": {
-      "feed": "https://blog.angular.dev/feed",
-      "saved_initial_count": 1,
-      "kept_after_top5": 1,
-      "removed_due_to_top5": 0,
-      "site_folder": "txtler/angular",
-      "site_combined": "txtler/_combined/angular_last24h.txt"
-    },
-    "nextjs": {
-      "feed": "https://github.com/vercel/next.js/releases.atom",
-      "saved_initial_count": 4,
-      "kept_after_top5": 4,
-      "removed_due_to_top5": 0,
-      "site_folder": "txtler/nextjs",
-      "site_combined": "txtler/_combined/nextjs_last24h.txt"
-    },
     "react": {
       "feed": "https://react.dev/rss.xml",
       "saved_initial_count": 0,
@@ -28,10 +12,50 @@
       "site_folder": "txtler/react",
       "site_combined": "txtler/_combined/react_last24h.txt"
     },
-    "openai": {
-      "feed": "https://openai.com/news/rss.xml",
+    "nextjs": {
+      "feed": "https://github.com/vercel/next.js/releases.atom",
       "saved_initial_count": 1,
       "kept_after_top5": 1,
+      "removed_due_to_top5": 0,
+      "site_folder": "txtler/nextjs",
+      "site_combined": "txtler/_combined/nextjs_last24h.txt"
+    },
+    "angular": {
+      "feed": "https://blog.angular.dev/feed",
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
+      "removed_due_to_top5": 0,
+      "site_folder": "txtler/angular",
+      "site_combined": "txtler/_combined/angular_last24h.txt"
+    },
+    "java": {
+      "feed": "https://inside.java/feed.xml",
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
+      "removed_due_to_top5": 0,
+      "site_folder": "txtler/java",
+      "site_combined": "txtler/_combined/java_last24h.txt"
+    },
+    "dotnet": {
+      "feed": "https://devblogs.microsoft.com/dotnet/feed/",
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
+      "removed_due_to_top5": 0,
+      "site_folder": "txtler/dotnet",
+      "site_combined": "txtler/_combined/dotnet_last24h.txt"
+    },
+    "claude": {
+      "feed": "https://status.claude.com/history.rss",
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
+      "removed_due_to_top5": 0,
+      "site_folder": "txtler/claude",
+      "site_combined": "txtler/_combined/claude_last24h.txt"
+    },
+    "openai": {
+      "feed": "https://openai.com/news/rss.xml",
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/openai",
       "site_combined": "txtler/_combined/openai_last24h.txt"

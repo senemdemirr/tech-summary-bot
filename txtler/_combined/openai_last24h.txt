@@ -1,5 +1,0 @@
---- openai | Our agreement with the Department of War | score=38.57 ---
-Details on OpenAI’s contract with the Department of War, outlining safety red lines, legal protections, and how AI systems will be deployed in classified environments.
-
-KAYNAK : https://openai.com/index/our-agreement-with-the-department-of-war
-
