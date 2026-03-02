@@ -1,4 +1,4 @@
---- mit_ai | OpenAI’s “compromise” with the Pentagon is what Anthropic feared | score=92.32 ---
+--- mit_ai | OpenAI’s “compromise” with the Pentagon is what Anthropic feared | score=91.06 ---
 On February 28, OpenAI announced it had reached a deal that will allow the US military to use its technologies in classified settings. CEO Sam Altman said the negotiations, which the company began pursuing only
 after
 the Pentagon’s public reprimand of Anthropic, were “
@@ -68,7 +68,7 @@ If you have information to share about how this is unfolding, reach out to me vi
 
 KAYNAK : https://www.technologyreview.com/2026/03/02/1133850/openais-compromise-with-the-pentagon-is-what-anthropic-feared/
 
---- arxiv_ai | The Compulsory Imaginary: AGI and Corporate Authority | score=89.61 ---
+--- arxiv_ai | The Compulsory Imaginary: AGI and Corporate Authority | score=88.34 ---
 The Compulsory Imaginary: AGI and Corporate Authority
 Abstract
 The development of artificial general intelligence (AGI) is as much an imaginative project as a technical one. This paper argues that the two leading AGI firms—OpenAI and Anthropic—construct sociotechnical imaginaries through a structurally consistent rhetorical strategy, despite meaningful differences in execution. Drawing on Jasanoff and Kim (2015)’s framework of sociotechnical imaginaries, the sociology of expectations (Borup et al., 2006), and the concept of the vanguard vision (Hilgartner et al., 2015), the paper analyzes two essays published within weeks of each other in late 2024: Sam Altman’s The Intelligence Age and Dario Amodei’s Machines of Loving Grace. A close comparative reading identifies four rhetorical operations shared across both texts: the self-exemption move, which disavows prophetic authority while exercising it; teleological naturalization, which embeds AGI’s arrival in narratives of historical and moral inevitability; qualified acknowledgment, which absorbs genuine concessions to risk into an overarching optimistic frame; and implicit indispensability, which positions each firm as central to the imagined future without naming it as a commercial actor. That two competing institutions with different cultures, different risk philosophies, and leaders with notably different public personae nevertheless converge on the same underlying rhetorical architecture—despite strong competitive incentives to differentiate their public visions—suggests the imaginary is not only a firm-level communication strategy but also a feature of the institutional position these firms occupy. The paper makes three contributions: it extends the sociotechnical imaginaries framework from nation-states to private firms at the frontier of transformative technology development; it identifies the specific discursive mechanism through which corporate authority over technological futures is projected and oriented toward stabilization; and it demonstrates through comparative analysis that this mechanism is at minimum structural rather than purely idiosyncratic. The findings raise the question of what institutional arrangements would be required to make that authority contestable from outside the firms that produce it.
@@ -195,7 +195,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2602.23679
 
---- arxiv_ai | A Reduction of Input/Output Logics to SAT | score=89.61 ---
+--- arxiv_ai | A Reduction of Input/Output Logics to SAT | score=88.34 ---
 A Reduction of Input/Output Logics to SAT
 Abstract
 Deontic logics are formalisms for reasoning over norms, obligations, permissions and prohibitions. Input/Output (I/O) Logics are a particular family of so-called norm-based deontic logics that formalize conditional norms outside of the underlying object logic language, where conditional norms do not carry a truth-value themselves. In this paper, an automation approach for I/O logics is presented that makes use of suitable reductions to (sequences of) propositional satisfiability problems. A prototypical implementation, named rio (reasoner for input/output logics), of the proposed procedures is presented and applied to illustrative examples.
@@ -585,7 +585,7 @@ Appendix E Input Problem Preferred Output #3
 
 KAYNAK : https://arxiv.org/abs/2508.16242
 
---- arxiv_ai | QD-MAPPER: A Quality Diversity Framework to Automatically Evaluate Multi-Agent Path Finding Algorithms in Diverse Maps | score=89.38 ---
+--- arxiv_ai | QD-MAPPER: A Quality Diversity Framework to Automatically Evaluate Multi-Agent Path Finding Algorithms in Diverse Maps | score=88.12 ---
 ifaamas \acmConference[AAMAS ’26]Proc. of the 25th International Conference on Autonomous Agents and Multiagent Systems (AAMAS 2026)May 25 – 29, 2026 Paphos, CyprusC. Amato, L. Dennis, V. Mascardi, J. Thangarajah (eds.) \copyrightyear2026 \acmYear2026 \acmDOI \acmPrice \acmISBN \acmSubmissionID546\authornoteEqual contribution. \affiliation \institutionCarnegie Mellon University \cityPittsburgh \countryUnited States \authornotemark[1] \affiliation \institutionCarnegie Mellon University \cityPittsburgh \countryUnited States \affiliation\institutionUniversity of Southern California \cityLos Angeles \countryUnited States \affiliation\institutionUniversity of Southern California \cityLos Angeles \countryUnited States \affiliation\institutionUniversity of Southern California \cityLos Angeles \countryUnited States \affiliation\institutionCarnegie Mellon University \cityPittsburgh \countryUnited States
 QD-MAPPER: A Quality Diversity Framework to Automatically Evaluate Multi-Agent Path Finding Algorithms in Diverse Maps
 Abstract.
@@ -721,7 +721,7 @@ Figure 23 shows the archive of PIBT by generating maps of size 64 64.
 
 KAYNAK : https://arxiv.org/abs/2409.06888
 
---- arxiv_ai | Democratizing GraphRAG: Linear, CPU-Only Graph Retrieval for Multi-Hop QA | score=89.38 ---
+--- arxiv_ai | Democratizing GraphRAG: Linear, CPU-Only Graph Retrieval for Multi-Hop QA | score=88.12 ---
 Democratizing GraphRAG: Linear, CPU-Only Graph Retrieval for Multi-Hop QA
 Abstract
 GraphRAG systems improve multi-hop retrieval by modeling structure, but many approaches rely on expensive LLM-based graph construction and GPU-heavy inference. We present SPRIG (Seeded Propagation for Retrieval In Graphs), a CPU-only, linear-time, token-free GraphRAG pipeline that replaces LLM graph building with lightweight NER-driven co-occurrence graphs and uses Personalized PageRank (PPR) for retrieval. We evaluate on HotpotQA and 2WikiMultiHopQA with BM25, dense retrieval, reciprocal-rank fusion (RRF), and a TF–IDF PPR baseline, focusing on retrieval quality and system efficiency. We provide ablations over seed size, NER choice, and PPR parameters, plus scalability curves and end-to-end QA on a 1,000-query subset. Lightweight alias disambiguation and hub pruning reduce query time by 16–28% with negligible Recall@10 changes. The results characterize when CPU-friendly graph retrieval helps multi-hop recall and when strong lexical hybrids (RRF) are sufficient, outlining a realistic path to democratizing GraphRAG without token costs or GPU requirements.
@@ -812,7 +812,7 @@ Figures A.1–A.5 visualize the ablations. Reading tip: seed size/weighting plot
 
 KAYNAK : https://arxiv.org/abs/2602.23372
 
---- arxiv_ai | SALIENT: Frequency-Aware Paired Diffusion for Controllable Long-Tail CT Detection | score=89.38 ---
+--- arxiv_ai | SALIENT: Frequency-Aware Paired Diffusion for Controllable Long-Tail CT Detection | score=88.12 ---
 Department of Radiology and Nuclear Medicine,
 University of Maryland School of Medicine 22institutetext: Department of Radiology and Nuclear Medicine,
 University of Maryland School of Medicine
@@ -939,7 +939,7 @@ These findings suggest that frequency-aware diffusion provides a practical mecha
 
 KAYNAK : https://arxiv.org/abs/2602.23447
 
---- java | Java 26 for DevOps | score=85.14 ---
+--- java | Java 26 for DevOps | score=83.82 ---
 With every release of Java comes updates to the underlying runtime, and how JVM applications can be administered and observed. In this article we will review changes to this area that are coming Java 26, which is scheduled for release on March 17th.
 Ahead-of-Time Computation for ZGC Users
 JEP 516
@@ -1126,7 +1126,7 @@ Java 26 will be released on March 17th! If you are able to, be sure to attend Ja
 
 KAYNAK : https://inside.java/2026/03/02/jdk-26-rn-ops/
 
---- mit_ai | I checked out one of the biggest anti-AI protests ever | score=83.82 ---
+--- mit_ai | I checked out one of the biggest anti-AI protests ever | score=82.56 ---
 Pull the plug! Pull the plug! Stop the slop! Stop the slop!
 For a few hours this Saturday, February 28, I watched as a couple of hundred anti-AI protesters marched through London’s King’s Cross tech hub, home to the UK headquarters of OpenAI, Meta, and Google DeepMind, chanting slogans and waving signs. The march was organized by two separate activist groups, Pause AI and Pull the Plug, which billed it as the largest protest of its kind yet.
 The range of concerns on show covered everything from online slop and abusive images to killer robots and human extinction. One woman wore a large homemade billboard on her head that read “WHO WILL BE WHOSE TOOL?” (with the Os in “TOOL” cut out as eye holes). There were signs that said “Pause before there’s cause” and “EXTINCTION=BAD” and “Demis the Menace” (referring to Demis Hassabis, the CEO of Google DeepMind). Another simply stated: “Stop using AI.”
@@ -1145,17 +1145,17 @@ rogue superintelligence
 After a week in which the US government tried to force Anthropic to let it use its LLM Claude for any “legal” military purposes, such fears seem a little less far-fetched. Anthropic stood its ground, but OpenAI signed a deal with the DOD instead. (OpenAI declined an invitation to comment on Saturday’s protest.)
 For Matilda da Rui, a member of Pause AI and co-organizer of the protest, AI is the last problem that humans will face. She thinks that either the technology will allow us to solve—once and for all—every other problem that we have, or it will wipe us out and there will be nobody left to have problems anymore. “It’s a mystery to me that anyone would really focus on anything else if they actually understood the problem,” she told me.
 And yet despite that urgency, the atmosphere at the march was pleasant, even fun. There was no sense of anger and little sense that lives—let alone the survival of our species—were at stake. That could be down to the broad range of interests and demands that protesters brought with them.
-A chemistry researcher I spoke to ticked off a litany of complaints, which ranged from the conspiracy-adjacent (that data centers emit infrasound below the threshold of human hearing, inducing paranoia in people who live near them) to the reasonable (that the spread of AI slop online is making it hard to find reliable academic sources). The researcher’s solution was to make it illegal for companies to profit from the technology: “If you couldn’t make money from AI, it wouldn’t be such a problem.”
+A chemistry researcher I met ticked off a litany of complaints, which ranged from the conspiracy-adjacent (that data centers emit infrasound below the threshold of human hearing, inducing paranoia in people who live near them) to the reasonable (that the spread of AI slop online is making it hard to find reliable academic sources). The researcher’s solution was to make it illegal for companies to profit from the technology: “If you couldn’t make money from AI, it wouldn’t be such a problem.”
 Most people I spoke to agreed that technology companies probably wouldn’t take any notice of this kind of protest. “I don’t think that the pressure on companies will ever work,” Maxime Fournes, the global head of Pause AI, told me when I bumped into him at the march. “They are optimized to just not care about this problem.”
 But Fournes, who worked in the AI industry for 12 years before joining Pause AI, thinks he can make it harder for those companies. “We can slow down the race by creating protection for whistleblowers or showing the public that working in AI is not a sexy job, that actually it’s a terrible job—you can dry up the talent pipeline.”
 In general, most protesters hoped to make as many people as possible aware of the issues and to use that publicity to push for government regulation. The organizers had pitched the march as a social event, encouraging anyone curious about the cause to come along.
-It seemed to have worked. I met a man who worked in finance who had tagged along with his roommate. I asked why he was there. “Sometimes you don’t have that much to do on a Saturday anyway,” he said. “If you can see the logic of the argument, it sort of makes sense to you, then it’s like ‘Yeah, sure, I’ll come along and see what it’s like.’”
+It seemed to have worked. I met a man who worked in finance who had tagged along with his roommate. I asked why he was there. “Sometimes you don’t have that much to do on a Saturday anyway,” he said. “If you can see the logic of the argument, if it sort of makes sense to you, then it’s like ‘Yeah, sure, I’ll come along.’”
 He thought raising concerns around AI was hard for anyone to fully oppose. It’s not like a pro-Palestine protest, he said, where you’d have people who might disagree with the cause. “With this, I feel like it’s very hard for someone to totally oppose what you’re marching for.”
 After winding its way through King’s Cross, the march ended in a church hall in Bloomsbury, where tables and chairs had been set up in rows. The protesters wrote their names on stickers, stuck them to their chests, and made awkward introductions to their neighbors. They were here to figure out how to save the world. But I had a train to catch, and I left them to it.
 
 KAYNAK : https://www.technologyreview.com/2026/03/02/1133814/i-checked-out-londons-biggest-ever-anti-ai-protest/
 
---- claude | Elevated errors on claude.ai, console, and claude code | score=68.62 ---
+--- claude | Elevated errors on claude.ai, console, and claude code | score=67.29 ---
 Mar
 2
 ,
@@ -1215,7 +1215,7 @@ Investigating
 
 KAYNAK : https://status.claude.com/incidents/0ghc53zpsfmt
 
---- nextjs | v16.2.0-canary.71 | score=56.53 ---
+--- nextjs | v16.2.0-canary.71 | score=55.38 ---
 Core Changes
 fix(turbopack): use posix.join for client URL manifest paths on Windows:
 #90700
@@ -1258,7 +1258,7 @@ for helping!
 
 KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.71
 
---- claude | Elevated errors on Claude Haiku 4.5 | score=56.42 ---
+--- claude | Elevated errors on Claude Haiku 4.5 | score=55.09 ---
 Mar
 2
 ,
@@ -1290,7 +1290,7 @@ Investigating
 
 KAYNAK : https://status.claude.com/incidents/vqnfq1179169
 
---- claude | Elevated errors on Claude Opus 4.6 | score=51.39 ---
+--- claude | Elevated errors on Claude Opus 4.6 | score=50.07 ---
 Mar
 2
 ,
@@ -1329,7 +1329,7 @@ Investigating
 
 KAYNAK : https://status.claude.com/incidents/5zg05jnrqmzg
 
---- claude | Elevated errors in claude.ai | score=50.10 ---
+--- claude | Elevated errors in claude.ai | score=48.78 ---
 Mar
 2
 ,
@@ -1347,7 +1347,7 @@ Investigating
 
 KAYNAK : https://status.claude.com/incidents/63943gpfb97z
 
---- claude | Elevated errors on Claude Opus 4.6 | score=47.79 ---
+--- claude | Elevated errors on Claude Opus 4.6 | score=46.46 ---
 Mar
 2
 ,
@@ -1386,7 +1386,7 @@ Investigating
 
 KAYNAK : https://status.claude.com/incidents/0j8dkb38jymf
 
---- nextjs | v16.2.0-canary.70 | score=32.70 ---
+--- nextjs | v16.2.0-canary.70 | score=31.55 ---
 Core Changes
 [devtools] Stop blocking overlay on error details copy:
 #90698

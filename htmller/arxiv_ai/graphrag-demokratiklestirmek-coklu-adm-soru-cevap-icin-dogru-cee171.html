@@ -1,0 +1,23 @@
+<div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
+  <h1>GraphRAG'ı Demokratikleştirmek: Çoklu Adım Soru-Cevap için Doğrusal, Yalnızca CPU Kullanımıyla Grafik Tabanlı Erişim</h1>
+  <p>GraphRAG sistemleri, çoklu adım erişimini modelleyerek iyileştirir, ancak birçok yaklaşım, pahalı LLM tabanlı grafik yapımı ve GPU ağırlıklı çıkarım gerektirir. Bu makalede, SPRIG (Seeded Propagation for Retrieval In Graphs) adı verilen, yalnızca CPU kullanan, doğrusal zamanlı, token içermeyen bir GraphRAG hattı sunulmaktadır. Bu sistem, LLM grafik yapımını hafif NER tabanlı eş-oluşum grafikleriyle değiştirir ve erişim için Kişiselleştirilmiş PageRank (PPR) kullanır. HotpotQA ve 2WikiMultiHopQA üzerinde BM25, yoğun erişim, karşılıklı sıralama füzyonu (RRF) ve bir TF–IDF PPR temel çizgisi ile değerlendirilir ve erişim kalitesi ve sistem verimliliğine odaklanılır.</p>
+  <p>Bu araştırma, iki önemli sorunu ele alır: Birincisi, birçok akademik ve endüstriyel ekibin ölçekli LLM tabanlı grafik yapımını veya GPU tabanlı grafik çıkarımını karşılayamaması. İkincisi, tamamen çoğaltılabilir, yalnızca CPU kullanan bir temel sunarak, gelecekteki verimli GraphRAG ve yeşil AI çalışmaları için bir referans noktası sağlamak. Bu çalışmanın hedefi, token maliyetlerinden kaçınırken çoklu adım erişim faydalarını koruyan doğrusal zamanlı, yalnızca CPU kullanan bir GraphRAG geliştirmektir.</p>
+  <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
+  <p>Bu makale, GraphRAG sistemlerinin çoklu adım erişiminde nasıl daha verimli hale getirilebileceğini ve bu sistemlerin daha geniş bir kullanıcı kitlesine nasıl sunulabileceğini araştırıyor. Özellikle, LLM tabanlı grafik yapımının ve GPU ağırlıklı işlemlerin maliyetlerini ve gereksinimlerini azaltarak, daha erişilebilir bir çözüm sunmayı hedefliyor. Bu, akademik ve düşük kaynaklı ortamlarda GraphRAG kullanımını artırabilir.</p>
+  <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
+  <p>SPRIG, hafif bir varlık-belge eş-oluşum grafiği ve seyrek Kişiselleştirilmiş PageRank (PPR) erişimi kullanır. Bu yapı, basit ama şeffaf bir temel sağlar ve "demokratikleşmiş" GraphRAG için bir yol sunar. Sistem, hafif NER (SpaCy veya regex) kullanarak bir varlık-belge iki parçalı grafik oluşturur ve ardından Kişiselleştirilmiş PageRank (PPR) uygular. Bu tasarım, doğrusal yapım, seyrek hesaplama ve pratik çoğaltılabilirliğe vurgu yapar.</p>
+  <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
+  <p>Bu çalışma, akademik ve endüstriyel ekiplerin daha düşük maliyetle ve daha az donanım gereksinimiyle çoklu adım erişim sistemlerini kullanmalarına olanak tanır. Özellikle, CPU tabanlı çözümler, GPU erişimi olmayan veya sınırlı kaynaklara sahip olanlar için önemlidir. Ayrıca, bu tür bir sistem, daha geniş bir kullanıcı kitlesinin erişim tabanlı üretim sistemlerini kullanmasına olanak tanır.</p>
+  <h2>Kısa Özet</h2>
+  <ul>
+    <li>GraphRAG sistemleri, çoklu adım erişimi iyileştirir ancak maliyetli olabilir.</li>
+    <li>SPRIG, LLM tabanlı grafik yapımı yerine hafif NER tabanlı eş-oluşum grafikleri kullanır.</li>
+    <li>Kişiselleştirilmiş PageRank (PPR) ile erişim sağlanır.</li>
+    <li>Sistem, akademik ve düşük kaynaklı ortamlarda daha geniş kullanım için uygundur.</li>
+    <li>Verimlilik ve erişim kalitesi arasında somut ödünleşimler sunar.</li>
+  </ul>
+  <h2>Kapanış</h2>
+  <p>Bu makale, LLM tabanlı grafik yapımını atlayan ve çoklu adım erişim kalitesini artıran bir CPU tabanlı, doğrusal zamanlı GraphRAG hattı sunmaktadır. Sonuçlar ve ablasyonlar, basit eş-oluşum grafikleri ve PPR'nin GraphRAG'ı demokratikleştirmek için pratik ve çoğaltılabilir bir yol sunduğunu göstermektedir. Kod ve betikler, 4 GB CPU yalnızca ayarını çoğaltmak için yayınlanacaktır.</p>
+  <h2>Kaynak</h2>
+  <p>Detaylı okumak için: <a href="https://arxiv.org/abs/2602.23372" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2602.23372</a></p>
+</div>

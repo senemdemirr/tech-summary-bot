@@ -1,43 +1,36 @@
 <div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
   <h1>Next.js v16.2.0-canary.71 Güncellemeleri</h1>
-  
-  <p>Next.js'in yeni sürümü, v16.2.0-canary.71, çeşitli iyileştirmeler ve hata düzeltmeleriyle karşımıza çıkıyor. Bu güncellemeler, hem geliştirici deneyimini artırmayı hem de performansı iyileştirmeyi hedefliyor. Bu yazıda, bu sürümdeki önemli değişiklikleri ve bunların etkilerini ele alacağız.</p>
-  
-  <p>Güncellemeler, Turbopack, DevTools ve Docker gibi farklı alanlarda çeşitli yenilikler getiriyor. Bu değişiklikler, geliştiricilerin daha verimli çalışmasına ve uygulamalarını daha kolay yönetmesine yardımcı olabilir.</p>
+  <p>Next.js'in yeni sürümü olan v16.2.0-canary.71, çeşitli iyileştirmeler ve hata düzeltmeleri ile karşımıza çıkıyor. Bu güncellemeler, hem geliştiricilerin iş akışını iyileştirmeyi hedefliyor hem de mevcut sistemdeki bazı eksiklikleri gideriyor. Yeni sürümdeki değişiklikler, özellikle Turbopack ve DevTools gibi bileşenlerde önemli yenilikler içeriyor.</p>
+  <p>Bu makalede, yeni sürümdeki değişikliklerin teknik detaylarına ve bu değişikliklerin kullanıcılar üzerindeki olası etkilerine odaklanacağız. Ayrıca, bu güncellemelerin neden önemli olduğunu ve hangi alanlarda fark yaratabileceğini ele alacağız.</p>
   
   <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
-  
-  <p>Bu sürümde yapılan değişiklikler, Next.js kullanıcılarının karşılaştığı bazı yaygın sorunları ele alıyor ve yeni özelliklerle kullanıcı deneyimini iyileştiriyor. Özellikle Turbopack ve DevTools alanındaki güncellemeler, daha hızlı ve güvenilir bir geliştirme ortamı sunmayı amaçlıyor. Ayrıca, Docker ile ilgili yeni yapılandırma dosyası formatları, konteyner tabanlı geliştirme süreçlerini daha esnek hale getirebilir.</p>
+  <p>Next.js v16.2.0-canary.71 sürümü, geliştiricilere daha iyi bir deneyim sunmayı amaçlayan bir dizi önemli değişiklik içeriyor. Turbopack ve DevTools gibi bileşenlerde yapılan iyileştirmeler, performansı artırmayı ve hata oranlarını azaltmayı hedefliyor. Ayrıca, yeni yapılandırma dosyası formatları ve hata düzeltmeleri ile geliştiricilerin iş akışlarını daha verimli hale getirmesi planlanıyor.</p>
   
   <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
-  
   <ul>
-    <li><strong>Turbopack:</strong> Windows üzerinde manifest yolları için posix.join kullanımı, platformlar arası uyumluluğu artırıyor.</li>
-    <li><strong>DevTools:</strong> React Compiler'ın en son deneysel sürümüne yükseltilmesi, yeni özelliklerin test edilmesine olanak tanıyor.</li>
-    <li><strong>Docker:</strong> Yeni yapılandırma dosyası formatları, Docker ile çalışan projelerde daha fazla esneklik sağlıyor.</li>
-    <li><strong>Hata Düzeltmeleri:</strong> Büyük CI günlüklerinin alınması sırasında oluşan ENOBUFS hatalarının giderilmesi, daha sorunsuz bir entegrasyon süreci sunuyor.</li>
-    <li><strong>Dokümantasyon:</strong> JSON-LD için <script> etiketinin kullanımı konusunda daha net açıklamalar, geliştiricilerin doğru uygulama yapmasına yardımcı oluyor.</li>
+    <li><strong>Turbopack:</strong> Windows'ta client URL manifest yolları için posix.join kullanılarak uyumluluk artırıldı.</li>
+    <li><strong>DevTools:</strong> React Compiler sürümü en son deneysel sürüme yükseltildi.</li>
+    <li><strong>Yapılandırma Dosyaları:</strong> Docker ile yeni yapılandırma dosyası formatları eklendi.</li>
+    <li><strong>Hata Düzeltmeleri:</strong> ENOBUFS hataları, büyük CI günlükleri alınırken pr-status.js'de düzeltildi.</li>
+    <li><strong>Dokümantasyon:</strong> JSON-LD için native &lt;script&gt; kullanımına ilişkin açıklamalar netleştirildi.</li>
   </ul>
   
   <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
-  
-  <p>Bu güncellemeler, özellikle Next.js ile çalışan geliştiricileri doğrudan etkiliyor. Turbopack ve DevTools'taki iyileştirmeler, geliştirme sürecini hızlandırabilir ve daha az hata ile karşılaşılmasını sağlayabilir. Docker kullanıcıları, yeni yapılandırma dosyası formatları sayesinde daha esnek bir geliştirme ortamına sahip olabilir. Ayrıca, dokümantasyon güncellemeleri, geliştiricilerin daha doğru ve verimli kod yazmasına katkıda bulunabilir.</p>
+  <p>Bu güncellemeler, özellikle Next.js geliştiricileri ve DevOps ekipleri için önemli avantajlar sunuyor. Turbopack'teki iyileştirmeler, daha hızlı ve daha güvenilir derleme süreçleri sağlayarak geliştiricilerin verimliliğini artırabilir. Ayrıca, yeni yapılandırma dosyası formatları, Docker kullanıcıları için daha esnek ve kolay bir yapılandırma süreci sunuyor.</p>
   
   <h2>Kısa Özet</h2>
-  
   <ul>
-    <li>Windows için manifest yollarında posix.join kullanımı, platform uyumluluğunu artırır.</li>
-    <li>React Compiler'ın deneysel sürüme yükseltilmesi, yeni özelliklerin test edilmesini sağlar.</li>
-    <li>Docker yapılandırma dosyalarında yeni formatlar, esnekliği artırır.</li>
-    <li>ENOBUFS hatalarının giderilmesi, CI süreçlerini sorunsuz hale getirir.</li>
-    <li>Dokümantasyon güncellemeleri, geliştiricilerin doğru uygulama yapmasına yardımcı olur.</li>
+    <li>Turbopack, Windows uyumluluğunu artırmak için posix.join kullanıyor.</li>
+    <li>React Compiler, en son deneysel sürüme güncellendi.</li>
+    <li>Yeni yapılandırma dosyası formatları Docker için eklendi.</li>
+    <li>ENOBUFS hataları, büyük CI günlüklerinde düzeltildi.</li>
+    <li>Dokümantasyon, JSON-LD &lt;script&gt; kullanımı konusunda netleştirildi.</li>
   </ul>
   
-  <p>Metin, eğitmenler ve bakış açıları gibi konularda detay vermiyor.</p>
+  <p>Metin, şu konularda detay vermiyor: eğitmenler ve bakış açıları, sınırlamalar ve belirsizlikler.</p>
   
   <h2>Kapanış</h2>
-  
-  <p>Next.js v16.2.0-canary.71 sürümü, çeşitli iyileştirmeler ve hata düzeltmeleri ile geliştiricilere daha iyi bir deneyim sunmayı hedefliyor. Bu güncellemeler, geliştirme sürecini daha verimli hale getirebilir ve uygulama performansını artırabilir. Detaylı değişiklikler ve etkileri hakkında daha fazla bilgi edinmek isteyenler için kaynak bağlantısı aşağıda yer almaktadır.</p>
+  <p>Next.js v16.2.0-canary.71 sürümü, geliştiricilerin iş akışlarını daha verimli hale getirmeyi ve mevcut sistemdeki bazı eksiklikleri gidermeyi amaçlıyor. Bu güncellemeler, özellikle performans ve uyumluluk konularında önemli iyileştirmeler sunuyor. Detaylı incelemeler ve uygulamalar, geliştiricilerin bu yeni sürümden en iyi şekilde yararlanmalarını sağlayacaktır.</p>
   
   <h2>Kaynak</h2>
   <p>Detaylı okumak için: <a href="https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.71" target="_blank" rel="noopener noreferrer">https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.71</a></p>
