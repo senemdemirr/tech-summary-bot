@@ -1,0 +1,37 @@
+<div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
+  <h1>Grafik Tabanlı Çok Adımlı Soru Yanıtlamada CPU-Tabanlı Yaklaşım: SPRIG</h1>
+  
+  <p>Grafik tabanlı bilgi geri getirme sistemleri, çok adımlı sorgulama süreçlerinde yapısal modellemeyle daha etkili sonuçlar sunar. Ancak, bu sistemlerin çoğu, pahalı dil modeli tabanlı grafik oluşturma ve GPU ağırlıklı çıkarım süreçlerine dayanır. Bu makalede, CPU tabanlı, doğrusal zamanlı ve token gerektirmeyen bir grafik geri getirme sistemi olan SPRIG'i tanıtıyoruz. SPRIG, dil modelleri yerine hafif bir isim varlık tanıma (NER) tabanlı eş-oluşum grafikleri kullanarak grafik oluşturur ve geri getirme için Kişiselleştirilmiş PageRank (PPR) kullanır.</p>
+  
+  <p>Çalışmamız, HotpotQA ve 2WikiMultiHopQA veri setlerinde BM25, yoğun geri getirme ve diğer yöntemlerle karşılaştırmalı değerlendirmeler yaparak geri getirme kalitesi ve sistem verimliliğine odaklanmaktadır. SPRIG, grafik tabanlı geri getirme sistemlerini daha erişilebilir hale getirmeyi hedeflerken, token maliyetlerini ve GPU gereksinimlerini ortadan kaldırır.</p>
+  
+  <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
+  
+  <p>Grafik tabanlı geri getirme sistemleri, çok adımlı sorgulama gerektiren durumlarda daha etkili olabilir. Ancak, mevcut sistemler genellikle yüksek maliyetli dil modellerine ve GPU tabanlı işlemcilere ihtiyaç duyar. SPRIG, bu gereksinimleri ortadan kaldırarak, daha geniş bir kullanıcı kitlesinin bu teknolojiden yararlanabilmesini sağlamayı amaçlar. Bu, akademik ve düşük kaynaklı ortamlarda önemli bir avantaj sunar.</p>
+  
+  <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
+  
+  <p>SPRIG, CPU tabanlı ve doğrusal zamanlı bir grafik geri getirme sistemidir. Sistemin temel bileşenleri arasında hafif bir NER tabanlı eş-oluşum grafiği oluşturma ve Kişiselleştirilmiş PageRank (PPR) kullanımı yer alır. Bu yapı, dil modeli tabanlı grafik oluşturma ihtiyacını ortadan kaldırarak, daha düşük maliyetli ve erişilebilir bir çözüm sunar.</p>
+  
+  <p>Sistem, sorgu varlıklarından veya yoğun geri getirme sonuçlarından tohumlar oluşturarak PPR işlemi gerçekleştirir. Ayrıca, hafif başlık-alias ayrıştırma ve hub budama gibi teknikler kullanarak sorgu süresini önemli ölçüde azaltır.</p>
+  
+  <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
+  
+  <p>SPRIG, özellikle akademik araştırmacılar ve düşük bütçeli projeler için önemli bir çözüm sunar. GPU gereksinimlerini ortadan kaldırarak, daha geniş bir kullanıcı kitlesinin grafik tabanlı geri getirme sistemlerinden yararlanabilmesini sağlar. Ayrıca, çok adımlı sorgulama gerektiren uygulamalarda daha etkili sonuçlar sunar.</p>
+  
+  <h2>Kısa Özet</h2>
+  <ul>
+    <li>SPRIG, CPU tabanlı ve doğrusal zamanlı bir grafik geri getirme sistemidir.</li>
+    <li>Sistem, hafif bir NER tabanlı eş-oluşum grafiği kullanır.</li>
+    <li>Kişiselleştirilmiş PageRank (PPR) ile geri getirme işlemi gerçekleştirilir.</li>
+    <li>Başlık-alias ayrıştırma ve hub budama ile sorgu süresi azaltılır.</li>
+    <li>GPU gereksinimleri ortadan kaldırılarak daha geniş bir kullanıcı kitlesine hitap edilir.</li>
+  </ul>
+  
+  <h2>Kapanış</h2>
+  
+  <p>SPRIG, grafik tabanlı geri getirme sistemlerini daha erişilebilir hale getirerek, çok adımlı sorgulama süreçlerinde etkili bir çözüm sunar. Bu sistem, dil modeli tabanlı grafik oluşturma ihtiyacını ortadan kaldırarak, daha düşük maliyetli ve erişilebilir bir alternatif sunar. Gelecekte, daha fazla veri seti ve güçlü okuyucularla genişletilmesi planlanmaktadır.</p>
+  
+  <h2>Kaynak</h2>
+  <p>Detaylı okumak için: <a href="https://arxiv.org/abs/2602.23372" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2602.23372</a></p>
+</div>

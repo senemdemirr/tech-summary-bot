@@ -1,4 +1,4 @@
---- nextjs | v16.2.0-canary.70 | score=49.06 ---
+--- nextjs | v16.2.0-canary.70 | score=46.87 ---
 Core Changes
 [devtools] Stop blocking overlay on error details copy:
 #90698
