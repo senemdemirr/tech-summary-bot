@@ -1,4 +1,4 @@
---- arxiv_ai | The Compulsory Imaginary: AGI and Corporate Authority | score=104.49 ---
+--- arxiv_ai | The Compulsory Imaginary: AGI and Corporate Authority | score=103.01 ---
 The Compulsory Imaginary: AGI and Corporate Authority
 Abstract
 The development of artificial general intelligence (AGI) is as much an imaginative project as a technical one. This paper argues that the two leading AGI firms—OpenAI and Anthropic—construct sociotechnical imaginaries through a structurally consistent rhetorical strategy, despite meaningful differences in execution. Drawing on Jasanoff and Kim (2015)’s framework of sociotechnical imaginaries, the sociology of expectations (Borup et al., 2006), and the concept of the vanguard vision (Hilgartner et al., 2015), the paper analyzes two essays published within weeks of each other in late 2024: Sam Altman’s The Intelligence Age and Dario Amodei’s Machines of Loving Grace. A close comparative reading identifies four rhetorical operations shared across both texts: the self-exemption move, which disavows prophetic authority while exercising it; teleological naturalization, which embeds AGI’s arrival in narratives of historical and moral inevitability; qualified acknowledgment, which absorbs genuine concessions to risk into an overarching optimistic frame; and implicit indispensability, which positions each firm as central to the imagined future without naming it as a commercial actor. That two competing institutions with different cultures, different risk philosophies, and leaders with notably different public personae nevertheless converge on the same underlying rhetorical architecture—despite strong competitive incentives to differentiate their public visions—suggests the imaginary is not only a firm-level communication strategy but also a feature of the institutional position these firms occupy. The paper makes three contributions: it extends the sociotechnical imaginaries framework from nation-states to private firms at the frontier of transformative technology development; it identifies the specific discursive mechanism through which corporate authority over technological futures is projected and oriented toward stabilization; and it demonstrates through comparative analysis that this mechanism is at minimum structural rather than purely idiosyncratic. The findings raise the question of what institutional arrangements would be required to make that authority contestable from outside the firms that produce it.
@@ -125,7 +125,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2602.23679
 
---- arxiv_ai | A Reduction of Input/Output Logics to SAT | score=104.49 ---
+--- arxiv_ai | A Reduction of Input/Output Logics to SAT | score=103.01 ---
 A Reduction of Input/Output Logics to SAT
 Abstract
 Deontic logics are formalisms for reasoning over norms, obligations, permissions and prohibitions. Input/Output (I/O) Logics are a particular family of so-called norm-based deontic logics that formalize conditional norms outside of the underlying object logic language, where conditional norms do not carry a truth-value themselves. In this paper, an automation approach for I/O logics is presented that makes use of suitable reductions to (sequences of) propositional satisfiability problems. A prototypical implementation, named rio (reasoner for input/output logics), of the proposed procedures is presented and applied to illustrative examples.
@@ -515,7 +515,7 @@ Appendix E Input Problem Preferred Output #3
 
 KAYNAK : https://arxiv.org/abs/2508.16242
 
---- arxiv_ai | QD-MAPPER: A Quality Diversity Framework to Automatically Evaluate Multi-Agent Path Finding Algorithms in Diverse Maps | score=104.26 ---
+--- arxiv_ai | QD-MAPPER: A Quality Diversity Framework to Automatically Evaluate Multi-Agent Path Finding Algorithms in Diverse Maps | score=102.78 ---
 ifaamas \acmConference[AAMAS ’26]Proc. of the 25th International Conference on Autonomous Agents and Multiagent Systems (AAMAS 2026)May 25 – 29, 2026 Paphos, CyprusC. Amato, L. Dennis, V. Mascardi, J. Thangarajah (eds.) \copyrightyear2026 \acmYear2026 \acmDOI \acmPrice \acmISBN \acmSubmissionID546\authornoteEqual contribution. \affiliation \institutionCarnegie Mellon University \cityPittsburgh \countryUnited States \authornotemark[1] \affiliation \institutionCarnegie Mellon University \cityPittsburgh \countryUnited States \affiliation\institutionUniversity of Southern California \cityLos Angeles \countryUnited States \affiliation\institutionUniversity of Southern California \cityLos Angeles \countryUnited States \affiliation\institutionUniversity of Southern California \cityLos Angeles \countryUnited States \affiliation\institutionCarnegie Mellon University \cityPittsburgh \countryUnited States
 QD-MAPPER: A Quality Diversity Framework to Automatically Evaluate Multi-Agent Path Finding Algorithms in Diverse Maps
 Abstract.
@@ -651,7 +651,7 @@ Figure 23 shows the archive of PIBT by generating maps of size 64 64.
 
 KAYNAK : https://arxiv.org/abs/2409.06888
 
---- arxiv_ai | Democratizing GraphRAG: Linear, CPU-Only Graph Retrieval for Multi-Hop QA | score=104.26 ---
+--- arxiv_ai | Democratizing GraphRAG: Linear, CPU-Only Graph Retrieval for Multi-Hop QA | score=102.78 ---
 Democratizing GraphRAG: Linear, CPU-Only Graph Retrieval for Multi-Hop QA
 Abstract
 GraphRAG systems improve multi-hop retrieval by modeling structure, but many approaches rely on expensive LLM-based graph construction and GPU-heavy inference. We present SPRIG (Seeded Propagation for Retrieval In Graphs), a CPU-only, linear-time, token-free GraphRAG pipeline that replaces LLM graph building with lightweight NER-driven co-occurrence graphs and uses Personalized PageRank (PPR) for retrieval. We evaluate on HotpotQA and 2WikiMultiHopQA with BM25, dense retrieval, reciprocal-rank fusion (RRF), and a TF–IDF PPR baseline, focusing on retrieval quality and system efficiency. We provide ablations over seed size, NER choice, and PPR parameters, plus scalability curves and end-to-end QA on a 1,000-query subset. Lightweight alias disambiguation and hub pruning reduce query time by 16–28% with negligible Recall@10 changes. The results characterize when CPU-friendly graph retrieval helps multi-hop recall and when strong lexical hybrids (RRF) are sufficient, outlining a realistic path to democratizing GraphRAG without token costs or GPU requirements.
@@ -742,7 +742,7 @@ Figures A.1–A.5 visualize the ablations. Reading tip: seed size/weighting plot
 
 KAYNAK : https://arxiv.org/abs/2602.23372
 
---- arxiv_ai | SALIENT: Frequency-Aware Paired Diffusion for Controllable Long-Tail CT Detection | score=104.26 ---
+--- arxiv_ai | SALIENT: Frequency-Aware Paired Diffusion for Controllable Long-Tail CT Detection | score=102.78 ---
 Department of Radiology and Nuclear Medicine,
 University of Maryland School of Medicine 22institutetext: Department of Radiology and Nuclear Medicine,
 University of Maryland School of Medicine
@@ -869,7 +869,7 @@ These findings suggest that frequency-aware diffusion provides a practical mecha
 
 KAYNAK : https://arxiv.org/abs/2602.23447
 
---- nextjs | v16.2.0-canary.70 | score=46.87 ---
+--- nextjs | v16.2.0-canary.70 | score=45.52 ---
 Core Changes
 [devtools] Stop blocking overlay on error details copy:
 #90698
