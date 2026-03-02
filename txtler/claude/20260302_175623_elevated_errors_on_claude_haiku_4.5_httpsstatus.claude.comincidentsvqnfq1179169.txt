@@ -1,4 +1,0 @@
-Subscribe to updates for Elevated errors on Claude Haiku 4.5 via email and/or text message. You'll receive email notifications when incidents are updated, and text message notifications whenever Claude creates or resolves an incident.
-To receive SMS updates, please verify your number. To proceed with just email click ‘Subscribe’
-
-KAYNAK : https://status.claude.com/incidents/vqnfq1179169
