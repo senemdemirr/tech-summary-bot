@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-03-02T00:55:57.853537+00:00",
-  "cutoff_utc": "2026-03-01T00:55:57.853537+00:00",
+  "generated_at_utc": "2026-03-02T01:10:29.307776+00:00",
+  "cutoff_utc": "2026-03-01T01:10:29.307776+00:00",
   "max_keep_per_site": 5,
   "all_combined": "txtler/_combined/all_last24h.txt",
   "sites": {
