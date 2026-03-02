@@ -1,4 +1,4 @@
---- nextjs | v16.2.0-canary.71 | score=57.46 ---
+--- nextjs | v16.2.0-canary.71 | score=56.53 ---
 Core Changes
 fix(turbopack): use posix.join for client URL manifest paths on Windows:
 #90700
@@ -41,7 +41,7 @@ for helping!
 
 KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.71
 
---- nextjs | v16.2.0-canary.70 | score=33.63 ---
+--- nextjs | v16.2.0-canary.70 | score=32.70 ---
 Core Changes
 [devtools] Stop blocking overlay on error details copy:
 #90698
