@@ -2,7 +2,7 @@ name: Tech Summary Bot
 
 on:
   schedule:
-    - cron: "10 11 * * *"
+    - cron: "15 23 * * *"
   workflow_dispatch: {}
 
 concurrency:
