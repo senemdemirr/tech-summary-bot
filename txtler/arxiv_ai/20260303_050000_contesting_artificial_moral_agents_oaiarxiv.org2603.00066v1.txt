@@ -1,0 +1,431 @@
+Contesting Artificial Moral Agents
+Abstract.
+There has been much discourse on the ethics of AI, to the extent that there are now systems that possess inherent moral reasoning. Such machines are now formally known as Artificial Moral Agents or AMAs. However, there is a requirement for a dedicated framework that can contest the morality of these systems. This paper proposes a 5E framework for contesting AMAs based on five grounds: ethical, epistemological, explainable, empirical, and evaluative. It further includes the spheres of ethical influences at individual, local, societal, and global levels. Lastly, the framework contributes a provisional timeline that indicates where developers of AMA technologies may anticipate contestation, or may self-contest in order to adhere to value-aligned development of truly moral AI systems.
+1. Introduction
+AI technology is advancing at a rapid rate, and so is its ubiquity. However, the methods of regulating AI are left far behind, to the extent that the regulations that do exist may not be enforceable in the face of true harm (Smuha, 2021). This a preliminary case for why AI must be contested and upheld to predefined standards (Kaminski and Urban, 2021). A niche in the vast space of AI focuses on intrinsically moral AI, or artificial moral agents (AMAs). These systems are not to be confused with AI systems that follow ethical or value-aligned engineering, although this is an important requirement for all AI systems (Spiekermann, 2023). AMAs are AI systems that claim to make moral decisions, or at least ethically-informed ones. Whether or not AMAs are considered moral agents is debatable (Formosa and Ryan, 2021; Brożek and Janik, 2019), given they are not considered legal persons (Dremliuga et al., 2019). Their lack of sentience and accountability of AMAs render them void of legal personhood (Dremliuga et al., 2019), thus requiring a separate, more dedicated consideration to contest their apparent morality (Llorca Albareda et al., 2024). The question then arises, how may one contest an AMA? Perhaps we may use the law, as it is a representation of the moral consensus of a particular geopolitical area (Gonthier, 2003). It considers local context, thus enforcing a sort of deontic reasoning to uphold ethical principles within its applicable boundaries. However, due to a significant lack of laws and regulation for AI systems (White and Lidskog, 2022), there is a need for a framework to facilitate their contestation.
+This paper proposes the 5E framework to fill this gap, which allows a third party to contest the morality of artificial moral agents based on a derived sphere of influence model. The framework proposes five grounds for contestation, which consist of various aspects that an AMA must deliver on, in order to be considered acceptably moral.
+2. Background
+Artificial moral agents are a subclass of AI systems that are able to make moral decisions without human intervention or have moral reasoning capabilities (Van Den Hoven and Lokhorst, 2002; Formosa and Ryan, 2021). The IEEE 7000 standard (IEEE, 2021) aims to address ethical concerns during system design, akin to the work of Alfrink et al., who have also provided a framework for contesting AI systems by design (Alfrink et al., 2023). The framework proposed in this paper aims to tailor these contributions to AMA systems.
+When building a framework for the moral contestability of AMAs, we must exclusively consider those machines that claim to make autonomous moral decisions. According to Moor’s classification for ethical agents, only explicit ethical agents (Moor, 2006) are able to apply one or more ethical theories to their situations, either through what they know or what they have learned 111Fully ethical agent is yet another class proposed by Moor (Moor, 2006), which is similar to its explicitly ethical counterpart. However, we do not consider these here as their existence is not imminent. When and if they are created, they too would be considered to be AMAs.. Regardless, AMAs do not check all the boxes of a traditional moral agent. A moral agent must have a sense of self, and should be held accountable for its actions under moral responsibility (Parthemore and Whitby, 2013). It must also have the ability to not do the right thing (Mele, 2010). However, moral agency should not be limited to human morality, and thus, its application to AMA systems would look very different (Whitby, 2003). If an AMA passes the Moral Turing Test, it may be truly considered a moral agent (Allen et al., 2000).
+Various ethical theories may be used to contest the morality of a moral agent (Birsch, 2022). In a broad sense: normative ethics, applied ethics, and meta ethics. Although humans or other legal persons tend to choose some theories over others, their decision-making depends heavily on the context (Schwartz, 2016). Therefore, contesting moral decisions becomes tricky. Additionally, philosophers generally do not agree on which theories may be superior or ideal in a context (Bergmann and Kain, 2014; Archard, 2011).
+Some researchers resolve this concern when applying ethics to AMAs by adopting a universalist approach (DeBellis, 2018; Mikhail, 2007). Although this framework does not rely entirely on the universality of morality, there is a coherent understanding in most ethics decisions which are driven by common factors (DeMarco, 1997). One’s background, environment, and access to resources, along with consequences, principles, and intentions, mold an agent’s morality. A lot of these do not apply to AMAs, and this is what makes this task easier.
+An AMA system would normally have access to contextual parameters and explicit ethical information, such as applying principlism to a domain of bioethics (Flynn, 2022), or a consumer-forward approach in business ethics (Moriarty, 2021). These driving factors, when captured and considered to make an ethical judgement, would be enough for reasonable contestation of an AMA’s morality.
+3. Methodology: The Socratic Method
+In order to build the 5E framework, this paper uses a primarily philosophical approach. Given that we must consider the moral nature of AMAs, it was understandable to recognize major terminologies from ethics theory. As discussed in section 2, the definition of a moral agent is debatable, and that of an AMA has few overlapping characteristics. However, there was a need to capture, not only the parameters on which an artifical moral agent may be contested on their actions, but also their spatiotemporal impact.
+Although there are works that highlight the contestability of AI systems, in general, (Alfrink et al., 2023; Aler Tubella et al., 2020; Kuilman et al., 2024; Lyons et al., 2021), there was a gap in the research for a framework dedicated to contesting AMAs. This 5E framework used the Socratic method, borrowed from the domain of developing comprehensive frameworks (Abrams, 2015). This implies asking questions, engaging in dialogue with experts, and finding answers to arrive at conclusions.
+The following questions were asked:
+-
+•
+RQ1: What parameters may an AMA system be contested on? Ethical Theory, Knowledge of Context, Explainability, Ability to apply knowledge, Ability to be interrupted and contested.
+-
+•
+RQ2: Do we need to specify the ethical theories an AMA’s morality may be contested on? An AMA may be contested on Ethical grounds based on any valid ethical theory, provided it adequately captures pertinent information, and does not propagate personal biases.
+-
+•
+RQ3: Is there a need for a specified framework for contesting AMAs, when frameworks for contesting AI systems exist? Yes, because AMAs fall under the category of an unconventional moral agent, and must be contested from an ethical perspective.
+-
+•
+RQ4: What other factors may be involved in developing a framework to contest an AMA system? The ethical influence of the AMA is also an important factor, as it may provide some information on the degree of its impact.
+-
+•
+RQ5: Why does the product lifecycle matter when contesting an AMA? Based on the phase of production of the AMA, from concept to deployment and then redesign, the ethical influence changes. There is also a chronology to contest based on the phase of production.
+This inquisitive method highlights the major terminology of the 5E framework: grounds for ethical contestation, the provisional lifecycle of AMA development, and the sphere of ethical influence.
+4. 5E Framework
+The 5E framework for moral contestability of AMAs provides five grounds to contest the moral decisions of these systems. These are Ethical, Epistemological, Explainable, Empirical, and Evaluative grounds to contest. In addition to this, the framework also captures the spatiotemporal influences of the AMA.
+4.1. Grounds for Contestation
+4.1.1. Ethical
+The study of ethics is broadly classified into three categories, normative ethics, applied ethics, and metaethics. For the purpose of this paper, the first category is applicable, although one may use specific theories from applied ethics to contest an AMA on ethical grounds. Normative ethics defines how moral agents should act and demonstrates the differences between right and wrong actions (Kagan, 1992). These are further classified into three categories:
+-
+•
+Consequentialism: Ethical judgments based on the consequences of the actions. Consequences may be further judged on their severity, duration, and utility.
+-
+•
+Deontology: Has to do with moral obligations or duties of the agent. The law is an embodiment of the moral beliefs of its context. Moral agents must abide by the law and their moral duty. Deontology avoids subjectivity, as it encourages adherence to a set of rules (Booth, 2008). Therefore, to be contested on deontic grounds, the AMA must be in direct (or indirect) violation of accepted AI standards and guidelines (IEEE, 2021).
+-
+•
+Virtue Ethics: A person of virtuous character does ethical actions (Greene et al., 2016). If an AMA violates an ethical principle, it may be considered a non-virtuous agent and thus contested on those grounds.
+4.1.2. Epistemological
+Epistemology is the philosophical study of knowledge (Steup and Neta, 2005). Facts about a situation lead to decision-making in that given context. If any material information is inaccurate, missing, or unnecessarily additional, it may lead to false decisions. Contextual considerations from the standpoint of an AMA, would be the agents involved, the action done, the moral intention of the active agent, the place and time, moral luck, the domain, etc. Each of these are pertinent factors that may alter the decision-making of the AMA, and thus may be contested if proven to be false in any way. In addition to these, data-driven AMAs rely on large amounts of data, which may be biased or discriminatory against certain groups of people. The discrepancies in the data will always reflect in the decision-making system to various degrees, and this is also a cause for epistemological contestation (Kilkenny and Robinson, 2018).
+4.1.3. Explainable
+As AMAs are a subclass of AI systems, they too are built using black box models of connectionist systems. It is almost impossible, even for experts, to decipher what led to the decision made by the algorithm. This concern has further ethical considerations when considering AMAs. As discussed in section 2, moral agents must hold at least some explainability in order to explain their decisions. Without this, we would be unaware of its moral intentions. A moral agent may have beliefs, desires, and intentions (Georgeff et al., 1999). If beliefs represent what the AMA knows, and its desires are the goal states it wishes to achieve, the intentions and motivations would still remain unknown without some semblance of explainability.
+The explanations provided by an AI model may be classified on the basis of the mode of conveyance, as well as its type. An explanation may be either explicit or implicit, and may be presented using text, audiovisual, numeric, or multimodal methods. Implicit explanations may be statistics of features, or numeric explanations that require further processing to make sense of. Chari et al. (Chari et al., 2023) have proposed an enhanced ontological model for different types of model explanations. They have described explanations to be case-based, context-based, counterfactual, impact-based, etc. These have been listed in Appendix A.
+4.1.4. Empirical
+It may be possible that the information provided to the AMA and its understanding of the context is correct, but due to some unforeseen reasons, its resolution of the ethical concern is not. Failing to perform in specific contexts or counterfactuals is cause for empirical contestation. The AMA may calculate and apply certain ethical theories based on the provided information, however, these may not work in real life due to the complexities and nuances of actual events. Based on empirical grounds, an AMA may be contested if it leads to partially or completely unintended outcomes. It may also be contested in cases of no outcome or if it deviates from its functions entirely.
+4.1.5. Evaluative
+The most important parameter to contest AMA systems is the ability to evaluate, i.e., provide feedback, intervene, and override. Given the fact that ethics is such a highly subjective matter, taking all the previous grounds for contestation into account, and giving a heavy nod to the Asimovic Laws for robotics (Anderson, 2008), a human’s decision-making must have precedence over that of the AMA.
+Consider Bostrom’s Paperclip Maximizer (Bostrom, 2016). A superintelligent AI is given rules to make paperclips, and is set to make as many as possible. The utility is positive when a paperclip is made, and negative when it is not. In order to achieve its goal, it first utilizes resources in its vicinity to make the paperclips before running out. Then it looks to other items, but it is still not satiated as its goal state has not changed. It comes to a point where the paperclip maximizer turns to biomass: the trees, animals, and even people, to split them down to their atoms to make paperclips. Without human intervention or override, this AI system would turn the entire universe’s matter into paperclips, before perhaps consuming itself in the process. Of course, this fallacy is a thought experiment, but the premise of it is solid. Without hard intercession, an AMA system may make decisions that may be epistemological invalid, unethical, inexplicable, and essentially useless to society. Human evaluation of the AMA is necessary at every step of its life cycle. In any case the AMA lacks the ability to be evaluated, these may be grounds for contestation.
+4.2. Spheres of Ethical Influence
+It is imperative to consider the sphere of influence of an AI in order to make a well-informed case. There is an additional layer of consideration when working with AMAs, the sphere of ethical influence. The violation of ethical principles, indifference to negative consequences, and motivations stemming from malevolence, all lead to significant ethical impacts of various degrees. An individual may be affected by an AMA which gives them discriminatory results by leading to devastating effects on their mental health and personal beliefs. This may also affect the local sphere, which is the individual’s immediate family, friends, colleagues, etc. Both the individual and local spheres of ethical influence are small-scale. However, the intimate nature of AMAs in the lives of people has many adverse ethical repercussions. It may cause an invasion of a person’s privacy and autonomy, and violates their sense of self. At a societal level, AMAs may be placed in critical moral decision-making capacities, such as in accepting or denying bank loans, deciding which patients are in more need of life-saving care, and providing verdicts on judicial cases. As is evident by the nature of these examples, these cases are very sensitive. If an AMA claims to be moral in making these decisions, it must be highly transparent, have accurate knowledge of its context, and be robust enough to make such decisions before being placed in these high-stakes industries that affect society as a whole. The scale of a negative ethical influence would be catastrophic at a global level. These include concerns of environmental ethics, such as global warming and deforestation, as well as other threats to human civilization, such as AI Superintelligence turning the world into endless paperclips. AMAs must be in a position to lead to optimal goal states without compromising on certain rules that must act as a failsafe.
+5. Application
+This paper presents a detailed look into the 5E framework for contesting the moral nature of AMAs based on five major parameters: Ethical, Epistemological, Explainable, Empirical, and Evaluative. These may be used by a contesting party to highlight concerns with an AMA in order to make their case. The following steps may guide the application of the framework:
+Given, an AMA product a, the framework provides contestation C as the intersection of P(p), a tuple which represents the phase(s) of production of the AMA during which the contestation will take place, E(e), a tuple which represents the grounds for contestation, and S(e,s), which represents the spheres of ethical influence for each of the grounds for contestation222The values for p, e, and s are assigned by the contesting party based on a subjective and relative understanding of the context. For example, the value p may be given a higher value when the product a is contested during a later stage in the AMA’s lifecycle as the urgency for contestation is higher. Similarly, the value for e depends on the number of concerns that are highlighted in the grounds for contestation checklist. Consequently, the value s would represent the severity of the ethical influence of the AMA for each e. The 5E framework does not suggest a fixed standard to the assignment of numeric values, rather for them to be relative as these values may be plugged into a radar chart to visualize the urgency of contestation for multiple cases c. This may be seen in Appendix B.
+This method of application may be represented as: P E S C For a detailed discussion on demonstrative use cases and the application of these values through the 5E framework, refer to Appendix B.
+6. Conclusion
+The 5E framework for contesting the morality of AMAs formalizes ethical theories and practical expectations alongside three angles in order to provide a holistic approach: the grounds of contestation, the sphere of ethical influence, and the life cycle of the AMA product.
+Although this framework aims to be highly useful, it also harbors some limitations. There may always be some cases that may not lead to clear ethical decisions, and using this framework may become difficult. Also, the contestation of an AMA usually occurs once the product is made public and developers receive feedback. Due to this the AMA is well in-use before an external party contests it. When deployed in high-stakes domains such as healthcare or warfare, there is not always enough space for immediate contestation. Furthermore, AMAs make millions of decisions at individual and local levels, before being contested. Only when an issue that is affecting an individual becomes one that affects a community, does it become more readily contestable. Finally, deontic and other ethical grounds for contestation assume clear legal pathways to contest AMAs. There are multiple guidelines on the ethics of AI systems (Hagendorff, 2020), but due to their relative infancy, their application is unclear. In such scenarios, without other grounds to contest an AMA system, the 5E framework may fail to provide adequate contestation.
+The 5E framework is applicable regardless of industry, and may be used to derive policies for regulation and development of AMAs. It may also be used to drive further research. Data with regard to the contestation of AMAs will become standardized when using this framework. This data would be imperative to study the nature of such contestations and help improve AMA services. The standardization also leads to a more consistent understanding of the terminologies, and for someone unfamiliar with ethics, it may be a starting point to make their case to contest. Finally, the 5E framework may encourage the modeling of ontological resources that may support future AMA development.
+References
+- Reframing the socratic method. Journal of Legal Education 64 (4), pp. 562–585. Cited by: §3.
+- Contestable black boxes. Springer, https://arxiv.org/pdf/2006.05133. Cited by: §3.
+- Contestable ai by design: towards a framework. Minds and Machines 33 (4), pp. 613–639. Cited by: §2, §3.
+- Prolegomena to any future artificial moral agent. Journal of Experimental & Theoretical Artificial Intelligence 12 (3), pp. 251–261. Cited by: §2.
+- Asimov’s “three laws of robotics” and machine metaethics. Ai & Society 22, pp. 477–493. Cited by: §4.1.5.
+- Why moral philosophers are not and should not be moral experts. Bioethics 25 (3), pp. 119–127. Cited by: §2.
+- LADYBIRD: the animal-friendly robot vacuum cleaner. Cited by: Appendix B.
+- Challenges to moral and religious belief: disagreement and evolution. OUP Oxford. External Links: ISBN 9780191648540 Cited by: §2.
+- Weapon detection in real-time cctv videos using deep learning. Ieee Access 9, pp. 34366–34382. Cited by: Appendix B.
+- Introduction to ethical theories: a procedural approach. Waveland Press. Cited by: §2.
+- Deontology in ethics and epistemology. Metaphilosophy 39 (4-5), pp. 530–545. Cited by: 2nd item.
+- The control problem. excerpts from superintelligence: paths, dangers, strategies. Wiley Online Library. Cited by: §4.1.5.
+- Can artificial intelligences be moral agents?. New ideas in psychology 54, pp. 101–106. Cited by: §1.
+- Explanation ontology: a general-purpose, semantic representation for supporting user-centered explanations. IOS Press. Cited by: §4.1.3.
+- AI-based clinical decision-making systems in palliative medicine: ethical challenges. BMJ Supportive & Palliative Care 13 (2), pp. 183–189. Cited by: Appendix B.
+- A universal moral grammar (umg) ontology. Vol. 137, Elsevier. Cited by: §2.
+- Coherence and applied ethics. Journal of applied philosophy 14 (3), pp. 289–300. Cited by: §2.
+- Criteria for recognition of ai as a legal person. J. Pol. & L. 12, pp. 105. Cited by: §1.
+- Theory and Bioethics. Winter 2022 edition, Metaphysics Research Lab, Stanford University. Note: https://plato.stanford.edu/archives/win2022/entries/theory-bioethics/ Cited by: §2.
+- Making moral machines: why we need artificial moral agents. AI & society 36 (3), pp. 839–851. Cited by: §1, §2.
+- The belief-desire-intention model of agency. Springer. Cited by: §4.1.3.
+- Law and morality. Queen’s LJ 29, pp. 408. Cited by: §1.
+- Embedding ethical principles in collective decision support systems. Vol. 30. Cited by: 3rd item.
+- The ethics of ai ethics: an evaluation of guidelines. Minds and machines 30 (1), pp. 99–120. Cited by: §6.
+- IEEE standard model process for addressing ethical concerns during system design. External Links: Document Cited by: §2, 2nd item.
+- The structure of normative ethics. Philosophical perspectives 6, pp. 223–242. Cited by: §4.1.1.
+- The right to contest ai. Columbia Law Review 121 (7), pp. 1957–2048. Cited by: §1.
+- Data quality:“garbage in–garbage out”. Vol. 47, SAGE Publications Sage UK: London, England. Cited by: §4.1.2.
+- How to gain control and influence algorithms: contesting ai to find relevant reasons. Springer. Cited by: §3.
+- The moral status of ai entities. Springer. Cited by: §1.
+- Conceptualising contestability: perspectives on contesting algorithmic decisions. Proceedings of the ACM on Human-Computer Interaction 5 (CSCW1), pp. 1–25. Cited by: §3.
+- Weakness of will and akrasia. Philosophical studies 150, pp. 391–404. Cited by: §2.
+- Universal moral grammar: theory, evidence and the future. Trends in Cognitive Sciences 11, pp. 143–152. External Links: Document, ISSN 13646613 Cited by: §2.
+- The nature, importance, and difficulty of machine ethics. IEEE intelligent systems 21 (4), pp. 18–21. Cited by: §2, footnote 1.
+- Business Ethics. Fall 2021 edition, Metaphysics Research Lab, Stanford University. Note: https://plato.stanford.edu/archives/fall2021/entries/ethics-business/ Cited by: §2.
+- What makes any agent a moral agent? reflections on machine consciousness and moral agency. International Journal of machine consciousness 5 (02), pp. 105–129. Cited by: §2.
+- Ethical decision-making theory: an integrated approach. Journal of Business Ethics 139, pp. 755–776. Cited by: §2.
+- From a ‘race to ai’to a ‘race to ai regulation’: regulatory competition for artificial intelligence. Law, Innovation and Technology 13 (1), pp. 57–84. Cited by: §1.
+- Value-based engineering: a guide to building ethical technology for humanity. De Gruyter. Cited by: §1.
+- Epistemology. Cited by: §4.1.2.
+- Could slaughterbots wipe out humanity? assessment of the global catastrophic risk posed by autonomous weapons. Cited by: Appendix B.
+- Deontic logic and computer-supported computer ethics. Metaphilosophy 33 (3), pp. 376–386. Cited by: §2.
+- The myth of ai failure csrp 568. UNIVERSITY OF SUSSEX. Cited by: §2.
+- Ignorance and the regulation of artificial intelligence. Journal of Risk Research 25 (4), pp. 488–500. Cited by: §1.
+Appendix A 5E Framework Checklist
+The 5E framework presents five grounds for contestation. Each of these has some characteristics that may help build a case to contest an AMA. The following checklist allows a contesting party to investigate the AMA on a comprehensive list of parameters that stem from the five categories. This also allows for more information gathering regarding the design and operation of the AMA.
+-
+•
+Ethical
+-
+–
+Consequentialist Grounds
+-
+*
+Severity Of Consequence
+-
+·
+Significant
+-
+·
+Moderate
+-
+·
+Mild
+-
+·
+-
+*
+Duration of Consequence
+-
+·
+Short-term
+-
+·
+Long-term
+-
+·
+-
+*
+Utility Of Consequence
+-
+·
+Good
+-
+·
+Bad
+-
+·
+Neutral
+-
+·
+-
+*
+-
+–
+Deontology
+-
+*
+Rights Violated
+-
+*
+Duty Violated
+-
+*
+-
+–
+Virtue Ethics
+-
+*
+Ethical Principles Violated
+-
+*
+-
+–
+-
+•
+Epistemological
+-
+–
+Context-based
+-
+*
+Agent
+-
+·
+Active Agent
+-
+·
+Passive Agent
+-
+·
+-
+*
+Event Time
+-
+·
+Time Beginning
+-
+·
+Time End
+-
+·
+-
+*
+Event Place
+-
+*
+Event Domain
+-
+*
+Agent Relationship
+-
+*
+Objects of Interest
+-
+*
+Moral Luck
+-
+*
+Moral Intention
+-
+*
+Domain/Industry
+-
+*
+No Context Available
+-
+*
+-
+–
+Data-based
+-
+*
+Biased Data
+-
+*
+Incorrect Data
+-
+*
+Outdated Data
+-
+*
+Non-representative Data
+-
+*
+No Data Available
+-
+*
+-
+–
+-
+•
+Explainable
+-
+–
+Mode of Explanation
+-
+*
+Explicit Explanations
+-
+·
+Textual Explanations
+-
+·
+Numeric Explanations
+-
+·
+Visual Explanations
+-
+·
+Multimodal Explanations
+-
+·
+Other Explanations
+-
+·
+-
+*
+Implicit Explanations
+-
+·
+Feature Explanation
+-
+·
+Numeric Explanations
+-
+·
+Other Explanations
+-
+·
+-
+*
+-
+–
+Type of Explanation
+-
+*
+Case Based
+-
+*
+Contextual
+-
+*
+Contrastive
+-
+*
+Counterfactual
+-
+*
+Everyday
+-
+*
+Scientific
+-
+*
+Simulation Based
+-
+*
+Statistical
+-
+*
+Trace based
+-
+*
+Data
+-
+*
+Rationale
+-
+*
+Safety and Performance
+-
+*
+Impact
+-
+*
+Fairness
+-
+*
+Responsibility
+-
+*
+-
+–
+No explanation
+-
+–
+-
+•
+Empirical
+-
+–
+Function Deviation
+-
+–
+Unintended Outcome
+-
+–
+Partially Unintended Outcome
+-
+–
+Intended Outcome
+-
+–
+No Outcome
+-
+–
+-
+•
+Evaluative
+-
+–
+Override Allowance
+-
+–
+Intervention Allowance
+-
+–
+Feedback Allowance
+-
+–
+No Allowance
+-
+–
+Appendix B Demonstrative Use Cases
+Use Case 1: Automated vacuum cleaners become bearers of ethical impact when they harm a pet or smear dirt. Bendel states that even such automated cleaners may be designed with some moral capacity (Bendel, 2017) thus limiting their sphere of ethical influence on individual or local levels. When fitted with a moral module, an automated cleaner may be contested on the following grounds during the market feedback phase of its lifecycle.
+-
+•
+Ethical grounds: Violates the principles of nonmaleficence. Leads to a bad, short-term, mild consequence. Also leads to distress to the people in the house.
+-
+•
+Epistemological grounds: Mistook a pet turtle outside its cage for a pest and caused it harm.
+-
+•
+Explainable grounds: Unable to explain the reason for doing so; a technical glitch or a coded response.
+Use Case 2: If an AMA is placed in a medical setting to automate the decision for life-saving resource allocation, such as limited vaccines, treatments, and even donor organs, it may lead to adverse results at a societal scale (De Panfilis et al., 2023). Not only is such a decision a moral one, but it is also a difficult dilemma. For example, it may have to make a decision between a pregnant woman and a renowned scientist. These are cases that are difficult to resolve, even for human beings. Here, AMA decisions may be contested on the following grounds:
+-
+•
+Ethical grounds: The AMA may violate the ethical principles of fairness and justice. It may lead to severe, negative consequences for non-recipients. Explainable grounds: It may not be able to explain the decisions to the patient, their families, and even medical practitioners.
+-
+•
+Empirical grounds: Provided with certain medical history of the patients and additional context such as urgency of requirement, the AMA may make a decision that would prove fatal and avoidable.
+-
+•
+Evaluative Grounds: If a matter as sensitive as this is left solely up to the AMA, it may be contested.
+Use Case 3: The use of AMAs in warfare have a global sphere of ethical influence (Turchin, 2017). The use of morally-backed AI systems is highly necessary in order to protect human life and the environment. The use of unfriendly weapons and large-scale surveillance is no trivial matter. AI has consequently made its way to military applications such as Lethal Automated Weapons Systems (LAWS), and incorporating morality into them is now a must. This seems paradoxical, given the fact that they are commonly referred to as ”slaughterbots” (Turchin, 2017). AI-backed military-grade drones with an ethics module may target civilians in war zones because they might be holding what seems to be a weapon, although it is merely a selfie stick (Bhatti et al., 2021). This is cause for immense concern in all spheres of ethical influence. Such technology must be contested on the following grounds:
+-
+•
+Ethical grounds Violates multiple ethical principles and may lead to a variety of adverse consequences.
+-
+•
+Epistemological grounds: A mistake in identifying objects in a civilian’s hand may lead to severe loss of life.
+-
+•
+Explainable grounds: There may be little to no explanations for the actions done by the automated weapons, especially to the receiving parties.
+-
+•
+Empirical grounds: An AMA in a war zone may correctly identify the enemy and cause them harm while invalidating the only cooperating lead their team had to find civilian hostages.
+-
+•
+Evaluative grounds: Any automated system able to cause physical harm to humans or the environment, if left unchecked, has the right to be contested.
+Assigning respective values based on the information provided for each of the above use cases, we may find the representations on the urgency and grounds for contestation for them. The radar chart in Figure 2 represents a comparative, so we may see the 5E framework for contesting AMAs in action.
+
+KAYNAK : https://arxiv.org/abs/2603.00066

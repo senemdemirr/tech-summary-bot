@@ -1,4 +1,4 @@
---- nextjs | v16.2.0-canary.72 | score=60.59 ---
+--- nextjs | v16.2.0-canary.72 | score=50.40 ---
 Core Changes
 docs: error component
 unstable_retry()
@@ -24,7 +24,7 @@ for helping!
 
 KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.72
 
---- nextjs | v16.2.0-canary.71 | score=50.92 ---
+--- nextjs | v16.2.0-canary.71 | score=40.74 ---
 Core Changes
 fix(turbopack): use posix.join for client URL manifest paths on Windows:
 #90700

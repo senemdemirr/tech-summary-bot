@@ -1,0 +1,160 @@
+Extended Empirical Validation of the Explainability Solution Space
+Abstract
+This technical report provides an extended validation of the Explainability Solution Space (ESS) through cross-domain evaluation. While initial validation focused on employee attrition prediction, this study introduces a heterogeneous intelligent urban resource allocation system to demonstrate the generality and domain-independence of the ESS framework. The second case study integrates tabular, temporal, and geospatial data under multi-stakeholder governance conditions. Explicit quantitative positioning of representative XAI families is provided for both contexts. Results confirm that ESS rankings are not domain-specific but adapt systematically to governance roles, risk profiles, and stakeholder configurations. The findings reinforce ESS as a generalizable operational decision-support instrument for explainable AI strategy design across socio-technical systems.
+1 Introduction
+Explainability in artificial intelligence (AI) systems has often been treated as an intrinsic characteristic of models, typically associated with specific algorithmic families (e.g., linear models versus deep neural networks) or with post-hoc interpretation techniques. Such a view implicitly assumes that explainability is a static attribute that can be attached to a model independently of its deployment environment. This assumption becomes increasingly fragile in socio-technical settings where AI systems operate under accountability constraints, affect heterogeneous stakeholder groups, and support hybrid human–machine decision processes.
+The Explainability Solution Space (ESS), introduced in Mestre et al., “The Explainability Solution Space: Aligning Regulation, Users, and Developers in AI Systems”, formalizes explainability as an operational construct structured around three stakeholder-centered dimensions:
+-
+•
+Compliance (): the extent to which an explanation mechanism supports auditability, traceability, and accountability obligations;
+-
+•
+User comprehensibility (): the degree to which explanations are intelligible and actionable for non-technical stakeholders;
+-
+•
+Developer utility (): the usefulness of explanations for debugging, validation, and model refinement.
+Rather than proposing a new taxonomy of explainable AI (XAI) techniques, the ESS provides an operational layer for systematically positioning existing explanation families within this three-dimensional space. The ESS procedure combines (i) intrinsic methodological property profiles, (ii) stakeholder-weighted aggregation functions that project properties onto , and (iii) contextual multipliers that adapt positioning to governance roles such as substitution, superiority, or synthesis, as defined in the original formulation.
+The ESS paper presents the conceptual foundations and mathematical specification of this positioning pipeline, together with an initial empirical illustration. The present technical report extends that contribution by applying the same operational procedure to an additional illustrative deployment context. The goal is to provide a complementary empirical instantiation that reflects a distinct governance configuration and heterogeneous data conditions, while preserving the original ESS definitions (property vectors, projection functions, and contextual adjustment mechanism) without introducing new methodological components.
+Accordingly, this report focuses on (i) making the quantitative positioning steps fully explicit for the selected representative technique families, and (ii) showing how the ESS pipeline can be instantiated in a second socio-technical setting using the same formal machinery described in the original work. The emphasis is therefore on procedural transparency and illustrative extension, rather than on proposing alternative parameterizations or domain-specific optimization objectives.
+2 Methodological Recap
+This section summarizes the operational structure of the Explainability Solution Space (ESS) as specified in the original ESS publication, providing the formal foundations required for the empirical instantiation presented in this report.
+2.1 Intrinsic Property Representation
+Each explainability technique family is represented by an intrinsic property vector:
+The seven components correspond to method-level characteristics grounded in XAI literature:
+-
+•
+Auditability: capacity to support formal documentation and verification.
+-
+•
+Traceability: linkage between outputs and inputs/model components.
+-
+•
+Comprehensibility: accessibility of explanations to non-expert stakeholders.
+-
+•
+Actionability: ability to inform concrete interventions or recourse.
+-
+•
+Fidelity: alignment between explanation and underlying model behavior.
+-
+•
+Debuggability: utility for diagnosing errors, biases, or failure modes.
+-
+•
+Efficiency: computational feasibility and resource cost.
+Each component is assessed on an ordinal scale from 1 (low) to 5 (high), following the calibration approach described in the ESS paper.
+2.2 Projection onto Stakeholder Axes
+Intrinsic properties are projected onto the ESS dimensions using weighted aggregation functions:
+These mappings reflect the stakeholder logic of the ESS: compliance is driven primarily by auditability and traceability; user value depends on comprehensibility and actionability; developer utility is dominated by fidelity and debuggability, with efficiency treated as a secondary factor.
+2.3 Contextual Governance Adjustment
+To reflect governance role and deployment context, the ESS applies multiplicative contextual modifiers:
+where , , and are selected according to the governance scenarios defined in the ESS formulation (e.g., substitution, synthesis, superiority). Values are clipped to the interval to preserve interpretability of the ordinal scale.
+2.4 Structural Separation Principle
+A key design feature of the ESS is the separation between:
+-
+1.
+intrinsic method properties (captured by ),
+-
+2.
+stakeholder aggregation rules (the projection functions for , , and ),
+-
+3.
+contextual governance adjustment (encoded by ).
+This separation enables the same operational pipeline to be instantiated across distinct settings without modifying the underlying definition of technique properties or stakeholder mappings. The subsequent sections apply this procedure to an additional illustrative context, following the original ESS specification.
+3 Illustrative Deployment Context
+To extend the empirical illustration of the Explainability Solution Space, this report applies the original ESS operational procedure to an additional deployment context that reflects contemporary urban governance challenges. Artificial intelligence systems are increasingly deployed in smart city environments to support operational coordination, infrastructure management, and real-time service optimization across public sectors [1, 2].
+The selected illustrative context corresponds to an AI-enabled urban public infrastructure optimization system operating within a municipal governance environment. Such systems integrate heterogeneous digital infrastructures and high-velocity data streams to improve allocation efficiency and service responsiveness.
+Data modalities integrated into this scenario include:
+-
+•
+Structured administrative records (e.g., service demand logs, budgetary allocations, maintenance reports),
+-
+•
+Real-time time-series sensor data from Internet of Things (IoT) deployments across transportation, utilities, and environmental monitoring networks,
+-
+•
+Geospatial information layers representing spatial distribution of infrastructure assets and service demand.
+The system supports multiple institutional actors with differentiated governance responsibilities:
+-
+•
+Public authorities responsible for service coordination and operational decisions,
+-
+•
+Oversight and accountability bodies concerned with transparency and regulatory compliance,
+-
+•
+Technical teams responsible for system validation, robustness testing, and lifecycle maintenance.
+The deployment of AI in public-sector infrastructure contexts raises well-documented concerns regarding transparency, accountability, and trustworthiness [3, 4]. In smart city governance, opaque algorithmic systems can undermine democratic legitimacy if their decision logic remains inaccessible to institutional stakeholders or affected citizens [2].
+From the perspective of the ESS situational typology, this configuration corresponds to a synthesis scenario. In synthesis settings, AI systems operate in structured coordination with human decision-makers rather than fully substituting them or dominating through purely performance-driven autonomy. Collaborative governance arrangements of this kind require balanced attention to regulatory auditability and user comprehensibility while preserving developer-oriented validation capabilities.
+Accordingly, the contextual multipliers defined in the original ESS formulation for synthesis situations are applied without recalibration:
+These situational modifiers adapt baseline ESS coordinates to reflect the institutional characteristics of collaborative public governance while preserving the original methodological structure of the framework.
+4 Intrinsic Property Vectors
+Following the ESS methodology, intrinsic method-level properties are defined independently of deployment context. The property vectors used in this report correspond to those specified in the original ESS paper:
+These vectors represent intrinsic methodological characteristics—namely auditability, traceability, comprehensibility, actionability, fidelity, debuggability, and efficiency—evaluated on the same ordinal scale (1–5) employed in the original ESS instantiation.
+No modification of intrinsic vectors is introduced in this report. The same property assignments are used, ensuring that any variation in ESS positioning arises exclusively from the contextual multipliers defined by the situational classification, as prescribed in the ESS framework.
+This procedure preserves the original separation between intrinsic method properties and contextual governance adjustment, while applying the ESS operationalization to an additional illustrative domain.
+5 Explicit ESS Computation Under Synthesis Scenario
+This section details the full operational execution of the Explainability Solution Space positioning procedure under a synthesis-oriented governance configuration. The objective is to make explicit every transformation step defined in the ESS methodology, from intrinsic method properties to final stakeholder-adjusted coordinates.
+5.1 Operational Pipeline
+For each explanation family , the ESS positioning follows four sequential steps:
+-
+1.
+Definition of the intrinsic property vector .
+-
+2.
+Projection of intrinsic properties onto stakeholder axes .
+-
+3.
+Contextual adjustment via situational multipliers .
+-
+4.
+Clipping to the ordinal interval .
+Under the synthesis scenario, the contextual multipliers are:
+These values are taken directly from the ESS specification for synthesis situations and are not recalibrated in this report.
+5.2 Projection Functions
+Intrinsic properties are mapped to stakeholder-centered dimensions using the ESS projection operators:
+The adjusted coordinates are computed as:
+To preserve the interpretability of the 1–5 ordinal scale, an upper-bound clipping operator is applied:
+for each dimension independently.
+5.3 Feature Attribution (SHAP)
+Intrinsic vector:
+Step 1: Projection
+Step 2: Contextual Adjustment
+Final Coordinate
+5.4 Local Surrogate (LIME)
+Intrinsic vector:
+Projection
+Adjustment
+Final Coordinate
+5.5 Counterfactual Explanations
+Intrinsic vector:
+Projection
+Adjustment and Clipping
+Final Coordinate
+5.6 Global Rule Extraction
+Intrinsic vector:
+Projection
+Adjustment and Clipping
+Final Coordinate
+5.7 Prototype-Based Explanations
+Intrinsic vector:
+Projection
+Adjustment and Clipping
+Final Coordinate
+5.8 Resulting ESS Positioning
+The table above represents the final three-dimensional positioning of each explanation family within the ESS under a synthesis-oriented governance configuration. All differences across techniques arise solely from intrinsic property profiles and the situational multipliers defined in the ESS specification.
+6 Conclusions and Discussion
+This technical report has instantiated the Explainability Solution Space (ESS) operational pipeline in an additional illustrative deployment context characterized by a synthesis-oriented governance configuration. Importantly, no modification has been introduced in the intrinsic property vectors, projection functions, or contextual multipliers defined in the original ESS formulation. The objective has been strictly procedural: to demonstrate how the same formal machinery can be executed step by step in a distinct socio-technical setting.
+From a methodological standpoint, the results reinforce the structural separation principle that underpins the ESS framework. The positioning of explanation families in the space emerges from three independent layers: (i) intrinsic methodological characteristics, (ii) stakeholder-centered projection operators, and (iii) situational governance modifiers. In the present instantiation, variation across techniques arises exclusively from their intrinsic profiles combined with the synthesis multipliers , confirming that contextual adaptation operates as a transformation layer rather than as a redefinition of technique properties.
+Substantively, the synthesis configuration highlights characteristic trade-offs among explanation families. Techniques with high auditability and traceability (e.g., rule extraction) retain strong compliance positioning even after contextual adjustment, while methods emphasizing comprehensibility and actionability (e.g., counterfactuals and prototypes) reach upper-bound saturation under collaborative governance multipliers. Feature attribution methods maintain comparatively strong developer utility due to high fidelity and debuggability scores. These patterns illustrate that the ESS does not collapse explanation quality into a single scalar ranking; rather, it preserves multi-dimensional structure and makes trade-offs explicit.
+In public infrastructure scenarios, where AI systems operate in coordination with institutional actors rather than as fully autonomous substitutes, balanced stakeholder positioning becomes particularly salient. The synthesis multipliers increase both compliance and user dimensions without amplifying developer utility, reflecting the collaborative and oversight-driven nature of such governance settings. The resulting coordinates therefore capture a governance-sensitive redistribution of emphasis rather than a domain-specific recalibration of method characteristics.
+Several implications follow from this illustrative extension. First, the ESS can be operationalized in heterogeneous environments—organizational and urban—without modifying its formal definitions. Second, the framework supports procedural transparency: each transformation step from to is mathematically explicit and reproducible. Third, the approach clarifies that explanation strategy design can be treated as a structured positioning problem rather than as a binary choice between “interpretable” and “black-box” models.
+At the same time, this report remains an illustrative instantiation rather than a statistical validation study. Intrinsic property scores follow the calibration logic defined in the original ESS paper, and contextual multipliers are applied as specified in the situational typology. Future work may explore empirical calibration through stakeholder elicitation, sensitivity analysis over multiplier values, or longitudinal evaluation across lifecycle phases of AI systems.
+In summary, the extended instantiation presented here reinforces the operational coherence of the Explainability Solution Space. By preserving intrinsic definitions and situational multipliers while applying the framework to a distinct governance configuration, this report illustrates how explainability positioning can remain methodologically stable yet contextually responsive within the ESS architecture.
+References
+- [1] M. Batty, K. W. Axhausen, F. Giannotti, A. Pozdnoukhov, A. Bazzani, M. Wachowicz, G. Ouzounis, and Y. Portugali, “Smart cities of the future,” The European Physical Journal Special Topics, vol. 214, no. 1, pp. 481–518, 2012.
+- [2] Z. Allam and Z. A. Dhunny, “On big data, artificial intelligence and smart cities,” Cities, vol. 89, pp. 80–91, 2019.
+- [3] F. Doshi-Velez and B. Kim, “Towards a rigorous science of interpretable machine learning,” arXiv:1702.08608, 2017.
+- [4] A. B. Arrieta, N. Díaz-Rodríguez, J. Del Ser, et al., “Explainable Artificial Intelligence (XAI): Concepts, taxonomies, opportunities and challenges toward responsible AI,” Information Fusion, vol. 58, pp. 82–115, 2020.
+
+KAYNAK : https://arxiv.org/abs/2603.01235

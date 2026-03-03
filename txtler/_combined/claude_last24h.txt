@@ -1,4 +1,42 @@
---- claude | Elevated errors on claude.ai, console, and claude code | score=63.00 ---
+--- claude | Elevated errors on Claude Opus 4.6 | score=60.22 ---
+Subscribe to updates for Elevated errors on Claude Opus 4.6 via email and/or text message. You'll receive email notifications when incidents are updated, and text message notifications whenever Claude creates or resolves an incident.
+To receive SMS updates, please verify your number. To proceed with just email click ‘Subscribe’
+
+KAYNAK : https://status.claude.com/incidents/kyj825w6vxr8
+
+--- claude | Elevated errors in claude.ai, cowork, platform, claude code | score=57.15 ---
+Mar
+3
+,
+04:43
+UTC
+Update
+- We are continuing to investigate this issue.
+Mar
+3
+,
+04:41
+UTC
+Update
+- We are continuing to investigate this issue.
+Mar
+3
+,
+04:39
+UTC
+Update
+- We are continuing to investigate this issue.
+Mar
+3
+,
+03:15
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/yf48hzysrvl5
+
+--- claude | Elevated errors on claude.ai, console, and claude code | score=51.29 ---
 Mar
 2
 ,
@@ -58,7 +96,7 @@ Investigating
 
 KAYNAK : https://status.claude.com/incidents/0ghc53zpsfmt
 
---- claude | Elevated errors on Claude Haiku 4.5 | score=53.19 ---
+--- claude | Elevated errors on Claude Haiku 4.5 | score=41.48 ---
 Mar
 2
 ,
@@ -97,7 +135,7 @@ Investigating
 
 KAYNAK : https://status.claude.com/incidents/vqnfq1179169
 
---- claude | Elevated errors on Claude Opus 4.6 | score=45.78 ---
+--- claude | Elevated errors on Claude Opus 4.6 | score=34.07 ---
 Mar
 2
 ,
@@ -135,61 +173,4 @@ Investigating
 - We are currently investigating this issue.
 
 KAYNAK : https://status.claude.com/incidents/5zg05jnrqmzg
-
---- claude | Elevated errors in claude.ai | score=44.49 ---
-Mar
-2
-,
-17:23
-UTC
-Resolved
-- This incident has been resolved.
-Mar
-2
-,
-17:08
-UTC
-Investigating
-- We are currently investigating this issue.
-
-KAYNAK : https://status.claude.com/incidents/63943gpfb97z
-
---- claude | Elevated errors on Claude Opus 4.6 | score=42.17 ---
-Mar
-2
-,
-17:55
-UTC
-Resolved
-- This incident has been resolved.
-Mar
-2
-,
-17:24
-UTC
-Monitoring
-- A fix has been implemented and we are monitoring the results.
-Mar
-2
-,
-17:15
-UTC
-Identified
-- The issue has been identified and a fix is being implemented.
-Mar
-2
-,
-17:09
-UTC
-Monitoring
-- A fix has been implemented and we are monitoring the results.
-Mar
-2
-,
-16:50
-UTC
-Investigating
-- We are currently investigating this issue.
-
-KAYNAK : https://status.claude.com/incidents/0j8dkb38jymf
 
