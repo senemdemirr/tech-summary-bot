@@ -1,6 +1,27 @@
 Mar
 3
 ,
+10:18
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+3
+,
+09:36
+UTC
+Update
+- We are continuing to monitor for any further issues.
+Mar
+3
+,
+08:39
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+3
+,
 04:43
 UTC
 Update

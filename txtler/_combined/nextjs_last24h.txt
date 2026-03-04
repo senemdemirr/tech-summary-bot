@@ -1,69 +1,128 @@
---- nextjs | v16.2.0-canary.72 | score=50.40 ---
-Core Changes
-docs: error component
-unstable_retry()
-:
-#89732
+--- nextjs | v16.2.0-canary.75 | score=49.80 ---
 Misc Changes
 Update Rspack development test manifest:
-#90751
-Update Rspack production test manifest:
-#90750
-Turbopack: improve cell order lint rule for TraitRef::cell:
-#90756
-Add determinism test for static shell with asset preload headers:
-#89826
+#90805
+Avoid using TaskTypes as keys in storage instead use hashes:
+#88904
+Remove leaf segment force-refetch check:
+#90836
 Credits
 Huge thanks to
-@devjiwonchoi
-,
 @vercel-release-bot
+,
+@lukesandberg
 , and
-@mischnic
+@acdlite
 for helping!
 
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.72
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.75
 
---- nextjs | v16.2.0-canary.71 | score=40.74 ---
+--- nextjs | v16.2.0-canary.76 | score=48.99 ---
+We read every piece of feedback, and take your input very seriously.
+To see all available qualifiers, see our documentation.
+32d8a9b
+There was an error while loading. Please reload this page.
+v16.2.0-canary.76
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.76
+
+--- nextjs | v16.2.0-canary.74 | score=45.93 ---
 Core Changes
-fix(turbopack): use posix.join for client URL manifest paths on Windows:
-#90700
-Turbopack: improve cell order lint rule for ReadRef::cell:
-#88500
-Change names of logged times:
-#90688
-[devtools] Bump React Compiler version to latest experimental:
-#90763
-Skip writeToBfCache without window:
-#90771
-Example Changes
-with-docker: add new config file formats:
-#90731
+Refactor extractExportedConstValue to return { value } | null instead of throwing:
+#90510
+Reimplement code frame rendering in native code:
+#85592
+[devtools] Bundle for same target as Next.js browser runtime:
+#90762
+Upgrade React from
+98ce535f-20260226
+to
+4cc5b7a9-20260303
+:
+#90827
+Add
+transitionTypes
+prop to
+next/link
+:
+#90701
+[otel] fix missing http.route attribute:
+#90832
 Misc Changes
-Fix ENOBUFS errors in pr-status.js when fetching large CI logs:
-#90654
-docs: clarify native <script> usage for JSON-LD in docs:
-#90380
-Publish @next/playwright to npm as part of canary releases:
-#90738
+turbo-persistence: add CRC32 block checksums:
+#90754
+Remove unused turbo-tasks items and add lint check:
+#90801
+Fix missing const generic parameter in turbo-persistence lookup call:
+#90817
+Unify caching story across the docs:
+#90149
+Turbopack: add anyhow::Context to turbo-persistence mmap, file open, and decompress operations:
+#90769
 Credits
 Huge thanks to
 @sokra
 ,
-@sleitor
+@lukesandberg
+,
+@delbaoliveira
+,
+@eps1lon
+, and
+@huozhi
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.74
+
+--- nextjs | v16.2.0-canary.73 | score=45.02 ---
+Core Changes
+Stub adapterPath with experimental.runtimeServerDeploymentId:
+#90790
+Conditionally load uncommon paths:
+#90514
+Misc Changes
+Add static error when
+unstable_instant
+is used without
+cacheComponents
+:
+#90793
+enable server action RDC deploy test:
+#90796
+turbo-persistence: StreamingSstWriter performance and readability improvements:
+#90692
+pr-status: add reply-thread and resolve-thread subcommands:
+#90773
+[turbopack] Don't schedule idle snapshots when we are in a short session:
+#90804
+Update Rust dependencies for turbo-persistence and turbo-tasks-backend:
+#90774
+Create next app CLI docs:
+#90788
+Add support for multi-valued tables:
+#89728
+pr-status: add --wait flag and background execution for /pr-status command:
+#90687
+exempt data URL CSS from Pages Router global CSS restriction:
+#89901
+Credits
+Huge thanks to
+@gnoff
+,
+@ztanner
+,
+@sokra
+,
+@lukesandberg
 ,
 @mischnic
 ,
-@karlhorky
+@icyJoseph
 ,
-@abhishekmardiya
-,
-@acdlite
-,
-@timneutkens
+@jantimon
 , and
-@eps1lon
+@timneutkens
 for helping!
 
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.71
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.73
 

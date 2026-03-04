@@ -1,10 +1,140 @@
---- claude | Elevated errors on Claude Opus 4.6 | score=60.22 ---
-Subscribe to updates for Elevated errors on Claude Opus 4.6 via email and/or text message. You'll receive email notifications when incidents are updated, and text message notifications whenever Claude creates or resolves an incident.
-To receive SMS updates, please verify your number. To proceed with just email click ‘Subscribe’
+--- claude | Outage in Usage Reporting | score=70.22 ---
+Mar
+4
+,
+01:29
+UTC
+Monitoring
+- We have applied a fix for usage reporting and are monitoring the recovery
+Mar
+4
+,
+00:58
+UTC
+Update
+- A fix has been applied and the admin API is operational.
+We are continuing to investigate issues with usage reporting via Console and admin API
+Mar
+4
+,
+00:08
+UTC
+Identified
+- The team has identified the issues affecting admin API and cost reporting and are working on a fix
+Mar
+3
+,
+18:03
+UTC
+Update
+- The team is investigating ongoing impact to admin API and usage reporting in the console
+Mar
+3
+,
+17:29
+UTC
+Update
+- The team has applied a fix for the admin API. Console and admin API endpoints
+The team is still investigating an ongoing issue with usage reporting in the console and admin API
+Mar
+3
+,
+16:49
+UTC
+Investigating
+- The team is currently investigating an issue affecting the admin API and some reporting screens in the Console
+
+KAYNAK : https://status.claude.com/incidents/p7nq2jdg4zwj
+
+--- claude | Elevated errors on Claude Opus 4.6 | score=43.37 ---
+Mar
+3
+,
+14:29
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+3
+,
+14:29
+UTC
+Update
+- We are continuing to monitor for any further issues.
+Mar
+3
+,
+14:11
+UTC
+Update
+- A fix has been implemented and we are monitoring the results.
+Mar
+3
+,
+14:03
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+3
+,
+12:59
+UTC
+Update
+- We are continuing to work on a fix for this issue.
+Mar
+3
+,
+12:00
+UTC
+Identified
+- The issue is reoccurring, a fix is being implemented.
+Mar
+3
+,
+10:27
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+3
+,
+08:31
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+Mar
+3
+,
+06:59
+UTC
+Investigating
+- We are currently investigating this issue.
 
 KAYNAK : https://status.claude.com/incidents/kyj825w6vxr8
 
---- claude | Elevated errors in claude.ai, cowork, platform, claude code | score=57.15 ---
+--- claude | Elevated errors in claude.ai, cowork, platform, claude code | score=35.39 ---
+Mar
+3
+,
+10:18
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+3
+,
+09:36
+UTC
+Update
+- We are continuing to monitor for any further issues.
+Mar
+3
+,
+08:39
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
 Mar
 3
 ,
@@ -36,141 +166,39 @@ Investigating
 
 KAYNAK : https://status.claude.com/incidents/yf48hzysrvl5
 
---- claude | Elevated errors on claude.ai, console, and claude code | score=51.29 ---
+--- claude | Elevated errors on Claude Sonnet 4.6 | score=26.85 ---
 Mar
-2
+3
 ,
-15:47
+16:38
 UTC
 Resolved
 - This incident has been resolved.
 Mar
-2
+3
 ,
-15:25
-UTC
-Monitoring
-- A fix has been implemented and we are monitoring the results.
-Mar
-2
-,
-14:05
-UTC
-Update
-- We are continuing to work on a fix for this issue.
-Mar
-2
-,
-13:37
-UTC
-Update
-- We have discovered that some API methods are not working and we are investigating.
-Mar
-2
-,
-13:22
-UTC
-Identified
-- The issue has been identified and a fix is being implemented.
-Mar
-2
-,
-12:21
-UTC
-Update
-- We have identified that the Claude API is working as intended. The issues we are seeing are related to Claude.ai and with the login/logout paths.
-Mar
-2
-,
-12:06
-UTC
-Update
-- We are continuing to investigate this issue.
-Mar
-2
-,
-11:49
+15:40
 UTC
 Investigating
 - We are currently investigating this issue.
 
-KAYNAK : https://status.claude.com/incidents/0ghc53zpsfmt
+KAYNAK : https://status.claude.com/incidents/v3j5tpfcr3dn
 
---- claude | Elevated errors on Claude Haiku 4.5 | score=41.48 ---
+--- claude | Elevated errors on Claude Haiku 4.5 | score=25.43 ---
 Mar
-2
+3
 ,
-21:16
+15:39
 UTC
 Resolved
 - This incident has been resolved.
 Mar
-2
+3
 ,
-18:54
-UTC
-Monitoring
-- A fix has been implemented and we are monitoring the results.
-Mar
-2
-,
-18:18
-UTC
-Investigating
-- We are seeing a repeat of this issue, we are currently investigating.
-Mar
-2
-,
-18:07
-UTC
-Monitoring
-- A fix has been implemented and we are monitoring the results.
-Mar
-2
-,
-17:56
+14:51
 UTC
 Investigating
 - We are currently investigating this issue.
 
-KAYNAK : https://status.claude.com/incidents/vqnfq1179169
-
---- claude | Elevated errors on Claude Opus 4.6 | score=34.07 ---
-Mar
-2
-,
-15:50
-UTC
-Resolved
-- This incident has been resolved.
-Mar
-2
-,
-15:49
-UTC
-Monitoring
-- A fix has been implemented and we are monitoring the results.
-Mar
-2
-,
-14:42
-UTC
-Identified
-- The issue has been identified and a fix is being implemented.
-Mar
-2
-,
-14:35
-UTC
-Update
-- We are continuing to investigate this issue.
-Mar
-2
-,
-14:35
-UTC
-Investigating
-- We are currently investigating this issue.
-
-KAYNAK : https://status.claude.com/incidents/5zg05jnrqmzg
+KAYNAK : https://status.claude.com/incidents/s0pmy4yywshv
 

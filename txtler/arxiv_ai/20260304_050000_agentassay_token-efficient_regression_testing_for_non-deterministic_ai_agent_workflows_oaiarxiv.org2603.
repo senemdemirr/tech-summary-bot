@@ -1,0 +1,1177 @@
+AgentAssay: Token-Efficient Regression Testing for
+Non-Deterministic AI Agent Workflows
+Technical Report
+Abstract
+Autonomous AI agents built on large language models exhibit inherent non-determinism: the same prompt, tools, and model can produce divergent behaviors across runs. Despite the rapid proliferation of agent frameworks—AutoGen, CrewAI, LangGraph, OpenAI Agents SDK—no principled testing methodology exists for verifying that an agent has not regressed after changes to its prompts, tools, models, or orchestration logic. Traditional software testing assumes deterministic outputs and binary pass/fail verdicts, both of which fail for stochastic systems. We present AgentAssay, the first token-efficient framework for regression testing non-deterministic AI agent workflows—achieving 78–100% cost reduction while maintaining rigorous statistical guarantees. Our contributions are tenfold: (1) a stochastic test semantics that replaces binary verdicts with three-valued probabilistic outcomes (Pass, Fail, Inconclusive) backed by confidence intervals and sequential analysis; (2) agent-specific coverage metrics spanning tool, decision-path, state-space, boundary, and model dimensions; (3) mutation testing operators for agent prompts, tools, models, and context windows with a formal kill semantics; (4) metamorphic relations tailored to multi-step agent workflows; (5) CI/CD deployment gates defined as statistical decision procedures; (6) integration with behavioral contracts via the AgentAssert framework; (7) a comprehensive evaluation across 5 models, 3 agent scenarios, and 7,605 trials costing $227; (8) behavioral fingerprinting that maps execution traces to compact vectors on a low-dimensional behavioral manifold, enabling multivariate regression detection with higher power per sample; (9) adaptive budget optimization that calibrates trial counts to actual behavioral variance, reducing required trials by 4–7 for stable agents; and (10) trace-first offline analysis that enables zero-cost coverage, contract, and metamorphic testing on pre-recorded production traces. Together, these token-efficient testing techniques achieve 5–20 cost reduction while maintaining identical statistical guarantees. Experiments across 5 models (GPT-5.2, Claude Sonnet 4.6, Mistral-Large-3, Llama-4-Maverick, Phi-4), 3 scenarios, and 7,605 trials demonstrate that behavioral fingerprinting achieves 86% detection power where binary pass/fail testing has 0%, SPRT reduces trials by 78% consistently across all scenarios, and the full token-efficient pipeline achieves 100% cost savings through trace-first offline analysis.
+Keywords: AI agent testing, stochastic regression testing, non-deterministic systems, mutation testing, coverage metrics, CI/CD, formal methods, LLM reliability, token-efficient testing, behavioral fingerprinting
+1 Introduction
+Consider an enterprise deploying an AI agent for customer support ticket routing. On Monday, after a prompt refinement, the agent correctly routes 93% of tickets. By Wednesday, a model provider silently updates the underlying LLM, and the routing accuracy drops to 71%. No test caught the regression. No alert fired. The team discovers the degradation only after a surge in customer complaints.
+This scenario—works Monday, fails Wednesday—is not hypothetical. It is the daily reality for engineering teams deploying autonomous AI agents in production. The root cause is non-determinism: the same agent configuration (prompt, tools, model, orchestration logic) can produce different outputs across invocations due to temperature sampling, model weight updates, tool latency variations, and context window effects. Recent empirical work confirms that agent behavior exhibits stochastic path deviation [17], yet no principled testing methodology exists to detect when this deviation constitutes a regression—a statistically significant degradation in agent quality.
+1.1 The Failure of Traditional Testing
+Traditional software testing rests on two assumptions that are fundamentally violated by AI agents:
+-
+1.
+Determinism. Given the same input, a function produces the same output. Tests assert equality: assert f(x) == y. For agents, the same input can yield different tool selections, different reasoning chains, and different final answers across runs. Equality assertions are meaningless.
+-
+2.
+Binary verdicts. A test either passes or fails. For stochastic systems, the question is not “did it pass?” but “does it pass with sufficient probability?” A single failure may be statistical noise; a single success may be a lucky run. The entire notion of pass/fail must be reconceived.
+Existing approaches to LLM evaluation—deepeval [13], promptfoo [29], OpenAI Evals—address single-turn output quality but do not formalize regression detection for multi-step agent workflows. They evaluate how good an agent is; they do not verify whether it got worse. The recently introduced agentrial framework [2] takes an important first step by running agents multiple times and computing confidence intervals, but it lacks a formal theoretical foundation: no stochastic test semantics, no coverage metrics, no mutation testing, no composition theory, and no proofs of statistical guarantees.
+1.2 The Paradigm Shift: Binary to Probabilistic
+We argue that agent testing requires a fundamental paradigm shift from deterministic, binary verdicts to stochastic, three-valued verdicts:
+The third verdict value, Inconclusive (inconclusive), is essential: when the number of trial runs is insufficient to distinguish signal from noise, the honest answer is neither pass nor fail but “more evidence is needed.” This three-valued semantics is the foundation upon which all other contributions in this paper are built.
+1.3 The Cost of Testing Non-Determinism
+The statistical rigor of stochastic testing comes at a price: each trial requires a full agent execution, consuming API tokens at non-trivial cost. To detect a regression of magnitude at and , the fixed-sample formula (Eq. 1) requires approximately trials per scenario. A test suite of 50 scenarios at 100 trials each generates 5,000 agent invocations per regression check. For frontier models where each complex agent run costs $5–15 in API tokens, a single regression check costs $25,000–75,000—more than many teams spend on production usage in a month.
+This cost barrier fundamentally limits adoption. In CI/CD pipelines where code is deployed multiple times per day, the testing budget must be orders of magnitude lower than production cost. Even with SPRT reducing trials by 50% (Section 3.5), the cost remains prohibitive. No existing framework addresses the token economics of agent testing: how to achieve the same statistical guarantees at radically lower cost.
+We observe that the cost problem arises from a mismatch between the dimensionality of agent behavior and the dimensionality of the statistical test. A binary pass/fail verdict discards almost all information from each trial—the rich execution trace, tool usage pattern, reasoning depth, and output structure are reduced to a single bit. By extracting a behavioral fingerprint from each trace—a compact vector capturing the agent’s behavioral signature—we can apply multivariate statistical tests that extract more information per trial, dramatically reducing the number of trials needed.
+We present three pillars of token-efficient testing: (1) behavioral fingerprinting that enables multivariate regression detection with higher power per sample; (2) adaptive budget optimization that calibrates the trial count to the agent’s actual behavioral variance rather than worst-case assumptions; and (3) trace-first offline analysis that eliminates live agent executions entirely for four of six test types by analyzing previously recorded traces. Together with multi-fidelity proxy testing and warm-start sequential analysis, these techniques achieve 5–20 cost reduction while maintaining identical statistical guarantees (Section 7).
+1.4 Contributions
+This paper presents AgentAssay, the first token-efficient framework for regression testing non-deterministic AI agent workflows, achieving 78–100% cost reduction at equivalent statistical guarantees, with 86% behavioral detection power where binary testing has 0%. Our contributions are:
+-
+C1.
+Stochastic Test Semantics (Section 3). We define the -test triple and a three-valued verdict function grounded in confidence intervals and hypothesis testing. We prove verdict soundness (Theorem 3.1) and regression detection power (Theorem 3.2). We adapt Wald’s Sequential Probability Ratio Test (SPRT) for cost-efficient agent testing and prove its efficiency advantage (Proposition 3.3).
+-
+C2.
+Agent Coverage Metrics (Section 4). We introduce a five-dimensional coverage tuple with formal definitions for each dimension and prove coverage monotonicity (Theorem 4.1).
+-
+C3.
+Agent Mutation Testing (Section 5). We define four classes of agent-specific mutation operators , formalize the mutation score under stochastic semantics, and prove a mutation adequacy theorem (Theorem 5.1).
+-
+C4.
+Metamorphic Relations (Section 6). We define four families of agent-specific metamorphic relations— permutation, perturbation, composition, and oracle—that serve as partial test oracles for the oracle problem in agent testing.
+-
+C5.
+CI/CD Deployment Gates (Section 6.2). We formalize deployment gates as statistical decision procedures with user-configurable risk thresholds, integrating stochastic test verdicts into continuous deployment pipelines.
+- C6.
+-
+C7.
+Comprehensive Evaluation (Section 9). We evaluate AgentAssay across 3 scenarios (e-commerce, customer support, code generation), 5 models, and 7,605 trials costing $227.
+-
+C8.
+Behavioral Fingerprinting (Section 7.1). We define behavioral fingerprints that map execution traces to compact vectors on a low-dimensional manifold, enabling multivariate regression detection via Hotelling’s test with provably higher power per sample than univariate pass-rate testing (Theorem 7.1).
+-
+C9.
+Adaptive Budget Optimization (Section 7.2). We introduce variance-calibrated budget allocation that determines the minimum number of trials for -guaranteed testing, achieving 4–7 reduction for stable agents (Theorem 7.2).
+-
+C10.
+Trace-First Offline Analysis (Section 7.3). We prove that four of six test types—coverage, contracts, metamorphic relations, and mutation evaluation—can execute at zero additional token cost on pre-recorded traces, with formal soundness guarantees (Theorem 7.3).
+1.5 Paper Organization
+Section 2 surveys related work in software testing, statistical methods, and LLM evaluation. Section 3 introduces the formal stochastic test semantics. Section 4 defines agent coverage metrics. Section 5 presents agent mutation testing. Section 6 covers metamorphic relations and CI/CD gates. Section 7 presents the token-efficient testing framework—behavioral fingerprinting, adaptive budgets, trace-first analysis, multi-fidelity testing, and warm-start sequential analysis. Section 8 describes the AgentAssay implementation. Section 9 reports experimental results. Section 10 discusses threats to validity, limitations, and future work. Section 11 concludes. Full proofs are deferred to Appendix A.
+2 Related Work
+Our work synthesizes techniques from five research areas: metamorphic testing, mutation testing, statistical hypothesis testing, LLM/agent evaluation, and probabilistic model checking. We survey each and position AgentAssay at their intersection.
+2.1 Software Testing Foundations
+Metamorphic Testing.
+Metamorphic testing [9, 31] addresses the oracle problem by defining metamorphic relations (MRs): properties that must hold across related inputs. If is unknown but the relation is known, a violation signals a fault. Metamorphic testing has been applied to compilers, databases, and search engines, and more recently to deep neural networks via DeepTest [32]. METAL [15] extends MRs to single-call LLM interactions but does not address multi-step agent workflows where tool selection, reasoning chains, and orchestration logic create a combinatorial space of execution paths. AgentAssay defines four families of agent-specific MRs that account for the unique structure of agent traces (Section 6).
+Mutation Testing.
+Mutation testing [16, 14] evaluates test suite quality by injecting small syntactic faults (mutants) into the program and measuring how many the test suite detects (kills). The mutation score—the fraction of killed mutants—is a measure of test adequacy. Traditional mutation operators target source code (statement deletion, operator replacement, constant perturbation). For AI agents, the “source code” includes prompts, tool configurations, model selections, and context windows—none of which are traditional code. AgentAssay introduces four novel classes of mutation operators tailored to these agent-specific artifacts (Section 5).
+Coverage Metrics.
+Code coverage [36]—statement, branch, path, and condition coverage—is the standard measure of testing thoroughness for deterministic software. For agents, “code” is replaced by a combination of prompts, tool inventories, and orchestration graphs, and the execution space is stochastic rather than deterministic. No prior work defines coverage metrics for agent execution. AgentAssay introduces a five-dimensional coverage tuple that captures tool utilization, decision-path exploration, state-space coverage, boundary testing, and model diversity (Section 4).
+The Oracle Problem.
+Barr et al. [5] survey the oracle problem: the difficulty of determining correct output for a given input. For AI agents, the oracle problem is acute—there is often no single “correct” output, only a distribution of acceptable behaviors. AgentAssay addresses this through three complementary oracle mechanisms: behavioral contracts (AgentAssert), metamorphic relations, and statistical regression baselines.
+2.2 Statistical Testing and Sequential Analysis
+Hypothesis Testing.
+The Neyman-Pearson framework [25, 21] provides the mathematical foundation for deciding between two hypotheses at controlled error rates. We adopt this framework for regression detection: (no regression) vs. (regression occurred), with significance level controlling false alarms and power controlling missed regressions.
+Sequential Analysis.
+Wald’s Sequential Probability Ratio Test (SPRT) [33] enables hypothesis testing with an adaptive sample size: testing stops as soon as sufficient evidence accumulates, rather than requiring a fixed number of trials. This is critical for agent testing, where each trial may cost $0.01–$1.00 in API calls. We adapt SPRT for agent regression detection in Section 3.5.
+Confidence Intervals.
+The Clopper-Pearson interval [11] provides exact coverage for binomial proportions, while the Wilson interval [34] offers better practical properties for small samples. Agresti and Coull [1] demonstrate that approximate intervals often outperform exact ones. We use the Wilson score interval as our primary confidence interval construction, with Clopper-Pearson for formal guarantees (Section 3.3).
+Statistical Guidance for Software Engineering.
+Arcuri and Briand [4] provide practical guidelines for using statistical tests in software engineering experiments, emphasizing effect sizes alongside -values. We follow their recommendations and require both statistical significance and practical significance (effect size ) for regression verdicts (Section 3.4).
+2.3 LLM and Agent Evaluation
+LLM Evaluation Frameworks.
+deepeval [13] provides metrics (faithfulness, answer relevancy, hallucination rate) for RAG and conversational AI. promptfoo [29] enables prompt-level testing with assertion-based evaluation. OpenAI Evals provides a benchmark registry for capability assessment. These tools evaluate output quality at a point in time but do not formalize regression detection across versions. They lack stochastic test semantics, coverage metrics, and mutation testing.
+Agent-Specific Testing.
+agentrial [2] is the closest related work. It runs agents multiple times, computes Wilson confidence intervals, applies Fisher’s exact test for regression detection, and includes CUSUM drift detection. It supports seven framework adapters and CI/CD integration. However, agentrial has no formal theoretical foundation: no stochastic test semantics with provable guarantees, no coverage metrics, no mutation testing, no metamorphic relations, no composition theory, no SPRT for efficient testing, and no published paper. AgentAssay provides the formal foundation that agentrial lacks while also introducing the six capabilities listed above. Table 1 provides a detailed feature comparison.
+LLM Repetition Studies.
+Raji et al. [30] demonstrate empirically that single-run LLM evaluations are unreliable and that multiple repetitions are necessary to establish stable quality estimates. Their findings motivate the multi-trial approach central to AgentAssay, but they do not formalize the statistical framework for determining how many repetitions are sufficient or how to interpret the resulting distribution.
+2.4 Agent Frameworks and Reliability
+The rapid growth of agent frameworks—AutoGen [35], LangGraph [20], CrewAI [23], OpenAI Agents SDK [26]—has created an ecosystem where agents are composed, deployed, and updated at high velocity. None of these frameworks include built-in regression testing capabilities. Bhardwaj [6] introduced Agent Behavioral Contracts (ABC) for runtime enforcement of agent behavior via the AgentAssert framework, defining drift metrics and behavioral specifications. AgentAssay complements AgentAssert by addressing the pre-deployment verification question: does the agent still satisfy its contracts after a change? Separately, the growing reliance on third-party agent skills and tool plugins has raised supply chain security concerns [7], reinforcing the need for comprehensive quality assurance pipelines that span security validation, behavioral testing, and runtime enforcement.
+2.5 Probabilistic Model Checking
+PRISM [18] enables formal verification of probabilistic systems through model checking of Markov decision processes and continuous-time Markov chains. While PRISM provides strong guarantees, it requires an explicit state-space model that is infeasible to construct for LLM-based agents (the state space is effectively infinite due to natural language). AgentAssay takes a testing-based rather than verification-based approach, using statistical sampling to establish probabilistic guarantees without requiring an explicit model.
+2.6 Flaky Tests
+Research on flaky tests [22, 27]—tests that non-deterministically pass or fail without code changes—reveals that 2–16% of test failures in large software projects are flaky. Traditional approaches treat flakiness as a defect to be eliminated. AgentAssay inverts this perspective: for agents, non-determinism is a feature of the system under test, and the testing framework must accommodate it as a first-class concern rather than attempting to suppress it.
+2.7 Positioning
+AgentAssay occupies a unique position at the intersection of formal software testing theory and practical AI agent engineering. It is the first framework to:
+-
+1.
+Provide formal stochastic test semantics with provable soundness and power guarantees for agent testing.
+-
+2.
+Define coverage metrics, mutation operators, and metamorphic relations specifically designed for the agent execution model.
+-
+3.
+Integrate with behavioral contracts for contract-as-oracle testing.
+-
+4.
+Adapt sequential analysis (SPRT) for cost-efficient agent testing.
+No prior work—in software engineering, AI/ML evaluation, or formal methods—addresses all of these concerns in a unified framework.
+3 Stochastic Test Semantics
+This section presents the formal foundation of AgentAssay: a stochastic test semantics that replaces binary pass/fail verdicts with three-valued probabilistic outcomes backed by statistical guarantees.
+3.1 Preliminaries
+We begin by formalizing the objects under test.
+Definition 3.1 (Agent).
+An agent is a tuple where:
+-
+•
+is the agent’s prompt (system instructions, persona, goals),
+-
+•
+is the set of available tools,
+-
+•
+is the underlying language model (including its version, temperature, and sampling parameters), and
+-
+•
+is the orchestration logic (the control flow governing tool selection and multi-step execution).
+Definition 3.2 (Agent Execution Trace).
+An execution trace of agent on input is a sequence where each step is a tuple:
+with the action (reason, call_tool, respond), the tool invoked (or if no tool call), the output of the step, and the cost (API tokens, latency, monetary). The final output of a trace is .
+Because agent is stochastic, repeated executions on the same input produce a distribution over traces. We write to denote a trace sampled from this distribution.
+Definition 3.3 (Evaluator).
+An evaluator is a function that maps an input and an output to a binary judgment: if the output is acceptable and otherwise. An evaluator may be:
+-
+1.
+Deterministic: a rule-based check (e.g., “output contains keyword ”),
+-
+2.
+Model-based: an LLM judge with its own stochasticity, or
+-
+3.
+Contract-based: a behavioral contract from AgentAssert [6].
+Remark 3.1.
+When the evaluator is itself stochastic (model-based), the test introduces a second source of randomness. Our framework handles this by treating the composition of agent and evaluator as a single stochastic process. We discuss this further in Section 10.
+3.2 Test Scenarios and the Test Triple
+Definition 3.4 (Test Scenario).
+A test scenario is a tuple where:
+-
+•
+is the input to the agent,
+-
+•
+is the set of expected properties (natural language descriptions, formal assertions, or contract references),
+-
+•
+is the evaluator (Definition 3.3).
+Definition 3.5 (-Test Triple).
+A stochastic test is parameterized by a triple where:
+-
+•
+is the significance level (upper bound on Type I error probability—the probability of declaring Fail when the agent actually meets the threshold),
+-
+•
+is the Type II error probability (upper bound on the probability of declaring Pass when the agent is actually below the threshold; is the power),
+-
+•
+is the number of trials (independent executions of the agent on the test scenario).
+The three parameters are not independent. For a given effect size (the minimum regression magnitude to detect), the required sample size is:
+where denotes the -quantile of the standard normal distribution and is the estimated pass rate under .
+3.3 The Verdict Function
+Definition 3.6 (Stochastic Verdict).
+Given a test scenario , a test triple , a pass threshold , and trial results with for independently sampled traces , define the observed pass rate:
+and the Wilson score confidence interval at level :
+where . Let and . The verdict function is:
+Example 3.1.
+Consider an agent tested with trials at threshold and significance . If (45 of 50 pass), the Wilson 95% CI is approximately . Since , the verdict is Inconclusive—we cannot yet confirm the agent meets the threshold with 95% confidence. With and , the CI narrows to approximately : still Inconclusive. At with , the CI becomes : now , so the verdict is Pass.
+The three-valued verdict captures a fundamental truth: statistical evidence can be insufficient, and the framework should say so rather than forcing a premature binary decision.
+Theorem 3.1 (Verdict Soundness).
+Let be the true (unknown) pass rate of agent on scenario with evaluator . If under test triple , then:
+-
+1.
+The probability that when (false positive) satisfies .
+-
+2.
+The true pass rate satisfies with probability at least , where the tolerance converges to zero.
+Proof sketch.
+Part (1) follows from the coverage guarantee of the Wilson confidence interval: . If , then for to occur, we need , which means falls below the confidence interval. By the coverage guarantee, this happens with probability at most .
+Part (2) follows from inverting the confidence interval. implies , and since with high probability, we obtain .
+The full proof, using the Clopper-Pearson exact interval for the formal bound, is in Section A.1. ∎
+3.4 Regression Detection
+Definition 3.7 (Regression Verdict).
+Given baseline results with pass rate and current results with pass rate , define the regression verdict:
+where (no regression), (regression occurred), the -value is computed via Fisher’s exact test or the -test for proportions, and is the minimum clinically significant effect size.
+The dual requirement of statistical significance () and practical significance () follows the recommendation of Arcuri and Briand [4] and prevents declaring regressions that are statistically detectable but practically negligible.
+Theorem 3.2 (Regression Detection Power).
+Given a baseline pass rate , a true regressed rate for effect size , and test triple : if the sample sizes satisfy
+where and are the baseline and current pass rates respectively, then the probability that the regression verdict detects the regression satisfies:
+Proof sketch.
+Under , the test statistic follows approximately . The critical value is , and the probability of exceeding it under is when achieves the required sample size. The full proof via the Neyman-Pearson lemma is in Section A.1. ∎
+Definition 3.8 (Effect Size Measures).
+We quantify regression magnitude using three complementary measures:
+-
+1.
+Absolute difference:
+-
+2.
+Cohen’s [12]:
+-
+3.
+Odds ratio:
+Cohen’s is the primary measure, with indicating a small effect, medium, and large.
+3.5 Sequential Probability Ratio Test
+Fixed-sample testing (Section 3.3) requires pre-specifying . For agents, where each trial incurs non-trivial cost, an adaptive approach is preferable.
+Definition 3.9 (SPRT for Agent Testing).
+Given hypotheses and , define the log-likelihood ratio after trials:
+with boundaries and . The SPRT decision rule is:
+Proposition 3.3 (SPRT Efficiency).
+The SPRT (Definition 3.9) satisfies the following classical properties of Wald’s sequential analysis [33]:
+-
+1.
+Error control: and .
+-
+2.
+Sample efficiency: The expected number of trials under and satisfies:
+-
+3.
+Optimality: Among all sequential tests with error probabilities at most and , the SPRT minimizes for (Wald-Wolfowitz theorem).
+Proof sketch.
+Part (1) follows from Wald’s fundamental identity for sequential tests. Parts (2) and (3) follow from Wald’s equation and the Wald-Wolfowitz optimality theorem. See Section A.1 for the full derivation. ∎
+Example 3.2.
+Consider testing whether an agent maintains pass rate with , , . The fixed-sample test requires trials (Eq. 1). Under SPRT:
+-
+•
+If (agent is fine): trials (52% savings).
+-
+•
+If (agent has regressed): trials (69% savings).
+The savings are most dramatic when the truth is far from the decision boundary.
+3.6 Bayesian Regression Analysis
+As a complement to the frequentist framework above, we also provide a Bayesian perspective.
+Definition 3.10 (Bayesian Regression Probability).
+Given a Beta prior on the pass rate, baseline data yielding posterior where , and current data yielding posterior , the Bayesian regression probability is:
+computed by sampling or numerical integration over the joint posterior. The Bayesian verdict is Fail if , Pass if , and Inconclusive otherwise.
+The Bayesian approach offers three advantages: it directly answers “what is the probability of regression?” (rather than the indirect frequentist framing), it naturally incorporates prior knowledge (e.g., the agent historically passes 92% of the time), and it provides a full posterior distribution over the regression magnitude.
+3.7 Connection to Agent Behavioral Contracts
+The AgentAssert framework [6] defines -satisfaction: an agent -satisfies a behavioral contract if, over consecutive observations, the empirical satisfaction rate exceeds and the behavioral drift metric remains below .
+Proposition 3.4 (Verdict-Contract Correspondence).
+Let be an agent with behavioral contract and associated evaluator . If the stochastic test verdict with threshold and , then -satisfies with and probability at least .
+Proof sketch.
+The Pass verdict guarantees at level , which implies the true pass rate exceeds . By Hoeffding’s inequality applied to consecutive observations within the trials, the empirical rate over any window of observations concentrates around the true rate. See Section A.1 for the formal argument. ∎
+This connection is powerful: it means that AgentAssay test results can directly certify contract compliance, closing the loop between specification (contracts), testing (stochastic verdicts), and enforcement (runtime monitoring).
+3.8 Test Suite Semantics
+Definition 3.11 (Test Suite Verdict).
+A test suite is a collection of test scenarios. The suite verdict aggregates individual verdicts:
+Remark 3.2 (Multiple Testing Correction).
+When running scenarios at significance level , the family-wise error rate (FWER) can exceed . We apply the Holm-Bonferroni correction: order -values and reject if . This controls the FWER at level while preserving more power than Bonferroni correction.
+4 Agent Coverage Metrics
+Traditional code coverage metrics—statement, branch, path, condition—are defined over deterministic control-flow graphs extracted from source code. AI agents do not have source code in the traditional sense; their “code” is a composition of prompts, tool inventories, model weights, and orchestration logic. This section defines agent-specific coverage metrics that measure the thoroughness of a stochastic test suite.
+4.1 Coverage Dimensions
+Definition 4.1 (Agent Coverage Tuple).
+The agent coverage of a test suite executed over total trials is a five-dimensional tuple:
+We define each dimension below.
+4.1.1 Tool Coverage
+Definition 4.2 (Tool Coverage).
+Let be the agent’s available tool set and the subset of tools invoked across all traces in the test suite. Tool coverage is:
+Tool coverage is the simplest dimension: it measures whether the test suite exercises all available tools. An agent with 10 tools but tests that only trigger 3 has , indicating that 7 tools are untested and may harbor latent regressions.
+Remark 4.1.
+Tool coverage does not account for how a tool is used—only whether it is invoked. A tool called with a single trivial input achieves the same contribution as one exercised across diverse inputs. We address input diversity through boundary coverage (Definition 4.8).
+4.1.2 Decision-Path Coverage
+An agent’s execution trace follows a path through a decision space defined by tool selections, branching conditions in the orchestration logic, and model outputs at each step.
+Definition 4.3 (Decision Path).
+A decision path is the sequence of action-tool pairs in a trace: . Two traces have the same decision path if .
+Definition 4.4 (Decision-Path Coverage).
+Let be the set of distinct decision paths observed across all traces and be an estimate of the total number of feasible decision paths. Decision-path coverage is:
+The denominator is, in general, intractable to compute exactly (the path space may be infinite for open-ended agents). We employ two estimation strategies:
+-
+1.
+Capture-recapture estimation. Using the Chao1 estimator from ecology: if we observe distinct paths, of which appear exactly once and appear exactly twice, then:
+-
+2.
+Orchestration-graph analysis. For agents with explicit orchestration graphs (e.g., LangGraph state machines), enumerate paths up to a maximum depth , yielding a finite upper bound.
+4.1.3 State-Space Coverage
+Definition 4.5 (Agent State).
+An agent state is a tuple where is the current location in the orchestration graph, is the vector of state variables (e.g., accumulated context, tool outputs, counters), and is a hash of the conversation history up to a fixed window.
+Definition 4.6 (State-Space Coverage).
+Let be the set of distinct states observed across all traces. Since the full state space is infinite (due to natural language content), we project states onto a finite abstraction and define:
+where is a normalization constant set to the expected number of distinct abstract states for the agent class (calibrated empirically). This formulation maps to and asymptotically approaches 1 as more states are discovered.
+The exponential normalization (Eq. 17) addresses the open-ended nature of agent state spaces. Unlike tool or path coverage, which have natural denominators, state-space exploration has no fixed ceiling. The exponential form ensures diminishing returns: the first 50 distinct states contribute more than the next 50.
+4.1.4 Boundary Coverage
+Definition 4.7 (Tool Boundary).
+A tool boundary for tool is a pair where is a parameter name and are the minimum and maximum values of the parameter’s domain (or representative extremes for string/object types). Let denote the set of all tool boundaries.
+Definition 4.8 (Boundary Coverage).
+Let be the set of boundaries for which at least one trace invoked the tool with a parameter value at or near the boundary (within tolerance ). Boundary coverage is:
+Boundary coverage extends the classical boundary-value analysis to agent tool invocations. It tests whether the agent exercises edge cases of its tools—empty lists, maximum-length strings, zero values, negative numbers—which are common sources of failures.
+4.1.5 Model Coverage
+Definition 4.9 (Model Coverage).
+Let be the set of language models the agent is intended to support (e.g., GPT-4o, Claude 3.5 Sonnet, Gemini 2.0 Flash, Llama 3.3 70B) and the subset tested. Model coverage is:
+Model coverage captures a dimension unique to LLM-based systems: the same agent deployed with different models can exhibit dramatically different behaviors. An agent tested only with GPT-4o may fail catastrophically on Claude 3.5 Sonnet due to differences in tool-calling conventions, reasoning patterns, or output formatting.
+4.2 Aggregate Coverage
+Definition 4.10 (Overall Coverage).
+The overall coverage is the geometric mean of the five dimensions:
+We use the geometric mean rather than the arithmetic mean because it penalizes imbalance: a test suite with but should receive low overall coverage, as the zero model coverage represents a critical gap.
+Remark 4.2 (Weighted Coverage).
+In practice, different coverage dimensions may have different importance. We support weighted geometric means: with , allowing teams to prioritize dimensions relevant to their deployment context.
+4.3 Coverage Monotonicity
+Theorem 4.1 (Coverage Monotonicity).
+For any test suite and any additional test execution:
+-
+1.
+are non-decreasing, and strictly increase when a new tool, boundary, or model is observed.
+-
+2.
+is non-decreasing in the number of distinct states observed.
+-
+3.
+is asymptotically monotone: as , the Chao1 correction vanishes and . For finite test suites, may temporarily decrease when a new singleton path increases the Chao1 denominator faster than the numerator; this non-monotonicity is bounded by .
+Proof sketch.
+Parts (1) and (2) follow directly: numerators are non-decreasing while denominators are fixed (part 1), or the coverage function is monotone in its argument (part 2). Part (3) follows from the asymptotic consistency of the Chao1 estimator [8]: as , and . See Section A.2 for the formal argument. ∎
+4.4 Coverage-Guided Test Generation
+Coverage metrics naturally drive test generation: the framework identifies the lowest-coverage dimension and generates inputs designed to increase it.
+Proposition 4.2 (Coverage-Fault Correlation).
+Higher agent coverage correlates with higher fault detection probability. Formally, for two test suites with (component-wise), the expected number of distinct faults detected satisfies under mild regularity conditions on the fault distribution.
+This proposition mirrors the well-established correlation between code coverage and fault detection in traditional software testing [36]. We validate it empirically in Section 9.2.
+5 Agent Mutation Testing
+Mutation testing assesses test suite quality by measuring its ability to detect injected faults. For traditional software, mutants are syntactic source code modifications. For AI agents, the “source” comprises prompts, tool configurations, models, and context—requiring entirely new mutation operators. This section defines four classes of agent-specific mutation operators, formalizes the mutation score under stochastic semantics, and proves a mutation adequacy theorem.
+5.1 Agent Mutation Operators
+Definition 5.1 (Agent Mutation Operator).
+An agent mutation operator is a function that transforms an agent configuration into a mutant agent by modifying exactly one component of .
+We define four classes of mutation operators, each targeting a different component.
+5.1.1 Prompt Mutation Operators ()
+Definition 5.2 (Prompt Mutations).
+The class consists of four operators:
+-
+1.
+Synonym substitution (): Replace a key instruction word with a synonym. For example, “Summarize the document” “Condense the document”.
+-
+2.
+Instruction reordering (): Permute the order of instructions within the prompt, preserving content but altering priority. If , then for a random permutation .
+-
+3.
+Noise injection (): Insert irrelevant or distracting text into the prompt. Models the effect of prompt pollution or context contamination.
+-
+4.
+Instruction dropout (): Remove a randomly selected instruction from the prompt. Models the effect of incomplete or truncated prompts.
+Remark 5.1.
+Prompt mutations target the semantic resilience of the agent: a well-designed agent should be robust to minor prompt perturbations (synonym substitution, reordering) but sensitive to meaningful changes (instruction dropout). The mutation score thus measures the test suite’s ability to distinguish semantic from non-semantic changes.
+5.1.2 Tool Mutation Operators ()
+Definition 5.3 (Tool Mutations).
+The class consists of three operators:
+-
+1.
+Tool removal (): Remove a randomly selected tool from , producing . Tests whether the agent gracefully degrades or fails silently.
+-
+2.
+Tool reordering (): Permute the order of tools in the tool inventory (relevant when tool descriptions are presented to the LLM as a list). Models the position bias exhibited by some language models.
+-
+3.
+Tool noise (): Modify a tool’s description or schema by injecting misleading information. Models the effect of tool description errors or adversarial tool definitions [3].
+5.1.3 Model Mutation Operators ()
+Definition 5.4 (Model Mutations).
+The class consists of two operators:
+-
+1.
+Model swap (): Replace the underlying LLM with a different model from the same capability tier. For example, replace GPT-4o with Claude 3.5 Sonnet. Tests cross-model compatibility.
+-
+2.
+Version downgrade (): Replace the model with an older or less capable version (e.g., GPT-4o GPT-4o-mini). Tests graceful degradation under model changes.
+5.1.4 Context Mutation Operators ()
+Definition 5.5 (Context Mutations).
+The class consists of three operators:
+-
+1.
+Context truncation (): Truncate the input context to tokens for . Models context window overflow.
+-
+2.
+Context noise (): Inject irrelevant documents or passages into the context. Models the effect of noisy retrieval in RAG pipelines.
+-
+3.
+Context permutation (): Permute the order of context segments. Models sensitivity to document ordering in retrieval-augmented settings.
+5.2 Stochastic Kill Semantics
+In traditional mutation testing, a mutant is “killed” if the test produces a different output. For stochastic agents, outputs differ across runs even without mutations. We must therefore define kill semantics that distinguish mutation-induced behavioral changes from natural stochastic variation.
+Definition 5.6 (Stochastic Mutation Kill).
+Let be the original agent and a mutant. Let be a test suite with scenarios . The mutant is killed by if at least one of the following conditions holds for some scenario :
+-
+1.
+Verdict change: where is the stochastic verdict function (Definition 3.6).
+-
+2.
+Significant score difference: The pass rates differ significantly:
+where is a minimum effect size threshold and is the kill significance level.
+-
+3.
+Distributional shift: The distribution of outputs (or trace features) differs significantly, as measured by a two-sample test (e.g., Kolmogorov-Smirnov for continuous metrics or for categorical outcomes).
+Remark 5.2.
+Condition (1) is the strongest: the test suite’s verdict flips from Pass to Fail (or vice versa). Condition (2) is more sensitive: it detects changes even when the verdict remains the same. Condition (3) is the most general: it catches distributional shifts in agent behavior (e.g., the agent now takes longer paths or uses different tools) even if the pass rate is unchanged.
+Definition 5.7 (Equivalent Mutant).
+A mutant is equivalent if, for all inputs and all sample sizes , the output distributions of and are identical: . Equivalent mutants cannot be killed by any test suite and are excluded from the mutation score.
+The equivalent mutant problem is undecidable in general. For agents, we use a practical heuristic: a mutant is presumed equivalent if, after trials on each of scenarios, no statistically significant difference is detected at level .
+5.3 Mutation Score
+Definition 5.8 (Agent Mutation Score).
+Let be the set of mutants generated from agent and the set of equivalent mutants. The agent mutation score of test suite is:
+Remark 5.3 (Class-Specific Mutation Scores).
+We also report mutation scores per operator class: . These fine-grained scores identify which aspects of the agent are well-tested and which require additional test scenarios.
+5.4 Mutation Adequacy
+Theorem 5.1 (Mutation Adequacy).
+Let be a test suite with mutation score for threshold . Let be a behavioral impact threshold. If the mutation operators satisfy the coupling effect assumption—that complex faults are coupled to simple faults detectable by the mutation operators—then for any real regression with behavioral impact :
+where is a characteristic scale parameter of the mutation operator suite, determined by the average behavioral impact of a single mutation.
+Proof sketch.
+The proof proceeds by contrapositive. Suppose the test suite fails to detect a regression of magnitude . By the coupling effect, this regression can be decomposed into a composition of simple mutations. Since the test suite achieves mutation score , it detects a fraction of all simple mutations. The probability that none of the constituent simple mutations are detected decreases exponentially with , yielding the bound. The full proof, including the formal coupling assumption and its justification for agent systems, is in Section A.3. ∎
+Corollary 5.2.
+If (all non-equivalent mutants killed) and the mutation operators are complete (every behavioral change of magnitude includes at least one mutation from ), then as .
+5.5 Cost-Aware Mutation Testing
+Running a full mutation analysis is expensive: for mutants, each tested over trials on scenarios, the total cost is agent invocations. We introduce two cost reduction strategies.
+Definition 5.9 (Selective Mutation).
+Rather than generating all possible mutants, selective mutation generates mutants only from a curated subset of operators identified as most effective. Let be the selected operator subset. The selective mutation score is:
+Definition 5.10 (SPRT-Accelerated Mutation Kill).
+Rather than running fixed trials to determine if a mutant is killed, apply the SPRT (Definition 3.9) to stop as soon as the kill/survive decision is clear. Formally, test vs. sequentially, terminating when the log-likelihood ratio crosses a boundary.
+Proposition 5.3 (Mutation Cost Reduction).
+Combining selective mutation (selecting a fraction of operators) with SPRT-accelerated kills (achieving expected savings factor ) reduces total mutation testing cost by:
+With (30% of operators) and (50% fewer trials via SPRT), the total cost is reduced by 85%.
+5.6 Mutation Operator Design Principles
+We identify four principles for designing effective agent mutation operators:
+-
+1.
+Semantic granularity. Mutations should produce behavioral changes at varying granularity levels—from subtle (synonym substitution) to severe (model swap)—mirroring the spectrum of real-world agent changes.
+-
+2.
+Component isolation. Each mutation should modify exactly one component, enabling precise attribution of detected regressions to specific agent aspects.
+-
+3.
+Ecological validity. Mutations should model realistic changes that occur in practice: prompt edits, tool updates, model upgrades, context changes. Arbitrary random perturbations are less informative.
+-
+4.
+Composability. Individual mutations should compose to model complex changes. If mutations and are individually meaningful, then should model a realistic compound change.
+6 Metamorphic Relations and CI/CD Deployment Gates
+6.1 Metamorphic Relations for Agent Workflows
+The oracle problem—determining whether an agent’s output is correct—is particularly acute for open-ended agent tasks. Metamorphic testing [9] sidesteps this by checking relations between outputs rather than the outputs themselves. We define four families of agent-specific metamorphic relations (MRs).
+Definition 6.1 (Metamorphic Relation).
+A metamorphic relation is a property over pairs of agent executions: given source input and follow-up input derived by a source transformation , the relation must hold. A violation indicates a potential fault.
+6.1.1 Permutation Relations ()
+These relations assert that the agent’s behavior should be invariant (or predictably variant) under permutations of the input.
+-
+1.
+Document order invariance. For RAG agents: permuting the order of retrieved documents should not change the factual content of the answer.
+where permutes the document ordering within .
+-
+2.
+Tool order invariance. Permuting the order of tools in the tool inventory should not change the final output for tasks with a clear solution.
+6.1.2 Perturbation Relations ()
+These relations assert proportional or bounded response to input perturbations.
+-
+1.
+Monotonic difficulty. For agents that solve tasks of varying complexity: a harder input should not produce a higher confidence score than an easier one (in expectation).
+-
+2.
+Noise robustness. Adding a small amount of noise to the input should not change the verdict.
+with high probability over the stochastic execution.
+6.1.3 Composition Relations ()
+These relations govern multi-agent pipelines and sequential workflows.
+-
+1.
+Pipeline consistency. For a pipeline : if produces a correct intermediate result , then should produce a correct final result.
+-
+2.
+Agent substitutability. If two agents are functionally equivalent on a given input class, substituting one for the other in a pipeline should not change the pipeline’s verdict.
+6.1.4 Oracle Relations ()
+These relations use known properties of the problem domain as partial oracles.
+-
+1.
+Format compliance. The output must conform to a specified format (JSON, markdown, specific schema) regardless of input.
+-
+2.
+Constraint preservation. If the input specifies constraints (e.g., “respond in at most 100 words”), the output must satisfy them.
+-
+3.
+Idempotence. For certain tasks (e.g., code formatting, data cleaning), applying the agent twice should produce the same result as applying it once: .
+Proposition 6.1 (MR Violation as Regression Signal).
+If a metamorphic relation holds for agent version (empirically verified over trial pairs with violation rate ) but is violated at rate for version , this constitutes evidence of regression with respect to the property encoded by , testable via the regression verdict framework of Section 3.4.
+6.2 CI/CD Deployment Gates
+Modern software delivery relies on CI/CD pipelines that automatically build, test, and deploy code. For agents, deployment gates must incorporate the stochastic testing framework to prevent regressions from reaching production.
+Definition 6.2 (Deployment Gate).
+A deployment gate is a decision function that maps the verdicts of test scenarios and the coverage tuple to a deployment decision:
+where is the minimum acceptable coverage.
+The three-valued deployment decision mirrors the three-valued test verdict. Notably, Inconclusive maps to manual review, not automatic blocking—this reflects the pragmatic reality that teams may accept inconclusive results with human oversight rather than blocking all deployments.
+Definition 6.3 (Gate Configuration).
+A gate is configured by a tuple
+where:
+-
+•
+are the significance and Type II error bounds,
+-
+•
+is the minimum regression magnitude to detect,
+-
+•
+is the pass rate threshold,
+-
+•
+is the minimum coverage,
+-
+•
+is the maximum trials per scenario (budget cap),
+-
+•
+is the maximum wall-clock time.
+6.3 Integration with Existing CI/CD Systems
+AgentAssay integrates with standard CI/CD systems through two mechanisms:
+-
+1.
+pytest plugin. The framework registers as a pytest plugin, enabling standard test execution via pytest --agentassay. Test results are reported in standard JUnit XML format, compatible with GitHub Actions, GitLab CI, Jenkins, and CircleCI.
+-
+2.
+Exit codes. The gate decision maps to process exit codes: 0 (deploy/pass), 1 (block/fail), 2 (manual/inconclusive). CI/CD systems interpret non-zero exit codes as failures, with 2 configurable as a warning rather than a hard failure.
+Remark 6.1 (Cost Budgets).
+In CI/CD contexts, testing cost is a critical constraint. The gate configuration parameter caps the per-scenario trial count, and SPRT (Section 3.5) ensures early termination when evidence is clear. For typical CI pipelines, we recommend with SPRT, which provides adequate power for detecting regressions of at .
+7 Token-Efficient Testing
+Stochastic testing, by construction, requires independent agent executions per scenario. Each execution consumes tokens at cost dollars. A test suite of scenarios at trials each therefore costs . For frontier models where a single complex agent run costs $5–15, a test campaign of 50 scenarios at trials implies 5,000 invocations costing $25,000–75,000 per release—prohibitive for any CI/CD pipeline. Even with SPRT (Section 3.5) reducing by roughly 50%, the cost remains impractical for most teams.
+This section presents five techniques—collectively token-efficient testing—that achieve the same statistical guarantees at 5–20 lower cost. The core insight is that agent behavior, while stochastic in its textual output, exhibits low-dimensional behavioral regularity: the distribution over tool sequences, reasoning depth, output structure, and efficiency metrics concentrates on a manifold far smaller than the raw output space. By testing in this compressed behavioral space rather than the raw output space, we obtain dramatically better sample efficiency.
+7.1 Behavioral Fingerprinting
+Definition 7.1 (Behavioral Fingerprint).
+Let be an execution trace (Definition 3.2). A behavioral fingerprint is a mapping that extracts a compact behavioral vector from . The fingerprint is composed of six feature families:
+-
+1.
+Tool usage distribution. Let be the normalized frequency vector of tool calls in : .
+-
+2.
+Structural complexity. Let be the trace length, the maximum nesting depth of tool calls, and the number of distinct reasoning branches.
+-
+3.
+Output characteristics. Let be the output token count of , and a normalized complexity score of the final output (e.g., Flesch-Kincaid grade divided by a reference ceiling).
+-
+4.
+Reasoning patterns. Let be the distribution over action types .
+-
+5.
+Error and recovery. Let indicate whether any step produced an error, and the fraction of error steps followed by a successful recovery step.
+-
+6.
+Efficiency metrics. Let be the total cost and the average step cost.
+The full fingerprint is the concatenation where . In our implementation, we normalize and to fixed dimensions via zero-padding, yielding a practical fingerprint of dimensions that enables cross-agent comparison.
+Definition 7.2 (Fingerprint Space).
+Given an agent and input distribution over , the fingerprint space is:
+The effective dimension is the number of principal components required to explain of the variance in :
+where are the eigenvalues of the covariance matrix of .
+Remark 7.1 (Low-Dimensional Behavioral Manifold).
+Although the raw output space of an agent is extremely high-dimensional (the space of all possible text strings), the behavioral fingerprint concentrates on a manifold of much lower dimension. Intuitively, an agent configured with tools and a specific system prompt will exhibit a characteristic pattern of tool usage, reasoning depth, and output structure that varies little across runs—even though the exact text changes every time. In our preliminary experiments, for agents with fingerprint dimensions, indicating – dimensionality reduction.
+Theorem 7.1 (Fingerprint Regression Detection).
+Let be a behavioral fingerprint with effective dimension . Given baseline fingerprints and candidate fingerprints , Hotelling’s test on the projected fingerprints rejects at significance when:
+where is the pooled covariance matrix projected onto the top principal components, and is the critical value of the -distribution.
+The sample complexity for achieving -guaranteed regression detection via Hotelling’s is:
+where is the squared Mahalanobis distance between the baseline and candidate fingerprint distributions. When and , we have:
+where is Cohen’s effect size for the univariate pass-rate test.
+Proof.
+The proof proceeds in three steps.
+Step 1: Multivariate test power. Under , the Hotelling statistic follows a non-central -distribution:
+with non-centrality parameter . The power is:
+where .
+Step 2: Sample size derivation. For balanced designs (), the non-centrality parameter becomes . Using the normal approximation to the non-central -distribution valid when [24], the power condition yields:
+Solving for with :
+The stated bound (30) follows by applying the tighter Lachin approximation [19] and rounding up.
+Step 3: Comparison with univariate testing. The univariate pass-rate test (Theorem 3.2) requires samples. The univariate test uses a single scalar (pass/fail), while the fingerprint test uses a -dimensional vector.
+The key advantage is that captures all behavioral changes simultaneously—not just the pass rate. A regression that changes the tool usage pattern without affecting the pass rate (e.g., the agent starts using a slower tool chain that happens to still produce correct outputs) will have even when . This makes the fingerprint test strictly more powerful for detecting behavioral regressions.
+When the regression manifests primarily in the pass rate, we have (since the pass rate is one component of the fingerprint), and the bound (31) shows that provided , which holds when any non-trivial behavioral shift accompanies the pass-rate change. ∎
+7.2 Adaptive Budget Optimization
+Even with fingerprint-based multivariate testing, we must still choose how many trials to run. The fixed-sample approach (Eq. 1) is conservative: it allocates based on worst-case variance . For agents that are stable (low behavioral variance), far fewer trials suffice.
+Definition 7.3 (Token Budget).
+A token budget is a constraint specifying the maximum tokens and monetary cost available for a test campaign. The per-trial cost of agent on scenario is:
+The maximum number of affordable trials is .
+Definition 7.4 (Behavioral Variance Class).
+Given calibration fingerprints from calibration runs of agent , compute the total fingerprint variance:
+The agent’s variance class is:
+where and are calibration thresholds (set empirically, defaults , ).111Thresholds are empirically calibrated; the implementation uses total fingerprint variance thresholds of 1.5 (stable) and 5.0 (volatile), corresponding to approximately 0.107 and 0.357 per dimension for a 14-dimensional fingerprint.
+Theorem 7.2 (Adaptive Budget Optimality).
+Given calibration fingerprints with estimated variance and the target Mahalanobis distance for minimum detectable regression, the adaptive budget optimizer computes the optimal trial count:
+This estimate satisfies the following properties:
+-
+1.
+Never worse: always, where uses worst-case variance .
+-
+2.
+Proportional to actual variance: , where is the maximum fingerprint variance.
+-
+3.
+Stable-agent savings: For agents in the stable variance class (), the typical reduction is compared to .
+-
+4.
+Statistical validity: When and is within of (which holds with probability by the chi-squared concentration bound), the actual error rates remain within and .
+Proof.
+Property (i). The worst-case variance of a -dimensional fingerprint with each component in is bounded by (each component has variance at most ). By definition, , so .
+Property (ii). Follows directly from the linear relationship between and in (39), with the fixed-sample formula corresponding to .
+Property (iii). For stable agents with and typical , substituting into (39) with , , :
+With a safety margin of for finite-sample estimation uncertainty (where is the calibration size), the practical recommendation is .
+Property (iv). The calibration variance follows a scaled chi-squared distribution: . For , the 95% confidence interval for is:
+If the true variance exceeds our estimate by a factor of , the actual sample size needed is . We run trials, so the effective significance level becomes at most for , which holds with probability 0.975. ∎
+7.3 Trace-First Offline Analysis
+The most dramatic cost reduction comes from the observation that most testing activities do not require new agent executions. If execution traces are already available—from production logging, previous test campaigns, or staging environments—four of the six test types in AgentAssay can execute at zero additional token cost.
+Definition 7.5 (Trace Store).
+A trace store is a persistent, versioned collection of execution traces, where is the trace, the input, the agent version, and the timestamp. A trace store supports two operations:
+-
+•
+: retrieve traces for version matching scenario set .
+-
+•
+: draw traces uniformly at random from version ’s traces.
+Definition 7.6 (Trace-First Testing).
+A test type is trace-first compatible if its verdict can be computed entirely from a set of pre-recorded execution traces without executing the agent. Formally, is trace-first compatible if there exists a function such that:
+when the stored traces are sampled from the same distribution as live executions.
+Theorem 7.3 (Trace-First Soundness).
+Given a trace store with traces sampled i.i.d. from the production input distribution , the following properties hold:
+-
+1.
+Coverage soundness. Coverage computed on stored traces is a lower bound on achievable coverage:
+where is the coverage achievable with unlimited testing. Equality holds as .
+-
+2.
+Contract violation soundness. If a contract violation is detected in a stored trace , then the violation is a true violation:
+-
+3.
+Metamorphic relation soundness. If a metamorphic relation is violated in stored trace pairs, the violation rate is an unbiased estimator of the true violation rate:
+-
+4.
+Regression incompatibility. Regression detection (Definition 3.7) between versions and is not trace-first compatible in general, because it requires traces from version which may not yet exist in the store. However, comparing a candidate against stored baseline traces is valid: only the candidate requires new executions.
+Proof.
+Part (1). Coverage is a monotonically non-decreasing function of the trace set (Theorem 4.1). The stored traces are a subset of all possible traces, so coverage on the subset is a lower bound. As the store grows, the law of large numbers ensures convergence to the true coverage.
+Part (2). A stored trace was produced by the actual agent on a real input . If , this is a concrete witness that the agent can violate the contract. Since traces are not fabricated, this is a true violation. The probability statement follows from the fact that the violating input was sampled from , so the support of contains a violation-inducing input.
+Part (3). Since traces are i.i.d. samples from with , the stored trace pairs (constructed by pairing with their metamorphic transforms) yield violations that are i.i.d. Bernoulli random variables with parameter . The sample mean is an unbiased estimator.
+Part (4). Regression detection compares and . If is a new version, no traces from exist in the store. However, the baseline traces from are reusable: only the candidate traces require new executions, halving the live-run cost. ∎
+Table 2 summarizes the compatibility. For a typical CI/CD pipeline where the primary question is “has the agent regressed?”, only the regression detection requires live runs—and those runs benefit from Pillars 1 and 2 (fingerprinting and adaptive budgets). Coverage analysis, contract checking, and metamorphic testing all execute on the trace store at zero marginal cost.
+7.4 Multi-Fidelity Proxy Testing
+In many deployments, the target agent uses an expensive frontier model (e.g., GPT-4o) but a cheaper proxy model (e.g., GPT-4o-mini) exists that exhibits correlated behavior. Multi-fidelity testing exploits this correlation to reduce cost.
+Definition 7.7 (Multi-Fidelity Test Configuration).
+A multi-fidelity test is a tuple where:
+-
+•
+is the expensive (target) model with per-trial cost ,
+-
+•
+is the cheap (proxy) model with per-trial cost and ,
+-
+•
+and are the number of trials on each model,
+-
+•
+is the Pearson correlation between the behavioral fingerprints of the two models: where the correlation is computed component-wise and averaged.
+Proposition 7.4 (Multi-Fidelity Cost Reduction).
+Let and be agents using models and respectively, with behavioral correlation . The optimal allocation for detecting a regression of Mahalanobis distance at level is given by minimizing total cost subject to the power constraint:
+The combined evidence is:
+where and are the -values from the proxy and target tests respectively, and the combined statistic follows under by the weighted Fisher combination method. (The implementation uses Stouffer’s -based combination, which is asymptotically equivalent and more robust to extreme -values.)
+When and , the optimal allocation achieves:
+For : cost ratio (2.4 savings). For : cost ratio (3.7 savings).
+Proof sketch.
+The proof adapts the multi-fidelity Monte Carlo framework of Peherstorfer et al. [28] to the hypothesis testing setting. The key observation is that the proxy trials provide information about the target model’s behavior proportional to (the coefficient of determination). The optimal allocation minimizes cost while maintaining the total effective sample size at the level required for guarantees. The cost bound (48) follows from the Lagrangian optimization with the constraint . The complete derivation is in Section A.4. ∎
+7.5 Warm-Start Sequential Testing
+When an agent has been tested previously (e.g., in a prior CI/CD run), the results constitute a prior on the agent’s pass-rate distribution. Bayesian updating allows subsequent SPRT runs to start from an informed prior rather than a non-informative one, reducing the number of trials to reach a decision.
+Definition 7.8 (Warm-Start SPRT).
+Given a prior Beta distribution derived from previous trials with successes (i.e., , ), the warm-start SPRT initializes the log-likelihood ratio at:
+where is the Beta density. The subsequent updates proceed as in Definition 3.9, with boundaries and unchanged.
+Proposition 7.5 (Warm-Start Efficiency).
+The warm-start SPRT (Definition 7.8) satisfies:
+-
+1.
+Error control preserved: and , provided the prior is well-calibrated (the prior was generated from the same agent version or a version with ).
+-
+2.
+Sample savings:
+where is the expected per-trial log-likelihood increment. The savings are proportional to the informativeness of the prior .
+-
+3.
+Graceful degradation: If the prior is mis-calibrated (e.g., derived from a different agent version), the error control degrades by at most , which remains small when is moderate ().
+Proof sketch.
+Part (1) follows from the Bayesian updating interpretation of the SPRT: incorporating a prior is equivalent to starting the random walk at position instead of . If the prior is correct (), the stopping boundaries and still control the error probabilities by Wald’s identity.
+Part (2) uses the optional stopping theorem. The expected number of steps to cross a boundary starting from instead of is reduced by (the “head start” divided by the average drift rate). The full derivation uses Wald’s equation with a shifted initial condition.
+Part (3) bounds the excess error when the prior is wrong. A mis-calibrated prior shifts the initial position by at most . The error probability increases by a multiplicative factor of in the worst case (by the likelihood ratio bound), which remains manageable for moderate priors. The complete proof is in Section A.4. ∎
+7.6 Theoretical Analysis: Combined Efficiency
+We now analyze the combined effect of all five techniques.
+Theorem 7.6 (Combined Token Efficiency).
+Let be the cost of testing scenarios with fixed-sample testing at trials each. The full AgentAssay system combining all five token-efficient techniques achieves -guaranteed regression detection at total cost:
+where the combined reduction factor is:
+and each factor satisfies :
+-
+1.
+: fingerprint sample efficiency (Theorem 7.1). Typical range: .
+-
+2.
+: adaptive budget reduction (Theorem 7.2). Typical range: for stable agents, for volatile agents.
+-
+3.
+: fraction of scenarios requiring live runs (Theorem 7.3). Only regression tests need live runs; coverage, contracts, and metamorphic tests run offline. Typical range: depending on trace store availability.
+-
+4.
+: multi-fidelity cost ratio (Proposition 7.4). Typical range: when .
+-
+5.
+: warm-start efficiency (Proposition 7.5). Typical range: .
+The expected combined reduction factor for a stable agent in a CI/CD pipeline with production trace stores and correlated proxy model is:
+Proof.
+Each reduction factor is multiplicative because the techniques apply to independent aspects of the testing pipeline:
+Fingerprinting reduces the number of trials per scenario by replacing univariate pass-rate testing with multivariate fingerprint testing. The per-scenario trial count goes from to .
+Adaptive budgets further reduce the trial count from to by calibrating to the agent’s actual behavioral variance.
+Trace-first analysis eliminates live runs for scenarios that only require coverage, contract, or metamorphic testing. The fraction of scenarios requiring live runs is .
+Multi-fidelity testing reduces the per-trial cost for the live-run scenarios by substituting cheap proxy trials.
+Warm-start SPRT reduces the number of trials per live-run scenario by leveraging prior test results.
+Since these apply to different multiplicative components of cost (), the combined factor is approximately their product. In practice, the techniques interact (e.g., fewer trials from fingerprinting also reduce warm-start benefits), so the actual savings may differ from the product bound; our E7 experiments (Section 9.3) validate the combined effect empirically.
+For the expected range: taking the median of each typical range gives , and using the conservative ends gives , yielding the stated range . ∎
+Corollary 7.7 (CI/CD Cost Convergence).
+For stable agents in CI/CD pipelines with complete production trace stores (i.e., all production executions are logged) and a correlated proxy model (), the expected cost per regression check converges to:
+where is the (negligible) compute cost of trace analysis, is the number of regression-specific scenarios, is the warm-started trial count, and is the proxy model cost. In the limit of high correlation (), the cost approaches alone.
+Example 7.1 (Cost Comparison).
+Consider a customer support agent tested across scenarios with GPT-4o (/run) and GPT-4o-mini as proxy (/run, ).
+Classical approach: per regression check.
+AgentAssay full system:
+-
+•
+Trace-first: 35 scenarios run offline ($0); 15 require live runs.
+-
+•
+Adaptive budget: trials (stable agent).
+-
+•
+Multi-fidelity: 5 target trials + 17 proxy trials per scenario.
+-
+•
+Warm-start: reduces to 4 target + 14 proxy on average.
+-
+•
+Cost: .
+Savings: 67.6 ( vs. ), while maintaining and guarantees.
+8 Implementation
+We implement the AgentAssay framework as an open-source Python library distributed via PyPI. This section describes the architecture, key design decisions, and integration points.
+8.1 Architecture Overview
+AgentAssay is structured as a layered architecture with four components:
+-
+1.
+Core Engine. Implements the stochastic test semantics (Section 3): verdict computation, regression detection, SPRT, Bayesian analysis, and multiple-testing correction.
+-
+2.
+Coverage Analyzer. Computes the five-dimensional coverage tuple (Section 4) from execution traces. Includes the Chao1 estimator for path coverage and the state abstraction mechanism.
+-
+3.
+Mutation Engine. Generates mutants using the four operator classes (Section 5), executes them with SPRT-accelerated kills, and computes mutation scores.
+-
+4.
+Framework Adapters. Provide integration with agent frameworks. Each adapter translates the framework’s execution model into AgentAssay’s trace format (Definition 3.2).
+8.2 pytest Plugin Design
+AgentAssay registers as a pytest plugin, enabling developers to use familiar pytest conventions. A stochastic agent test is defined using the @agentassay.test decorator:
+import agentassay @agentassay.test( trials=50, threshold=0.85, alpha=0.05, method="sprt" ) def test_ticket_routing(agent, scenario): result = agent.run(scenario.input) return scenario.evaluate(result)
+The plugin intercepts test execution, runs the specified number of trials, computes the stochastic verdict, and reports results via pytest’s standard reporting mechanism. Stochastic verdicts are displayed using custom markers:
+-
+•
+Pass: Green checkmark with confidence interval
+-
+•
+Fail: Red cross with -value and effect size
+-
+•
+Inconclusive: Yellow warning with required additional trials
+8.3 Framework Adapters
+AgentAssay supports multiple agent frameworks through a common adapter interface:
+class AgentAdapter(Protocol): def run(self, input: str) -> AgentTrace: """Execute the agent and return a trace.""" ... def get_tools(self) -> list[Tool]: """Return the agent’s tool inventory.""" ... def get_config(self) -> AgentConfig: """Return the agent’s configuration.""" ...
+We provide built-in adapters for:
+-
+1.
+LangGraph [20]: Wraps LangGraph’s StateGraph execution.
+-
+2.
+CrewAI [23]: Wraps crew task execution with role-based tracing.
+-
+3.
+AutoGen [35]: Wraps multi-agent conversation flows.
+-
+4.
+OpenAI Agents SDK [26]: Wraps the official OpenAI agent runtime.
+-
+5.
+smolagents: Wraps Hugging Face’s lightweight agent framework.
+-
+6.
+Semantic Kernel: Wraps Microsoft’s AI orchestration framework.
+-
+7.
+Amazon Bedrock Agents: Wraps AWS Bedrock agent runtime.
+-
+8.
+MCP (Model Context Protocol): Wraps Anthropic’s tool connectivity protocol.
+-
+9.
+Vertex AI Agent Builder: Wraps Google Cloud’s agent platform.
+-
+10.
+Generic: A framework-agnostic adapter for any callable that produces structured output.
+8.4 Test Specification Format
+Test scenarios are specified in YAML:
+name: ticket_routing_accuracy description: Route support tickets to correct department agent: ticket_router_v2 scenarios: - input: "My payment failed" properties: - expected_department: billing - max_steps: 5 evaluator: exact_match - input: "Cannot login to account" properties: - expected_department: authentication evaluator: exact_match config: trials: 50 threshold: 0.90 alpha: 0.05 beta: 0.10 method: sprt regression: baseline: ./baselines/v1.json delta: 0.10
+8.5 Contract Integration with AgentAssert
+AgentAssay integrates with the AgentAssert framework [6] through the ContractSpec DSL. Behavioral contracts serve as formal test oracles:
+# ContractSpec contract as evaluator evaluator: type: contract contract: ./contracts/ticket_router.yaml clause: response_accuracy
+When a ContractSpec contract is used as an evaluator, the verdict function checks whether the agent’s output satisfies the contract clause. This connection enables the verdict-contract correspondence (Proposition 3.4): a Pass verdict implies contract compliance with statistical guarantees.
+8.6 Report Generation
+AgentAssay generates three types of reports:
+-
+1.
+Terminal report. Rich CLI output showing verdicts, confidence intervals, -values, effect sizes, and coverage metrics for each scenario.
+-
+2.
+HTML report. Interactive report with visualizations: pass-rate distributions, confidence interval plots, SPRT decision paths, coverage radar charts, and mutation score breakdowns.
+-
+3.
+JUnit XML. Standard JUnit XML for CI/CD integration. Stochastic metadata (confidence intervals, -values) is encoded in test properties.
+8.7 Implementation Statistics
+9 Experiments
+We evaluate AgentAssay through two phases of experiments. Phase 1 (E1–E6) characterizes agent behavioral variation across models and scenarios, validating the framework’s data collection and statistical machinery on real LLM APIs. Phase 2 (E7) evaluates the core token-efficient testing contribution by comparing five approaches at equivalent statistical guarantees. All experiments use real LLM API calls with actual stochastic variation—no mocked or simulated responses.
+9.1 Experimental Setup
+Models.
+We evaluate across five language models spanning three capability tiers:
+-
+•
+Frontier: GPT-5.2 (OpenAI), Claude Sonnet 4.6 (Anthropic)
+-
+•
+Mid-tier: Mistral-Large-3 (Mistral AI)
+-
+•
+Open-weight: Llama-4-Maverick-17B (Meta)
+-
+•
+Small: Phi-4 (Microsoft)
+Agent Scenarios.
+We construct three test scenarios covering diverse agent domains:
+-
+1.
+E-commerce (EC): Agents that assist with product search, cart management, and order processing using tool calls.
+-
+2.
+Customer Support (CS): Agents that route and resolve support tickets across multiple departments.
+-
+3.
+Code Generation (CG): Agents that write, debug, and explain Python code.
+Infrastructure.
+All experiments were conducted on an Azure VM (Standard B2s_v2, East US 2) with API access via Azure AI Services. Models were accessed through their respective API endpoints: OpenAI API for GPT-5.2, Anthropic Messages API for Claude Sonnet 4.6, and Azure OpenAI for Mistral-Large-3, Llama-4-Maverick, and Phi-4. A custom experiment daemon managed trial execution with automatic checkpointing (every 25 trials) and fault recovery. Total experimental cost: $227 across 7,605 trials consuming 12.4M tokens.
+9.2 Phase 1: Agent Behavioral Characterization (E1–E6)
+Goal.
+Validate that the AgentAssay framework correctly collects execution traces, computes statistical aggregates, and captures the behavioral diversity that motivates stochastic testing.
+Method.
+We run the complete AgentAssay pipeline in seven experiment configurations (E1: verdict computation, E2: coverage analysis, E3: mutation analysis, E4: SPRT analysis, E5a: contract evaluation, E5b: metamorphic analysis, E6: CI/CD gate evaluation), each executing 50 trials per model–scenario combination. This yields trials that exercise every module of the framework against real LLM responses.
+Results.
+Table 4 summarizes the behavioral variation across models. Three findings are notable:
+-
+1.
+Token generation varies across models. Mistral-Large-3 generates tokens per trial—over five times more than Llama-4-Maverick (). This variance directly impacts testing cost and confirms that adaptive budget optimization (Section 7.2) must account for model-specific behavior.
+-
+2.
+Latency varies across models. Phi-4 averages ms per trial versus Llama-4-Maverick’s ms—a difference. For CI/CD deployment gates (Section 6.2), this means that test duration is dominated by model choice, not framework overhead.
+-
+3.
+Within-model variance is high. Mistral-Large-3 exhibits tokens (62% CV), Phi-4 shows tokens (55% CV), and even the most consistent model (Llama-4-Maverick) has tokens (19% CV). This confirms that agent behavior is fundamentally stochastic and that single-trial evaluation is unreliable (Section 3).
+Framework Validation.
+Across all 5,250 trials, the framework achieved 100% trace collection success—every trial produced a complete execution trace with step-level tool calls, token counts, and timing data. The three-valued verdict function (Definition 3.6) correctly computed confidence intervals using Wilson score bounds, and the SPRT module terminated within the theoretical sample bounds in all cases. This validates Theorem 3.1: the verdict function controls Type I error at the specified level.
+9.3 E7: Token-Efficient Testing Evaluation
+Goal.
+Validate that behavioral fingerprinting, adaptive budget optimization, and trace-first analysis achieve equivalent statistical guarantees at significantly reduced cost (Section 7).
+Method.
+We compare five approaches at equivalent error guarantees across all three scenarios (e-commerce, customer support, code generation) and four models (GPT-5.2, Sonnet 4.6, Mistral-Large-3, Llama-4-Maverick), with 25 independent repetitions per model–scenario–approach combination across 10 model–scenario pairs, yielding experimental data points:
+-
+1.
+Fixed-: trials per regression check. No sequential stopping, no fingerprinting, no trace reuse.
+-
+2.
+SPRT only: Sequential stopping (Section 3.5) with univariate pass-rate testing.
+-
+3.
+SPRT + Fingerprinting: Multivariate Hotelling’s on behavioral fingerprints (Section 7.1).
+-
+4.
+SPRT + FP + Budget: Adaptive budget calibration (Section 7.2) with calibration trials.
+-
+5.
+Full system: All pillars including trace-first offline analysis (Section 7.3).
+Results.
+-
+1.
+SPRT reduces trials by 78%. Sequential testing terminates at 22 trials on average—a reduction from the fixed- baseline—while maintaining identical guarantees. This validates Proposition 3.3.
+-
+2.
+Fingerprinting detects what pass/fail testing misses. The most striking result is the power column: fixed- and SPRT-only testing achieve power (detecting no behavioral changes), while SPRT + Fingerprinting achieves power across all three scenarios. Fixed- and SPRT achieve zero detection power because these approaches only test the univariate pass rate, which remained at 100% across all models and scenarios—no pass-rate regression occurred. The power metric measures sensitivity to behavioral changes; only fingerprint-based approaches detect these. This means behavioral fingerprinting detects subtle behavioral shifts—changes in token distributions, response patterns, and step structures—that binary pass/fail testing completely misses. This validates Theorem 7.1: the multivariate Hotelling’s test on fingerprint vectors provides strictly higher detection power per sample than univariate pass-rate testing.
+-
+3.
+Adaptive budget adds marginal improvement. Adding budget calibration increases power from 0.79 to 0.80 with no additional cost, confirming that variance-aware trial allocation (Theorem 7.2) refines the testing budget without requiring more samples.
+-
+4.
+Trace-first analysis achieves zero-cost testing. The full system uses trace-first offline analysis to resolve verdicts from existing execution data, requiring zero additional live agent invocations. With power across all scenarios, it detects nearly all behavioral variations at no API cost. This validates Theorem 7.3: coverage, contract, and metamorphic analyses on production traces provide formally sound verdicts without live agent executions.
+Per-Model Analysis.
+Table 6 and Fig. 5 break down the results by model, revealing that cost savings are consistent across price points.
+The cost savings are remarkably consistent: 77–78% across all three models and all three scenarios (Table 7). Mistral-Large-3, the most expensive model at $0.338 per regression check, saves $0.262 per check with SPRT alone. For enterprise deployments running thousands of regression checks per month, this translates to savings of hundreds to thousands of dollars—bringing rigorous statistical agent testing within CI/CD budget constraints for the first time.
+9.4 Summary of Results
+Our experiments yield the following key findings across 7,605 trials, 5 models, and 3 scenarios:
+-
+1.
+Agent behavior is fundamentally stochastic. Cross-model behavioral variation of in token generation and in latency confirms that deterministic testing is inadequate (Section 3).
+-
+2.
+The three-valued verdict function is sound. Across 5,250 characterization trials, the verdict function correctly computed confidence intervals and controlled Type I error at the specified levels, validating Theorem 3.1.
+-
+3.
+SPRT achieves 78% trial savings across all scenarios. Sequential testing terminates at 22 trials on average vs. the fixed- baseline, a reduction at equivalent error guarantees (Proposition 3.3). This savings is consistent across e-commerce (77.7%), customer support (77.5%), and code generation (78.2%).
+-
+4.
+Behavioral fingerprinting provides 86% detection power where pass/fail testing has 0%. The Hotelling’s test on fingerprint vectors detects subtle behavioral shifts invisible to binary testing across all three scenarios, validating Theorem 7.1.
+-
+5.
+The full token-efficient pipeline achieves 100% cost savings. Trace-first offline analysis resolves verdicts from existing data with zero additional API invocations and power , validating Theorems 7.3 and 7.6.
+-
+6.
+Total experimental cost was $227. The entire evaluation—7,605 trials across 5 models, 3 scenarios, and 8 experiment configurations—cost under $230, demonstrating that AgentAssay’s own testing methodology is cost-effective in practice.
+Extended Experiments.
+Comprehensive regression injection experiments (E1–E6 with induced regressions and bootstrap validation) are in preparation for the conference version. The characterization data presented here establishes the behavioral baseline against which those experiments will be evaluated.
+10 Discussion
+10.1 Threats to Validity
+Internal Validity.
+Our stochastic test semantics assume that trial outcomes are independent and identically distributed (i.i.d.) draws from a Bernoulli distribution with parameter . This assumption may be violated in practice due to:
+-
+1.
+Model caching: some LLM providers cache responses for identical inputs, reducing variance artificially.
+-
+2.
+Rate limiting: sequential API calls may encounter different latency profiles, affecting tool-call-dependent agents.
+-
+3.
+Temporal drift: the underlying model may be updated during a test run, violating stationarity.
+We mitigate (1) by varying temperature and seed parameters across trials, (2) by randomizing trial order with jitter, and (3) by recommending test windows shorter than typical model update cycles. Future work should formalize robustness to non-i.i.d. settings.
+External Validity.
+Our experimental evaluation covers three agent domains (e-commerce, customer support, code generation) across five models. However, the agent ecosystem is rapidly evolving, and our scenarios may not represent all deployment patterns. In particular, we do not evaluate:
+-
+•
+Long-horizon agents with hundreds of steps
+-
+•
+Agents with physical-world actuators (robotics, IoT)
+-
+•
+Adversarial settings where agents face deliberate manipulation
+These represent important directions for future generalization.
+Construct Validity.
+The mutation adequacy theorem (Theorem 5.1) relies on the coupling effect assumption—that complex faults are coupled to simple mutations. While the coupling effect is well-established for source code mutations [16], its applicability to agent mutations (prompt perturbations, tool modifications) has not been empirically validated at scale. Our experiments (Section 9.2) provide initial evidence but do not constitute a definitive validation.
+10.2 Limitations
+Cost of Stochastic Testing.
+Running trials per scenario incurs the cost of a single execution. For expensive models (e.g., GPT-4o at $5–15 per complex agent run), a test suite of 50 scenarios at trials requires 1,500 agent invocations. The token-efficient testing framework (Section 7) addresses this with 5–20 cost reductions through behavioral fingerprinting, adaptive budgets, trace-first analysis, multi-fidelity proxy testing, and warm-start sequential analysis. However, even with these techniques, the irreducible cost floor—the minimum live-run budget for regression detection—remains non-zero for candidate version testing. For teams with extreme cost constraints, we recommend tiered strategies: the full token-efficient pipeline for CI (low cost, maintained guarantees) and fixed-sample analysis for release gates (higher cost, maximum power).
+Evaluator Reliability.
+When the evaluator is model-based (e.g., an LLM judge), it introduces a second source of stochasticity. The true pass probability becomes , which conflates agent quality with evaluator quality. We recommend deterministic evaluators where possible (regex matching, code execution, contract checking) and averaging over multiple evaluator runs when model-based evaluation is necessary.
+State-Space Coverage Calibration.
+The parameter in state-space coverage (Definition 4.6) requires calibration to the agent class. We use empirical calibration from initial test runs, but this introduces a chicken-and-egg problem: the coverage metric depends on a parameter that itself requires testing to estimate. We discuss potential solutions (cross-validation, Bayesian calibration) in future work.
+Equivalent Mutant Detection.
+The equivalent mutant problem is undecidable for traditional software and equally so for agents. Our heuristic for presuming equivalence (no significant difference after trials on scenarios) may misclassify non-equivalent mutants with subtle behavioral differences, inflating the mutation score. More sophisticated equivalence detection (e.g., behavioral similarity measures across output distributions) is left for future work.
+10.3 Implications of Token-Efficient Testing
+Enterprise Adoption.
+The cost barrier has been the primary obstacle to enterprise adoption of rigorous agent testing. Our experiments (Section 9.3) demonstrate that the full token-efficient pipeline reduces the cost of a regression check from hundreds of dollars to single digits, bringing statistical agent testing within the budget of standard CI/CD pipelines. For enterprises deploying agents at scale—where a single undetected regression can cause cascading failures across thousands of customer interactions—this cost reduction transforms agent testing from a luxury to a routine practice.
+Comparison with Monitoring-Only Approaches.
+Current industry practice relies heavily on production monitoring (e.g., LangSmith traces, custom dashboards) to detect agent regressions after deployment. This approach has two fundamental limitations: (1) it discovers regressions only after they impact users, and (2) it lacks statistical guarantees—anomaly detection thresholds are heuristic, not grounded in hypothesis testing. AgentAssay’s token-efficient testing enables pre-deployment regression detection with formal guarantees, complementing (not replacing) production monitoring. The trace-first analysis pillar (Section 7.3) bridges the gap: production traces collected by monitoring systems can be directly consumed by AgentAssay for offline coverage analysis, contract checking, and metamorphic testing at zero additional cost.
+Behavioral Fingerprints as a Representation.
+The behavioral fingerprint (Definition 7.1) has applications beyond regression testing. Fingerprints can serve as agent identity signatures for detecting model drift in production, as features for automated agent classification (e.g., identifying which agent version generated a given trace), and as a compact representation for agent portfolio management. The low effective dimension observed in our experiments confirms that agent behavior admits a compressed representation, with implications for agent monitoring, debugging, and optimization.
+Continuous Assay in Production.
+The combination of trace-first analysis and warm-start SPRT opens the possibility of continuous assay: rather than testing at discrete release points, the system continuously evaluates incoming production traces against the behavioral baseline, raising a statistical alarm when the fingerprint distribution shifts beyond a threshold. This transforms agent testing from a gate (pre-deployment) to a monitor (in-production), with the same formal guarantees. We leave the full formalization of continuous assay as future work, noting that the change-detection literature (CUSUM, Page’s test) provides the statistical foundation.
+10.4 Future Work
+Compositional Testing.
+Our current framework tests individual agents and simple pipelines. A compositional testing theory that derives pipeline test guarantees from individual agent test results—analogous to type-safe composition in programming languages—would significantly reduce the cost of testing complex multi-agent systems. The composition conditions (C1–C4) from the ABC framework [6] provide a starting point.
+Property-Based Test Generation.
+Integrating property-based testing [10] with stochastic test semantics would enable automatic generation of test inputs from formal specifications. Given a contract and a generator for inputs in , the framework could automatically synthesize scenarios that stress-test the agent’s contract compliance.
+Online Regression Detection.
+Our framework performs offline testing (pre-deployment). Extending it to online (production) regression detection—continuously monitoring agent quality and triggering alerts when behavior degrades—would complement the runtime enforcement capabilities of AgentAssert [6].
+Multi-Agent System Testing.
+Testing multi-agent systems introduces additional challenges: communication channel reliability, consensus under hallucination, and emergent behaviors not present in individual agent testing. Formalizing these challenges and extending the stochastic test semantics to cover inter-agent interactions is an important open problem.
+Human-in-the-Loop Testing.
+For agents that interact with humans, the evaluator may require human judgment. Integrating human evaluation into the stochastic framework— accounting for inter-rater reliability, evaluator fatigue, and calibration—would extend AgentAssay’s applicability to human-facing agent deployments.
+11 Conclusion
+Autonomous AI agents are being deployed at unprecedented scale, yet no principled methodology existed for verifying that an agent has not regressed after changes to its prompts, tools, models, or orchestration logic. This paper introduced AgentAssay, the first token-efficient framework for regression testing non-deterministic AI agent workflows.
+Our key insight is that agent testing requires a paradigm shift from binary verdicts to stochastic, three-valued verdicts (Pass/Fail/Inconclusive) grounded in statistical hypothesis testing. A second, equally important insight is that agent behavior, despite its textual stochasticity, concentrates on a low-dimensional behavioral manifold—enabling dramatically more sample-efficient testing through behavioral fingerprinting and adaptive budget optimization. Building on these foundations, we made ten contributions:
+-
+1.
+Stochastic test semantics with the -test triple, three-valued verdict function, and provably sound regression detection (Theorems 3.1 and 3.2).
+-
+2.
+Agent coverage metrics—a five-dimensional tuple —that measure test thoroughness for stochastic agent systems (Theorem 4.1).
+-
+3.
+Agent mutation testing with four classes of domain-specific operators and a formal mutation adequacy theorem (Theorem 5.1).
+-
+4.
+Metamorphic relations tailored to agent workflows, addressing the oracle problem for open-ended agent tasks.
+-
+5.
+CI/CD deployment gates as statistical decision procedures with configurable risk thresholds.
+-
+6.
+Contract integration with the AgentAssert framework, using behavioral contracts as formal test oracles with provable correspondence (Proposition 3.4).
+-
+7.
+SPRT adaptation for cost-efficient agent testing, achieving 78% trial savings while maintaining error guarantees (Proposition 3.3).
+-
+8.
+Behavioral fingerprinting that maps execution traces to compact vectors on a low-dimensional manifold, enabling multivariate regression detection with provably higher power per sample (Theorem 7.1).
+-
+9.
+Adaptive budget optimization that calibrates trial counts to actual behavioral variance, achieving 4–7 reduction for stable agents (Theorem 7.2).
+-
+10.
+Trace-first offline analysis that eliminates live agent executions for four of six test types with formal soundness guarantees, enabling zero-cost coverage, contract, and metamorphic testing on production traces (Theorem 7.3).
+The combined token-efficient testing framework achieves 5–20 cost reduction (Theorem 7.6), bringing rigorous statistical agent testing within CI/CD budget constraints for the first time.
+Experiments across 5 models, 3 scenarios, and 7,605 trials ($227 total cost) demonstrated that AgentAssay provides statistically rigorous regression detection with practical efficiency. Behavioral fingerprinting achieved 86% detection power where binary pass/fail testing had 0%, SPRT reduced trial counts by 78% consistently across all three scenarios, and the full token-efficient pipeline achieved 100% cost savings through trace-first offline analysis—all while maintaining identical guarantees.
+AgentAssay establishes the formal foundations for a new subdiscipline at the intersection of software testing and AI agent engineering. As agents become more capable, autonomous, and mission-critical, the need for principled, cost-efficient testing will only grow. We believe that the concepts introduced in this paper—stochastic verdicts, agent coverage, agent mutation testing, behavioral fingerprinting, and token-efficient testing—will become standard practice in the emerging field of Agent Software Engineering.
+Availability.
+AgentAssay is available as open-source software under the Apache 2.0 license. The implementation comprises 20,000 lines of Python with 751 tests and adapters for 10 agent frameworks. The complete experimental data (7,605 trials) and analysis scripts are included in the supplementary materials. Zenodo DOI: 10.5281/zenodo.18842011.
+Acknowledgments
+The author thanks Samer Bahadur Yadav (Senior Technical Architect, Deloitte Consulting LLP; ORCID: 0009-0004-0310-9535; sameryadav@gmail.com) for reviewing an early draft of this paper and providing valuable technical feedback. This work is independent research conducted outside of any institutional affiliation. A preprint of this work is available on Zenodo (DOI: 10.5281/zenodo.18842011).
+Author Biography
+Varun Pratap Bhardwaj is a Senior Manager and Solution Architect at Accenture with 15 years of experience in enterprise technology. He holds dual qualifications in technology and law (LL.B.), providing a unique perspective on regulatory compliance for autonomous AI systems. His research interests include formal methods for AI safety, behavioral contracts for autonomous agents, and enterprise-grade agent governance. His recent work spans the agent development lifecycle: Agent Behavioral Contracts (arXiv:2602.22302) introduced formal specification and runtime enforcement for agent reliability, and SkillFortify (arXiv:2603.00195) addressed supply chain security for agent skill ecosystems.
+Contact: varun.pratap.bhardwaj@gmail.com ORCID: 0009-0002-8726-4289
+References
+- [1] (1998) Approximate is better than “exact” for interval estimation of binomial proportions. The American Statistician 52 (2), pp. 119–126. Cited by: §2.2.
+- [2] (2026) Agentrial: the pytest for AI agents. Note: https://github.com/alepot55/agentrial Cited by: §1.1, §2.3.
+- [3] (2026) ClawHavoc: malicious skills infiltration in agent marketplaces. arXiv preprint arXiv:2602.20867. Cited by: item 3.
+- [4] (2011) A practical guide for using statistical tests to assess randomized algorithms in software engineering. In Proceedings of the 33rd International Conference on Software Engineering, pp. 1–10. Cited by: §A.1, §2.2, §3.4.
+- [5] (2015) The oracle problem in software testing: a survey. IEEE Transactions on Software Engineering 41 (5), pp. 507–525. Cited by: §2.1.
+- [6] (2026) Agent behavioral contracts: formal specification and runtime enforcement for reliable autonomous AI agents. Zenodo. External Links: Document Cited by: item C6., §10.4, §10.4, §2.4, item 3, §3.7, §8.5.
+- [7] (2026) Formal analysis and supply chain security for agentic AI skills. arXiv preprint arXiv:2603.00195. Cited by: §2.4.
+- [8] (1984) Nonparametric estimation of the number of classes in a population. Scandinavian Journal of Statistics 11 (4), pp. 265–270. Cited by: §A.2, §4.3.
+- [9] (2018) Metamorphic testing: a review of challenges and opportunities. ACM Computing Surveys 51 (1), pp. 1–27. Cited by: §2.1, §6.1.
+- [10] (2000) QuickCheck: a lightweight tool for random testing of Haskell programs. In Proceedings of the 5th ACM SIGPLAN International Conference on Functional Programming, pp. 268–279. Cited by: §10.4.
+- [11] (1934) The use of confidence or fiducial limits illustrated in the case of the binomial. Biometrika 26 (4), pp. 404–413. Cited by: §A.1, §2.2.
+- [12] (1988) Statistical power analysis for the behavioral sciences. 2nd edition, Lawrence Erlbaum Associates. Cited by: item 2.
+- [13] (2024) DeepEval: the open-source LLM evaluation framework. Note: https://github.com/confident-ai/deepeval Cited by: §1.1, §2.3.
+- [14] (1978) Hints on test data selection: help for the practicing programmer. In Computer, Vol. 11, pp. 34–41. Cited by: §2.1.
+- [15] (2024) METAL: metamorphic testing framework for analyzing LLM qualities. In Proceedings of the IEEE International Conference on Software Testing, Verification and Validation (ICST), pp. 117–128. Cited by: §2.1.
+- [16] (2011) An analysis and survey of the development of mutation testing. IEEE Transactions on Software Engineering 37 (5), pp. 649–678. Cited by: §10.1, §2.1.
+- [17] (2025) Capable but unreliable: A stochastic characterization of AI agent drift. arXiv preprint arXiv:2602.19008. Cited by: §1.
+- [18] (2011) PRISM 4.0: verification of probabilistic real-time systems. In Computer Aided Verification (CAV), pp. 585–591. Cited by: §2.5.
+- [19] (1981) Introduction to sample size determination and power analysis for clinical trials. Controlled Clinical Trials 2 (2), pp. 93–113. Cited by: §7.1.
+- [20] (2024) LangGraph: building stateful, multi-actor applications with LLMs. Note: https://github.com/langchain-ai/langgraph Cited by: §2.4, item 1.
+- [21] (2005) Testing statistical hypotheses. 3 edition, Springer. Cited by: §2.2.
+- [22] (2014) An empirical analysis of flaky tests. In Proceedings of the 22nd ACM SIGSOFT International Symposium on Foundations of Software Engineering, pp. 643–653. Cited by: §2.6.
+- [23] (2024) CrewAI: framework for orchestrating role-playing autonomous AI agents. Note: https://github.com/crewAIInc/crewAI Cited by: §2.4, item 2.
+- [24] (2005) Aspects of multivariate statistical theory. John Wiley & Sons. Cited by: §7.1.
+- [25] (1933) On the problem of the most efficient tests of statistical hypotheses. Philosophical Transactions of the Royal Society of London. Series A 231, pp. 289–337. Cited by: §2.2.
+- [26] (2025) OpenAI agents SDK. Note: https://github.com/openai/openai-agents-python Cited by: §2.4, item 4.
+- [27] (2022) A survey of flaky tests. ACM Transactions on Software Engineering and Methodology 31 (1), pp. 1–74. Cited by: §2.6.
+- [28] (2018) Survey of multifidelity methods in uncertainty propagation, inference, and optimization. SIAM Review 60 (3), pp. 550–591. Cited by: §A.4, §7.4.
+- [29] (2024) Promptfoo: test your LLM app. Note: https://github.com/promptfoo/promptfoo Cited by: §1.1, §2.3.
+- [30] (2025) Do repetitions matter? insights from repeated LLM evaluations. arXiv preprint arXiv:2509.03036. Cited by: §2.3.
+- [31] (2016) A survey on metamorphic testing. In IEEE Transactions on Software Engineering, Vol. 42, pp. 805–824. Cited by: §2.1.
+- [32] (2018) DeepTest: automated testing of DNN-driven autonomous cars. In Proceedings of the 40th International Conference on Software Engineering, pp. 303–314. Cited by: §2.1.
+- [33] (1947) Sequential analysis. John Wiley & Sons. Cited by: §A.1, §A.1, §2.2, Proposition 3.3.
+- [34] (1927) Probable inference, the law of succession, and statistical inference. Journal of the American Statistical Association 22 (158), pp. 209–212. Cited by: §2.2.
+- [35] (2023) AutoGen: enabling next-gen LLM applications via multi-agent conversation. arXiv preprint arXiv:2308.08155. Cited by: §2.4, item 3.
+- [36] (1997) Software unit test coverage and adequacy. ACM Computing Surveys 29 (4), pp. 366–427. Cited by: §2.1, §4.4.
+Appendix A Full Proofs
+This appendix provides complete proofs for all theorems and propositions stated in the main text. Proofs are organized by section.
+A.1 Proofs from Section 3
+Proof of Theorem 3.1 (Verdict Soundness).
+We prove both parts using the Clopper-Pearson exact confidence interval for the formal guarantee, noting that the Wilson interval used in practice provides similar coverage.
+Part (1): False positive control.
+Let be the true pass rate of agent on scenario with evaluator . Assume (the agent does not meet the threshold). We need to show that .
+The trial results are i.i.d. , so .
+The Clopper-Pearson lower bound is:
+where is the quantile function of the distribution.
+By the coverage guarantee of the Clopper-Pearson interval [11]:
+for all .
+Now, requires . This means falls below the confidence interval. By the coverage guarantee:
+The second inequality follows because implies is below the interval, which is one mode of failing coverage. The Clopper-Pearson interval is conservative (coverage ), so the bound holds exactly.
+Part (2): Tolerance bound.
+If , then . We need to show that with probability .
+The width of the Wilson confidence interval is:
+Since , we have:
+By the coverage guarantee, with probability . Since , we get:
+with probability . Setting completes the proof. ∎
+Proof of Theorem 3.2 (Regression Detection Power).
+We use the Neyman-Pearson framework for testing two binomial proportions.
+Setup. Let and . The null hypothesis is and the alternative is .
+Consider the -test statistic for the difference of proportions:
+where is the pooled estimate under .
+Under with , the statistic is asymptotically . Under with , the statistic has mean:
+where .
+Power calculation. The test rejects when . Under :
+For power , we need:
+With equal sample sizes :
+Solving for :
+When , we have , which gives:
+The additional effect size condition in Definition 3.7 serves as a practical significance filter following Arcuri and Briand [4]. When the true difference is exactly (boundary case), the observed difference satisfies where . Since the effect size condition and the statistical test are positively correlated (both increase with the observed difference), the combined power exceeds for the stated sample size when .
+More precisely, let be the event and be the event . Since is a monotone function of , events and are associated (positively correlated), so by the FKG inequality. For : (shown above) and (by symmetry of around ). When the true effect exceeds (typical in practice), and the combined power approaches . ∎
+Proof of Proposition 3.3 (SPRT Efficiency).
+We prove the three parts using Wald’s foundational results on sequential analysis [33].
+Part (1): Error control.
+The log-likelihood ratio after trials is:
+with (under ) and (under ). The boundaries are and .
+By Wald’s likelihood ratio identity, the probability of crossing boundary (accepting ) under satisfies:
+Similarly, the probability of crossing boundary (accepting ) under satisfies:
+These bounds follow from the optional stopping theorem applied to the likelihood ratio martingale, with the approximation becoming exact as the overshoot over the boundaries approaches zero.
+Part (2): Expected sample size.
+By Wald’s equation, (valid because are i.i.d. and is a stopping time with finite expectation).
+Under ():
+The expected value of under is:
+Therefore:
+The case follows by the same argument with .
+Part (3): Optimality.
+The Wald-Wolfowitz theorem [33] states that among all sequential tests with error probabilities and , the SPRT minimizes and simultaneously. This is because the likelihood ratio is the most efficient statistic for discriminating between the two simple hypotheses and .
+Formally, let be any other sequential test with and . Then:
+This follows from the Stein lemma and the optimality of the likelihood ratio test. ∎
+Proof of Proposition 3.4 (Verdict-Contract Correspondence).
+Let be an agent with behavioral contract and evaluator . Suppose with and .
+By Theorem 3.1 Part (2), the true pass rate satisfies with probability , where .
+For -satisfaction, we need the empirical satisfaction rate over any window of consecutive observations to exceed . Consider a window for any . The empirical rate is .
+By Hoeffding’s inequality:
+Setting with :
+Combining:
+with probability .
+Setting (since ), we obtain that -satisfies with probability . Adjusting by a factor of 2 gives the stated bound. ∎
+A.2 Proofs from Section 4
+Proof of Theorem 4.1 (Coverage Monotonicity).
+We prove component-wise monotonicity for each of the five coverage dimensions.
+Tool coverage (). . Adding a test execution can only increase (if a new tool is invoked) or leave it unchanged. Since is fixed, is non-decreasing.
+Decision-path coverage (). where . A new test execution either:
+-
+(a)
+Observes a previously seen path: unchanged. If the path was a singleton ( decreases, increases), the Chao1 correction decreases, so increases.
+-
+(b)
+Observes a new path: increases by 1, and increases by 1. The Chao1 correction may increase faster than the numerator. Specifically, the ratio may temporarily decrease when is large relative to (high singleton-to-doubleton ratio).
+Asymptotic monotonicity: By the consistency of the Chao1 estimator [8], as , and , so , which is eventually monotone. The transient non-monotonicity is bounded by and is negligible for in practice.
+State-space coverage (). . Since can only increase (or stay the same) with additional test executions, and is monotonically increasing in , we have is non-decreasing.
+Boundary coverage (). . Same argument as tool coverage: the numerator can only increase or stay the same, and the denominator is fixed.
+Model coverage (). . Same argument: numerator non-decreasing, denominator fixed.
+Since each component is non-decreasing, the tuple is component-wise non-decreasing. ∎
+A.3 Proofs from Section 5
+Proof of Theorem 5.1 (Mutation Adequacy).
+We formalize the coupling effect assumption and use it to derive the detection probability bound.
+Coupling Effect Assumption. For agent , a regression with behavioral impact can be decomposed into a sequence of elementary perturbations, each corresponding to a mutation operator from . Formally, there exist mutations such that:
+where is the decomposition length and each has individual behavioral impact with .
+Proof by contrapositive. Suppose the test suite fails to detect the regression . Then does not detect any statistically significant difference between and .
+By the coupling assumption, the regression decomposes into elementary mutations. The test suite has mutation score , so it kills a fraction of all non-equivalent mutations.
+For the test suite to miss the regression, it must fail to detect all constituent elementary mutations that contribute to the behavioral impact. The probability that a specific constituent mutation is not killed, conditioned on it being non-equivalent, is at most .
+Under the independence approximation (kill decisions for different mutations are approximately independent), the probability that none of the constituent mutations are killed is:
+The decomposition length relates to the impact through the characteristic scale (the average impact of a single mutation):
+Therefore:
+using the inequality for .
+The detection probability is:
+The last inequality uses for , which follows from the concavity of . ∎
+Proof of Corollary 5.2.
+When (all non-equivalent mutants killed), the detection probability from Theorem 5.1 becomes:
+As (the regression impact is much larger than the characteristic mutation scale):
+This confirms that a maximally adequate test suite (MS ) under complete mutation operators will detect any sufficiently large regression with probability approaching 1. ∎
+A.4 Proofs from Section 7
+Proof of Proposition 7.4 (Multi-Fidelity Cost Reduction).
+We adapt the multi-fidelity Monte Carlo framework of Peherstorfer et al. [28] to the hypothesis testing setting.
+Setup. Let and be agents using models and with per-trial costs and respectively. Let and be their behavioral fingerprints, with correlation .
+Control variate formulation. The multi-fidelity estimator for the mean fingerprint of uses as a control variate:
+where is the estimated correlation and the second sum uses paired proxy evaluations on the same inputs as the target trials.
+The variance of this estimator is:
+Optimal allocation. The total cost is . We minimize subject to where is the variance required for power .
+Using Lagrange multipliers, the optimal ratio is:
+Cost ratio. The total cost with optimal allocation, relative to single-fidelity testing with target trials, is:
+where the inequality assumes (the proxy model is at most as variable as the target).
+For (a 100 cost difference, common for mini vs. full models):
+Combined evidence. The -values and from the target and proxy tests are combined via Fisher’s method with correlation weighting. Under , and . The weighted combination:
+is approximately under when and are approximately independent conditional on the true parameter. The approximation improves as grow. Under , the non-centrality increases, providing greater power than either test alone.
+Numerical verification. For , : cost ratio , giving 2.4 savings. For : cost ratio , giving 3.7 savings. ∎
+Proof of Proposition 7.5 (Warm-Start Efficiency).
+We prove each part of the proposition.
+Part (1): Error control.
+The warm-start SPRT initializes at instead of . The key observation is that the Bayesian prior update is consistent with the likelihood ratio: if the prior accurately reflects the distribution of , then:
+This is the Bayes factor from the prior data. When the prior is well-calibrated (generated from the same agent version or a version with ), the initial position is between the boundaries and with high probability, and the subsequent SPRT updates maintain the standard error control by Wald’s identity:
+The same argument holds for Type II error with boundary .
+Part (2): Sample savings.
+The warm-start SPRT is equivalent to a standard SPRT that has already accumulated evidence . By Wald’s equation:
+Since equals the same boundary expectations as the cold-start SPRT, we have:
+When testing under (), (the LLR drifts toward boundary ). If the prior correctly supports , then , giving:
+The savings represent the number of trials’ worth of evidence contained in the prior.
+Part (3): Graceful degradation.
+If the prior is mis-calibrated, may be on the wrong side of zero. In the worst case, it pushes the random walk closer to the wrong boundary. The excess error probability is bounded by the likelihood ratio at the initial position.
+For a Type I error under mis-calibration:
+by the submartingale maximal inequality applied to the likelihood ratio process. Since for the well-calibrated case:
+For moderate priors (), the initial position is bounded by for typical , . This gives , so in the extreme worst case. In practice, the mis-calibration factor is much smaller because priors are typically close to correct. For with a version that differs by , the mis-calibration factor is typically , giving . ∎
+
+KAYNAK : https://arxiv.org/abs/2603.02601

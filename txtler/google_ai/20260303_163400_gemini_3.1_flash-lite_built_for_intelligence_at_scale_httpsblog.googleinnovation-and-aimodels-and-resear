@@ -1,4 +1,3 @@
---- deepmind | Gemini 3.1 Flash-Lite: Built for intelligence at scale | score=92.86 ---
 Gemini 3.1 Flash-Lite: Built for intelligence at scale
 Today, we're introducing Gemini 3.1 Flash-Lite, our fastest and most cost-efficient Gemini 3 series model. Built for high-volume developer workloads at scale, 3.1 Flash-Lite delivers high quality for its price and model tier.
 Starting today, 3.1 Flash-Lite is rolling out in preview to developers via the Gemini API in Google AI Studio and for enterprises via Vertex AI.
@@ -15,5 +14,4 @@ Beyond its raw performance, Gemini 3.1 Flash-Lite comes standard with thinking l
 Early-access developers on AI Studio and Vertex AI, and companies like Latitude, Cartwheel and Whering are already using 3.1 Flash-Lite to solve complex problems at scale. Early testers highlighted 3.1 Flash-Lite’s efficiency and reasoning capabilities, saying it can handle complex inputs with the precision of a larger-tier model, plus follow instructions and maintain adherence.
 We look forward to seeing what you build with 3.1 Flash-Lite and the rest of the Gemini 3 series models.
 
-KAYNAK : https://deepmind.google/blog/gemini-3-1-flash-lite-built-for-intelligence-at-scale/
-
+KAYNAK : https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-flash-lite/

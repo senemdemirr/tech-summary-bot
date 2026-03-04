@@ -1,0 +1,50 @@
+Core Changes
+Stub adapterPath with experimental.runtimeServerDeploymentId:
+#90790
+Conditionally load uncommon paths:
+#90514
+Misc Changes
+Add static error when
+unstable_instant
+is used without
+cacheComponents
+:
+#90793
+enable server action RDC deploy test:
+#90796
+turbo-persistence: StreamingSstWriter performance and readability improvements:
+#90692
+pr-status: add reply-thread and resolve-thread subcommands:
+#90773
+[turbopack] Don't schedule idle snapshots when we are in a short session:
+#90804
+Update Rust dependencies for turbo-persistence and turbo-tasks-backend:
+#90774
+Create next app CLI docs:
+#90788
+Add support for multi-valued tables:
+#89728
+pr-status: add --wait flag and background execution for /pr-status command:
+#90687
+exempt data URL CSS from Pages Router global CSS restriction:
+#89901
+Credits
+Huge thanks to
+@gnoff
+,
+@ztanner
+,
+@sokra
+,
+@lukesandberg
+,
+@mischnic
+,
+@icyJoseph
+,
+@jantimon
+, and
+@timneutkens
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.73

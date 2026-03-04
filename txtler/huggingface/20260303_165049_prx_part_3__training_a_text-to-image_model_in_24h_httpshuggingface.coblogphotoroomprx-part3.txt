@@ -1,4 +1,3 @@
---- huggingface | PRX Part 3 — Training a Text-to-Image Model in 24h! | score=93.43 ---
 PRX Part 3 — Training a Text-to-Image Model in 24h!
 Introduction
 Welcome back 👋
@@ -75,4 +74,3 @@ If you made it this far, thank you for reading. We would also love to have you j
 Goodbye for now, and stay tuned for the next round of experiments! 🚀
 
 KAYNAK : https://huggingface.co/blog/Photoroom/prx-part3
-
