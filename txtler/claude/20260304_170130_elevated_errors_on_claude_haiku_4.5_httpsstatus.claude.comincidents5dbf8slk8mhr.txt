@@ -1,0 +1,23 @@
+Mar
+4
+,
+17:01
+UTC
+Resolved
+- Errors have returned to the baseline as of 8:08 PT / 16:08 UTC.
+Mar
+4
+,
+16:13
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+4
+,
+15:58
+UTC
+Investigating
+- The earlier issues with Haiku 4.5 have reappeared.
+
+KAYNAK : https://status.claude.com/incidents/5dbf8slk8mhr

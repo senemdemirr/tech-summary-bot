@@ -1,4 +1,11 @@
---- claude | Outage in Usage Reporting | score=70.22 ---
+--- claude | Outage in Usage Reporting | score=45.80 ---
+Mar
+4
+,
+08:32
+UTC
+Resolved
+- This incident has been resolved.
 Mar
 4
 ,
@@ -46,159 +53,64 @@ Investigating
 
 KAYNAK : https://status.claude.com/incidents/p7nq2jdg4zwj
 
---- claude | Elevated errors on Claude Opus 4.6 | score=43.37 ---
+--- claude | Elevated errors on Claude Haiku 4.5 | score=37.19 ---
 Mar
-3
+4
 ,
-14:29
+17:01
 UTC
 Resolved
-- This incident has been resolved.
+- Errors have returned to the baseline as of 8:08 PT / 16:08 UTC.
 Mar
-3
+4
 ,
-14:29
-UTC
-Update
-- We are continuing to monitor for any further issues.
-Mar
-3
-,
-14:11
-UTC
-Update
-- A fix has been implemented and we are monitoring the results.
-Mar
-3
-,
-14:03
+16:13
 UTC
 Monitoring
 - A fix has been implemented and we are monitoring the results.
 Mar
-3
+4
 ,
-12:59
+15:58
 UTC
-Update
-- We are continuing to work on a fix for this issue.
+Investigating
+- The earlier issues with Haiku 4.5 have reappeared.
+
+KAYNAK : https://status.claude.com/incidents/5dbf8slk8mhr
+
+--- claude | Elevated errors on Claude Haiku 4.5 | score=29.06 ---
 Mar
-3
+4
 ,
-12:00
+14:55
 UTC
-Identified
-- The issue is reoccurring, a fix is being implemented.
+Resolved
+- The incident for Haiku 4.5 has been between 6:45 PT / 14:45 UTC and 6:50 PT / 14:50 UTC.
 Mar
-3
+4
 ,
-10:27
-UTC
-Monitoring
-- A fix has been implemented and we are monitoring the results.
-Mar
-3
-,
-08:31
-UTC
-Identified
-- The issue has been identified and a fix is being implemented.
-Mar
-3
-,
-06:59
+14:47
 UTC
 Investigating
 - We are currently investigating this issue.
 
-KAYNAK : https://status.claude.com/incidents/kyj825w6vxr8
+KAYNAK : https://status.claude.com/incidents/4xx67ythzxg5
 
---- claude | Elevated errors in claude.ai, cowork, platform, claude code | score=35.39 ---
+--- claude | Elevated errors on Claude Opus 4.6 | score=28.61 ---
 Mar
-3
+4
 ,
-10:18
+15:57
 UTC
 Resolved
 - This incident has been resolved.
 Mar
-3
+4
 ,
-09:36
-UTC
-Update
-- We are continuing to monitor for any further issues.
-Mar
-3
-,
-08:39
-UTC
-Monitoring
-- A fix has been implemented and we are monitoring the results.
-Mar
-3
-,
-04:43
-UTC
-Update
-- We are continuing to investigate this issue.
-Mar
-3
-,
-04:41
-UTC
-Update
-- We are continuing to investigate this issue.
-Mar
-3
-,
-04:39
-UTC
-Update
-- We are continuing to investigate this issue.
-Mar
-3
-,
-03:15
+14:14
 UTC
 Investigating
 - We are currently investigating this issue.
 
-KAYNAK : https://status.claude.com/incidents/yf48hzysrvl5
-
---- claude | Elevated errors on Claude Sonnet 4.6 | score=26.85 ---
-Mar
-3
-,
-16:38
-UTC
-Resolved
-- This incident has been resolved.
-Mar
-3
-,
-15:40
-UTC
-Investigating
-- We are currently investigating this issue.
-
-KAYNAK : https://status.claude.com/incidents/v3j5tpfcr3dn
-
---- claude | Elevated errors on Claude Haiku 4.5 | score=25.43 ---
-Mar
-3
-,
-15:39
-UTC
-Resolved
-- This incident has been resolved.
-Mar
-3
-,
-14:51
-UTC
-Investigating
-- We are currently investigating this issue.
-
-KAYNAK : https://status.claude.com/incidents/s0pmy4yywshv
+KAYNAK : https://status.claude.com/incidents/cvh0kqnmzjks
 

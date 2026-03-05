@@ -1,0 +1,12 @@
+Core Changes
+partial fallbacks: add adapter flag:
+#90395
+Misc Changes
+[ci]: continue-on-error for more gh auth status checks:
+#90890
+Credits
+Huge thanks to
+@ztanner
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.79
