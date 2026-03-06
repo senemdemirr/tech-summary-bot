@@ -1,4 +1,3 @@
---- java | Episode 49 “LazyConstants in JDK 26” [IJN] | score=68.02 ---
 Lazily initializing fields in Java is error-prone and undermines constant-folding. JDK 26 comes with JEP 526, which previews
 LazyConstant
 , a type that lazily initializes a value through a given
@@ -37,4 +36,3 @@ here
 .
 
 KAYNAK : https://inside.java/2026/03/06/podcast-049/
-

@@ -1,4 +1,3 @@
---- mit_ai | Online harassment is entering its AI era | score=71.71 ---
 Scott Shambaugh didn’t think twice when he denied an AI agent’s request to contribute to matplotlib, a software library that he helps manage. Like many open-source projects, matplotlib has been overwhelmed by a glut of AI code contributions, and so Shambaugh and his fellow maintainers have instituted a policy that all AI-written code must be reviewed and submitted by a human. He rejected the request and went to bed.
 That’s when things got weird. Shambaugh woke up in the middle of the night, checked his email, and saw that the agent had responded to him, writing a
 blog post
@@ -38,4 +37,3 @@ committing extortion and fraud
 “I wouldn’t say we’re cruising toward there,” Kolt says. “We’re speeding toward there.”
 
 KAYNAK : https://www.technologyreview.com/2026/03/05/1133962/online-harassment-is-entering-its-ai-era/
-

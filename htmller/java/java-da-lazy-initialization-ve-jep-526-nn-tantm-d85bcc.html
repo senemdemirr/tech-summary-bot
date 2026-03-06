@@ -1,0 +1,31 @@
+<div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
+  <h1>Java'da Lazy Initialization ve JEP 526'nın Tanıtımı</h1>
+  <p>Java programlama dilinde tembel (lazy) başlatma, genellikle hatalara açık bir süreç olarak kabul edilir ve sabit katlama (constant-folding) yeteneğini zayıflatır. Bu zorlukları aşmak için JDK 26, JEP 526 ile birlikte geliyor. Bu yeni özellik, bir <strong>LazyConstant</strong> türünü tanıtarak bir <strong>Supplier</strong> aracılığıyla tembel bir şekilde bir değerin başlatılmasını sağlar.</p>
+  <p>Bu mekanizma, bir tedarikçiyi en fazla bir kez başarılı bir şekilde çalıştırır ve ardından değeri <strong>@Stable</strong> ile anotasyonlanmış bir alana atar. Bu anotasyon, sabit katlamayı mümkün kılar. Bu API, aynı zamanda OpenJDK'nın nasıl geliştiğini ve özelliklerini nasıl evrimleştirdiğini gösteren bir örnek teşkil eder.</p>
+  
+  <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
+  <p>JEP 526, Java'da tembel başlatmanın getirdiği sorunları çözmeyi amaçlayan bir yenilik olarak karşımıza çıkıyor. Java geliştiricileri için, tembel başlatmanın getirdiği hata risklerini azaltmak ve performansı artırmak her zaman önemli bir konu olmuştur. Bu yeni özellik, bu tür başlatmaların daha güvenli ve etkili bir şekilde yapılmasına olanak tanıyor.</p>
+  
+  <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
+  <p>JEP 526 ile tanıtılan <strong>LazyConstant</strong> türü, bir değeri tembel bir şekilde başlatmak için bir <strong>Supplier</strong> kullanır. Bu tedarikçi, sadece bir kez başarılı bir şekilde çalıştırılır ve sonuç, <strong>@Stable</strong> anotasyonlu bir alana atanır. Bu işlem, sabit katlamayı mümkün kılarak performansı artırır. Bu tür bir başlatma, özellikle büyük ve karmaşık projelerde önemli avantajlar sunabilir.</p>
+  
+  <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
+  <p>Bu yenilik, özellikle büyük ölçekli Java projelerinde çalışan geliştiricileri etkiler. Tembel başlatmanın getirdiği hata risklerini azaltarak daha güvenli ve performanslı uygulamalar geliştirmelerine olanak tanır. Ayrıca, Java'nın performansını artırmak isteyen tüm geliştiriciler için önemli bir araç olacaktır.</p>
+  
+  <h2>Kısa Özet</h2>
+  <ul>
+    <li>JEP 526, tembel başlatmanın hataya açık yapısını iyileştirmeyi amaçlar.</li>
+    <li><strong>LazyConstant</strong>, bir değeri tembel bir şekilde başlatmak için kullanılır.</li>
+    <li>Başlatma işlemi sadece bir kez başarılı bir şekilde gerçekleştirilir.</li>
+    <li><strong>@Stable</strong> anotasyonu, sabit katlamayı mümkün kılar.</li>
+    <li>Bu yenilik, Java'nın performansını ve güvenilirliğini artırır.</li>
+  </ul>
+  
+  <p>Metin, şu konularda detay vermiyor: Eğitmenler ve bakış açısı, sınırlamalar ve belirsizlikler.</p>
+  
+  <h2>Kapanış</h2>
+  <p>JEP 526, Java'da tembel başlatmanın getirdiği zorlukları ele alarak geliştiricilere daha güvenli ve etkili bir başlatma yöntemi sunuyor. Bu yenilik, Java'nın performansını artırırken, geliştiricilere daha güvenilir bir çalışma ortamı sağlıyor.</p>
+  
+  <h2>Kaynak</h2>
+  <p>Detaylı okumak için: <a href="https://inside.java/2026/03/06/podcast-049/" target="_blank" rel="noopener noreferrer">https://inside.java/2026/03/06/podcast-049/</a></p>
+</div>

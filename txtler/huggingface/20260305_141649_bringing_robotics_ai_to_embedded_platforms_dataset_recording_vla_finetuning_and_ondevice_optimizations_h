@@ -1,4 +1,3 @@
---- huggingface | Bringing Robotics AI to Embedded Platforms: Dataset Recording, VLA Fine‑Tuning, and On‑Device Optimizations | score=89.74 ---
 Bringing Robotics AI to Embedded Platforms: Dataset Recording, VLA Fine‑Tuning, and On‑Device Optimizations
 Authors: Enzo Ruedas, Tess Boivin
 Recent advances in Large Language Models have enabled the transition from text-only reasoning to multimodal systems. First, with the integration of visual perception in Vision–Language Models (VLMs), and more recently with the generation of robot actions in Vision–Language–Action (VLA) models. Deploying these models on embedded robotic platforms remains a challenge due to tight constraints in terms of compute, memory, and power, as well as real-time control requirements.
@@ -103,4 +102,3 @@ Deployment on i.MX95
 - Sherry Chen’s HF blog on training ACT on SO‑101 (practical lessons, pitfalls, fixes). [huggingface.co]
 
 KAYNAK : https://huggingface.co/blog/nxp/bringing-robotics-ai-to-embedded-platforms
-

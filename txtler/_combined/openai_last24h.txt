@@ -1,5 +1,15 @@
---- openai | Extending single-minus amplitudes to gravitons | score=38.94 ---
-A new preprint extends single-minus amplitudes to gravitons, with GPT-5.2 Pro helping derive and verify nonzero graviton tree amplitudes in quantum gravity.
+--- openai | Introducing GPT-5.4 | score=46.09 ---
+Introducing GPT-5.4, OpenAI’s most most capable and efficient frontier model for professional work, with state-of-the-art coding, computer use, tool search, and 1M-token context.
 
-KAYNAK : https://openai.com/index/extending-single-minus-amplitudes-to-gravitons
+KAYNAK : https://openai.com/index/introducing-gpt-5-4
+
+--- openai | Reasoning models struggle to control their chains of thought, and that’s good | score=41.20 ---
+OpenAI introduces CoT-Control and finds reasoning models struggle to control their chains of thought, reinforcing monitorability as an AI safety safeguard.
+
+KAYNAK : https://openai.com/index/reasoning-models-chain-of-thought-controllability
+
+--- openai | Ensuring AI use in education leads to opportunity | score=29.35 ---
+OpenAI shares new tools, certifications, and measurement resources to help schools and universities close AI capability gaps and expand opportunity.
+
+KAYNAK : https://openai.com/index/ai-education-opportunity
 

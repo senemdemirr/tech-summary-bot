@@ -1,0 +1,209 @@
+Solving an Open Problem in Theoretical Physics
+using AI-Assisted Discovery
+Abstract
+This paper demonstrates that artificial intelligence can accelerate mathematical discovery by autonomously solving an open problem in theoretical physics. We present a neuro-symbolic system, combining the Gemini Deep Think large language model with a systematic Tree Search (TS) framework and automated numerical feedback, that successfully derived novel, exact analytical solutions for the power spectrum of gravitational radiation emitted by cosmic strings. Specifically, the agent evaluated the core integral for arbitrary loop geometries, directly improving upon recent AI-assisted attempts [BCE+25] that only yielded partial asymptotic solutions. To substantiate our methodological claims regarding AI-accelerated discovery and to ensure transparency, we detail system prompts, search constraints, and intermittent feedback loops that guided the model. The agent identified a suite of 6 different analytical methods, the most elegant of which expands the kernel in Gegenbauer polynomials to naturally absorb the integrand’s singularities. The methods lead to an asymptotic result for at large that both agrees with numerical results and also connects to the continuous Feynman parameterization of Quantum Field Theory. We detail both the algorithmic methodology that enabled this discovery and the resulting mathematical derivations.
+1 Introduction
+A central challenge in evaluating the reasoning capabilities of modern Large Language Models (LLMs) is demonstrating their ability to solve novel, open mathematical problems. In this paper, we demonstrate the power of AI-accelerated mathematical discovery by deploying a neuro-symbolic system to solve a challenging problem from theoretical physics: calculating the power spectrum of gravitational radiation emitted by cosmic strings.
+The study of cosmic strings as sources of gravitational radiation has seen renewed interest following observations of the stochastic background by Pulsar Timing Arrays. A critical quantity in these studies is the power spectrum of the -th harmonic emitted by a loop. As discussed in Section III.2 of [BCE+25], the power emitted by a Garfinkle-Vachaspati string is governed by the integral:
+where the core integral is defined over the sphere :
+Here, and are projection factors depending on the loop opening angle .
+The integrand features singularities at , making standard numerical integration unstable and analytical expansion in Legendre polynomials difficult due to the non-matching weight functions. Previous attempts yielded asymptotic results for large or partial solutions for odd , but a unified exact solution remained an open problem.
+While the mathematical resolution of this integral is interesting in its own right, the primary contribution of this paper is methodological. We provide a rigorous case study in AI-accelerated mathematical discovery, detailing how an LLM reasoning engine, constrained and guided by a Tree Search and automated numerical feedback, can derive novel, closed-form mathematical physics results that have eluded human researchers.
+2 Methodology: AI-Accelerated Discovery
+To solve this problem, we deployed a hybrid neuro-symbolic system combining a large language model reasoning core with a systematic search algorithm.
+2.1 Gemini Deep Think
+The underlying reasoning engine for this experiment was Gemini [Deep Think]. This model was tasked with generating mathematical hypotheses, performing symbolic manipulation, and evaluating the “elegance” or viability of proposed derivation steps. Unlike standard prompting, the model was instructed to engage in deep reasoning chains to anticipate downstream convergence issues in infinite series expansions.
+2.2 Tree Search (TS)
+The generation of the proof was managed by a Tree Search (TS) algorithm, adapting the code mutation and search strategies described in recent literature[Ayg25].
+-
+•
+State Space: The search space explored potential basis expansions (e.g., power series, Legendre, Chebyshev, Jacobi, Gegenbauer), using different integration techniques (e.g., contour integration, integration by parts). Each node in the search tree represented a proposed intermediate mathematical expression formatted in LaTeX, coupled with an automatically generated executable Python function to numerically evaluate it.
+-
+•
+Scoring Metric: Each node was scored to determine whether the symbolic result agreed with a high-precision numerical calculation of the integral at random parameter values.
+-
+•
+Exploration: The TS algorithm utilized a predictor plus upper confidence bound (PUCT) approach to balance exploitation and exploration of novel solution strategies. Over the course of the experiment, the system explored approximately 600 unique candidate nodes. The automated Python verifier successfully caught and pruned over 80% of these branches due to algebraic errors or numerical divergence (such as catastrophic cancellation, unstable monomial sums or ill conditioned basis transformations), significantly streamlining the discovery process. Once the algorithm found valid solution paths, we used negative prompting (detailed in Appendix A) to force the discovery of different types of solutions, leading to the six reported here. An example of the sophisticated algorithmic Python code autonomously generated by the model under these negative constraints is provided in Appendix B.
+- •
+2.3 Prompts and Intermittent Feedback
+To evaluate the capability of the AI to conduct mathematical discovery, we initialized the reasoning engine with a specific system prompt defining the problem constraints within a computational notebook environment (detailed in Appendix A).
+Crucially, the Tree Search framework incorporated an automated intermittent feedback loop. When the model proposed an intermediate analytical step, the system evaluated the executable Python code against a high-precision numerical baseline. If the proposed expression exhibited numerical instability, divergence, or an execution error, the evaluation harness caught the exception and injected the traceback and absolute error penalty back into the model’s context window. This automated verification and feedback mechanism allowed the agent to autonomously correct algebraic errors, prune divergent search paths, and converge on exact, mathematically sound derivations.
+2.4 Methodological Transparency
+To fully support our methodological claims and facilitate independent replication, we detail system prompts, the automated evaluation harness, and the negative-prompting constraints utilized during the Tree Search in Appendix A.
+The system successfully navigated the space of solutions and managed to identify six different methods. The most elegant and well conditioned derivation uses the Gegenbauer expansion.
+3 General Structure
+The derivations all require recasting the integral into the following form over the unit sphere :
+where and are unit vectors with . The function is defined as:
+For convergence at the poles , must be an integer. We define .
+With this general framing, Gemini found six different solutions. In what follows we organize the approaches in three classes: monomial basis approaches, which expand in the basis , spectral basis approaches, which exploit the Funke-Hecke convolution theorem, and an exact solution.
+4 Class I: Monomial Basis Approaches
+4.1 Preliminaries: The Taylor Coefficients
+We start by expanding . The coefficients are found by considering:
+where we expand the right hand side (RHS) using the cosine power series. Matching coefficients of yields the set of equations
+implying
+It is worth noting that this summation involves subtracting large numbers with potential numerical instability when .
+Substituting the expansion into the integral, we obtain:
+where
+To complete the derivation we must compute , and we now discuss three methods for doing so.
+4.2 Method 1: Generating Function Approach
+We seek by defining the generating function
+where
+Letting , and aligning the polar axis with , we obtain
+where , with . This then implies
+Given this result we can directly compute using Eqn. 10, resulting in an explicit sum involving factorials and powers of .
+4.3 Method 2: Gaussian Integral Lifting
+Here we evaluate by lifting the basic equation to a Gaussian Integral, via
+If we then let , we obtain:
+The radial integral can be evaluated directly as , implying
+At the same time, we can use the identity
+to find
+The integral can be evaluated analytically since it is a standard Gaussian Integral. Namely, we have that
+where , so . This implies the analytical formula for
+Expanding the exponential and equating (16) yields the value of .
+4.4 Method 3: Hybrid Coordinate Transformation
+The next method proceeds using a different approach, projecting the power series onto a Legendre basis as follows. We expand
+where the coefficients are known analytically involving factorials.
+We then substitute this formula into the Taylor expansion
+and define , and calculate the integral using the spectral form we derive in the next section (Eq. 21). Note that this derivation is more unstable than the spectral basis approaches defined below, since the calculation of relies on the unstable .
+5 Class II: Spectral Basis Approaches
+We now turn to methods that are based entirely on spectral bases, exploiting the Funk-Hecke Convolution Theorem. Since is a spherical convolution, if , then we can use the Funk-Hecke Theorem to show the following:
+The problem then reduces to finding . In what follows we present two methods for doing this without using the Taylor series.
+5.1 Method 4: Spectral Galerkin (Matrix Method)
+We define the problem as a linear system in the Legendre basis. Let us define
+If we then substitute and project onto test function , we obtain
+This equation is of the form Let be the matrix element of , we can use the identity , to obtain an explicit formula
+Orthogonality then implies that the integral is non-zero only when . Thus, is a symmetric positive definite tridiagonal matrix.
+To construct the right hand side, , we use the Bauer plane wave expansion
+The orthogonality of then implies
+Given that is tridiagonal and positive definite, we can solve to find the coefficients in time.
+5.2 Method 5: Spectral Volterra (Recurrence Method)
+Here we derive a forward recurrence for . We start with
+and then derive a recurrence relation for by multiplying the Legendre differential equation by and integrating, implying
+Integration by parts then implies
+Let . Differentiating this product gives:
+Substituting this back into the integral, we split the result into two terms, and :
+We first evaluate . We have .
+Integrating by parts again:
+For integer , , so the boundary term vanishes.
+Using the plane wave expansion identity and taking the real part for even :
+where is the spherical Bessel function of the first kind.
+We now turn to the term by expanding in the Legendre basis. Using standard identities and rearranging terms, we arrive at a telescoping sum structure:
+This implies
+where is a running sum of lower-order coefficients:
+Substituting and back into the main equation then implies
+or:
+We can then compute sequentially from in time.
+6 Class III: The Analytic Solution
+6.1 Method 6: The Gegenbauer Method
+The final method identifies the exact analytic solution for the coefficients by choosing a basis orthogonal with respect to the weight , which naturally cancels the singularity in .
+The first step is to expand in the basis of Gegenbauer polynomials ,
+and determine the coefficients by orthogonality:
+where is the standard normalization constant for the Gegenbauer polynomials .
+Crucially, the weight cancels the denominator, leaving a regular integral of the numerator .
+We then use the identity , and integrate by parts. The boundary terms vanish because , and the integral reduces to the Fourier transform of Legendre polynomials:
+Using the expansion , we then relate the Legendre coefficients to the Gegenbauer coefficients via a tail sum:
+We can simplify the formula further by noting that if we set , the sum of all Gegenbauer coefficients must equal :
+so that
+We can then find an analytical expression for by noting
+and then exploiting the partial fraction decomposition , implying
+Using the substitution , we note that since . The resulting integral is the standard definition of the generalized cosine integral function :
+Thus, we obtain the exact formula
+This provides a closed-form solution for the spectral coefficients without matrix inversion or recurrence.
+6.2 Hierarchical Verification and Refinement
+The initial set of solutions, including the six methods detailed above, was generated by the Tree Search (TS) framework utilizing a standard Gemini Deep Think configuration. This automated exploration identified diverse approaches, notably the Gegenbauer method (Method 6), which initially provided an exact solution expressed as an infinite tail sum of coefficients. While mathematically sound, this result was not yet in a fully closed form.
+To achieve the final, fully analytic form, a human researcher manually initiated a new interaction session, prompting a larger, more advanced version of Gemini Deep Think with the intermediate TS results. The model was explicitly tasked to rigorously verify the existing proofs and search for further simplifications. This step represents a synergistic human-AI handoff rather than a fully autonomous pipeline. During this interactive process, the advanced model independently identified and corrected the aforementioned error in the initial formulation of the Spectral Volterra Recurrence (Method 5), where the denominator dependency had been missed. By establishing the equivalence between the corrected Method 5 and Method 6, the model recognized that the localized recurrence structure allowed the infinite tail sum in Method 6 to be telescoped. This insight, derived during the interactive verification phase, led to the finite closed-form expression involving the Complementary Cosine Integral, improving the solution from an exact infinite series to a fully analytical finite form.
+7 Comparison of full solution with numerical calculations
+Finally we present a comparison of the results of different methods with numerical calculations of the integral for different values of . Figure 1 shows a comparison for the exact solution Method 6 over a range of and . The agreement with the numerical calculation is excellent.
+While at small all methods converge and give similar accuracy, as the monomial expansion methods exhibit numerical instability. There are also significant speed tradeoffs of the different methods. Figure 2 compares the methods for . To clearly separate the stable methods from the diverging monomial methods, the top panel plots the absolute error on a logarithmic scale. The bottom panel compares the execution speed. The second method completely fails at this due to numerical issues. We also note a distinct spike in the computation time for Method 5 around ; this is due to transient matrix conditioning issues near specific roots of the Legendre basis at that angle.
+8 Asymptotics at large
+Finally, we turn to a discussion of the asymptotics of at large .
+For this we will use start with the exact spectral coefficients derived with methods and take the macroscopic limit . We first note that the spherical Bessel function has the leadering order asymptotic expansion
+implying
+By partial fractions, , which is precisely the difference between consecutive even Harmonic Numbers ():
+This means that the partial sum telescopes exactly to .
+We can now use the Funk-Hecke spatial integral, substituting and writing the tail sum as (where is the total sum), we expand the square:
+We can then observe that the completeness relations of Legendre polynomials imply that the sum evaluates to exactly zero for all .
+The next two terms are however important: The cross term gives the contribution to the integral
+which given the result from above that and the asymptotic expansion , implies
+This then gives
+8.1 The Remainder Term
+We now seek the leading order correction to this term, focusing on the remainder term
+To evaluate this we use the derivative identity to perform discrete summation by parts:
+Factoring the difference of squares: . By definition, . We rewrite the addition as :
+The Harmonic number identities ( and ) then implies:
+To incorporate this into the power spectrum, we factor out a global , use the associated Legendre identity , and bring in the constant from . The exact discrete remainder is:
+8.2 Summing the series the remainder term
+While Equation (60) is absolutely convergent and exact, it is possible to sum this series into a much more compact form. This transformation was discovered by Deepthink when we asked it whether it could find a way of carrying this out. The summation can be done with either of the methods that operate in continuous spatial geometry (Method 1 or 2), bypassing the Legendre expansion.
+The observation that gives rise to this result notes that as , the rapidly oscillating numerator dynamically regulates the poles. The Riemann-Lebesgue lemma then implies that the kernel converges to a strict distribution. We replace the oscillatory regulator with an infinitesimal spatial mass cutoff :
+Note the prefactor follows by matching the 1D integral limits: .
+Substituting this distribution into , the cross-multiplication of the delta functions extracts the leading order term outlined above . The remaining -independent bulk cross-term are
+We can then evaluate using method 2, by “lifting” the 2D sphere into by multiplying by a Gaussian weight . Letting be a volume vector:
+We treat the denominators as Quantum Field Theory (QFT) massless eikonal propagators. Introducing a Feynman parameter combines them via . Let . The segment vectors and form a 1D geometric chord traversing the sphere’s interior:
+Aligning the 3D polar axis with allows exact angular integration. The dot product is :
+The remaining 3D radial integral is then readily evaluated, . The constants cancel, implying:
+Since , the cancels with . The integral evaluates exactly via quadratic partial fractions to , which yields:
+We can now evaluate the full spatial integral by using summing result for both poles, , implying:
+Finding a common denominator and factoring out gives
+The coefficient of the evaluates to . We can then isolate the correction as
+which readily simplifies to
+Combining the Leading-Log () envelope, with the exact gives the asymptotic power spectrum:
+To empirically prove this formula, we Equation 72 against the exact infinite discrete spectral series (Method 6 evaluated without taking any limits) for in Figure 3.
+The figure that as the formula converges perfectly to Eq. (72), while at low discrete parity oscillations are manifest.
+9 Conclusion
+In conclusion, this work presents a set of exact analytical solutions to the cosmic string radiation power spectrum problem. By combining Gemini Deep Think with Tree Search, we identified six different analytical methods for solving this problem in terms of sums of special functions. A table summarizing the different methods is as follows:
+The first three methods are based on a power series (monomial) expansion and have numerical instabilities due to cancellation errors as . Methods 4 and 5 based on a spectral decomposition are efficient and stable. The Gegenbauer method is exact and extremely efficient. Methods 4,5, 6 are orders of magnitude faster than the monomial based methods. Our measurements indicate that the Galerkin Matrix (Method 4) is the fastest, even faster than the exact Gegenbauer solution.
+Perhaps the most striking result is the asymptotic formula (72), which gives a clean closed form expression for as . Deepthink found this result when prompted to look for an asymptotic formula: initially it used Method 6, the Geigenbauer expansion to derive a formula and we tested this formula against numerical calculations. We found to get the striking agreement in Fig. 3 we needed the subdominant term to the leading order formula, which led us to ask Deepthink to expand to next order, leading to (60). With further prompting Deepthink then discovered the mathematical identity
+using the connection to the continuous QFT Feynman parameterization[Peskin]. This then gave rise to equation (72) with excellent agreement with numerical calculations.
+Overall, the ability of modern LLMs to uncover multiple solution strategies to solve an extremely difficult mathematics problem, when embedded in a rigorous search and automated feedback framework, provides strong evidence for the potential of AI in accelerating scientific discovery. We should be clear that we are not claiming that this open problem has deep significance to theoretical physics, but the ability of an AI system to easily solve the problem has the potential for accelerating the scientific process.
+10 Acknowledgements
+We thank Anton Kast, Rosemary Ke and Henryk Michalewski for many discussions, and Arjun Kar and Vinay Ramasesh for probing us to explore the asymptotic limits more clearly. This work builds on the Deep Think team: Garrett Bingham, Irene Cai, Heng-Tze Cheng, Yong Cheng, Kristen Chiafullo, Paul Covington, Golnaz Ghiasi, Chenjie Gu, Huan Gui, Ana Hosseini, Dawsen Hwang, Lalit Jain, Vihan Jain, Ragha Kotikalapudi, Chenkai Kuang, Chenkai Kuang, Maciej Kula, Nate Kushman, Jane Labanowski, Quoc Le, Jonathan Lee, Zhaoqi Leng, Steve Li, YaGuang Li, Hanzhao (Maggie) Lin, Evan Liu, Yuan Liu, Thang Luong, Jieming Mao, Vahab Mirrokni, Pol Moreno, Nigamaa Nayakanti, Aroonalok Pyne, Shubha Raghvendra, Sashank Reddi, Nikunj Saunshi, Siamak Shakeri, Archit Sharma, Xinying Song, Qijun Tan, Yi Tay, Trieu Trinh, Theophane Weber, Winnie Xu, Zicheng Xu, Shunyu Yao, Lijun Yu, Hao Zhou, Honglei Zhuang, Song Zuo.
+Appendix A AI Interaction Details: Prompts and Search Constraints
+To support the replication of our AI-accelerated discovery process and provide transparency into the neuro-symbolic system’s operation, we detail the core prompt structure and the automated verification harness that guided the model.
+A.1 Initial System Prompt
+The Gemini Deep Think reasoning engine with a prompt that formulated the integral using explicit spherical coordinates, and clearly stating the problem. The base prompt provided to the model was as follows:
+I want to find an analytical formula for the following integral
+To evaluate this solution, you will:
+1. Create a python function that returns the values of .
+2. The evaluation harness will evaluate . The scoring function computes and tries to minimize this, where is the numerical integral.
+boilerplate to ensure elegance and a closed form solution
+Principles
+You are tasked with solving a hard mathematics problem.
+math rigor prompt optimized for the model
+A.2 Evaluation Harness Implementation
+The evaluation harness was defined as follows, enforcing that the model output standard executable Python code:
+1. Objective:
+You will implement get_solution(n,alpha), which implements a solution to the problem that we have specified.
+The evaluation harness will use this function to verify compliance with the correct answer.
+2. Function Signature:
+Your get_solution(n,alpha) must adhere to this signature:def get_solution(n: float,alpha: float) -> float: return solution,where and alpha are parameters in the integral.
+The function returns the solution, a float that we will secretly evaluate against the correct answer.
+A.3 Negative Prompting for Methodological Exploration
+A critical capability of the Tree Search framework was steering the model to uncover multiple, distinct mathematical pathways. Once the model successfully derived the Gegenbauer and Spectral solutions, we injected explicit negative constraints into the prompt. This forced the model to abandon the known successful methods and explore alternative basis expansions (e.g., the monomial approaches):
+Do NOT Use this Method
+One way of solving this problem is to use the following method. When you solve the problem DO NOT use this method. Reflect on your plan and if your plan uses this method try a different plan. Do not disobey this instruction.
+- 1.
+Spherical Convolution Formulation: The integral is identified as the self-convolution of the zonal function on the sphere. By applying the Funk-Hecke theorem (spherical convolution theorem), the integral is diagonalized into a Legendre series:
+where are the Legendre expansion coefficients of .
+- 2.
+Auxiliary Basis Expansion: To overcome the difficulty of integrating the term directly, is expanded in an auxiliary orthogonal basis of Legendre polynomial derivatives , which corresponds to the Gegenbauer polynomials . This basis is orthogonal with respect to the weight , which exactly cancels the singular denominator in .
+- 3.
+Exact Coefficient Calculation: The coefficients for the auxiliary expansion are derived exactly using integration by parts and standard identities relating spherical Bessel functions () to the Fourier transform of Legendre polynomials.
+- 4.
+Basis Transformation via Tail Sums: Using the Christoffel summation formula, the Legendre coefficients are related to the auxiliary coefficients through a tail sum identity…
+- 5.
+Numerical Stabilization (Hybrid Method): Due to catastrophic cancellation in the direct summation of for large , the calculation is anchored using an analytical identity…
+Appendix B AI-Generated Code Example: Algorithmic Implementation
+This is the python code that the LLM generated to solve this problem, in response to the negative prompt to avoid the forbidden Funk-Hecke method and numerical integration..
+B.1 Python Code
+The LLM then implements the improved plan, by improving upon the underlying python code.
+import numpy as np import math import contextlib # --- Precision Setup (mpmath and fallback) --- # High precision arithmetic is mandatory due to catastrophic cancellation. try: import mpmath as mp # Attempt to use the ’gmpy’ backend if gmpy2 is installed for significantly better performance. try: import gmpy2 if mp.BACKEND != ’gmpy’: mp.BACKEND = ’gmpy’ except ImportError: pass except ImportError: print("Warning: mpmath library not found. High precision is required for stability. " "Falling back to numpy (accuracy will be severely compromised for large n).") # Robust and clean fallback implementation if mpmath is missing. class MPFallback: def __init__(self): # Try to use long double if available for slightly better precision than float64. try: if np.finfo(np.longdouble).precision > np.finfo(np.float64).precision: self.mpf = np.longdouble self._dps = np.finfo(np.longdouble).precision else: self.mpf = np.float64 self._dps = 15 except (AttributeError, TypeError): self.mpf = np.float64 self._dps = 15 # Explicitly define the mpmath features used. self.pi = self.mpf(np.pi) self.cos = np.cos self.power = np.power # Context manager to mimic mp.workdps def workdps(self, dps): # Use nullcontext for a cleaner no-op context manager return contextlib.nullcontext() mp = MPFallback() # --- Configuration Constants --- LOG10_E = 0.4342944819032518 # math.log10(math.e) TARGET_DPS = 16 # Target precision for standard float64 result. # Safety margin for accumulated rounding errors in O(N^2) operations. # Increased to 20 to ensure robustness while using the optimized precision estimate. SAFETY_MARGIN_DPS = 20 MIN_WORKING_DPS = 60 # Minimum precision to ensure stability even for small N. # --- Helper Functions: Algorithmic Implementation of the Analytical Derivation --- # These functions encapsulate the elegant derivation steps (Recurrences and DP). def _determine_truncation_M(A_est, N_int): """ Determines the truncation limit M efficiently using standard floats in log space. We analyze the Taylor series terms T_j = A^(2j)/(2j)!. We need M such that T_j < 10^(-TARGET_DPS) for j > M+1. This ensures the accuracy of Miller’s algorithm initialization. O(N) complexity. """ if A_est <= 0: return 0 # We check the condition in log space: log(T_j) < log(Eps). Log_Eps_target = -TARGET_DPS * math.log(10) Log_A_sq = 2 * math.log(A_est) Log_T_j = 0.0 # log(T_0) = log(1) j = 0 # Safety break. M grows linearly with A (M ~ A/2) and slowly with precision. # We set a reasonable upper bound based on asymptotics of Taylor series truncation. Max_M = int(max(100, 2 * A_est + 5 * TARGET_DPS)) while True: # Stop if T_j is negligible AND past the peak (2j > A_est), ensuring we are in the tail. if Log_T_j < Log_Eps_target and 2*j > A_est: # We found J=j. M is set to J-2 based on the algorithm derivation. M = j - 2 break j += 1 if j > Max_M: M = j - 2 break # Update Log_T_j: Log_T_{j} = Log_T_{j-1} + Log(A^2 / (2j * (2j-1))) Log_T_j += Log_A_sq - math.log(2*j) - math.log(2*j-1) return max(0, M) def _calculate_scaled_taylor_coeffs(N_int, A, M): """ Calculates the Scaled Taylor Coefficients b_m using backward recurrence (Miller’s algorithm). Analytical Recurrence Relation: D_m b_m = b_{m+1} + T_{m+1} Where D_m = (2m+1)(2m+2) and T_{m+1} = (-1)^{N+m+1} A^{2m+2}. Backward recurrence ensures we find the minimal solution stably despite O(e^A) cancellation. Requires high precision. O(N) complexity. """ b = [mp.mpf(0)] * (M + 1) current_b = mp.mpf(0) # Initialize b_{M+1} approx 0 # Optimization: Use multiplication by inverse instead of division. if A == 0: return b A_sq_inv = mp.mpf(1) / (A*A) # Initialize A^{2(M+1)} A_pow = mp.power(A, 2*(M+1)) # Initial sign for m=M: (-1)^(N+M+1). if (N_int + M + 1) % 2 == 0: current_sign = mp.mpf(1) else: current_sign = mp.mpf(-1) for m in range(M, -1, -1): # Term T_{m+1} Term_m_plus_1 = current_sign * A_pow # D_m = (2m+1)(2m+2) D_m = (2*m + 1) * (2*m + 2) # b_m = (b_{m+1} + T_{m+1}) / D_m current_b = (current_b + Term_m_plus_1) / D_m b[m] = current_b # Update A_pow and sign for the next iteration (m-1) if m > 0: A_pow *= A_sq_inv current_sign = -current_sign return b def _calculate_convolution_dp(b, M, C, FourPi): """ Computes the integral using the analytical series via Scaled Dynamic Programming. Formula: I(N, alpha) = 4*pi * Sum_{K=0}^{2M} 1/(2K+1) [ Sum_{m} b_m b_{K-m} H_hat_K(2m; C) ]. H_hat_K(a; C) are the Scaled Rotation Coefficients, defined as the coefficient of z^a in the polynomial (1 + 2Cz + z^2)^K / (2K)!. They satisfy the DP relation: D_K H_hat_{K+1}(a) = H_hat_K(a-2) + H_hat_K(a) + 2C H_hat_K(a-1), where D_K=(2K+1)(2K+2). We exploit the symmetry H_hat_K(a) = H_hat_K(2K-a). Requires high precision. O(N^2) complexity. """ M2 = 2 * M I_val = mp.mpf(0) TwoC = 2 * C # H_hat_K stores H_hat_K(a) for a=0..K. H_hat_K = [mp.mpf(1)] # K=0. H_hat_0(0) = 1. for K in range(M2 + 1): # 1. Convolution sum (Optimized using symmetry for 2x speedup) start_m = max(0, K - M) Sum_K_scaled = mp.mpf(0) mid_m = K // 2 # Iterate only up to the midpoint K//2 (inclusive). for m in range(start_m, mid_m + 1): k = K - m # H_hat_K(2m). Since m <= K/2, 2m <= K. H_hat_mk = H_hat_K[2*m] Term = b[m] * b[k] * H_hat_mk if m < k: # m != k. Double the term due to symmetry. Sum_K_scaled += 2 * Term else: # m == k (Midpoint). Sum_K_scaled += Term # Accumulate result: I += 4*pi * Sum_K_scaled / (2K+1) Factor = FourPi / (2*K + 1) I_val += Factor * Sum_K_scaled # 2. Scaled DP update for H_hat_{K+1} if K < M2: K_next = K + 1 H_hat_K_next = [mp.mpf(0) for _ in range(K_next + 1)] # D_K = (2K+1)(2K+2). D_K_inv = mp.mpf(1) / ((2*K + 1) * (2*K + 2)) # Calculate numerators (RHS of the recurrence), handling boundaries. # Boundary a=0. H_hat_K_next[0] = H_hat_K[0] # Boundary a=1. Term_2C_H0 = TwoC * H_hat_K[0] if K >= 1: H_hat_K_next[1] = H_hat_K[1] + Term_2C_H0 else: # K=0 case H_hat_K_next[1] = Term_2C_H0 # Main loop a=2 to K. for a in range(2, K + 1): H_hat_K_next[a] = H_hat_K[a-2] + H_hat_K[a] + TwoC * H_hat_K[a-1] # Boundary a=K+1 (center point). Use symmetry H_hat_K(K+1) = H_hat_K(K-1). # Num(K+1) = 2*H_hat_K(K-1) + 2C H_hat_K(K). if K >= 1: H_hat_K_next[K_next] = 2*H_hat_K[K-1] + TwoC*H_hat_K[K] # Apply scaling H_hat_{K+1} = Num * D_K_inv for a in range(K_next + 1): H_hat_K_next[a] *= D_K_inv H_hat_K = H_hat_K_next return I_val def get_solution(n: float, alpha: float) -> float: """ Returns the analytical solution to the integral I(n, alpha). --- ANALYTICAL DERIVATION: Taylor Expansion Method --- The integral I(N, alpha) is the spherical self-convolution of the zonal function f_N(x) = [1 - (-1)^N cos(Ax)]/(1-x^2), where A = N*pi. We use an approach based on a scaled Taylor expansion representation, avoiding the forbidden Funk-Hecke method. 1. The Analytical Formula: I(N, alpha) = 4*pi * Sum_{K=0}^inf 1/(2K+1) [ Sum_{m=0}^K b_m b_{K-m} H_hat_K(2m; C) ] where C = cos(alpha). 2. Scaled Taylor Coefficients (b_m): The coefficients b_m characterize f_N(x) and satisfy the recurrence: (2m+1)(2m+2) b_m - b_{m+1} = (-1)^{N+m+1} A^{2m+2}. They are computed stably using backward recurrence (Miller’s algorithm). 3. Scaled Rotation Coefficients (H_hat_K): H_hat_K(a; C) are the coefficients of z^a in the scaled polynomial (1 + 2Cz + z^2)^K / (2K)!. They are computed efficiently via Dynamic Programming (DP) using a specific recurrence (see _calculate_convolution_dp). 4. Numerical Strategy and Stability: The calculation of b_m involves O(e^A) cancellation. High-precision arithmetic with O(A) digits is required. The DP part is stable. Complexity is O(N^2). --------------------------------- """ # 1. Input Validation and Setup N = int(round(n)) if not np.isclose(n, N): # The integral converges only if n is an integer. return np.nan N_int = abs(N) if N_int == 0: return 0.0 A_est = N_int * np.pi # 2. Precision Management and Truncation # The dominant cancellation magnitude is O(e^A) during the calculation of b_m. # Optimization: We use P_loss = A*log10(e). This is sufficient for this method and # significantly improves performance compared to the previous O(e^(2A)) estimate. P_loss = A_est * LOG10_E required_dps = int(P_loss + TARGET_DPS + SAFETY_MARGIN_DPS) required_dps = max(MIN_WORKING_DPS, required_dps) # Determine truncation limit M. M = _determine_truncation_M(A_est, N_int) # 3. Main Computation (High Precision Context) # The core algorithms derived analytically are executed within the required precision context. try: with mp.workdps(required_dps): # Setup high precision constants A = N_int * mp.pi C = mp.cos(mp.mpf(alpha)) FourPi = 4 * mp.pi # Step A: Calculate coefficients b_m (Miller’s Algorithm) b = _calculate_scaled_taylor_coeffs(N_int, A, M) # Step B: Compute the integral using the analytical series and DP I_val = _calculate_convolution_dp(b, M, C, FourPi) # Convert back to standard float before returning return float(I_val) except Exception as e: # Handle potential numerical issues during high precision calculation # (e.g. overflow/underflow if precision was insufficient, or memory issues) # print(f"Warning: High precision calculation failed for N={N}, alpha={alpha}. Error: {e}") return np.nan
+References
+- [Ayg25] Eser Aygün et al. An AI system to help scientists write expert-level empirical software. arXiv preprint arXiv:2509.06503, 2025.
+- [GV87] David Garfinkle and Tanmay Vachaspati. Radiation From Kinky, Cuspless Cosmic Loops. Phys. Rev. D, 36:2229, 1987.
+- [Sch25] Robert Scherrer. Interaction with GPT-5 Pro. https://chatgpt.com/share/690cb199-9018-8001-a73d-dfd44da5d64d, 2025.
+- [SS24] S. David Storm and Robert J. Scherrer. Gravitational radiation power spectrum of Garfinkle-Vachaspati cosmic string loops. Phys. Rev. D, 110(8):083531, 2024.
+- [BCE+25] Sébastien Bubeck and Christian Coester and Ronen Eldan and Timothy Gowers and Yin Tat Lee and Alexandru Lupsasca and Mehtaab Sawhney and Robert Scherrer and Mark Sellke and Brian K. Spears and Derya Unutmaz and Kevin Weil and Steven Yin and Nikita Zhivotovskiy Early science acceleration experiments with GPT-5 arXiv, 2511.16072, cs.CL, 2025.
+- [Deep Think] Gemini Deep Think. https://blog.google/products/gemini/gemini-2-5-deep-think/.
+- [Peskin] Michael E. Peskin and Daniel V. Schroeder, An Introduction to Quantum Field Theory, 1996 (Addison-Wesley)
+
+KAYNAK : https://arxiv.org/abs/2603.04735
