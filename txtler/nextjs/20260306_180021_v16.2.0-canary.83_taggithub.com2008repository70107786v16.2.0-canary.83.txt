@@ -1,40 +1,3 @@
---- nextjs | v16.2.0-canary.84 | score=53.19 ---
-Core Changes
-Bump Node heap limit for lint-no-typescript to avoid OOM in CI:
-#90996
-Upgrade React from
-3bc2d414-20260304
-to
-46103596-20260305
-:
-#90989
-fix: trigger MPA navigation for server action redirects with build ID mismatch:
-#89946
-Misc Changes
-Update Rspack development test manifest:
-#90969
-Turbopack: Make
-ReadVcFuture::strongly_consistent
-private:
-#90843
-Update adapters documentation:
-#90986
-Credits
-Huge thanks to
-@vercel-release-bot
-,
-@bgw
-,
-@gaojude
-,
-@timneutkens
-, and
-@jonasherr
-for helping!
-
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.84
-
---- nextjs | v16.2.0-canary.83 | score=45.31 ---
 Core Changes
 Rewrite instant validation to use depth-based URL boundary discovery:
 #90905
@@ -85,4 +48,3 @@ Huge thanks to
 for helping!
 
 KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.83
-

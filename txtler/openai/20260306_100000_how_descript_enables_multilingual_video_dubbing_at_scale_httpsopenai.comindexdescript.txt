@@ -1,0 +1,3 @@
+Descript uses OpenAI models to scale multilingual video dubbing, optimizing translations for both meaning and timing so dubbed speech sounds natural across languages.
+
+KAYNAK : https://openai.com/index/descript

@@ -1,0 +1,3 @@
+Codex Security is an AI application security agent that analyzes project context to detect, validate, and patch complex vulnerabilities with higher confidence and less noise.
+
+KAYNAK : https://openai.com/index/codex-security-now-in-research-preview
