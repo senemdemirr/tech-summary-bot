@@ -1,5 +1,0 @@
---- google_ai | How our open-source AI model SpeciesNet is helping to promote wildlife conservation | score=39.98 ---
-An overview of SpeciesNet, our open-source AI model that is helping people around the world protect and conserve wildlife.
-
-KAYNAK : https://blog.google/company-news/outreach-and-initiatives/sustainability/speciesnet-open-source-ai-wildlife/
-
