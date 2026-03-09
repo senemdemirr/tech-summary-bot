@@ -1,4 +1,3 @@
---- java | Episode 50 “Towards Better Checked Exceptions” [IJN] | score=61.85 ---
 Java’s checked exceptions are both an integral part of the language and one of its most contested features. Whether their introduction was a mistake and whether they should all be turned unchecked are frequently discussed topics but since the former is not overly relevant and the latter unlikely, this conversation isn’t moving Java forward. Instead, let’s talk about specific issues with checked exceptions and what could be done about them - from (entirely speculative) language changes to (marginally realistic) JDK/library evolution to stylistic changes.
 Links:
 JEP draft for Exception Handling in switch
@@ -31,4 +30,3 @@ here
 .
 
 KAYNAK : https://inside.java/2026/03/09/podcast-050/
-
