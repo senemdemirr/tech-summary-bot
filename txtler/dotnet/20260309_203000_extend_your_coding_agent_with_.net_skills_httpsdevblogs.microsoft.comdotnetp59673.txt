@@ -1,4 +1,3 @@
---- dotnet | Extend your coding agent with .NET Skills | score=90.18 ---
 Coding agents are becoming part of everyday development, but quality of responses
 and usefulness still depends on the best context as input. That context comes in
 different forms starting from your environment, the code in the workspace, the
@@ -117,4 +116,3 @@ appeared first on
 .
 
 KAYNAK : https://devblogs.microsoft.com/dotnet/extend-your-coding-agent-with-dotnet-skills/
-

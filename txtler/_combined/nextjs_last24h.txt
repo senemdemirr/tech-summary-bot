@@ -1,0 +1,18 @@
+--- nextjs | v16.2.0-canary.87 | score=39.88 ---
+We read every piece of feedback, and take your input very seriously.
+To see all available qualifiers, see our documentation.
+92b854d
+There was an error while loading. Please reload this page.
+v16.2.0-canary.87
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.87
+
+--- nextjs | v16.2.0-canary.86 | score=39.42 ---
+We read every piece of feedback, and take your input very seriously.
+To see all available qualifiers, see our documentation.
+2ecfbfc
+There was an error while loading. Please reload this page.
+v16.2.0-canary.86
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.86
+
