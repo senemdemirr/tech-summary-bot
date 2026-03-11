@@ -1,4 +1,3 @@
---- huggingface | How NVIDIA Builds Open Data for AI | score=97.67 ---
 How NVIDIA Builds Open Data for AI
 A collaborative approach to scaling trustworthy AI systems and agents.
 AI progress is often framed in terms of model capability and efficiency. In reality, every training pipeline ultimately rests on a data layer that determines how those models behave.
@@ -65,4 +64,3 @@ We encourage anyone passionate about data science and model building to explore 
 The next generation of trustworthy AI models and agentic systems will be built on shared foundations. Open data is one of them.
 
 KAYNAK : https://huggingface.co/blog/nvidia/open-data-for-ai
-

@@ -1,0 +1,18 @@
+Core Changes
+Updates to Instant Navs devtools functionality:
+#91005
+Trace upload: add git and environment info:
+#91124
+Misc Changes
+chore(docs): mention behavior of redirects and remotePatterns:
+#91151
+Credits
+Huge thanks to
+@samselikoff
+,
+@styfle
+, and
+@wbinnssmith
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.89

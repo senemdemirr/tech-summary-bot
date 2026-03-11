@@ -1,0 +1,5 @@
+--- google_ai | Gemini in Google Sheets just achieved state-of-the-art performance. | score=45.56 ---
+Today we announced new beta features for Gemini in Sheets to help you create, organize and edit entire sheets, from basic tasks to complex data analysis — just describe …
+
+KAYNAK : https://blog.google/products-and-platforms/products/workspace/gemini-google-sheets-state-of-the-art/
+

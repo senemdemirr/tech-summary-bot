@@ -1,5 +1,10 @@
---- openai | OpenAI to acquire Promptfoo | score=41.51 ---
-OpenAI is acquiring Promptfoo, an AI security platform that helps enterprises identify and remediate vulnerabilities in AI systems during development.
+--- openai | Improving instruction hierarchy in frontier LLMs | score=43.18 ---
+IH-Challenge trains models to prioritize trusted instructions, improving instruction hierarchy, safety steerability, and resistance to prompt injection attacks.
 
-KAYNAK : https://openai.com/index/openai-to-acquire-promptfoo
+KAYNAK : https://openai.com/index/instruction-hierarchy-challenge
+
+--- openai | New ways to learn math and science in ChatGPT | score=30.84 ---
+ChatGPT introduces interactive visual explanations for math and science, helping students explore formulas, variables, and concepts in real time.
+
+KAYNAK : https://openai.com/index/new-ways-to-learn-math-and-science-in-chatgpt
 

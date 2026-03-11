@@ -1,3 +1,0 @@
-OpenAI is acquiring Promptfoo, an AI security platform that helps enterprises identify and remediate vulnerabilities in AI systems during development.
-
-KAYNAK : https://openai.com/index/openai-to-acquire-promptfoo

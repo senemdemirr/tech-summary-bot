@@ -1,4 +1,3 @@
---- mit_ai | How Pokémon Go is giving delivery robots an inch-perfect view of the world | score=67.73 ---
 Pokémon Go was the world’s first augmented-reality megahit. Released in 2016 by the Google spinout Niantic, the AR twist on the juggernaut Pokémon franchise fast became a global phenomenon. From Chicago to Oslo to Enoshima, players hit the streets in the urgent hope of catching a Jigglypuff or a Squirtle or (with a huge amount of luck) an ultra-rare Galarian Zapdos hovering just out of reach, superimposed on the everyday world.
 In short, we’re talking about a huge number of people pointing their phones at a huge number of buildings. “Five hundred million people installed that app in 60 days,” says Brian McClendon, CTO at Niantic Spatial, an AI company that Niantic spun out in May last year. According to the video-game firm Scopely, which bought Pokémon Go from Niantic at the same time, the game still drew more than 100 million players in 2024, eight years after it launched.
 Now Niantic Spatial is using that vast and unparalleled trove of crowdsourced data—images of urban landmarks tagged with super-accurate location markers taken from the phones of hundreds of millions of Pokémon Go players around the world—to build a kind of world model, a buzzy new technology that grounds the smarts of LLMs in real environments.
@@ -27,4 +26,3 @@ There is a lot of buzz about world models right now—and Niantic Spatial knows 
 Niantic Spatial says it is coming at the problem from a different angle. Push map-making far enough and you’ll end up capturing everything, says McClendon: “I’m very focused on trying to re-create the real world. We’re not there yet, but we want to be there.”
 
 KAYNAK : https://www.technologyreview.com/2026/03/10/1134099/how-pokemon-go-is-helping-robots-deliver-pizza-on-time/
-

@@ -1,4 +1,3 @@
---- claude | Claude Desktop app unresponsive | score=59.11 ---
 Mar
 10
 ,
@@ -38,4 +37,3 @@ Investigating
 - We have identified the issue and are working on a mitigation. Currently, scheduled tasks are disabled for cowork and claude code desktop.
 
 KAYNAK : https://status.claude.com/incidents/pqpgkf52p3tg
-

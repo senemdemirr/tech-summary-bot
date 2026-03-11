@@ -1,0 +1,70 @@
+Welcome to our combined .NET servicing updates for March 2026. Let’s get into the latest release of .NET & .NET Framework, here is a quick overview of what’s new in our servicing releases:
+Security improvements
+.NET and .NET Framework has been refreshed with the latest update as of March 10, 2026. This update contains security and non-security fixes.
+This month you will find that these CVEs have been fixed:
+CVE #
+Title
+Applies to
+CVE-2026-26130
+.NET Security Feature Bypass Vulnerability
+.NET 10.0, .NET 9.0, .NET 8.0
+CVE-2026-26127
+.NET Security Feature Bypass Vulnerability
+.NET 10.0, .NET 9.0
+CVE-2026-26131
+.NET Security Feature Bypass Vulnerability
+.NET 10.0
+.NET 10.0
+.NET 9.0
+.NET 8.0
+Release Notes
+10.0.4
+9.0.14
+8.0.25
+Installers and binaries
+10.0.4
+9.0.14
+8.0.25
+Container Images
+images
+images
+images
+Linux packages
+10.0
+9.0
+8.0
+Known Issues
+10.0
+9.0
+8.0
+Release changelogs
+ASP.NET Core:
+10.0.4
+Entity Framework Core:
+10.0.4
+Runtime:
+10.0.4
+|
+9.0.14
+|
+8.0.25
+WPF:
+10.0.4
+|
+9.0.14
+Share feedback about this release in the
+Release feedback issue
+.
+.NET Framework March 2026 Updates
+This month, there are no new security or new non-security updates available. For recent .NET Framework servicing updates, be sure to browse our
+release notes for .NET Framework
+for more details.
+See you next month
+That’s it for this month, make sure you update to the latest service release today.
+The post
+.NET and .NET Framework March 2026 servicing releases updates
+appeared first on
+.NET Blog
+.
+
+KAYNAK : https://devblogs.microsoft.com/dotnet/dotnet-and-dotnet-framework-march-2026-servicing-updates/

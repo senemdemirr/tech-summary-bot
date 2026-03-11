@@ -1,0 +1,3 @@
+IH-Challenge trains models to prioritize trusted instructions, improving instruction hierarchy, safety steerability, and resistance to prompt injection attacks.
+
+KAYNAK : https://openai.com/index/instruction-hierarchy-challenge

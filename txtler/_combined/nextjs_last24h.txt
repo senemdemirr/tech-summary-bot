@@ -1,18 +1,131 @@
---- nextjs | v16.2.0-canary.87 | score=39.88 ---
-We read every piece of feedback, and take your input very seriously.
-To see all available qualifiers, see our documentation.
-92b854d
-There was an error while loading. Please reload this page.
-v16.2.0-canary.87
-
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.87
-
---- nextjs | v16.2.0-canary.86 | score=39.42 ---
-We read every piece of feedback, and take your input very seriously.
-To see all available qualifiers, see our documentation.
-2ecfbfc
-There was an error while loading. Please reload this page.
-v16.2.0-canary.86
+--- nextjs | v16.2.0-canary.86 | score=63.27 ---
+Core Changes
+Improve webpack loader error messages and handling:
+#89698
+Turbopack: implement module.hot.accept(deps, cb) and module.hot.decline(deps):
+#90443
+partial fallbacks: gate behind experimental flag:
+#91123
+fix: app-page URL normalization:
+#91121
+Example Changes
+example: remove duplicate items in .dockerignore:
+#91079
+Misc Changes
+Turbopack: show specific SWC error messages as error titles:
+#91022
+Turbopack: correctly use ChunkGroup::Shared:
+#90978
+Add script to patch project with preview tarball URLs:
+#91057
+Fix pr-status script missing failed jobs on page 2+ of API results:
+#91087
+Turbopack: don't panic due to eventual consistency in module merging:
+#91088
+fix: run lerna on a branch:
+#91092
+docs(localFont): enhance details about using the localFont function:
+#88189
+Fix preview tarball script to include @next/swc-linux-x64-gnu:
+#91099
+Improve unsafe code safety documentation in turbo-tasks-backend:
+#90755
+docs(contributing): Update setup in contributing/core/developing.md:
+#91018
+Turbopack: Pass hmr_enabled to ImportMetaBinding:
+#91118
+Credits
+Huge thanks to
+@sokra
+,
+@mischnic
+,
+@icyJoseph
+,
+@thdxg
+,
+@kowyo
+,
+@bgw
+,
+@wbinnssmith
+, and
+@ztanner
+for helping!
 
 KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.86
+
+--- nextjs | v16.2.0-canary.90 | score=52.48 ---
+Core Changes
+fix(css): rewrite MiniCssExtractPlugin insert function to ES5 to support legacy browsers:
+#90556
+Revert "Address review feedback: extract modules, clean up imports":
+#91159
+Misc Changes
+fix: Use a pnpm preinstall script to fix catch-22 in next binary creation:
+#91016
+Exclude partial fallback for deploy mode:
+#91163
+docs: More Server Actions security guidance across docs:
+#90878
+docs: Streaming guide:
+#90779
+Credits
+Huge thanks to
+@bgw
+,
+@ijjk
+,
+@sleitor
+, and
+@icyJoseph
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.90
+
+--- nextjs | v16.2.0-canary.91 | score=41.83 ---
+Misc Changes
+[turbopack] Add support for fixed key blocks:
+#90844
+[turbopack] Encode task storage directly during persistence (skip clone):
+#89412
+Credits
+Huge thanks to
+@lukesandberg
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.91
+
+--- nextjs | v16.2.0-canary.89 | score=36.26 ---
+Core Changes
+Updates to Instant Navs devtools functionality:
+#91005
+Trace upload: add git and environment info:
+#91124
+Misc Changes
+chore(docs): mention behavior of redirects and remotePatterns:
+#91151
+Credits
+Huge thanks to
+@samselikoff
+,
+@styfle
+, and
+@wbinnssmith
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.89
+
+--- nextjs | v16.2.0-canary.88 | score=27.96 ---
+Misc Changes
+Turbopack: introduce
+ReferenceTypeCondition
+:
+#91101
+Credits
+Huge thanks to
+@mischnic
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.88
 
