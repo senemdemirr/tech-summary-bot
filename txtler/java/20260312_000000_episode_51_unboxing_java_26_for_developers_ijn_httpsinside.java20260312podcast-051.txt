@@ -1,4 +1,3 @@
---- java | Episode 51 “Unboxing Java 26 for Developers” [IJN] | score=94.07 ---
 Java 26 is getting all packaged up to be shipped worldwide! As with every release of the JDK there are a number of new features, improvements, changes in behavior, and more developers should be aware of before upgrading. In this episode of the Inside Java Newscast we will review all the noteworthy changes coming in Java 26 that will impact developers.
 Links to JDK Enhancement Proposals (JEPs):
 JEP 500 - Prepare to Make Final Mean Final
@@ -60,4 +59,3 @@ here
 .
 
 KAYNAK : https://inside.java/2026/03/12/podcast-051/
-

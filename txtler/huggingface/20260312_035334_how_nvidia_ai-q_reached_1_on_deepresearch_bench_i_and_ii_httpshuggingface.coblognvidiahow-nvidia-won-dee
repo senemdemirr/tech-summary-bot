@@ -1,4 +1,3 @@
---- huggingface | How NVIDIA AI-Q Reached \#1 on DeepResearch Bench I and II | score=97.75 ---
 How NVIDIA AI-Q Reached #1 on DeepResearch Bench I and II
 Contributors: Raja Biswas, Divyansh Jain, Ivan Sorokin, Alessio Devoto, Chantal D Gama Rose, Ajay Thorve, David Austin, Jean-Francois Puget
 NVIDIA AI-Q deep research agent recently achieved first place on both DeepResearch Bench (55.95) and DeepResearch Bench II (54.50), the two primary benchmarks for evaluating deep research agents. This marks a meaningful step for open, portable deep research. One configurable stack leading on both shows that developer accessible models and tooling can power state-of-the-art agentic research.
@@ -73,4 +72,3 @@ Join us at NVIDIA GTC in San Jose the week of March 16, 2026 to learn more.
 - S81789 - Open Source AI Shaping the Next Era of Intelligent Digital Workers
 
 KAYNAK : https://huggingface.co/blog/nvidia/how-nvidia-won-deepresearch-bench
-

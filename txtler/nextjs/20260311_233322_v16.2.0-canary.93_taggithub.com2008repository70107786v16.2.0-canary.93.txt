@@ -1,0 +1,32 @@
+Core Changes
+Adds a Start button to the Instant Navs panel to initiate inspection …:
+#91216
+Preserve RSC metadata in Proxy request with skipProxyUrlNormalize:
+#91213
+Misc Changes
+fix(turbopack): unref ThreadsafeFunctions to allow Node.js exit after build:
+#91107
+remove worktrees accidentally committed in
+#90166
+:
+#91215
+Fix syntax contexts in server action transform:
+#91210
+docs(turbopack): Merge the contents of the "cells" page in the mdbook with our rustdocs:
+#91126
+Credits
+Huge thanks to
+@xusd320
+,
+@samselikoff
+,
+@lukesandberg
+,
+@mischnic
+,
+@bgw
+, and
+@ijjk
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.93

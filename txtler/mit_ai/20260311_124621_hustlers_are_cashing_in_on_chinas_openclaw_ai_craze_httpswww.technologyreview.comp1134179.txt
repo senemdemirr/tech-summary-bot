@@ -1,4 +1,3 @@
---- mit_ai | Hustlers are cashing in on China’s OpenClaw AI craze | score=76.01 ---
 Feng Qingyang had always hoped to launch his own company, but he never thought this would be how—or that the day would come this fast.
 Feng, a 27-year-old software engineer based in Beijing, started tinkering with OpenClaw, a popular new open-source AI tool that can take over a device and autonomously complete tasks for a user,  in January. He was immediately hooked, and before long he was helping other curious tech workers with less technical proficiency install the AI agent.
 Feng soon realized this could be a lucrative opportunity. By the end of January, he had set up a page on Xianyu, a secondhand shopping site, advertising “OpenClaw installation support.” “No need to know coding or complex terms. Fully remote,” reads the posting. “Anyone can quickly own an AI assistant, available within 30 minutes.”
@@ -35,4 +34,3 @@ Feng, now flush with the earnings from his operation, wants to use the momentum�
 “With OpenClaw and other AI agents, I want to see if I can run a one-person company,” he says. “I’m giving myself one year.”
 
 KAYNAK : https://www.technologyreview.com/2026/03/11/1134179/china-openclaw-gold-rush/
-

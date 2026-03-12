@@ -1,0 +1,3 @@
+Rakuten uses Codex, the coding agent from OpenAI, to ship software faster and safer, reducing MTTR 50%, automating CI/CD reviews, and delivering full-stack builds in weeks.
+
+KAYNAK : https://openai.com/index/rakuten
