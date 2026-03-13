@@ -1,0 +1,32 @@
+Core Changes
+[cna] Bump
+picocolors
+to 1.1.1:
+#91252
+[Instant] Build-time validation:
+#90964
+[Instant] fix instant config suggested by editor plugin:
+#91262
+Misc Changes
+TURBOPACK: typescript transform support verbatimModuleSyntax:
+#90907
+[ci] Disable test-level retries during flakiness detection:
+#91261
+[cna] Bump vendored
+json-schema-types
+:
+#91255
+Remove sequential madvise for compressed blocks in StaticSortedFile:
+#91263
+Credits
+Huge thanks to
+@fireairforce
+,
+@eps1lon
+,
+@lubieowoce
+, and
+@sokra
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.94

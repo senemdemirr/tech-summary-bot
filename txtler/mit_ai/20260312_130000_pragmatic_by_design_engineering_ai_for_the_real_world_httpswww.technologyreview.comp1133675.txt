@@ -1,0 +1,18 @@
+The impact of artificial intelligence extends far beyond the digital world and into our everyday lives, across the cars we drive, the appliances in our homes, and medical devices that keep people alive. More and more, product engineers are turning to AI to enhance, validate, and streamline the design of the items that furnish our worlds.
+The use of AI in product engineering follows a disciplined and pragmatic trajectory. A significant majority of engineering organizations are increasing their AI investment, according to our survey, but they are doing so in a measured way. This approach reflects the priorities typical of product engineers. Errors have concrete consequences beyond abstract fears, ranging from structural failures to safety recalls and even potentially putting lives at risk. The central challenge is realizing AI’s value without compromising product integrity.
+DOWNLOAD THE REPORT
+Drawing on data from a survey of 300 respondents and in-depth interviews with senior technology executives and other experts, this report examines how product engineering teams are scaling AI, what is limiting broader adoption, and which specific capabilities are shaping adoption today and, in the future, with actual or potential measurable outcomes.
+Key findings from the research include:
+Verification, governance, and explicit human accountability are mandatory in an environment where the outputs are physical—and the risk high.
+Where product engineers are using AI to directly inform physical designs, embedded systems, and manufacturing decisions that are fixed at release, product failures can lead to real-world risks that cannot be rolled back. Product engineers are therefore adopting layered AI systems with distinct trust thresholds instead of general-purpose deployments.
+Predictive analytics and AI-powered simulation and validation are the top near-term investment priorities for product engineering leaders.
+These capabilities—selected by a majority of survey respondents—offer clear feedback loops, allowing companies to audit performance, attain regulatory approval, and prove return on investment (ROI). Building gradual trust in AI tools is imperative.
+Nine in ten product engineering leaders plan to increase investment in AI in the next one to two years, but the growth is modest.
+The highest proportion of respondents (45%) plan to increase investment by up to 25%, while nearly a third favor a 26% to 50% boost. And just 15% plan a bigger step change—between 51% and 100%. The focus for product engineers is on optimization over innovation, with scalable proof points and near-term ROI the dominant approach to AI adoption, as opposed to multi-year transformation.
+Sustainability and product quality are top measurable outcomes for AI in product engineering.
+These outcomes, visible to customers, regulators, and investors, are prioritized over competitive metrics like time to-market and innovation—rated of medium importance—and internal operational gains like cost reduction and workforce satisfaction, at the bottom. What matters most are real-world signals like defect rates and emissions profiles rather than internal engineering dashboards.
+Download the report
+.
+This content was produced by Insights, the custom content arm of MIT Technology Review. It was not written by MIT Technology Review’s editorial staff. It was researched, designed, and written by human writers, editors, analysts, and illustrators. This includes the writing of surveys and collection of data for surveys. AI tools that may have been used were limited to secondary production processes that passed thorough human review.
+
+KAYNAK : https://www.technologyreview.com/2026/03/12/1133675/pragmatic-by-design-engineering-ai-for-the-real-world/

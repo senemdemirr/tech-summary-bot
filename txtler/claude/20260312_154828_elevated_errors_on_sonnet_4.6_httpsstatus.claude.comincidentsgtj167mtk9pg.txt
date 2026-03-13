@@ -1,0 +1,16 @@
+Mar
+12
+,
+15:48
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+12
+,
+15:42
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/gtj167mtk9pg

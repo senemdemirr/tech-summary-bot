@@ -1,4 +1,3 @@
---- huggingface | Build an Agent That Thinks Like a Data Scientist: How We Hit #1 on DABStep with Reusable Tool Generation | score=105.15 ---
 Build an Agent That Thinks Like a Data Scientist: How We Hit #1 on DABStep with Reusable Tool Generation
 The world of data is vast, but quantitative information is often sparse or unavailable in text form online, presenting a significant challenge for deep research agents. This post shares an architecture, NVIDIA KGMON (NeMo Agent Toolkit) Data Explorer, for building autonomous data analysis agents, developed by the NVIDIA Kaggle Grandmasters (KGMON) LLM Agent Research Team. The NVIDIA KGMON (NeMo Agent Toolkit) Data Explorer project introduces an agent specialized for dataset exploration and analysis, designed to handle the complexities of multi-step reasoning, tool calling, and iterative data analysis. Notably, our approach establishes new state-of-the-art (SOTA) performance on the Data Agent Benchmark for Multi-step Reasoning (DABStep) benchmark, ranking 1st place with a 30x speedup over the claude code baseline.
 The success of the multi-phase approach on the challenging DABStep benchmark validates the strategy of separating foundational knowledge building from rapid inference.
@@ -44,4 +43,3 @@ Building on top of NVIDIA NeMo Agent Toolkit, the Data Explorer agent represents
 Ready to build your own data exploration agent? Get started with NVIDIA Launchable. Examples will be released soon!
 
 KAYNAK : https://huggingface.co/blog/nvidia/nemo-agent-toolkit-data-explorer-dabstep-1st-place
-

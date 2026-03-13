@@ -1,0 +1,17 @@
+Mar
+12
+,
+16:28
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+12
+,
+16:07
+UTC
+Monitoring
+- We recently had an incident on Sonnet 4.6 between 8:30 PT / 15:30 UTC and 8:44 PT / 15:44 UTC where users would have seen a higher error rate across Claude Code, Claude API, and Claude.ai.
+Separately, we also had at around 8:27 PT an incident relate to Claude.ai that lasted a minute.
+
+KAYNAK : https://status.claude.com/incidents/28hx7gp8hnzw

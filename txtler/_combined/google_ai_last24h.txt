@@ -1,4 +1,4 @@
---- google_ai | How AI is helping improve heart health in rural Australia | score=70.48 ---
+--- google_ai | How AI is helping improve heart health in rural Australia | score=34.48 ---
 A new Google AI initiative aims to improve heart health outcomes for people living in remote Australian communities.
 
 KAYNAK : https://blog.google/innovation-and-ai/technology/health/google-ai-heart-health-australia/

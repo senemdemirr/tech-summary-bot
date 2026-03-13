@@ -1,0 +1,16 @@
+Mar
+12
+,
+18:00
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+12
+,
+16:34
+UTC
+Identified
+- A repeat of an earlier issue today started at 9:27 PT / 16:27 UTC.
+
+KAYNAK : https://status.claude.com/incidents/tdp33ycsk4rb

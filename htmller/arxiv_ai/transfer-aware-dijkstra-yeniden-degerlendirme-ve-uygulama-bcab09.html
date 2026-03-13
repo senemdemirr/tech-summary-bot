@@ -1,0 +1,25 @@
+<div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
+  <h1>Transfer Aware Dijkstra: Yeniden Değerlendirme ve Uygulama</h1>
+  <p>Son yıllarda, sınırsız transferlerle yol bulma konusunda RAPTOR tabanlı algoritmalar, ön işleme gerek duymadan en iyi yöntem olarak kabul edilmiştir. Ancak, bu durum, Dijkstra tabanlı çözümlerin sistematik bir karşılaştırma yapılmadan zaman çizelgesi tabanlı algoritmalarla yer değiştirmesiyle ortaya çıkmıştır. Bu çalışmada, sınırsız transferlerle toplu taşıma rotası bulma için klasik Dijkstra tabanlı yaklaşımları yeniden ele alıyoruz ve Time-Dependent Dijkstra'nın (TD-Dijkstra) MR'yi geride bıraktığını gösteriyoruz.</p>
+  <p>Ancak, verimli TD-Dijkstra uygulamaları, yolcuların her zaman daha hızlı bir bağlantıya geçebileceğini varsayan bir ön işleme sırasında baskın bağlantıların filtrelenmesine dayanır. Bu filtreleme, duraklarda tampon süreleri olduğunda geçersizdir, çünkü oturan yolcuların beklemeden devam edebileceği ile transfer yapan yolcuların tampon süresine uyması gerektiği arasındaki farkı ayırt edemez. Bu sınırlamayı aşmak için, tampon sürelerini doğru bir şekilde ele alan ve performans avantajlarını koruyan Transfer Aware Dijkstra (TAD) adlı bir modifikasyon tanıtıyoruz.</p>
+  <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
+  <p>Çalışmamız, Dijkstra tabanlı algoritmaların, özellikle sınırsız transferler içeren toplu taşıma senaryolarında, günümüzün en iyi algoritmalarından biri olan MR'yi geride bırakabileceğini göstermektedir. Bu, Dijkstra tabanlı yaklaşımların, RAPTOR gibi zaman çizelgesi tabanlı algoritmalarla karşılaştırıldığında daha az dikkat çekmesine rağmen, hala güçlü bir alternatif olabileceğini ortaya koyuyor.</p>
+  <p>Özellikle, tampon süreleri gibi gerçek dünya kısıtlamalarını doğru bir şekilde ele alabilen algoritmaların geliştirilmesi, toplu taşıma sistemlerinin daha etkili ve kullanıcı dostu hale getirilmesine katkıda bulunabilir. TAD, bu bağlamda, oturan yolcular ve transfer yapan yolcular arasındaki farkı doğru bir şekilde modelleyerek, daha gerçekçi ve optimal rotalar sunar.</p>
+  <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
+  <p>TD-Dijkstra'nın etkinliği, baskın bağlantıların filtrelenmesine dayanır. Ancak, bu yaklaşım tampon süreleri olan duraklarda başarısız olur. TAD, bu sorunu çözmek için tüm yolculuk dizilerini tarar ve tampon sürelerini doğru bir şekilde ele alır. Bu, yolcuların oturdukları sürece beklemeden devam etmelerine olanak tanır.</p>
+  <p>Deneylerimiz, TAD'nin hem tampon süreleri olan hem de olmayan ağlarda optimal sonuçlar üretebildiğini göstermektedir. Özellikle, Londra ve İsviçre ağlarında yapılan testler, TAD'nin MR'ye göre iki kat daha hızlı olduğunu ortaya koymaktadır.</p>
+  <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
+  <p>TAD'nin geliştirilmesi, toplu taşıma sistemlerini kullanan yolcular için daha hızlı ve daha doğru rotalar sunabilir. Bu, özellikle büyük şehirlerdeki karmaşık ağlarda seyahat edenler için önemlidir. Ayrıca, toplu taşıma operatörleri, daha verimli rota planlaması yaparak hizmet kalitesini artırabilir.</p>
+  <h2>Kısa Özet</h2>
+  <ul>
+    <li>TD-Dijkstra, sınırsız transfer problemlerinde MR'yi geride bırakabilir.</li>
+    <li>Standart baskın bağlantı filtreleme, tampon süreleri olan duraklarda geçersizdir.</li>
+    <li>TAD, tüm yolculuk dizilerini tarayarak tampon sürelerini doğru bir şekilde ele alır.</li>
+    <li>Deneyler, TAD'nin MR'ye göre iki kat daha hızlı olduğunu göstermektedir.</li>
+    <li>TAD, toplu taşıma sistemlerinde daha gerçekçi ve optimal rotalar sunar.</li>
+  </ul>
+  <h2>Kapanış</h2>
+  <p>Transfer Aware Dijkstra (TAD), klasik Dijkstra algoritmasını modern toplu taşıma senaryolarında daha etkili hale getiren önemli bir gelişmedir. TAD, tampon sürelerini doğru bir şekilde ele alarak, yolculara daha hızlı ve doğru rotalar sunar. Gelecekte, bu tür algoritmaların daha geniş uygulama alanları bulması ve toplu taşıma sistemlerinin daha da geliştirilmesi beklenmektedir.</p>
+  <h2>Kaynak</h2>
+  <p>Detaylı okumak için: <a href="https://arxiv.org/abs/2603.11729" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2603.11729</a></p>
+</div>
