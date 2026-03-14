@@ -1,55 +1,18 @@
---- claude | Elevated errors on Claude Sonnet 4.6 and on Claude.ai | score=44.67 ---
+--- claude | Elevated errors on Claude Opus 4.6 and Sonnet 4.6 | score=42.77 ---
 Mar
-12
+13
 ,
-16:28
+21:27
 UTC
 Resolved
 - This incident has been resolved.
 Mar
-12
+13
 ,
-16:07
-UTC
-Monitoring
-- We recently had an incident on Sonnet 4.6 between 8:30 PT / 15:30 UTC and 8:44 PT / 15:44 UTC where users would have seen a higher error rate across Claude Code, Claude API, and Claude.ai.
-Separately, we also had at around 8:27 PT an incident relate to Claude.ai that lasted a minute.
-
-KAYNAK : https://status.claude.com/incidents/28hx7gp8hnzw
-
---- claude | Elevated errors on Claude Sonnet 4.6 | score=32.98 ---
-Mar
-12
-,
-18:00
-UTC
-Resolved
-- This incident has been resolved.
-Mar
-12
-,
-16:34
-UTC
-Identified
-- A repeat of an earlier issue today started at 9:27 PT / 16:27 UTC.
-
-KAYNAK : https://status.claude.com/incidents/tdp33ycsk4rb
-
---- claude | Elevated errors on Sonnet 4.6 | score=29.30 ---
-Mar
-12
-,
-15:48
-UTC
-Resolved
-- This incident has been resolved.
-Mar
-12
-,
-15:42
+18:37
 UTC
 Investigating
 - We are currently investigating this issue.
 
-KAYNAK : https://status.claude.com/incidents/gtj167mtk9pg
+KAYNAK : https://status.claude.com/incidents/q58b2gkv64pw
 

@@ -1,16 +1,16 @@
 Mar
-12
+13
 ,
-15:48
+21:27
 UTC
 Resolved
 - This incident has been resolved.
 Mar
-12
+13
 ,
-15:42
+18:37
 UTC
 Investigating
 - We are currently investigating this issue.
 
-KAYNAK : https://status.claude.com/incidents/gtj167mtk9pg
+KAYNAK : https://status.claude.com/incidents/q58b2gkv64pw

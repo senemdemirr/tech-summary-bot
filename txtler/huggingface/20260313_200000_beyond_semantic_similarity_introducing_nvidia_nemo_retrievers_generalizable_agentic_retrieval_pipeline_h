@@ -1,4 +1,3 @@
---- huggingface | Beyond Semantic Similarity: Introducing NVIDIA NeMo Retriever’s Generalizable Agentic Retrieval Pipeline | score=97.73 ---
 Beyond Semantic Similarity: Introducing NVIDIA NeMo Retriever’s Generalizable Agentic Retrieval Pipeline
 We are thrilled to announce that NVIDIA NeMo Retriever team has developed a new agentic retrieval pipeline that has officially secured the #1 spot on the ViDoRe v3 pipeline leaderboard. In addition, this exact same pipeline architecture achieved the #2 spot on the highly demanding, reasoning-intensive BRIGHT leaderboard.
 In the rapidly evolving landscape of AI retrieval, many solutions are highly specialized, engineered to perform exceptionally well on specific, narrow tasks. However, real-world enterprise applications rarely have the luxury of perfectly curated, single-domain data. They require systems that can seamlessly adapt to a wide variety of challenges—from parsing complex visual layouts to executing deep logical reasoning.
@@ -59,4 +58,3 @@ alongside our research embedding models, the true strength of this architecture 
 . To explore these models, dive into the tools, and start building your own highly generalizable retrieval workflows, visit the NeMo Retriever library today.
 
 KAYNAK : https://huggingface.co/blog/nvidia/nemo-retriever-agentic-retrieval
-

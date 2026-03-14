@@ -1,0 +1,20 @@
+Core Changes
+partial fallbacks: only upgrade shells with remaining prerenderable params:
+#91158
+partial fallbacks: complete generic shells into more specific shells:
+#91231
+Misc Changes
+Turbopack: Remove old macos-compress script:
+#90967
+docs: remove incorrect _document.tsx font example:
+#91346
+Credits
+Huge thanks to
+@bgw
+,
+@ztanner
+, and
+@zamadye
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.98

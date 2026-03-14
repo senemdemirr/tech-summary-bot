@@ -1,4 +1,3 @@
---- angular | Modernize Your Workflow: AI Tooling, Deferrable Views, and the Era of Forms! ️ | score=70.17 ---
 The way we build with Angular continues to evolve. From AI agents helping us write code to smarter performance patterns, our community experts are documenting every step of this evolution.
 Get up to speed with these essential resources:
 Stop Writing Outdated Angular Code: MCP, Cursor & Claude
@@ -47,4 +46,3 @@ Angular Blog
 on Medium, where people are continuing the conversation by highlighting and responding to this story.
 
 KAYNAK : https://blog.angular.dev/modernize-your-workflow-ai-tooling-deferrable-views-and-the-era-of-forms-%EF%B8%8F-7aa1c1cf9550?source=rss----447683c3d9a3---4
-

@@ -1,92 +1,136 @@
---- nextjs | v16.2.0-canary.95 | score=53.73 ---
+--- nextjs | v16.2.0-canary.97 | score=63.61 ---
 Core Changes
-chore(deps): Bump tar from 7.5.7 to 7.5.11 in /packages/next:
-#91233
-Upgrade React from
-46103596-20260305
-to
-5e9eedb5-20260312
-:
-#91272
-feat(server): expose requestMeta router helpers and merge fallback context:
-#91235
-[Instant] Show owner stack for validation-blocking errors:
-#91277
-Hydrate page loads during instant navigation testing:
-#91207
-Misc Changes
-docs(turbopack): Move mdbook "tasks" docs over to
+Expose edge runtime fields in build-complete:
+#91239
+[turbopack] Remove
 turbo_tasks::function
-rustdoc:
-#91132
-test-new-tests: enable adapter in deploy flow:
-#91269
-Revert "Exclude partial fallback for deploy mode":
-#91172
-[test] Properly log
-framereceived
-payload:
-#91266
-docs(turbopack): Merge task input docs from mdbook into rustdocs:
-#91136
-bundle-analyzer: merge _app route modules into current route visualization:
-#90841
-docs(turbopack): Migrate docs about traits from mdbook to rustdocs:
-#91170
-Remove LMDB backend and ReadTransaction abstractions from turbo-tasks-backend:
-#91284
+from ModuleReference getters:
+#91229
+[Turbopack] write route bundle stats to .next/diagnostics/route-bundle-stats.json:
+#90949
+Misc Changes
+re-enable RDC deployment tests:
+#91327
+Use keyed cells for used_exports and export_circuit_breakers in BindingUsageInfo:
+#91306
+[test] Show decoded binary WebSocket messages in traces:
+#91308
+Docs skills: guide and api-reference:
+#90992
+Turbopack: switch chunk/asset hashes from hex to base40 encoding:
+#91137
+Turbopack: don't emit polyfill chunk for API routes:
+#91331
+[test] Current behavior for request APIs in
+generateStaticParams
+:
+#91188
+Update Rspack production test manifest:
+#91301
+Update Rspack development test manifest:
+#91300
+Credits
+Huge thanks to
+@ztanner
+,
+@ijjk
+,
+@sokra
+,
+@lukesandberg
+,
+@eps1lon
+,
+@delbaoliveira
+,
+@mischnic
+,
+@unstubbable
+,
+@vercel-release-bot
+, and
+@wbinnssmith
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.97
+
+--- nextjs | v16.2.0-canary.98 | score=47.47 ---
+Core Changes
+partial fallbacks: only upgrade shells with remaining prerenderable params:
+#91158
+partial fallbacks: complete generic shells into more specific shells:
+#91231
+Misc Changes
+Turbopack: Remove old macos-compress script:
+#90967
+docs: remove incorrect _document.tsx font example:
+#91346
 Credits
 Huge thanks to
 @bgw
 ,
-@ijjk
-,
 @ztanner
-,
-@eps1lon
-,
-@lubieowoce
-,
-@wbinnssmith
-,
-@acdlite
 , and
-@lukesandberg
+@zamadye
 for helping!
 
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.95
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.98
 
---- nextjs | v16.2.0-canary.94 | score=37.76 ---
+--- nextjs | v16.2.0-canary.96 | score=46.61 ---
 Core Changes
-[cna] Bump
-picocolors
-to 1.1.1:
-#91252
-[Instant] Build-time validation:
-#90964
-[Instant] fix instant config suggested by editor plugin:
-#91262
+perf: use Buffer.from for base64 encoding of binary Flight data:
+#91221
+Skip dimming when
+--inspect
+is used:
+#91271
+Respect
+generateStaticParams
+in instant navigation shell:
+#91316
+[Prefetch Inlining] Generate size-based hints on server:
+#90891
+Wire cache handlers in edge paths and add e2e regression coverage:
+#91236
 Misc Changes
-TURBOPACK: typescript transform support verbatimModuleSyntax:
-#90907
-[ci] Disable test-level retries during flakiness detection:
-#91261
-[cna] Bump vendored
-json-schema-types
+docs(turbopack): Move singleton pattern documentation from mdbook to rustdoc:
+#91175
+Docs: Split route segment config options into their own files:
+#90991
+Turbopack: rename CSS module structs for clarity:
+#91304
+[test] Deflake
+instant-navs-devtools
 :
-#91255
-Remove sequential madvise for compressed blocks in StaticSortedFile:
-#91263
+#91256
+Expose resolved invocation targets in next-routing:
+#91242
+Delete blob files during compaction when entries are superseded:
+#91314
+[test] Resolve stale merge issues:
+#91329
+Turbopack: Remove the IntoTraitRef trait, make it an inherent method on Vc:
+#91223
 Credits
 Huge thanks to
-@fireairforce
+@bgw
+,
+@delbaoliveira
+,
+@benfavre
+,
+@unstubbable
+,
+@mischnic
+,
+@acdlite
 ,
 @eps1lon
 ,
-@lubieowoce
+@ijjk
 , and
 @sokra
 for helping!
 
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.94
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.96
 

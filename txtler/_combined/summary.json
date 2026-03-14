@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-03-13T07:54:00.905287+00:00",
-  "cutoff_utc": "2026-03-12T07:54:00.905287+00:00",
+  "generated_at_utc": "2026-03-14T07:48:35.822100+00:00",
+  "cutoff_utc": "2026-03-13T07:48:35.822100+00:00",
   "max_keep_per_site": 5,
   "all_combined": "txtler/_combined/all_last24h.txt",
   "sites": {
@@ -14,16 +14,16 @@
     },
     "nextjs": {
       "feed": "https://github.com/vercel/next.js/releases.atom",
-      "saved_initial_count": 2,
-      "kept_after_top5": 2,
+      "saved_initial_count": 3,
+      "kept_after_top5": 3,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/nextjs",
       "site_combined": "txtler/_combined/nextjs_last24h.txt"
     },
     "angular": {
       "feed": "https://blog.angular.dev/feed",
-      "saved_initial_count": 0,
-      "kept_after_top5": 0,
+      "saved_initial_count": 1,
+      "kept_after_top5": 1,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/angular",
       "site_combined": "txtler/_combined/angular_last24h.txt"
@@ -38,16 +38,16 @@
     },
     "dotnet": {
       "feed": "https://devblogs.microsoft.com/dotnet/feed/",
-      "saved_initial_count": 2,
-      "kept_after_top5": 2,
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/dotnet",
       "site_combined": "txtler/_combined/dotnet_last24h.txt"
     },
     "claude": {
       "feed": "https://status.claude.com/history.rss",
-      "saved_initial_count": 3,
-      "kept_after_top5": 3,
+      "saved_initial_count": 1,
+      "kept_after_top5": 1,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/claude",
       "site_combined": "txtler/_combined/claude_last24h.txt"
@@ -62,8 +62,8 @@
     },
     "google_ai": {
       "feed": "https://blog.google/technology/ai/rss/",
-      "saved_initial_count": 1,
-      "kept_after_top5": 1,
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/google_ai",
       "site_combined": "txtler/_combined/google_ai_last24h.txt"
@@ -78,16 +78,16 @@
     },
     "arxiv_ai": {
       "feed": "https://rss.arxiv.org/rss/cs.AI",
-      "saved_initial_count": 299,
-      "kept_after_top5": 5,
-      "removed_due_to_top5": 294,
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
+      "removed_due_to_top5": 0,
       "site_folder": "txtler/arxiv_ai",
       "site_combined": "txtler/_combined/arxiv_ai_last24h.txt"
     },
     "mit_ai": {
       "feed": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
-      "saved_initial_count": 2,
-      "kept_after_top5": 2,
+      "saved_initial_count": 1,
+      "kept_after_top5": 1,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/mit_ai",
       "site_combined": "txtler/_combined/mit_ai_last24h.txt"
