@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-03-14T07:48:35.822100+00:00",
-  "cutoff_utc": "2026-03-13T07:48:35.822100+00:00",
+  "generated_at_utc": "2026-03-15T07:52:01.194785+00:00",
+  "cutoff_utc": "2026-03-14T07:52:01.194785+00:00",
   "max_keep_per_site": 5,
   "all_combined": "txtler/_combined/all_last24h.txt",
   "sites": {
@@ -14,16 +14,16 @@
     },
     "nextjs": {
       "feed": "https://github.com/vercel/next.js/releases.atom",
-      "saved_initial_count": 3,
-      "kept_after_top5": 3,
+      "saved_initial_count": 1,
+      "kept_after_top5": 1,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/nextjs",
       "site_combined": "txtler/_combined/nextjs_last24h.txt"
     },
     "angular": {
       "feed": "https://blog.angular.dev/feed",
-      "saved_initial_count": 1,
-      "kept_after_top5": 1,
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/angular",
       "site_combined": "txtler/_combined/angular_last24h.txt"
@@ -46,8 +46,8 @@
     },
     "claude": {
       "feed": "https://status.claude.com/history.rss",
-      "saved_initial_count": 1,
-      "kept_after_top5": 1,
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/claude",
       "site_combined": "txtler/_combined/claude_last24h.txt"
@@ -86,16 +86,16 @@
     },
     "mit_ai": {
       "feed": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
-      "saved_initial_count": 1,
-      "kept_after_top5": 1,
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/mit_ai",
       "site_combined": "txtler/_combined/mit_ai_last24h.txt"
     },
     "huggingface": {
       "feed": "https://hf.co/blog/feed.xml",
-      "saved_initial_count": 1,
-      "kept_after_top5": 1,
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/huggingface",
       "site_combined": "txtler/_combined/huggingface_last24h.txt"

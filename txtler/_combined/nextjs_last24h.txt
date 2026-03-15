@@ -1,136 +1,38 @@
---- nextjs | v16.2.0-canary.97 | score=63.61 ---
+--- nextjs | v16.2.0-canary.99 | score=59.95 ---
 Core Changes
-Expose edge runtime fields in build-complete:
-#91239
-[turbopack] Remove
-turbo_tasks::function
-from ModuleReference getters:
-#91229
-[Turbopack] write route bundle stats to .next/diagnostics/route-bundle-stats.json:
-#90949
+Add eval and docs for unstable_instant:
+#91334
+Simplify scroll restoration with shared ScrollRef on CacheNode:
+#91348
 Misc Changes
-re-enable RDC deployment tests:
-#91327
-Use keyed cells for used_exports and export_circuit_breakers in BindingUsageInfo:
-#91306
-[test] Show decoded binary WebSocket messages in traces:
-#91308
-Docs skills: guide and api-reference:
-#90992
-Turbopack: switch chunk/asset hashes from hex to base40 encoding:
-#91137
-Turbopack: don't emit polyfill chunk for API routes:
-#91331
-[test] Current behavior for request APIs in
-generateStaticParams
+disable sub shell generation test outside of adapter:
+#91353
+Turboopack: put import attributes behind a pointer, 23% faster analyze:
+#91347
+Turbopack:
+require(/* turbopackChunkingType: parallel */
 :
-#91188
-Update Rspack production test manifest:
-#91301
-Update Rspack development test manifest:
-#91300
+#91278
+Turbopack: use keyed cell access for AsyncModulesInfo:
+#91305
+Enable thin LTO for release builds:
+#91343
+[turbopack] const-ify most of the registration code:
+#90868
 Credits
 Huge thanks to
-@ztanner
-,
-@ijjk
-,
-@sokra
-,
-@lukesandberg
-,
-@eps1lon
-,
-@delbaoliveira
-,
-@mischnic
-,
-@unstubbable
-,
-@vercel-release-bot
-, and
-@wbinnssmith
-for helping!
-
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.97
-
---- nextjs | v16.2.0-canary.98 | score=47.47 ---
-Core Changes
-partial fallbacks: only upgrade shells with remaining prerenderable params:
-#91158
-partial fallbacks: complete generic shells into more specific shells:
-#91231
-Misc Changes
-Turbopack: Remove old macos-compress script:
-#90967
-docs: remove incorrect _document.tsx font example:
-#91346
-Credits
-Huge thanks to
-@bgw
+@gaojude
 ,
 @ztanner
-, and
-@zamadye
-for helping!
-
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.98
-
---- nextjs | v16.2.0-canary.96 | score=46.61 ---
-Core Changes
-perf: use Buffer.from for base64 encoding of binary Flight data:
-#91221
-Skip dimming when
---inspect
-is used:
-#91271
-Respect
-generateStaticParams
-in instant navigation shell:
-#91316
-[Prefetch Inlining] Generate size-based hints on server:
-#90891
-Wire cache handlers in edge paths and add e2e regression coverage:
-#91236
-Misc Changes
-docs(turbopack): Move singleton pattern documentation from mdbook to rustdoc:
-#91175
-Docs: Split route segment config options into their own files:
-#90991
-Turbopack: rename CSS module structs for clarity:
-#91304
-[test] Deflake
-instant-navs-devtools
-:
-#91256
-Expose resolved invocation targets in next-routing:
-#91242
-Delete blob files during compaction when entries are superseded:
-#91314
-[test] Resolve stale merge issues:
-#91329
-Turbopack: Remove the IntoTraitRef trait, make it an inherent method on Vc:
-#91223
-Credits
-Huge thanks to
-@bgw
-,
-@delbaoliveira
-,
-@benfavre
-,
-@unstubbable
 ,
 @mischnic
 ,
 @acdlite
 ,
-@eps1lon
-,
-@ijjk
-, and
 @sokra
+, and
+@mmastrac
 for helping!
 
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.96
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.99
 
