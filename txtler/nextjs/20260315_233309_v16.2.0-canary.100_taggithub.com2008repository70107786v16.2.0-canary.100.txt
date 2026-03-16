@@ -1,4 +1,3 @@
---- nextjs | v16.2.0-canary.100 | score=40.58 ---
 Core Changes
 fix: test-cargo-unit CI job timing out since LTO was enabled:
 #91424
@@ -8,4 +7,3 @@ Huge thanks to
 for helping!
 
 KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.100
-

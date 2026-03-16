@@ -1,0 +1,333 @@
+Structured Distillation for Personalized Agent Memory:
+11 Token Reduction with Retrieval Preservation
+Abstract
+Long conversations with an AI agent create a simple problem for one user. The history is useful. Carrying it verbatim is expensive.
+We study personalized agent memory: one developer’s conversation history with an agent, distilled into a compact retrieval layer for later search. Each exchange is compressed into a compound object with four fields: exchange_core, specific_context, thematic room_assignments, and regex-extracted files_touched. The searchable distilled text (exchange_core + specific_context) averages 38 tokens per exchange. Applied to 4,182 conversations (14,340 exchanges) from 6 software engineering projects in this single-user corpus, the method reduces average exchange length from 371 to 38 tokens, yielding 11 compression.
+The real test is whether personalized recall survives that compression. Using 201 recall-oriented queries, 107 configurations spanning 5 pure and 5 cross-layer search modes, and 5 large language model graders (214,519 consensus-graded query-result pairs), we compare search over distilled and verbatim text on the same user’s historical corpus. The best pure distilled configuration reaches 96% of the best verbatim MRR (0.717 vs 0.745).
+The result is mechanism-dependent. All 20 vector search configurations (HNSW, Exact) remain non-significant after Bonferroni correction, while all 20 BM25 configurations degrade significantly (effect sizes =0.031–0.756). The best cross-layer retrieval setup, combining verbatim keyword search with distilled vector search, slightly exceeds the best pure verbatim baseline (MRR 0.759). The signals are complementary.
+Structured distillation compresses single-user agent memory without uniformly sacrificing retrieval quality. At the context cost, thousands of exchanges fit within a single prompt while the verbatim source remains available for drill-down. We release the implementation and analysis pipeline as open-source software.
+1 Introduction
+The conversation between a human and an AI agent is asymmetric in a specific way. The human remembers fragments: spatial, associative, recognition-based. The agent remembers nothing. Every session starts from zero. The human may recall that “we fixed that connection pool issue three weeks ago,” but the agent has no access to that history unless it is explicitly provided.
+This paper studies that problem in the single-user setting. One developer accumulates a long history of conversations with an agent across ongoing projects. The question is not whether a generic compression method works for everyone. The question is whether that user’s own history can be distilled into a compact memory layer that remains useful later.
+Retrieval-augmented generation (RAG; Lewis et al., 2020) approaches address this by loading prior conversation text into context at query time. A typical conversation exchange in our corpus contains 371 tokens on average. Loading 500 past exchanges would cost nearly 200,000 tokens. That is a significant portion of most context windows, and expensive even where the window allows it.
+A large fraction of those tokens is irrelevant to retrieval: tool output, boilerplate responses, tangential discussion, repeated file contents. What the human actually remembers is much smaller: the decision made, the parameter changed, the error that got resolved. In our corpus that usually fits in roughly 38 tokens (25 words).
+The prevalent response to this cost is compaction: when the context window fills, an LLM summarizes the conversation history into a shorter form and discards the original. This is lossy summarization applied under pressure. The summarizer has no schema, no extraction targets, and no contract about what survives. It produces whatever a generic “summarize this” instruction yields. In long conversations, compaction compounds: summaries of summaries degrade iteratively, and information from early exchanges is progressively destroyed. Yet the verbatim conversation is already persisted on the user’s machine. The context that compaction discards is not gone. It is still on disk, unindexed and unused. What is missing is not better summarization but structured extraction: a method that produces indexed, retrievable working memory from the conversation while the ground truth remains locally available.
+The question is simple. Can that missing layer be built for one user’s persistent agent history without wrecking retrieval quality? We use a structured distillation method that turns each exchange into a compound object preserving the retrievable part of the interaction. We test information preservation through search quality. If the same user’s recall queries retrieve results of comparable quality from distilled text and verbatim text, the distillation kept what mattered.
+Our contributions are:
+-
+1.
+A distillation method for single-user conversational memory, producing structured compound objects from conversation exchanges and achieving 11 compression.
+-
+2.
+A 107-configuration evaluation of personalized recall across 5 pure and 5 cross-layer search modes. The best pure distilled configuration preserves 96% of verbatim MRR. Vector search holds up. BM25 does not. Cross-layer fusion slightly exceeds the best pure verbatim baseline.
+-
+3.
+A concrete memory budget result: 1,000 conversation exchanges fit in 39,000 tokens instead of 407,000.
+-
+4.
+A two-tier architecture for personalized agent memory that separates index from display. Distilled text routes the query. The user still reads the original verbatim exchange.
+2 Related Work
+This section is selective, not exhaustive. The point is to locate the closest neighboring lines of work, not to survey every memory or summarization system.
+2.1 Agent Memory Systems
+Persistent memory for LLM agents is now a systems problem, not a thought experiment. MemGPT (Packer et al., 2024) frames memory management as a hierarchy in which older context is pushed out of the immediate window and later retrieved. Our setting is narrower and more concrete. We study one user’s accumulated conversation history with an agent and ask whether that history can be distilled into a compact retrieval layer without breaking later recall.
+The representation also differs. We distill each resolved exchange into a compound object with a summary field, a distinguishing technical detail, thematic room assignments, and file references, all tied back to the original verbatim source. The distilled text is an index, not the user-facing artifact. Search returns the original conversation. That separation between retrieval representation and displayed evidence is central here.
+2.2 Conversation Summarization
+Dialogue summarization is well-studied (Feng et al., 2022). Extractive methods select verbatim segments. Abstractive methods generate novel text. Running-summary approaches maintain a rolling digest of older messages.
+This paper asks a narrower question. If each conversation exchange is distilled into a structured object and the verbatim source is kept for drill-down, how much retrieval quality survives the compression? We are not trying to produce a polished running summary. We paraphrase the decision, but we keep the technical handles verbatim. The surviving vocabulary principle constrains the LLM to reuse the participants’ phrasing rather than paraphrase freely. The exchange core keeps the terms the participants settled on. The specific context keeps exact values such as error messages, parameter names, and file paths.
+2.3 Context Compression
+Prompt compression techniques such as LLMLingua (Jiang et al., 2023b) reduce token counts at inference time by removing tokens with low information content. They operate at runtime and optimize a single inference call.
+This is a different problem. We distill offline into a searchable object. The output is structured, not merely shorter text, and the distilled text is retrievable in its own right through both keyword and semantic search.
+This paper is narrower than the generic summarization literature in another way. The target is not a public benchmark or a cross-user corpus. It is one user’s accumulated conversation history with an agent, treated as a personalized memory system. The relevant question is whether that compressed representation stays searchable enough later.
+3 Method
+3.1 Exchange Segmentation
+We adopt a ply model for conversation structure. A user message constitutes one half-ply; the agent’s response completes the ply, forming one exchange. A new exchange begins when a user message follows a non-empty assistant response with substantive text beyond tool invocations. This structural boundary usually coincides with task completion. Claude Code conversations follow request-response cycles where users issue new requests after receiving results, so exchange boundaries align with natural topic transitions without requiring content-based detection.
+Empty tool-use round-trips (where the assistant invokes a tool and the user provides no substantive text) do not start a new exchange; the current exchange remains open until the assistant produces a substantive response. Exchanges shorter than 100 characters are filtered as trivial; exchanges exceeding 20 plies are split at fixed intervals.
+3.2 Structured Distillation
+Each exchange is distilled into a compound object with four components (Table 1). The first two (exchange_core, specific_context) are LLM-generated; room_assignments are LLM-generated thematic placements; files_touched is regex-extracted from the raw exchange text, not generated by the LLM:
+Each object also carries a back-reference to its source: conversation_id, ply_start, and ply_end, enabling drill-down to the original verbatim text. The distilled text is never shown to the user. It serves as a retrieval routing artifact: all search modes return the original verbatim conversation text. Distillation determines which conversations surface and in what rank order; the user always reads the unmodified original.
+The surviving vocabulary principle drives the distillation. The LLM is told to reuse the specific terms in the exchange, not invent synonyms or paraphrase freely. When participants settle on a term such as “connection pool timeout” rather than “make connections better,” that term should survive into the distilled object. Precise terminology is what future queries match. Only 27.0% of the top-15 highest-IDF tokens per verbatim exchange appear in the corresponding distilled text. Most exchange-specific rarities, such as error strings, file paths, and unique identifiers, are lost. But 96.8% of query vocabulary is retained in the distilled corpus: the tokens users actually search for survive distillation, while the tokens lost are exchange-specific and rarely queried. The specific_context field carries higher-IDF vocabulary than exchange_core (mean IDF 5.74 vs. 3.13, a 1.84 ratio), confirming that it captures the more discriminative terms.
+The distilled text is constructed as:
+distill_text = f"{exchange_core}\n{specific_context}"
+This concatenation averages 38 tokens versus 371 for the verbatim exchange. The reported 11 ratio is computed from corpus totals, not from per-item averages. The two differ because 12,427 distilled objects are produced from 14,340 exchanges via ply splitting. All token counts use the cl100k_base encoding (OpenAI, 2023).
+The evaluated corpus was distilled by Claude Haiku 4.5 (Anthropic, 2025), invoked via the Claude CLI (claude --print --model haiku), producing all 12,427 palace objects. The distilled object count (12,427) is lower than the exchange count (14,340) because the 100-character minimum filter removes more exchanges than ply splitting (at 20 plies) adds. The exact batch prompt is provided in Appendix B.
+3.3 Embedding and Indexing
+Distilled text is embedded using all-MiniLM-L6-v2 (Reimers and Gurevych, 2019; Wang et al., 2020), producing 384-dimensional vectors. We chose this model for deployment accessibility: at 22M parameters it runs on CPU without a GPU, matching the single-developer target environment; larger embedding models would improve semantic matching at the cost of hardware requirements. These are stored in a FAISS (Facebook AI Similarity Search) (Johnson et al., 2019) IndexFlatL2 index, separate from the verbatim conversation index. Separate indices are maintained because of a density mismatch: verbatim chunks average 1,500 characters while distilled objects average 200 characters. Each distilled object produces a single vector (no chunking is needed given the short text length).
+A BM25 index (Robertson and Zaragoza, 2009) is built for each object from the concatenation of exchange_core, specific_context, files_touched, and room metadata (room_key, room_label). The BM25 index is constructed lazily in memory at query time.
+3.4 Search Configurations
+We define 14 search modes organized into three families. The evaluation covers the 5 pure modes (44 configurations) and 5 cross-layer modes (63 configurations), for 107 configurations in total. Hybrid modes define the remaining design space and are left to future work.
+Pure modes (5 modes, 44 configs).
+A single retrieval mechanism operates on a single text layer.
+-
+1.
+Full Text: Raw verbatim conversation text (baseline).
+-
+2.
+Distill Core: exchange_core + specific_context only.
+-
+3.
+Distill Core+Files: Core text + files_touched.
+-
+4.
+Distill Core+Rooms: Core text + room metadata.
+-
+5.
+Distill All Facets: Core text + files + rooms.
+Each mode uses 4 mechanisms: HNSW (Hierarchical Navigable Small World (Malkov and Yashunin, 2020); approximate nearest neighbor via DuckDB’s vss extension (DuckDB Labs, 2024)), Exact (brute-force cosine similarity), BM25-Okapi (=1.5, =0.75), and BM25-FTS (DuckDB full-text search). Single-field modes use pass-through (identity) fusion; multi-field modes use 3 fusion strategies (Reciprocal Rank Fusion, RRF; Cormack et al. 2009), Weighted, and Additive.
+Cross-layer modes (5 modes, 74 configs).
+Two retrieval mechanisms operate on different text layers at the same time, one on verbatim text and one on distilled text, and then fuse their ranked lists:
+-
+1.
+Cross: BM25(V)+HNSW(D): BM25 keyword search on verbatim text fused with HNSW vector search on distilled text.
+-
+2.
+Cross: BM25(V)+HNSW(D) rev: Same signals, reversed weighting.
+-
+3.
+Cross: HNSW(V)+BM25(D): HNSW on verbatim fused with BM25 on distilled.
+-
+4.
+Cross: HNSW(V)+BM25(D) rev: Reversed weighting.
+-
+5.
+Cross: 3-Signal: BM25 on both verbatim and distilled, plus HNSW on distilled.
+Each uses 2 compound mechanisms (e.g., BM25-Okapi+HNSW, BM25-FTS+HNSW) and 5–9 fusion strategies including CombMNZ (Fox and Shaw, 1994), Max, and weighted interpolations at signal weights from 50% to 95% (denoted W50–W95).
+Hybrid modes (4 modes, 56 configs).
+Two retrieval mechanisms operate on the same text layer, combining keyword and semantic search:
+-
+1.
+Hybrid Raw / rev: HNSW + BM25 on verbatim text (forward and reversed weighting).
+-
+2.
+Hybrid Core / rev: HNSW + BM25 on distilled core text (forward and reversed weighting).
+Same compound mechanisms and fusion strategies as cross-layer.
+The full design space spans 44 pure + 74 cross-layer + 56 hybrid configurations. The 107 evaluated configurations span pure and cross-layer families; not all fusion strategies apply to all modes. Statistical comparisons for pairwise -tests use the 40 pure-mode comparisons where distilled and verbatim modes share the same mechanism, with Bonferroni correction: = 0.05/40 = 0.00125.
+For each configuration, the top 10 results are retrieved per query.
+4 Experimental Setup
+4.1 Corpus
+The corpus (Table 2) consists of 4,182 conversations from one developer’s Claude Code sessions across 6 software engineering projects spanning different domains. The conversations cover ordinary software engineering work: debugging, feature implementation, code review, architecture discussion, and configuration. This single-user corpus is not a convenience sample standing in for a population benchmark. It is the intended deployment setting: persistent memory over one developer’s long-running agent history.
+We refer to the structured distilled objects as palace objects due to their organization within a spatial memory palace architecture, where each object is assigned to thematic “rooms.” Room assignments are LLM-generated during distillation: the model selects 1–3 rooms per exchange from three types (file, concept, workflow), each with a free-form key and label. Room keys are not constrained to a predefined vocabulary; the LLM produces them based on the exchange content (e.g., concept:retry_timeout, file:auth_middleware, workflow:ci_pipeline). Deduplication is by deterministic hash of the (room_type, room_key, project_id) triple, so identical keys from different exchanges map to the same room.
+4.2 Query Set
+201 evaluation queries were constructed as recall probes over this user’s own history, across three types:
+-
+•
+Conceptual (abstract topics): e.g., broad technical concepts
+-
+•
+Phrase (multi-word patterns): e.g., multi-word library or technique references
+-
+•
+Exact term (specific identifiers): e.g., file names, database identifiers
+Query construction process.
+Candidate text was drawn via stratified random sampling (seed 42) across the 6 project groups, weighted by corpus proportion. Within each group, user and assistant messages were sampled in equal proportions, filtered to 20–1,000 characters, and stripped of tool output, system tags, markup, interrupted requests, and code blocks. 2 oversampling relative to target counts provided surplus candidates. Candidate queries were generated from these sampled messages, then manually curated for answerability, uniqueness of intent, and clarity. The final evaluation set was stratified to preserve project-group proportions and the target mix of conceptual, phrase, and exact-term queries.
+Up to 10 results were retrieved per query per configuration. One query returned no BM25 matches in some configurations, reducing those to 199–200 queries; a small number of queries returned fewer than 10 results. The final dataset spans 107 configurations, yielding 214,519 consensus-graded query-result pairs (201 queries up to 10 results 107 configurations, minus missing results).
+4.3 Grading Methodology
+Five local LLM graders (7–12B parameters) independently assessed each query-result pair:
+Graders used a 0–3 relevance scale following TREC (Text Retrieval Conference) conventions (Voorhees and Harman, 2005):
+-
+•
+0 — Irrelevant: The result has nothing to do with the query. Different topic entirely.
+-
+•
+1 — Related: The result is on a related topic but does not answer the query. It may mention similar concepts or share terminology, but a user would not find what they were looking for.
+-
+•
+2 — Highly relevant: The result contains an answer or useful information for the query, but the answer may be unclear, incomplete, or buried among other content.
+-
+•
+3 — Perfectly relevant: The result is dedicated to the query topic and directly provides the information sought.
+Graders were instructed to judge semantic relevance rather than keyword matching, and to consider what the original user would actually be trying to recall by issuing the query. The exact grading prompt is provided in Appendix C.
+Consensus was computed via majority voting across the 5 graders; ties were broken conservatively (lower grade). For the 741 pairs where no grader achieved a majority (2/5 vote concentration), a calibrated Claude Opus grader served as a 6th vote, validated against 108 human grades (Section 4.4). The final consensus uses 6 graders for these 741 pairs; the remaining 3,113 pairs already have a 5-grader majority (1,739 weak, 1008 strong, and 366 unanimous) and retain that consensus.
+0.0% of individual grader responses failed to parse (malformed JSON, refusals, or empty output). Parse failures were distributed across all five graders and did not correlate with search mode or result type; the failures are treated as missing at random. The remaining responses produced consensus grades for all 201 queries across all 107 configurations.
+Verbatim snippets were truncated at 1,500 characters; palace snippets (averaging 200 characters) were never truncated. This differential truncation may systematically disadvantage verbatim results. All five graders ran as Q4_K_M GGUF (GGML Unified Format) quantizations via llama-server; quantization affects model behavior and the specific GGUF files are not versioned with hashes. The v2 grading prompt omits rank position (see Section 4.4 and Appendix C).
+Local LLMs were chosen over API models for three reasons: reproducibility (weights are fixed), cost (zero marginal cost over 214,519 items), and lack of rate limits.
+4.4 Human Validation via Calibrated Opus Grader
+With 90.5% of pairs showing some disagreement across 5 graders, manual grading of all disagreements is infeasible. We adopted a simple consensus triage. Of 3,488 non-unanimous pairs, only the 741 with no majority need a 6th grader. These are the 2-2-1 splits where a new vote can create a 3-vote majority from nothing. The 1,739 weak-majority (3/5) and 1008 strong-majority (4/5) pairs are unaffected by a 6th vote.
+Claude Opus (claude-opus-4-6) served as the calibrated 6th grader. A 100-pair pilot (selected by rank-1 footprint across all 107 configurations, spanning both verbatim and distilled modes) was graded by Opus and compared against 23 human grades. Initial agreement was 17/23 (74%). The problem was clear. Opus penalized truncated snippets even when the conversation itself was on-topic. We corrected for that. The grader was told to judge whether the conversation addresses the query topic, not whether the visible snippet contains the full answer. Snippets are excerpts from long conversations, so a truncated response or a matching user question can still show that the conversation is relevant. Post-calibration agreement: 22/23 (95.7%).
+Opus then graded all 741 no-majority pairs with the calibrated lens. Opus graded higher than the 7B consensus on 67.8% of pairs, the same on 17.6%, and lower on 14.6%. Opus’s vote resolved all 741 ties.
+Human validation (108 grades: 23 pilot + 85 from the 741 pool) confirmed Opus accuracy: 82/85 agreement on the 741 pool (96.5%), with all 3 disagreements within 1 grade. The acceptance criteria (agreement 85%, Cohen’s 0.61) were exceeded. The sample size of 50 was determined by Cohen’s with 4 ordinal categories (Sim and Wright, 2005); 108 grades were collected, exceeding the minimum.
+The final consensus uses 6 graders for the 741 no-majority pairs and 5 graders for the remaining 3,113 pairs. The 5 local graders run at temperature 0.0 (deterministic); Opus is an API model without strict reproducibility, anchored to human judgment through the 108 validated grades.
+4.5 Metrics
+-
+•
+Mean Reciprocal Rank (MRR): Reciprocal rank of the first perfectly relevant result (grade 3).
+-
+•
+Mean Grade: Average relevance grade on the 0–3 scale.
+-
+•
+P@1: Proportion of queries where the top result received grade 3 (perfectly relevant).
+-
+•
+nDCG@10: Normalized Discounted Cumulative Gain at rank 10 (Järvelin and Kekäläinen, 2002).
+Metric hierarchy for conversation recall.
+This evaluation addresses single-conversation recall, meaning the task is to locate a specific past conversation, not multi-document retrieval where several relevant documents must be ranked. The task is analogous to passage retrieval in question answering (Voorhees and Harman, 2005), where the goal is to locate a single answer. In this paper, that answer is usually a resurfaced memory from the same user’s own prior work with the agent.
+We adopt MRR as the primary metric, following established IR evaluation practice for passage ranking (Voorhees and Harman, 2005; Thakur et al., 2021). MRR measures the reciprocal rank of the first perfectly relevant result, directly quantifying search efficiency: an MRR of 0.50 indicates the first relevant result appears at position 2 on average. Empirically, MRR ranges from 0.559 to 0.745 across configurations, indicating that the first perfectly relevant result typically appears within the top 2–3 positions.
+Mean Grade quantifies result quality independent of rank. P@1 isolates top-result precision. nDCG@10 evaluates ranking quality over the top 10 results; we report @10 following TREC and BEIR (Benchmarking IR) (Järvelin and Kekäläinen, 2002; Thakur et al., 2021) conventions for comparability, though empirically observed examination depth is 2–5 results. Tables are sorted by MRR (descending), with secondary sorts by Mean Grade, P@1, and nDCG@10.
+4.6 Statistical Methods
+Paired -tests compare per-query mean grades across configurations (each query serves as its own control). Because the 0–3 grade scale is ordinal and the distribution is skewed, with grades 1 and 3 accounting for 34% and 45% of consensus grades respectively, we report Wilcoxon signed-rank tests alongside the paired -tests as a non-parametric robustness check. For each of the 4 retrieval mechanisms, we compare the verbatim baseline against each of the 10 distilled configurations (4 single-mechanism 1 fusion + 3 multi-field 3 fusions = 10), yielding 40 comparisons total; the significance threshold is Bonferroni-corrected to = 0.05/40 = 0.00125. Effect sizes are reported as paired Cohen’s (: mean difference divided by standard deviation of differences; Cohen 1988). 95% confidence intervals for individual configuration means use the normal approximation; 95% CIs for pairwise mean differences and effect sizes use bootstrap (10,000 resamples).
+5 Results
+5.1 Main Results
+Table 3 and Figure 1 present the headline results. The full ranking of all 107 configurations is moved to Appendix A.
+Best pure distilled. The highest-MRR pure distilled configuration is Distill Core+Rooms / Exact / Weighted (MRR=0.717), preserving 96% of the best verbatim MRR (Full Text / BM25-FTS, MRR=0.745), 93% of mean grade, 97% of P@1, and 91% of nDCG@10.
+Cross-layer complementarity. The highest-MRR configuration overall is a cross-layer setup that fuses BM25 keyword search on verbatim text with HNSW vector search on distilled text (MRR=0.759). It slightly exceeds the best pure verbatim baseline (102% of verbatim MRR), but it uses both verbatim and distilled text. This is not distilled superiority. It is complementarity.
+Verbatim baselines. Among pure verbatim configurations, BM25-FTS achieves the highest MRR (0.745), followed by BM25-Okapi (0.719), HNSW (0.645), and Exact (0.638).
+Mechanism-mode interaction. Mechanism choice matters more than distillation mode: within any mode, the MRR gap between the best and worst mechanism exceeds the gap between modes for any given mechanism. The verbatim baselines span MRR 0.638 (Exact) to 0.745 (BM25-FTS), a range of 0.108. For mean grade, Full Text / HNSW achieves 2.002; the closest distilled match is Distill Core+Rooms / HNSW / Additive at 1.992 (100% of verbatim). Figure 1 makes this plain. The high-scoring cells cluster by mechanism, not by distillation mode.
+5.2 Distillation Quality: Mechanism-Dependent Preservation at 11x Compression
+Quality preservation depends strongly on the retrieval mechanism.
+Vector search (HNSW, Exact). With HNSW, 10 of 10 distilled configurations show no statistically significant mean grade degradation after Bonferroni correction (=0.00125); with Exact, 10 of 10 are non-significant (Table LABEL:tab:stat-tests). The closest distilled match to verbatim HNSW is Distill Core+Rooms / HNSW / Additive at 1.992 (100% of verbatim mean grade 2.002). Effect sizes for vector search comparisons range from negligible to small (). Vector similarity captures semantic content preserved by distillation even after 11 compression.
+Keyword search (BM25). 10 of 10 BM25-Okapi and 10 of 10 BM25-FTS comparisons show statistically significant degradation after Bonferroni correction. BM25 effect sizes range from small to medium; 18 of 40 comparisons reach the medium threshold (), with the largest occurring in All Facets configurations (=0.756). BM25 depends on lexical overlap, and 11 compression removes the verbatim vocabulary that keyword matching requires.
+MRR vs mean grade. Mean grade degradation is modest (the closest distilled match preserves 100% of verbatim grade). The best pure distilled configuration (Distill Core+Rooms / Exact / Weighted) achieves MRR=0.717, preserving 96% of the best verbatim MRR (0.745). MRR is sensitive to the rank position of grade-3 results; mean grade averages across all 10 results. Figure 2 says the same thing in another register. Vector-search comparisons sit near zero. BM25 is negative almost throughout, and often by more.
+5.3 Query Type Interaction
+Not all queries degrade in the same way. Figure 3 shows the main query-type contrasts. The compact comparison table and full query-type breakdown across all 107 configurations appear in Appendix A. Exact term queries show a reversal: several distilled configurations outperform verbatim on exact terms (e.g., Core+Files / HNSW / Weighted: 2.08 vs Full Text / HNSW: 1.93), consistent with file metadata providing precise identifier matching (see Appendix D for individual examples). Conceptual queries show the largest verbatim advantage (Full Text / HNSW: 2.08 vs Core+Files / HNSW / RRF: 1.96), consistent with abstract semantic content being harder to preserve through compression. Appendix E presents queries where all modes struggle, revealing cases where the target content was either absent from the corpus or discussed with different terminology.
+The asymmetry is plain in the heatmap. The largest negative cells sit in conceptual and phrase queries. Exact-term queries stay closer to parity and sometimes flip positive.
+5.4 Grade Distributions
+That does not mean the whole relevance profile has changed. Figure 4 gives the pooled grade composition by mode.
+Figure 4 shows the grade composition pooled by mode across mechanisms. Grade 3 is the single largest bucket across modes (45% of consensus grades overall), while grade 1 remains substantial at 34%. The relative mix changes only modestly across modes. BM25-heavy settings place slightly more mass away from grade 3 and into the lower grades. This rules out a simpler story. Distillation is not wrecking the relevance distribution everywhere. The differences are narrower. They show up in specific mechanisms and query types.
+5.5 Inter-Rater Agreement
+Fleiss’ (Fleiss, 1971) across all 5 graders (Table 4) is 0.175 (Slight agreement, Landis and Koch 1977), computed over 3,672 items rated by all graders (Figure 5). The best pairwise agreement is between Phi-3.5-Mini and Qwen3-8B (=0.260, Fair); the worst is between Mistral-7B and Phi-3.5-Mini (=0.131, Slight).
+This level of agreement is low. The important point is consistency: all five graders show verbatim modes outperforming distilled modes within BM25, and all five show smaller or non-significant degradation with vector search mechanisms. Figure 5 makes the structure easier to read than the kappas alone. Exact pairwise agreement is modest, but no grader pair flips the pattern.
+The agreement noise is real. It does not erase the main pattern. The next subsection tests that formally.
+5.6 Statistical Tests Summary
+Table 5 presents the 40 per-mechanism comparisons (4 mechanisms 10 distilled configurations each), restricted to pure modes where distilled and verbatim share the same retrieval mechanism. The full row-level comparison table is moved to Appendix A.
+Main result: Of 40 comparisons, 20 show statistically significant mean grade degradation after Bonferroni correction (=0.00125). All 20 non-significant comparisons are in HNSW and Exact; all 20 significant comparisons are in BM25.
+Per-mechanism pattern. HNSW and Exact account for all 20 non-significant comparisons; BM25-Okapi and BM25-FTS account for all 20 significant ones.
+Effect sizes range from =0.031 to 0.756. Of 40 comparisons, 18 reach the medium threshold (), all in BM25; the largest is =0.756. The largest effects occur with BM25 keyword search, where lexical overlap loss from compression does the most damage.
+Wilcoxon signed-rank tests confirm the same significance pattern as the -tests. The key finding is simple: distillation quality preservation is mechanism-dependent. With vector search, all 20 configurations achieve non-significant degradation at 11 compression; with keyword search, all 20 configurations show significant degradation, with effect sizes ranging from small to medium (=0.031–0.756).
+5.7 Coverage Analysis: Verbatim vs Distilled Result Pools
+The ranking metrics already hint at complementarity. Figure 6 shows it directly at the query level.
+Figure 6 partitions the 201 queries by which configurations solve them at P@1 (grade=3).
+Best-vs-best parity. The left panel compares the single best configuration from each family. The best Full Text configuration solves 122 queries; the best Distilled configuration solves 119 queries. The overlap is 77 queries; 45 are solved only by Full Text, 42 only by Distilled. At the level of the best individual configuration, distillation matches verbatim retrieval at 11 compression, with near-symmetric exclusive coverage.
+Oracle complementarity. The right panel shows oracle coverage using all configurations per family (4 Full Text, 40 Distilled). The union solves 191 of 201 queries (95.0%), with only 10 unsolvable. The 32 distill-only queries span all three query types (15 conceptual, 11 phrase, 6 exact term). Structured distillation is creating retrieval pathways through exchange cores, room assignments, and file metadata that the verbatim configurations miss. The asymmetry (32 distill-only vs 4 verbatim-only) is partly a configuration count effect (40 vs 4) and does not indicate that distilled text is inherently more searchable; the fair best-vs-best comparison in the left panel controls for this.
+That complementary coverage raises a natural question. Can the verbatim text, which is already stored for display, serve as a second-stage reranking signal for distilled results?
+Post-hoc reranking experiment.
+We tested this by applying BM25 snippet reranking to the top-10 distilled candidates: each candidate’s verbatim snippet is scored against the query via BM25-Okapi and blended with the original retrieval score (=0.3 original, 0.7 BM25). The best distilled configuration after reranking (Distill Core+Rooms / Exact / Additive) achieves 120/201 queries at P@1, compared to 122/201 for Full Text / BM25-FTS. The gap narrows from 22 queries (100 vs 122 without reranking) to 2 queries (120 vs 122), but does not close.
+The reranker promotes 36 queries to P@1 by moving up candidates ranked 2–7 when BM25 snippet matching identifies the right result. It also demotes 16 queries from P@1 when a wrong candidate has higher lexical overlap in the wrong context. In every loss, the promoted candidate’s snippet contains more query terms than the correct result’s snippet, but those terms appear in an irrelevant discussion. The same mechanism causes both behaviors. Rewarding verbatim term overlap creates the 36 wins and the 16 failures.
+We tested whether any query-time feature could gate the reranker to prevent losses: original retrieval score, score margin between rank 1 and rank 2, BM25 score of the rank-1 result, and query term overlap fraction. None separates gains from losses. The distributions overlap. Losses have higher median BM25 scores and more term overlap than gains, which is the opposite of what a protective threshold would need. The best single-feature gate achieves 105/201, worse than both the ungated reranker (120) and the verbatim baseline (122).
+The features we tested do not separate gains from losses. The missing signal may not be textual. Online learning from user interaction, such as click-through rates, dwell time, and query reformulation, could supply the missing signal. That requires a deployed system with real users, so it sits outside this offline evaluation.
+6 Discussion
+6.1 Context Compression, Not Search Optimization
+The search evaluation stands in for a simpler question: does distillation preserve the information that matters? At 11 compression, thousands of conversation exchanges fit within a single agent prompt, enabling persistent memory without context overflow.
+The distilled text is never shown to the user. It functions as a routing index. Distillation determines which conversations surface and in what rank order, but the search result the user reads is the verbatim exchange that produced it. Index representation and display representation are separate layers. If the distilled index routes correctly, the user sees the original conversation text; compression artifacts in the distilled form are invisible.
+Each distilled object carries a conversation_id and ply-range back-reference to its source exchange. A search hit returns the matched verbatim snippet directly. The user sees the exact user and assistant turns from the original conversation, not a summary or reconstruction. The distilled layer determines which exchange to surface; the verbatim layer determines what the user reads.
+This two-tier separation gives a concrete architectural alternative to compaction for personalized agent memory. In current agent systems, when the context window fills, the agent summarizes its own history and discards the original. That is lossy compression applied iteratively, so the information loss compounds over long sessions. The verbatim conversation, meanwhile, is already persisted on the client. The distillation results point to a different approach. The agent carries only the distilled form as working memory, at 11 the token cost, while the complete verbatim text remains on the client as ground truth. When the distilled form is sufficient, which is the common case given that all 20 vector search configurations show no significant degradation, the agent operates at a fraction of the context cost. When it is not, because the user needs exact wording or the distilled form dropped a specific detail, verbatim retrieval from local storage resolves it. We do not evaluate agent task performance under distilled-only context here; that direct comparison remains future work. What the search evaluation does establish is simpler. Structured distillation preserves enough information for retrieval at 11 compression. Without that, the whole idea falls apart.
+The search evaluation is, in fact, a harder test than what live context management requires. Search has two failure points: the distilled text must rank correctly against competing candidates, and it must contain the relevant information. Ranking is where our degradation comes from, particularly for BM25, where lexical compression removes the vocabulary that keyword matching depends on. In live context management, there is no ranking. Completed exchanges are loaded sequentially, in conversation order; the only question is whether the distilled form preserves enough information for the agent to understand what occurred. The grade evaluation measures information preservation independent of rank position. It shows small to medium effect sizes (=0.031–0.756), with the largest confined to BM25 keyword search. The retrieval degradation that is our primary limitation is less central in the sequential-loading case; the evidence for information preservation still matters there.
+6.2 The Asymmetric Memory Problem
+The current state of human-agent conversation is asymmetric: the human retains fragments of past interactions through recognition memory, while the agent starts each session with no history. This asymmetry degrades conversation quality over time. The agent re-asks questions that were answered weeks ago, re-proposes solutions that were tried and rejected, and cannot build on prior decisions.
+Distilled memory addresses this by giving both parties access to the same compressed history. The agent can reference past decisions (“In session 47, we chose connection pooling over per-request connections because of the timeout issue”), and the human can verify against their own recognition memory.
+Git is a distillation system for code: the commit message is a distilled object summarizing what changed; the file tree provides spatial organization; git log --follow walks into a room. A project with 50,000 commits remains navigable because developers interact with distilled summaries (commit messages), not raw diffs. We build the same thing for conversations.
+6.3 Complementary Retrieval Signals
+The coverage analysis (Section 5.7) shows that verbatim and distilled result pools are partially complementary: 42 queries are solved only by distilled configurations while 45 are solved only by verbatim. Distillation does not just lose signal; it creates a second signal that verbatim search misses. The cross-layer search modes (Section 5) confirm this: fusing BM25 on verbatim text with HNSW on distilled text achieves the highest MRR overall (0.759), slightly exceeding the best pure verbatim configuration (0.745). Distillation is not just a degraded copy of the original signal. It produces a complementary signal that improves retrieval when fused with verbatim keyword search.
+6.4 Mechanism Dominance Within Pure Modes
+Within pure modes, the dominant factor is retrieval mechanism, not distillation mode. Vector similarity (HNSW, Exact) captures semantic content preserved through distillation: the surviving vocabulary principle ensures that query-relevant terms survive compression (96.8% of query vocabulary retained), and embedding similarity detects this preserved meaning. BM25 depends on lexical overlap, and 11 compression removes exchange-specific vocabulary (only 27.0% of top-15 IDF tokens survive) that keyword matching requires. HNSW: 10 of 10 comparisons are non-significant after Bonferroni correction; Exact: 10 of 10. All 10 HNSW and all 10 Exact comparisons are non-significant regardless of fusion strategy; significant degradation is confined entirely to BM25 keyword search.
+6.5 Per-Grader Consistency
+The inter-rater agreement (=0.175) is low by standard benchmarks; human assessors in TREC evaluations achieve =0.35–0.65 (Voorhees, 1998). The task is genuinely difficult: assessing whether a fragment of a software engineering conversation is “relevant” to a short query requires domain understanding that 7–12B parameter models may lack.
+Despite this disagreement on absolute scores, the mechanism-dependent preservation finding is directionally consistent across all five graders: all five show verbatim modes outperforming distilled modes within BM25, and all five show smaller or non-significant degradation with vector search. The length-bias hypothesis does not hold up. If short distilled snippets were being rewarded across the board, all distilled modes should benefit uniformly across mechanisms. They do not. BM25 degrades much more than HNSW.
+7 Limitations
+We present ten limitations, ordered by severity.
+-
+1.
+Low inter-rater agreement (=0.175). The five LLM graders barely agree beyond chance. Majority voting mitigates but does not eliminate this noise. All quantitative results should be interpreted with this noise floor in mind.
+-
+2.
+Mechanism-dependent degradation in pure-mode comparisons. 20 of 40 pure-mode per-mechanism comparisons show statistically significant mean grade degradation after Bonferroni correction (=0.00125). All significant comparisons are BM25 keyword search; all 20 vector search comparisons are non-significant. The best pure distilled configuration preserves 96% of the best verbatim MRR (0.717 vs 0.745); cross-layer configurations slightly exceed verbatim but rely on fusing verbatim and distilled signals. With vector search, compression is mostly fine. With BM25, it costs you.
+-
+3.
+Single-user setting. All data comes from one developer’s conversations across 6 projects. This is intentional: the paper studies personalized memory for one user’s long-running agent history. What it does not establish is transfer across different users, domains, conversation styles, or languages, which may produce different compression ratios and different preservation profiles.
+-
+4.
+Limited human evaluation. The primary grading was performed by 7–12B parameter local LLMs, with a calibrated Claude Opus grader for the 741 no-majority pairs. Human validation (108 grades, Section 4.4) targets the Opus grader’s accuracy on the decisive stratum, not a random sample of all grades.
+-
+5.
+No head-to-head comparison. We did not benchmark against Letta, Mem0, Zep, or other memory systems. Our evaluation asks whether a personalized distilled memory layer is viable within this system, not whether it dominates other memory architectures head-to-head.
+-
+6.
+Effect sizes range from small to medium. The 40 pairwise effect sizes range from =0.031 to 0.756. 18 of 40 comparisons reach the medium threshold (), all in BM25; the remaining are small.
+-
+7.
+Spatial navigation not evaluated. Rooms are evaluated only as retrieval metadata. The spatial navigation interface (walking from room to room, exploring connections) is not evaluated. What we measure here is rooms-as-metadata, not rooms-as-UI. The user experience of navigating a memory palace remains untested.
+-
+8.
+Distillation quality depends on the LLM. All 12,427 evaluated palace objects were produced by Claude Haiku 4.5 (Anthropic, 2025). Different models at different capability levels may produce different compression ratios and quality preservation.
+-
+9.
+Length-bias confound in LLM grading. Distilled snippets average 200 characters while verbatim snippets average 1,500 characters; the 7–12B graders may exhibit systematic bias toward shorter or longer text. Short-text bias would inflate distilled mode scores uniformly across mechanisms, but BM25 shows consistently larger degradation than HNSW. That pattern is hard to square with uniform short-text bias. It is better explained by real differences in how retrieval mechanisms handle compressed text.
+-
+10.
+Recall interface not implemented. The conversational recall pattern, where a user describes a memory vaguely and the system proposes candidates for recognition, is described in the design but remains future work.
+8 Conclusion
+Structured distillation compresses conversation exchanges by 11 (371 38 tokens). The best pure distilled configuration (Distill Core+Rooms / Exact / Weighted) preserves 96% of the best verbatim MRR (0.717 vs 0.745). Cross-layer configurations that fuse verbatim keyword search with distilled vector search slightly exceed the best pure verbatim baseline (MRR 0.759). The two representations help in different ways.
+Within pure single-mechanism comparisons, the mechanism matters. 10 of 10 HNSW and 10 of 10 Exact distilled configurations show no statistically significant mean grade degradation (=0.00125), while 10 of 10 BM25-Okapi and 10 of 10 BM25-FTS do degrade significantly. Effect sizes range from =0.031 to 0.756; 18 of 40 comparisons reach the medium threshold, all in BM25.
+An agent carrying 1,000 distilled exchanges in 39,000 tokens has persistent memory without context overflow. The verbatim alternative would require 407,000 tokens.
+The point of the system is personalized memory. One user’s ongoing work with an agent can be distilled into a compact retrieval layer that remains useful later, while the verbatim source stays available for drill-down. Distilled objects handle fast recognition. Verbatim text handles full recall.
+Future work includes evaluating the hybrid search modes defined in Section 3.4 (same-layer keyword + semantic fusion), cross-user validation across different users and domains, and a conversational recall interface in which users describe memories vaguely and the system proposes candidates for recognition-based selection. Post-hoc snippet BM25 reranking narrows the gap (120/201 vs 122/201 at P@1 for the best configurations) but does not close it: the BM25 signal that promotes correct results also demotes them, and the static query-time features we tested do not separate the two cases (Section 5.7).
+We release the implementation and analysis pipeline as open-source software (Lewis, 2026).111https://github.com/Process-Point-Technologies-Corporation/searchat Because the corpus consists of one user’s private conversation history, the underlying data, evaluation queries, and grading outputs are not publicly released. The repository includes the software, configuration files, and analysis scripts needed to run the same methodology on a user’s own data.
+References
+- Abdin et al. [2024] Marah Abdin, Jyoti Aneja, Hany Awadalla, Ahmed Awadallah, Ammar Ahmad Awan, Nguyen Bach, Amit Bahree, Arash Bakhtiari, Jianmin Bao, Harkirat Beber, et al. Phi-3 technical report: A highly capable language model locally on your phone. arXiv preprint arXiv:2404.14219, 2024.
+- Anthropic [2025] Anthropic. Introducing claude haiku 4.5, 2025. URL https://www.anthropic.com/news/claude-haiku-4-5.
+- Cai et al. [2024] Zheng Cai, Maosong Cao, Haojiong Chen, Kai Chen, Keyu Chen, Xin Chen, Xun Chen, et al. InternLM2 technical report. arXiv preprint arXiv:2403.17297, 2024.
+- Cohen [1988] Jacob Cohen. Statistical Power Analysis for the Behavioral Sciences. Lawrence Erlbaum Associates, 2nd edition, 1988.
+- Cormack et al. [2009] Gordon V. Cormack, Charles L. A. Clarke, and Stefan Buettcher. Reciprocal rank fusion outperforms condorcet and individual rank learning methods. In Proceedings of the 32nd International ACM SIGIR Conference on Research and Development in Information Retrieval, pages 758–759. ACM, 2009.
+- DuckDB Labs [2024] DuckDB Labs. Vector similarity search in duckdb, 2024. URL https://duckdb.org/2024/05/03/vector-similarity-search-vss.
+- Feng et al. [2022] Xiachong Feng, Xiaocheng Feng, and Bing Qin. A survey on dialogue summarization: Recent advances and new frontiers. In Proceedings of the Thirty-First International Joint Conference on Artificial Intelligence (IJCAI), pages 5453–5460, 2022.
+- Fleiss [1971] Joseph L. Fleiss. Measuring nominal scale agreement among many raters. Psychological Bulletin, 76(5):378–382, 1971.
+- Fox and Shaw [1994] Edward A. Fox and Joseph A. Shaw. Combination of multiple searches. In Proceedings of the Second Text REtrieval Conference (TREC-2), pages 243–252. NIST, 1994.
+- Järvelin and Kekäläinen [2002] Kalervo Järvelin and Jaana Kekäläinen. Cumulated gain-based evaluation of IR techniques. ACM Transactions on Information Systems, 20(4):422–446, 2002.
+- Jiang et al. [2023a] Albert Q. Jiang, Alexandre Sablayrolles, Arthur Mensch, Chris Bamford, Devendra Singh Chaplot, Diego de las Casas, Florian Bressand, Gianna Lengyel, Guillaume Lample, Lucile Saulnier, et al. Mistral 7B. arXiv preprint arXiv:2310.06825, 2023a.
+- Jiang et al. [2023b] Huiqiang Jiang, Qianhui Wu, Chin-Yew Lin, Yuqing Yang, and Lili Qiu. LLMLingua: Compressing prompts for accelerated inference of large language models. In Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing (EMNLP), pages 13358–13376, 2023b.
+- Johnson et al. [2019] Jeff Johnson, Matthijs Douze, and Hervé Jégou. Billion-scale similarity search with GPUs. IEEE Transactions on Big Data, 7(3):535–547, 2019. doi: 10.1109/TBDATA.2019.2921572.
+- Landis and Koch [1977] J. Richard Landis and Gary G. Koch. The measurement of observer agreement for categorical data. Biometrics, 33(1):159–174, 1977.
+- Lewis et al. [2020] Patrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir Karpukhin, Naman Goyal, Heinrich Küttler, Mike Lewis, Wen-tau Yih, Tim Rocktäschel, Sebastian Riedel, and Douwe Kiela. Retrieval-augmented generation for knowledge-intensive NLP tasks. In Advances in Neural Information Processing Systems, volume 33, pages 9459–9474, 2020.
+- Lewis [2026] Sydney Lewis. Searchat: Semantic search for AI coding agent conversations, 2026. URL https://github.com/Process-Point-Technologies-Corporation/searchat. Open-source software.
+- Malkov and Yashunin [2020] Yu. A. Malkov and D. A. Yashunin. Efficient and robust approximate nearest neighbor using hierarchical navigable small world graphs. IEEE Transactions on Pattern Analysis and Machine Intelligence, 42(4):824–836, 2020. doi: 10.1109/TPAMI.2018.2889473.
+- OpenAI [2023] OpenAI. tiktoken: A fast BPE tokeniser for use with OpenAI’s models, 2023. URL https://github.com/openai/tiktoken.
+- Packer et al. [2024] Charles Packer, Sarah Wooders, Kevin Lin, Vivian Fang, Shishir G. Patil, Ion Stoica, and Joseph E. Gonzalez. MemGPT: Towards LLMs as operating systems. In International Conference on Learning Representations (ICLR), 2024.
+- Qwen Team [2025] Qwen Team. Qwen3 technical report. arXiv preprint arXiv:2505.09388, 2025.
+- Reimers and Gurevych [2019] Nils Reimers and Iryna Gurevych. Sentence-BERT: Sentence embeddings using siamese BERT-networks. In Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP), pages 3982–3992, 2019.
+- Robertson and Zaragoza [2009] Stephen Robertson and Hugo Zaragoza. The probabilistic relevance framework: BM25 and beyond. Foundations and Trends in Information Retrieval, 3(4):333–389, 2009.
+- Sim and Wright [2005] Julius Sim and Chris C. Wright. The kappa statistic in reliability studies: Use, interpretation, and sample size requirements. Physical Therapy, 85(3):257–268, 2005.
+- Thakur et al. [2021] Nandan Thakur, Nils Reimers, Andreas Rücklé, Abhishek Srivastava, and Iryna Gurevych. BEIR: A heterogeneous benchmark for zero-shot evaluation of information retrieval models. In Proceedings of the Neural Information Processing Systems Track on Datasets and Benchmarks, 2021.
+- Voorhees [1998] Ellen M. Voorhees. Variations in relevance judgments and the measurement of retrieval effectiveness. In Proceedings of the 21st Annual International ACM SIGIR Conference on Research and Development in Information Retrieval, pages 315–323. ACM, 1998.
+- Voorhees and Harman [2005] Ellen M. Voorhees and Donna K. Harman. TREC: Experiment and Evaluation in Information Retrieval. MIT Press, 2005.
+- Wang et al. [2020] Wenhui Wang, Furu Wei, Li Dong, Hangbo Bao, Nan Yang, and Ming Zhou. MiniLM: Deep self-attention distillation for task-agnostic compression of pre-trained transformers. In Advances in Neural Information Processing Systems, volume 33, pages 5776–5788, 2020.
+- Young et al. [2024] Alex Young, Bei Chen, Chao Li, Chengen Huang, Ge Zhang, Guanwei Zhang, Heng Li, Jiangcheng Zhu, Jianqun Chen, Jing Chang, et al. Yi: Open foundation models by 01.AI. arXiv preprint arXiv:2403.04652, 2024.
+Appendix A Full Results Tables
+The main text reports compact summaries. The full generated tables are included here for completeness.
+A.1 All Configuration Results
+A.2 Results by Query Type
+A.3 Inter-Rater Agreement Details
+A.4 Statistical Test Details
+Appendix B Distillation Prompt
+The following prompt is used for batch distillation (Haiku), which produced the corpus evaluated in this paper. {project_id}, {ply_start}, {ply_end}, and {messages_text} are interpolated per exchange. Messages are truncated to 4,000 characters.
+Distill this conversation exchange into JSON: - "exchange_core": 1-2 sentences. What was accomplished or decided? Use the specific terms from the exchange. Do not invent details not present in the text. If the exchange is mostly empty, say so briefly. - "specific_context": One concrete detail from the text: a number, error message, parameter name, or file path. Copy it exactly from the text. Do not use the project path. - "room_assignments": 1-3 rooms. Each room is a topic this exchange belongs to. {"room_type": "<file|concept|workflow>", "room_key": "<identifier>", "room_label": "<short label>", "relevance": <0.0-1.0>}. A room should be specific enough to group related exchanges (e.g. "retry_timeout" not "errors"). Do NOT include "files_touched". Project: {project_id} Exchange (messages {ply_start}-{ply_end}): {messages_text} Respond with ONLY valid JSON.
+Per-turn distillation (Haiku) uses a simpler prompt that extracts tags (2–4 keywords) instead of room_assignments. The per-turn prompt runs as a Claude Code stop hook with a 60-second timeout. Since the batch distiller re-processes the full corpus, the evaluated palace objects reflect the batch prompt above.
+Appendix C Grading Prompt
+The following prompt template is used for LLM-based relevance grading. {query} and {snippet} are interpolated per item.
+You are a strict relevance assessor for a conversational search system. QUERY: "{query}" SEARCH RESULT: --- {snippet} --- Grade this result’s relevance to the query on a 0-3 scale. SCALE: 0 = Irrelevant: The result has nothing to do with the query. Different topic entirely. 1 = Related: The result is on a related topic but does NOT answer the query. It may mention similar concepts or share terminology, but a user would not find what they were looking for. 2 = Highly Relevant: The result contains an answer or useful information for the query, but the answer may be unclear, incomplete, or buried among other content. 3 = Perfectly Relevant: The result is dedicated to the query topic and directly provides the information sought. GRADING RULES: - The key test for grade 2 vs grade 1: does the result contain a usable answer? If yes, grade 2+. If it is merely on a related topic, grade 1. - Only assign grade 3 if the result specifically and clearly addresses the query. - When uncertain between two grades, assign the lower one. - A result about a related but different tool, version, or concept is grade 1, not grade 2. Respond with a JSON object. Write your reasoning first, then the grade. {"reason": "<10-20 word justification>", "grade": <0|1|2|3>}
+Appendix D Best Cases: Distilled Modes Outperform Verbatim
+The following queries show the largest advantage for distilled search over a matched Full Text baseline, measured as the difference in mean grade between the best distilled configuration and Full Text with the same retrieval mechanism.
+Query A (exact term):
+Distilled advantage: +1.60 grade points (Distill Core / Exact / — mean 2.80, Full Text mean 1.20). The gain comes from stripping away long exchange padding while preserving the specific term the user is trying to recall.
+Query B (conceptual):
+Distilled advantage: +1.50 grade points (Distill Core+Files / HNSW / Additive mean 2.90, Full Text mean 1.40). This is the same pattern in a more extreme form: the verbatim hit exists, but it is weak because the target term is buried inside surrounding material.
+Query C (exact term):
+Distilled advantage: +1.50 grade points (Distill Core+Files / Exact / Additive mean 1.60, Full Text mean 0.10). The compressed representation keeps the decisive phrase near the top of the object, which makes retrieval less sensitive to the noise of the original exchange.
+Query D (conceptual):
+Distilled advantage: +1.30 grade points (Distill Core / HNSW / — mean 2.60, Full Text mean 1.30). The winning configuration here adds structure without losing the local term match. That combination is exactly what the personalized memory layer is trying to buy.
+Query E (phrase):
+Distilled advantage: +1.30 grade points (Distill Core+Rooms / HNSW / Weighted mean 2.40, Full Text mean 1.10). This case is smaller, but it points the same way. Distillation helps when the remembered clue is real but thinly distributed in the verbatim exchange history.
+Distilled search outperforms verbatim when specific terms or concepts are buried in long exchanges. Distillation surfaces the essential content, while structured metadata (files + rooms) provides precise retrieval signals that verbatim text lacks. The advantages are largest for exact-term queries where the target phrase appears tangentially in verbatim text but centrally in the distilled exchange_core.
+Appendix E Failure Cases: All Modes Struggle
+The following queries have the lowest mean grade across all evaluated configurations.
+Query F (phrase):
+Mean grade across all configurations: 0.86. The user is asking for something the corpus does not contain in a stable, directly retrievable form.
+Query G (phrase):
+Mean grade across all configurations: 0.90. There are topical neighbors, but not a strong enough exchange to anchor the query cleanly.
+Query H (phrase):
+Mean grade across all configurations: 0.95. This is a low-signal recall target. The system finds adjacent material, not the thing itself.
+Query I (phrase):
+Mean grade across all configurations: 0.97. The underlying idea exists in the history, but not in the framing the query asks for.
+Query J (conceptual):
+Mean grade across all configurations: 0.98. A vague or weakly grounded phrase produces broad topical matches rather than a clear hit.
+These failure cases share a common pattern: the queries target concepts that either (a) were not substantively discussed in the corpus, (b) were discussed with different terminology, or (c) are too generic to distinguish the relevant exchange from topically related noise. Distillation cannot improve retrieval for content that does not exist in the corpus or that lacks distinctive vocabulary.
+
+KAYNAK : https://arxiv.org/abs/2603.13017
