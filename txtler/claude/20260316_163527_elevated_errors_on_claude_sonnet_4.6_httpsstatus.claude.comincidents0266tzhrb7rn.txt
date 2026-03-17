@@ -1,0 +1,51 @@
+Mar
+16
+,
+16:35
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+16
+,
+15:35
+UTC
+Update
+- We are continuing to work on a fix for this issue. This is currently only impacting free Claude.ai users.
+Mar
+16
+,
+15:13
+UTC
+Update
+- We are continuing to work on a fix for this issue.
+Mar
+16
+,
+14:05
+UTC
+Update
+- We are continuing to work on a fix for this issue.
+Mar
+16
+,
+14:04
+UTC
+Update
+- We are continuing to work on a fix for this issue.
+Mar
+16
+,
+14:02
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+Mar
+16
+,
+14:02
+UTC
+Investigating
+- There's an elevated error rate for free tier users on Claude Sonnet 4.6. We are investigating
+
+KAYNAK : https://status.claude.com/incidents/0266tzhrb7rn

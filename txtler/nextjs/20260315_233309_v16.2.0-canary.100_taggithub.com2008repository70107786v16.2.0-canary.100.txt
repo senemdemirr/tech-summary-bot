@@ -1,9 +1,0 @@
-Core Changes
-fix: test-cargo-unit CI job timing out since LTO was enabled:
-#91424
-Credits
-Huge thanks to
-@lukesandberg
-for helping!
-
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.100

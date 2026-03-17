@@ -1,4 +1,3 @@
---- huggingface | The First Healthcare Robotics Dataset and Foundational Physical AI Models for Healthcare Robotics | score=98.94 ---
 The First Healthcare Robotics Dataset and Foundational Physical AI Models for Healthcare Robotics
 Introducing Open-H-Embodiment: The first healthcare robotics open dataset, built by a community collaboration
 Authors: Nigel Nelson, Lukas Zbinden, Mostafa Toloui, Sean Huver
@@ -44,4 +43,3 @@ Access the following resources to start working with the Open-H-embodiment datas
 - Explore on Hugging Face: Check out new open Cosmos models and datasets on Hugging Face and GitHub or try models on build.nvidia.com.
 
 KAYNAK : https://huggingface.co/blog/nvidia/physical-ai-for-healthcare-robotics
-

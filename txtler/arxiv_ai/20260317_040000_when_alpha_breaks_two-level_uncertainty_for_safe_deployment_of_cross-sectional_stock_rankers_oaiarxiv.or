@@ -1,0 +1,525 @@
+When Alpha Breaks: Two-Level Uncertainty for Safe Deployment of Cross-Sectional Stock Rankers
+Abstract
+Cross-sectional equity rankers are often deployed as if point predictions were sufficient: the model outputs scores, and the portfolio follows the induced ordering. In practice, non-stationarity creates regime failures in which a historically profitable ranker becomes systematically unreliable. In the AI Stock Forecaster, a LightGBM ranker achieves strong all-period performance at the 20-day horizon (volatility-sized shadow-portfolio Sharpe 2.73), yet the 2024 holdout coincides with an AI thematic rally/sector rotation that breaks the signal at longer horizons (60d and 90d mean turn negative) and severely weakens 20d ( 0.072 0.010, DEV FINAL). This motivates treating deployment as two distinct decisions: (i) which individual positions require caution and (ii) whether the strategy should trade at all.
+We adapt Direct Epistemic Uncertainty Prediction (DEUP) to ranking by predicting rank displacement and defining a per-stock epistemic signal , where is a deployable point-in-time baseline (PIT-safe, computed using only information available at ); all headline policy results use this PIT-safe . We document a ranking-specific structural coupling between epistemic uncertainty and signal strength (median across 1,865 dates), which causes inverse-uncertainty sizing to de-lever the strongest signals and degrade portfolio performance. To resolve this, we propose a two-level deployment architecture: a strategy-level regime-trust gate that decides whether to trade (AUROC 0.72 overall; 0.75 in FINAL; 80% precision at with 47% abstention; 7/8 correct across five crisis and three calm windows), and a position-level epistemic tail-risk cap (P85) that reduces exposure only for the most uncertain predictions while preserving score-tail convexity. The resulting operational policy is simple: trade only when , apply volatility sizing on active dates, and cap the top epistemic-uncertainty tail. In a deployment policy comparison at 20d, Gate+Vol+-Cap achieves the best risk-adjusted performance (ALL Sharpe 1.877 vs 1.886 for Gate+Vol; FINAL Sharpe 0.925 vs 0.375), indicating that DEUP adds economic value as a tail-risk guard rather than as a continuous sizing denominator.
+1 Introduction
+Machine learning models for cross-sectional equity ranking have advanced substantially, and modern point-in-time (PIT) and walk-forward pipelines can produce economically meaningful signals. Yet most deployments still treat ranking as a one-shot prediction problem: output scores, sort into a portfolio. The operational question when to trade is often left to crude heuristics, despite being the failure mode that matters most under non-stationarity.
+Motivating failure under regime shift.
+Our setting makes the deployment problem concrete. The AI Stock Forecaster produces cross-sectional rankings at 20d, 60d, and 90d horizons over a dynamic universe of AI-exposed U.S. equities. The primary LightGBM ranker is exceptionally strong in development and remains economically meaningful out of sample at 20d, but experiences a regime break during the 2024 AI thematic rally/sector rotation: longer-horizon signal quality turns negative and the 20d signal weakens sharply. Table 1 summarizes baseline performance without uncertainty controls.
+Why “market regime” proxies are not enough.
+A common operational response to non-stationarity is to condition exposure on market stress proxies such as VIX level/percentile, realized volatility, or dispersion. In our setting, these proxies are poorly aligned with the failure mode that matters: model failure. Empirically, a VIX-percentile gate is worse than random at predicting whether the ranker will work (AUROC ), while a model-specific regime-trust gate built from trailing realized efficacy achieves AUROC overall and in FINAL. The implication is that regime control should monitor the model’s realized efficacy rather than market conditions alone: stress can occur without model failure, and model failure can occur without extreme VIX.
+Two distinct deployment decisions.
+Uncertainty quantification (UQ) is a natural candidate to improve robustness, but it must be aligned to the decision being made:
+-
+•
+Position-level risk: which stock predictions are likely to be wrong (and should be clipped, down-weighted, or filtered)?
+-
+•
+Strategy-level risk: is the model currently reliable enough to deploy (or should we abstain today)?
+Much of the portfolio-UQ literature operationalizes UQ via inverse-uncertainty weighting, with the intuition that uncertain predictions should receive less capital (Spears et al., 2021; Liu et al., 2026). We show that this intuition can fail in cross-sectional ranking for structural reasons, and that position- and strategy-level controls should be treated as separate layers.
+DEUP for ranking loss.
+We adapt Direct Epistemic Uncertainty Prediction (DEUP) (Lahlou et al., 2023) to ranking by learning an error predictor for rank displacement rather than mean squared error. For date and horizon , define stock-level ranking loss:
+Training on PIT-safe walk-forward residuals yields a per-stock epistemic signal
+where estimates irreducible (aleatoric) ranking noise. Crucially, is a deployment-facing component: choices that are harmless for retrospective visualization can be invalid when used for live capping or scaling. Accordingly, all deployment-facing uses of in this paper (epistemic caps and conformal-style scaling) are evaluated under a PIT-safe , and we explicitly report a hindsight-vs-deployable ablation for the aleatoric baseline. Empirically, achieves positive rank-loss predictiveness at 20d (Spearman –), and the resulting produces clean monotonic separation by quintiles, indicating that DEUP-style UQ can rank stock-level failure risk.
+A ranking-specific pitfall: uncertainty couples to signal strength.
+In cross-sectional rankers, the strongest trade ideas reside in the score tails. But rank displacement is also larger at extreme ranks (there is more “room to move”), and the learned error predictor internalizes this geometry. The result is a structural coupling between epistemic uncertainty and signal magnitude: across 1,865 trading dates, the median Spearman correlation is . Consequently, inverse-uncertainty sizing systematically de-levers the strongest signals and can reduce portfolio performance, even when is a competent error-ranking signal. This is not a failure of UQ per se; it is a mismatch between a continuous sizing rule and ranking geometry.
+Two-level uncertainty for deployment under regime shifts.
+We therefore propose a two-level deployment architecture:
+-
+1.
+Strategy-level regime-trust gate : a PIT-safe classifier built from trailing realized model efficacy that decides whether to trade. It achieves AUROC 0.72 overall (0.75 in FINAL) and reaches 80% precision at with 47% abstention; across five crisis and three calm windows, it is correct in 7 of 8 cases.
+-
+2.
+Position-level tail-risk guard: rather than inverse-sizing by , apply a discrete epistemic cap (-Cap) that reduces exposure only for the most uncertain tail (P85), while leaving the bulk of positions unchanged. Combined with volatility sizing on trading days, this provides a robust guardrail without penalizing the score tails wholesale.
+Empirical punchline: the operational policy is simple.
+At the 20d horizon, the best-performing uncertainty-aware deployment policy is Binary Gate + Vol-Sizing + -Cap (P85), improving Sharpe relative to Gate + Vol alone (ALL 0.884 vs 0.817; FINAL 0.316 vs 0.191). This improvement comes from a small number of deployable decisions (trade/abstain via , then cap only the most uncertain tail) rather than from continuous inverse-uncertainty reweighting. Importantly, these deployment-policy Sharpes are computed on a gated P&L series with substantial abstention and are therefore not directly comparable to the ungated shadow-portfolio baseline in Table 1; they quantify the incremental value of the deployment layer under regime stress. Consistent with the deployment focus, we also report sensitivity to the aleatoric baseline used in , including a hindsight-vs-deployable ablation for .
+Contributions.
+This paper makes four contributions:
+-
+•
+We adapt DEUP to cross-sectional ranking by predicting rank displacement and constructing a per-stock epistemic signal , validating its stock-level failure ranking.
+-
+•
+We document a structural coupling between uncertainty and signal strength in ranking (median ) that causes inverse-uncertainty sizing to fail.
+-
+•
+We propose and evaluate a two-level deployment architecture—strategy-level gating plus position-level epistemic capping—that improves risk-adjusted performance under thematic regime shifts with a small, operationally simple policy.
+-
+•
+We evaluate deployable aleatoric baselines for and report a hindsight-vs-deployable ablation, quantifying sensitivity of deployment-facing controls (caps and scaling) to the aleatoric component.
+2 Related Work
+2.1 Uncertainty decomposition and DEUP
+The decomposition of predictive uncertainty into aleatoric (irreducible) and epistemic (model-dependent) components is foundational in Bayesian machine learning (Gal and Ghahramani, 2016; Lakshminarayanan et al., 2017). Classical approaches such as MC Dropout, deep ensembles, and variational inference estimate epistemic uncertainty via stochastic forward passes or ensemble disagreement, but are computationally expensive and often awkward for non-Bayesian architectures such as gradient-boosted trees.
+DEUP (Direct Epistemic Uncertainty Prediction) (Lahlou et al., 2023) sidesteps Bayesian inference by training a secondary model on held-out residuals to predict the primary model’s expected error at each input. In generalized risk terms, recent theory decomposes total risk into Bayes risk (aleatoric) and excess risk (epistemic) using proper scoring rules and Bregman divergences (Kotelevskii and Panov, 2025). Our implementation instantiates this idea empirically for ranking: total predicted rank displacement decomposes into an estimated noise floor and excess model error .
+A parallel line of work questions how cleanly aleatoric and epistemic components can be disentangled in practice, especially under distribution shift (Mucsányi et al., 2024). For deployment, we take an operational stance: what matters is whether improves decisions (abstention, caps, risk limits), not whether it perfectly isolates a theoretical quantity.
+2.2 Uncertainty in portfolio construction
+Uncertainty-aware portfolio construction is commonly operationalized through multiplicative sizing rules, scaling exposure inversely with uncertainty (Spears et al., 2021). Related theory derives portfolios that shrink toward safety as parameter uncertainty increases (Garlappi et al., 2007). More recently, Liu et al. (2026) propose uncertainty-adjusted sorting, using uncertainty bounds to form long/short portfolios, and report improvements across multiple ML model families.
+Our setting differs in a crucial way: we study cross-sectional ranking models rather than return forecasts. In ranking, the strongest trade ideas live in the score tails, but those tails are also where rank displacement is largest, yielding a structural coupling between uncertainty and signal magnitude. This coupling can render standard inverse-uncertainty sizing counterproductive. A related idea is to residualize uncertainty on signal context before acting on it (Hentschel, 2025); our findings suggest that, in ranking, a discrete tail-risk cap can be more robust than continuous multiplicative rules.
+Finally, learning from out-of-sample forecast errors improves portfolio outcomes in optimized settings (Barroso and Saxena, 2021), consistent with the general principle that systematic error learning is valuable—though that work does not address ranking geometry or the signal–uncertainty coupling we document.
+2.3 Selective prediction and abstention
+Selective prediction formalizes a reject option: the model may abstain on inputs where it anticipates high error (El-Yaniv and Wiener, 2010; Geifman and El-Yaniv, 2017). Modern treatments study coverage–risk tradeoffs and connections to conformal prediction (Chaudhuri and Lopez-Paz, 2023). Extensions consider hybrid rules that reject the most uncertain predictions and apply confidence-weighted actions within the accepted set (Franc et al., 2021; Rabanser, 2025).
+We implement abstention at two granularities simultaneously. At the strategy level, the regime-trust gate decides whether to deploy the ranker on a given date. At the position level, -Cap reduces exposure only for the most uncertain tail, a soft form of within-portfolio rejection. This separation is empirically motivated: cross-sectional uncertainty can rank stock-level error risk, but aggregated per-stock uncertainty measures are not reliable detectors of regime-wide model failure.
+2.4 Regime detection in quantitative finance
+Regime-switching models have a long history in econometrics and portfolio allocation (Hamilton, 1989; Nystrup et al., 2017), with extensions to robust optimization and modern learning-based approaches (Oprisor and Kwon, 2021; Pun et al., 2023). These methods typically infer regimes from market observables (returns, volatility, correlations) and then condition portfolio choices on the inferred state.
+Our approach is model-specific: the gate measures trailing realized efficacy of the model itself (using matured labels under a structural lag to preserve PIT safety), rather than market conditions alone. This distinction matters empirically: market stress proxies (e.g., VIX percentile) need not align with model failure, motivating a direct “does the model work?” monitor.
+2.5 Positioning this paper
+Table 2 summarizes the closest prior work and our contribution.
+3 Problem Setup
+3.1 Cross-Sectional Equity Ranking
+On each trading date , we observe a dynamic universe of AI-exposed U.S. equities and a PIT-safe feature vector for each stock . A ranking model outputs a real-valued score (higher is better), inducing a cross-sectional ordering.
+We evaluate ranking quality using the Spearman rank information coefficient (RankIC) between scores and subsequent realized excess returns relative to a benchmark:
+where denotes the realized excess return of stock over the forward horizon trading days (primary: ), and is Spearman correlation computed cross-sectionally within each date.
+Universe and sample.
+The sample spans February 2016 through February 2025, yielding 2,277 trading dates and 109 walk-forward evaluation folds. The benchmark is the Invesco QQQ ETF.
+The investable universe is capped at 100 names by construction, but varies through time due to IPO entry and tradability filters. Measured directly from evaluation outputs (unique tickers per evaluation date, d), the realized universe size distribution is:
+The tightening in FINAL reflects that by 2024–2025 nearly all universe members are listed and pass tradability thresholds, whereas DEV includes pre-IPO periods for later entrants.
+3.2 Data, Tradability, and Return Definitions
+Data sources and price conventions.
+Daily market data consist of OHLCV series used for feature engineering, portfolio simulation, and label construction. Prices are split-adjusted close series (close-to-close, 4:00 PM ET) obtained from a vendor endpoint that returns split-adjusted prices directly. Corporate actions are treated as follows:
+-
+•
+Splits: handled implicitly via vendor-provided split-adjusted price histories (no additional split adjustment is applied internally).
+-
+•
+Dividends: incorporated explicitly into labels via dividend yield computed from dividends with ex-date in , which is a conservative PIT-safe choice.
+Benchmark-relative excess returns (total return).
+All targets and RankIC evaluations are performed on excess total returns relative to QQQ. For horizon trading days, define stock total return as price return plus dividend yield:
+The realized excess return used throughout is then
+If benchmark dividend data are unavailable, labels fall back to stock total return minus benchmark price-only return under a logged fallback policy.
+Tradability filters and investable universe construction.
+Universe membership is defined as-of each rebalance date by applying a deterministic tradability-and-relevance waterfall, then taking the top 100 by market capitalization:
+-
+•
+Exchange/type filter: U.S. common stocks only (Polygon ticker type “CS”).
+-
+•
+Minimum average price: .
+-
+•
+Minimum liquidity (ADV): average daily dollar volume , computed as using the most recent 20 trading days of volume history.
+-
+•
+AI exposure filter: membership in a fixed AI-themed ticker list (100 unique tickers across categories), applied as an exact ticker match.
+-
+•
+Max constituents: select the top 100 by market cap after the above filters.
+No minimum market-cap threshold is imposed by default beyond the top-100 cap.
+Survivorship, delistings, and identifier stability.
+Universe construction is survivorship-aware when Polygon is used: constituents are queried as-of date with active_only=False, allowing historically active but subsequently delisted tickers to be included in past universes when data exist. A security master tracks stable identifiers across ticker changes (e.g., FBMETA) and records security events (delisting, merger, spinoff, bankruptcy), enabling timestamped membership replay rather than retroactive dropping.
+Label availability and missing-data policy.
+Labels require entry/exit prices for both the stock and benchmark at . If any of {entry price, exit price, benchmark entry, benchmark exit} is missing, the label is not formed and the corresponding row is dropped from training/evaluation for that horizon. Across all horizons and dates, 600,855 out of 688,800 candidate label attempts are valid (87.2% coverage; 12.8% dropped). The dropped set is dominated by correct pre-IPO behavior for later entrants (approximately 98% of dropped rows), with a single mid-sample exception attributable to an ADR leaving the U.S. market (ABB), which accounts for essentially all non-pre-IPO gaps. Within the realized 20d evaluation window, label availability is effectively complete: 99.95% of pairs have a valid 20d label, with the remaining 0.05% corresponding to the ABB exit episode.
+Important limitation: delisting returns.
+CRSP-style delisting returns are not modeled. If a security delists within the holding period and no exit price is available at , the label is dropped rather than replaced with a terminal delisting return. In this 100-name AI universe this behavior is empirically rare; for broader universes, explicit delisting-return modeling would be required to avoid bias.
+Feature missingness and preprocessing.
+Missingness is handled component-wise:
+-
+•
+Base ranker features: LightGBM is trained on raw PIT-safe features with native NaN handling (no explicit imputation).
+-
+•
+Labels: rows with missing excess returns are dropped prior to training/evaluation.
+-
+•
+DEUP meta-model features: uncertainty-model features are zero-filled (fillna(0)) in the DEUP pipeline.
+No winsorization of the excess-return labels is applied in the frozen LightGBM baseline pipeline.
+3.3 Base Ranker (LightGBM)
+The primary ranker is a LightGBM gradient-boosted tree ensemble trained on seven PIT-safe features: three momentum signals (mom_1m, mom_3m, mom_12m), two realized-volatility measures (vol_20d, vol_60d), an average daily volume proxy (adv_20d), and the stock’s cross-sectional rank on the current date (cross_sectional_rank). The training target is the stock’s excess return versus QQQ at the specified horizon.
+Walk-forward training.
+Models are trained in an expanding-window walk-forward configuration. For evaluation fold , training uses all data from folds through with a minimum 90-trading-day embargo between the most recent training label-maturation date and the earliest prediction date in fold . Overlapping labels are purged to prevent leakage from forward-return overlap.
+3.4 Shadow Portfolio (Economic Signal Test)
+To translate cross-sectional signal quality into an economic sanity check, we construct a simple shadow long–short portfolio. On each rebalance date (non-overlapping 20-trading-day intervals), the top- stocks by score form the long leg and the bottom- form the short leg, with and equal weights within each leg. For reporting, we form a non-overlapping monthly return series by selecting the first trading day of each calendar month and using the corresponding 20-trading-day forward return; this is the common return series used for Sharpe and Crisis MaxDD in all deployment-policy tables unless explicitly stated otherwise. A transaction cost of 10 basis points per rebalance is applied. This portfolio is deliberately simple—fixed , no optimization—so that performance primarily reflects ranking quality rather than portfolio-construction sophistication.
+We report both raw and volatility-sized variants of this shadow portfolio. Over the full walk-forward sample (ALL), the volatility-sized 20d LightGBM shadow portfolio achieves Sharpe 2.73 with 82.6% monthly hit rate and maximum drawdown. Performance degrades in the FINAL holdout (2024 onward): Sharpe 1.91 with 71.4% hit rate, consistent with a genuine regime shift in the AI-exposed equity universe.
+3.5 Evaluation Protocol (DEV/FINAL)
+All results are reported under a strict DEV/FINAL protocol:
+-
+•
+DEV period (2016–2023, 95 months): all hyperparameter tuning, calibration, threshold selection, and model iteration use DEV only.
+-
+•
+FINAL period (2024 onward, 14 months): evaluated exactly once with all parameters frozen from DEV (no re-tuning).
+The walk-forward structure ensures each prediction is out-of-sample relative to its fold-specific training set. The DEV/FINAL split adds a second, end-to-end temporal holdout to reduce implicit overfitting through repeated experimentation.
+3.6 Loss Definition for Uncertainty: Rank Displacement
+Our uncertainty framework requires a per-prediction loss aligned with ranking. We use rank displacement:
+where denotes the cross-sectional percentile rank on date . Rank displacement lies in and directly measures ranking error: a stock scored in the 90th percentile that realizes returns at the 40th percentile has .
+This loss is preferable to return-space errors (e.g., MAE) for two practical reasons. First, it directly targets the object used in evaluation (cross-sectional ordering) and is therefore tightly aligned with RankIC. Second, it avoids conflating ranking failure with idiosyncratic volatility: in our experiments, rank displacement has near-zero correlation with stock-level realized volatility at 20d (), supporting the use of rank displacement as an error target for uncertainty modeling rather than a proxy for volatility.
+4 Method
+We present a two-level uncertainty architecture in four parts: (1) adaptation of DEUP to cross-sectional ranking loss, (2) the structural coupling diagnostic that motivates the architecture, (3) the regime-trust gate and position-level tail-risk cap, and (4) the deployment policy variants tested.
+4.1 DEUP for Ranking Loss
+4.1.1 Error Predictor
+Following Lahlou et al. (2023), we train a secondary model to predict the primary model’s expected rank displacement at each input. Concretely, let denote the realized rank displacement (Equation 3) of stock on date . The error predictor is a LightGBM regression model:
+trained walk-forward on held-out residuals from the primary model. The walk-forward protocol mirrors the base model: an expanding window over 109 folds, with predictions generated for folds 21–109 (requiring a minimum of 20 training folds, yielding 89 prediction folds and 161,863 predictions per horizon).
+The error predictor uses 11 features drawn from three categories:
+The LightGBM hyperparameters are deliberately conservative to reduce meta-overfitting: , , , , , with subsampling at 80% of rows and columns.
+At the 20d horizon, achieves Spearman with realized rank displacement in walk-forward evaluation. Feature importance analysis reveals that cross_sectional_rank is the dominant predictor at all horizons (split importance 101–120), followed by score and vol_60d. This dominance is economically meaningful: stocks at the extremes of the model’s cross-sectional ranking have systematically different—and predictable—error profiles than mid-ranked stocks.
+4.1.2 Aleatoric Baseline
+The aleatoric component estimates irreducible ranking noise: the floor of rank displacement that persists even for an optimal predictor under the prevailing information set. In the Kotelevskii and Panov (2025) framework, this corresponds to the Bayes-risk component of total predictive risk.
+Key point (narrow claim): within-date ordering vs. deployment magnitudes.
+For cross-sectional stock ranking, our primary diagnostic use of DEUP is the within-date ordering of failure risk. For any fixed date , if the aleatoric term is constant across stocks (i.e., ), then the cross-sectional ordering of
+is determined entirely by : subtracting a date-level constant does not change the rank order across . This argument justifies using a simple per-date floor for ranking diagnostics (e.g., quintile monotonicity, within-date ). It does not justify using a hindsight floor for deployment actions that depend on the magnitude of (e.g., caps, conformal scaling), where PIT-safety is required.
+Candidate estimators.
+We evaluate a tiered set of increasingly structured proxies:
+-
+1.
+Tier 0 (Inverse IQR): , calibrated so that . Killed at all horizons ( with mean rank loss). Cross-sectional return dispersion conflates signal dispersion with noise dispersion and does not identify hard-to-rank days.
+-
+2.
+Tier 1 (Factor-Residual IQR): regress cross-sectional returns on sector dummies and momentum, then apply Tier 0 to residuals. Also killed (): removing factor structure does not resolve the signal-vs-noise ambiguity.
+-
+3.
+Tier 2 (Per-Stock LGB Quantile Regression): walk-forward LightGBM quantile models predicting the 25th and 75th percentiles of stock-level rank displacement from characteristics (vol_20d, adv_20d, market_vol_21d, vix_percentile_252d, mom_1m, sector_enc). Passes at 60d (, consistent across three base models); killed at 20d ().
+The failure of Tiers 0 and 1 is itself a finding: cross-sectional dispersion of realized returns—the most natural proxy for ranking “noise”—has no predictive power for ranking difficulty in this setting. At 20d, ranking noise is dominated by short-horizon idiosyncratic movements with extremely low autocorrelation (), rendering it effectively unpredictable from observable regime proxies.
+(A) Oracle / hindsight floor .
+For diagnostic analysis only, we define an oracle per-date floor using realized same-date rank losses:
+where is the cross-section of realized rank displacements on date . This stabilizes the scale of for visualization and diagnostics, while leaving the within-date stock ordering entirely determined by .
+(B) Deployable PIT-safe floor .
+All deployment-facing uses of that depend on its magnitude (caps and conformal scaling) use a PIT-safe aleatoric baseline computed only from matured historical losses, aligned with the horizon lag .
+Primary PIT-safe definition (rolling matured ). Let denote the horizon in trading days (e.g., at 20d). For a trailing window length (we use operationally; we also test as a robustness alternative), define:
+This uses only losses whose forward returns have fully matured by time .
+Robustness alternative (expanding-window constant baseline). As a simpler, lower-variance deployable proxy, we also consider:
+which is constant within a given date and updated only using matured history.
+Evaluation protocol.
+Unless explicitly labeled as oracle/diagnostic, all reported deployment-policy results that use magnitudes (caps and conformal normalization) are computed with (Equation 6). We additionally report a hindsight-vs-deployable ablation by comparing results under versus (and ), quantifying sensitivity to the aleatoric baseline.
+4.1.3 Epistemic Signal
+The epistemic uncertainty signal is defined as predicted rank displacement beyond the irreducible noise floor:
+where the operator enforces non-negativity.
+Oracle vs. deployable variants.
+Because admits both oracle and PIT-safe constructions, we define two corresponding epistemic signals:
+The within-date ordering of and is identical (both are date-level shifts of ), but their magnitudes differ and therefore yield different cap/scaling behavior. Unless noted otherwise, all deployable policy experiments in this paper use .
+Validation.
+We validate through six diagnostic tests:
+-
+(A)
+Disentanglement (Residualization): After regressing on vol_20d, vol_60d, vix_percentile_252d, and mom_1m via OLS and taking residuals, the residualized retains – with rank loss across all horizons. The maximum absolute correlation between and VIX is 0.074. Pass: is not repackaged volatility.
+-
+(B)
+Quintile Monotonicity: Stocks sorted into quintiles by exhibit strictly monotonically increasing mean rank loss at 20d and 90d in both DEV and FINAL. Spearman across all four conditions (DEV/FINAL 20d/90d). In the FINAL holdout, the Q5/Q1 rank-loss ratio is 1.69 at 20d and 1.88 at 90d—stronger separation than in DEV (1.51, 1.53), the opposite of overfitting.
+-
+(C)
+AUROC for High-Loss Events: Stock-level AUROC for above-median rank loss ranges from 0.53 to 0.61. The signal identifies individual high-error predictions, though with moderate discriminative power.
+-
+(D)
+Regime Failure Detection: Per-stock does not spike during the 2024 regime failure. Crisis-period mean (0.259) is statistically indistinguishable from non-crisis (0.271). Expected: is a per-stock signal by design; regime failure affects all stocks uniformly and requires a separate per-date detector (Section 4.3.1).
+-
+(E)
+Baseline Dominance: and achieve 3–10 higher with rank loss than vol_20d (–) or VIX percentile ( to ). In the FINAL holdout, volatility and VIX lose predictive power entirely (); maintains or improves its correlation. See Table 4.
+-
+(F)
+Feature Importance: Per-prediction features (cross_sectional_rank, score) account for 39–56% of ’s split importance, confirming that captures per-stock prediction uncertainty rather than market-level regime information.
+Stability.
+The signal is positive under all tested conditioning cuts: pre-2020 vs. post-2020, low-VIX vs. high-VIX regimes, and low-volatility vs. high-volatility stocks (– across all conditions at all horizons).
+Robustness across base models.
+We replicate the DEUP pipeline on a second base model—Rank Average 2, an ensemble of LightGBM and FinText-TSFM signals—to verify that the uncertainty signal is not an artifact of the LightGBM architecture. RA2 produces with 35% higher at 20d (0.194 vs. 0.144) and 44% higher at 60d (0.153 vs. 0.106), confirming that DEUP uncertainty quality responds to base-model robustness. The structural coupling between and persists for RA2 (Section 4.2), confirming it is a model-agnostic property of cross-sectional ranking rather than an LGB-specific artifact.
+4.2 The Structural Coupling Problem
+The standard prescription for deploying uncertainty estimates in portfolio construction is inverse-uncertainty sizing: allocate less capital to predictions with higher uncertainty. In return-prediction settings, this is well-motivated and empirically successful (Liu et al., 2026; Spears et al., 2021). We show that it fails structurally in cross-sectional ranking due to a coupling between epistemic uncertainty and signal strength.
+4.2.1 Empirical Measurement
+On each trading date , we compute the cross-sectional Spearman correlation between the epistemic signal and the absolute model score:
+Across 1,865 trading dates (the walk-forward prediction window), the median cross-sectional correlation is , with positive correlation on more than 90% of dates.
+4.2.2 Mechanistic Explanation
+The coupling arises from the interaction between the ranking loss target and the error predictor’s feature structure:
+-
+1.
+Extreme ranks have higher rank displacement by construction. A stock scored at the 95th percentile cross-sectionally has room to “fall” by up to 95 percentile points; a stock at the 50th percentile can fall by at most 50. Expected rank displacement scales with distance from the median rank.
+-
+2.
+cross_sectional_rank is ’s dominant feature. Feature importance analysis (Diagnostic F) shows that cross_sectional_rank is the single most important predictor of rank displacement at all horizons (split importance 101–120 out of 300–500 total), followed by score itself.
+-
+3.
+Extreme ranks carry the strongest trading signal. The shadow portfolio is constructed from the top-10 and bottom-10 stocks—precisely the extreme ranks where is highest.
+The consequence is that inverse-uncertainty sizing systematically reduces weight on the stocks that contribute most to the long–short spread. This is not a failure of DEUP as an uncertainty estimator— genuinely predicts error magnitude—but a fundamental incompatibility between the ranking-loss uncertainty metric and the multiplicative sizing paradigm. In return-prediction settings (Liu et al., 2026; Spears et al., 2021), the forecast magnitude and forecast uncertainty are not structurally constrained to covariate; in ranking settings, they are.
+4.2.3 Empirical Consequences
+Table 5 confirms the economic impact. In the gated shadow portfolio (binary gate at ), inverse- sizing (Variant 4: residualized-) and uncertainty-adjusted sorting (Variant 3: Liu et al. UA Sort with , calibrated on DEV) both underperform simple volatility-based sizing, despite using a more informative uncertainty signal.
+Liu et al. (2026)’s UA Sort, which achieves substantial Sharpe improvements in their return-prediction setting, produces an optimal of only 0.05 in our ranking system (calibrated on DEV via grid search)—effectively zero. The uncertainty adjustment is absorbed by the existing score structure because the information content of is already embedded in the extreme-rank positions.
+4.3 Two-Level Deployment Architecture
+The structural coupling motivates an architectural separation: rather than using uncertainty for continuous position sizing, we deploy it at two discrete levels that address qualitatively distinct failure modes.
+4.3.1 Level 1: Strategy-Level Regime Gate
+Motivation.
+Diagnostic D establishes that per-stock cannot detect regime-level model failure: aggregated per-stock uncertainty (median, 90th percentile, cross-sectional spread of ) achieves AUROC for predicting whether the model will have a positive-RankIC day—no better than random. This is by design: measures cross-sectional variation in prediction quality, while regime failure is a latent variable that affects all stocks uniformly. A separate per-date signal is required.
+Binary target and evaluation alignment.
+We define a good day as
+where matured_RankIC at date is computed from a PIT-safe stream of realized RankIC values whose underlying -day forward returns have fully matured (a structural -day lag at horizon ). All candidate regime predictors are date-level aggregates (mean across stocks on each date) aligned by as-of date. To keep the AUROC direction consistent (higher predictor higher probability of a good day), we apply the same sign conventions as the implementation: , , and . Any residual missing values are filled with zero prior to roc_auc_score. Early warm-up dates without a defined health signal are dropped (59 dates in ALL; none in FINAL).
+Construction.
+The regime-trust gate is derived from a health index that combines three PIT-safe signals:
+(i) Realized efficacy : an exponentially weighted moving average (halflife , ) of matured daily RankIC values. At date , only RankIC values from date (i.e., predictions whose returns have fully matured) are used, imposing a structural -day lag (20 trading days at the 20d horizon). This is the only fully honest realized-efficacy measure—no future information contaminates the signal.
+(ii) Feature and score drift : a real-time (zero-lag) composite of three sub-signals: (a) mean absolute z-score of key features (vol_20d, mom_1m, adv_20d, vix_percentile_252d, market_vol_21d, vol_60d) relative to their trailing 252-day means, (b) the Kolmogorov–Smirnov statistic of today’s score distribution versus a trailing 60-day reference, and (c) mean pairwise return correlation over the trailing 20 days (a proxy for cross-sectional separability). Combined as .
+(iii) Cross-expert disagreement : the Spearman rank correlation between the primary model (LGB) and an alternative model (Rank Average 2) on the same date. Low correlation signals potential regime boundaries. If only one model is available, score dispersion relative to its expanding mean serves as a fallback proxy.
+These are combined via expanding z-scores:
+where is the logistic sigmoid and clamps the output to . is the dominant component by design; drift and disagreement provide supplementary adjustment (-only AUROC vs. combined AUROC ).
+Deployment rule.
+is applied as a binary gate:
+If inactive, the strategy holds zero exposure (cash). The threshold is selected on DEV to maximize precision at a reasonable abstention rate. Binary abstention outperforms continuous scaling () because continuous throttling destroys recovery convexity: the strategy stays partially “off” during rebounds following regime failures, compressing realized Sharpe. This finding is consistent with Nystrup et al. (2017)’s observation that excessively frequent regime-switching hurts portfolio outcomes.
+Regime-gate classifier performance.
+Table 6 summarizes the regime-trust classification results. In the FINAL holdout, common volatility proxies are weak or unstable: VIX percentile is effectively random (AUROC ) and mean stock volatility reverses sign (AUROC ), while and retain strong discrimination.
+At the operating point, the gate achieves 80% precision (when the system decides to trade, 80% of those days have positive matured RankIC), 64% recall, and 47% abstention rate. The confusion matrix over the full walk-forward sample yields 937 true positives and 234 false positives out of 1,171 active days, with 520 true negatives and 527 false negatives. The bucket analysis exhibits perfect monotonicity (Spearman ): the lowest- bucket has mean RankIC with 51% bad days, while the highest- bucket has mean RankIC with only 12% bad days.
+Multi-crisis validation.
+To confirm that is not overfit to the 2024 episode, we evaluate its behavior across five distinct stress episodes and three calm reference periods spanning 2016–2025, using only pre-existing frozen outputs (no retraining). We compare against a VIX-percentile-based gate (abstain if VIX exceeds the 67th rolling-252-day percentile on of window days). Results appear in Section 6.3.3.
+4.3.2 Level 2: Position-Level -Cap (Tail-Risk Guard)
+Within active trading days (when ), the structural coupling prevents from being used as a sizing denominator. However, retains value as a discrete tail-risk guard. We implement a percentile-based cap using the deployable epistemic signal :
+where is the volatility-sized weight, is the cap percentile (85th, calibrated on DEV), and is the cap weight (i.e., a 30% weight reduction). This caps the top 15% most uncertain stocks by on each date, leaving the remaining 85% untouched.
+Why PIT-safe is required for the cap.
+The cap threshold is cross-sectional and therefore sensitive to shifts and kinks in the distribution of across dates. Any look-ahead in the aleatoric floor would leak into the magnitude of and hence into whether a name falls above the cutoff. For this reason, all cap results use (Equation 10), i.e., a PIT-safe .
+The -cap operates as a selective-prediction mechanism within the accepted portfolio (Chaudhuri and Lopez-Paz, 2023): predictions in the extreme tail of predicted epistemic uncertainty receive reduced capital allocation, implementing a form of “soft abstention” at the position level. Crucially, this avoids the structural coupling problem because it does not continuously modulate all weights by —it applies a discrete filter only to the tail, where the coupling between and signal strength is most extreme.
+4.4 The Combined System
+The recommended deployment system combines three layers:
+-
+1.
+Strategy gate (Section 4.3.1): If , hold cash. No exposure.
+-
+2.
+Volatility sizing: When active, compute , where is calibrated on DEV such that the median weight . Select top-10/bottom-10 by sized score for the long/short legs.
+-
+3.
+Tail-risk cap (Section 4.3.2): Within the selected portfolio, reduce weight by 30% for stocks above the 85th percentile of on that date.
+This architecture separates two qualitatively distinct risk-management questions:
+The key architectural insight—supported by Diagnostic D and the aggregated- AUROC analysis—is that these levels are not redundant. Per-stock uncertainty cannot substitute for strategy-level monitoring (aggregated AUROC for regime detection), and strategy-level monitoring cannot identify which individual positions are most error-prone (it applies uniformly to all stocks). The two levels address orthogonal failure modes and must be implemented independently.
+4.5 Deployment Policy Variants
+We evaluate seven deployment configurations, all sharing the binary gate and differing only in per-stock sizing within active days:
+-
+1.
+Gate + Raw: Equal-weight top-10/bottom-10 by raw score. Tests the gate alone.
+-
+2.
+Gate + Vol: Volatility-sized score selection (). The Chapter 12 heuristic benchmark.
+-
+3.
+Gate + UA Sort (Liu et al. (2026)): Uncertainty-adjusted sorting where longs are selected by and shorts by , with calibrated on DEV.
+-
+4.
+Gate + Resid-: Residualize on via OLS to remove the structural coupling, then size inversely by the residual (following Hentschel (2025)).
+-
+5.
+Gate + -Cap: Cap the top 10% (90th percentile) most uncertain stocks to 50% weight.
+-
+6.
+Gate + Vol + -Cap: Combine volatility sizing with the -cap at the 85th percentile with .
+-
+K4.
+Trail-IC (kill baseline): Replace with a trailing RankIC-based continuous sizing signal. Tests whether a continuous IC-based weight adds value beyond the binary gate.
+All hyperparameters (, , cap percentile , cap weight , ) are fitted on DEV data only and frozen for FINAL evaluation. The kill baseline K4 is included as an honesty check: if trailing-IC sizing merely replicates the binary gate, it confirms that the gate’s value is in the discrete decision rather than in continuous exposure modulation.
+4.6 Conformal Prediction Intervals
+As a complementary output, we produce calibrated prediction intervals for rank displacement using split conformal prediction (Vovk et al., 2005) with DEUP-normalized nonconformity scores, following the motivation of Plassier et al. (2025). Three variants are compared:
+For each prediction at date , the calibration quantile is computed from a rolling 60-trading-day window of past nonconformity scores (strictly before ), and the prediction interval width is , where the normalizer is 1 (raw), vol_20d (vol), or (DEUP). Nominal coverage is 90%.
+The critical evaluation metric is conditional coverage by tercile: standard conformal produces 98.2% coverage for low- stocks but only 78.0% for high- stocks (a 20.2 percentage-point spread). DEUP-normalized conformal using reduces the coverage dispersion across terciles from 2.0 percentage points to 0.8 percentage points (89.6%, 90.4%, 89.8% across terciles), while simultaneously producing narrower intervals (mean width 0.647 vs. 0.675 for raw). This validates the Plassier et al. (2025) motivation that normalizing nonconformity scores by predicted uncertainty approximates conditional validity. For completeness, we also report a sensitivity check replacing with the oracle variant to illustrate the (non-deployable) upper bound on conditioning quality under perfect same-date calibration.
+5 Experiments
+5.1 Experimental Design and Data Splits
+Walk-forward evaluation.
+All models—the base LightGBM ranker, the DEUP error predictor , and the aleatoric estimator —are trained in an expanding-window walk-forward configuration over 109 chronological folds spanning February 2016 through February 2025 (2,277 trading dates). For each fold , training uses all data from folds through with a 90-trading-day embargo between the most recent training label maturation date and the earliest prediction date in fold . Overlapping labels are purged. The error predictor requires a minimum of 20 training folds, yielding 89 prediction folds (folds 21–109) and 161,863 stock-level predictions per horizon.
+DEV/FINAL holdout protocol.
+Results are reported under a strict two-stage temporal holdout:
+-
+•
+DEV (2016–2023, 95 months): all hyperparameter tuning, threshold selection, and calibration are performed exclusively on DEV.
+-
+•
+FINAL (2024 onward, 14 months): evaluated exactly once with all parameters frozen from DEV. No re-tuning, threshold adjustment, or model iteration is permitted.
+The walk-forward structure ensures each prediction is out-of-sample relative to its fold-specific training set; the DEV/FINAL split adds an end-to-end temporal holdout to guard against implicit overfitting through repeated experimentation. The FINAL period is of particular interest because it coincides with an AI-driven thematic rally and sector rotation that breaks the LightGBM signal at longer horizons (60d, 90d RankIC turns negative) and weakens 20d signal quality (mean RankIC , DEV FINAL).
+Horizons.
+Three forward-return horizons are evaluated: trading days. The primary deployment horizon is d, which retains weak but positive signal quality in FINAL; the longer horizons provide robustness diagnostics and stress tests.
+Universe characteristics.
+The investable universe is a dynamic panel of up to 100 AI-exposed U.S. equities, filtered at each rebalance date by price (), average daily dollar volume (M), and membership in a fixed AI-themed ticker list. The realized universe size varies: mean (ALL), 81.8 (DEV), 98.4 (FINAL), reflecting that by 2024 nearly all candidate names have listed and pass tradability thresholds.
+5.2 Evaluation Metrics
+We evaluate the system at three levels: signal quality, regime classification, and portfolio economics.
+Signal quality.
+Cross-sectional signal quality is measured by the Spearman rank information coefficient (RankIC, Equation 1), computed per date and reported as mean, median, and IC stability (mean/std). Per-stock uncertainty quality is measured by : the Spearman correlation between the epistemic signal and realized rank displacement, computed cross-sectionally per date and averaged. Quintile monotonicity—whether sorting stocks by produces strictly increasing mean rank loss—is reported as a pass/fail diagnostic.
+Gate classification.
+The regime-trust gate is evaluated as a binary classifier for the target , where matured RankIC incorporates a structural -day lag (Section 4.3.1). We report:
+-
+•
+AUROC: area under the receiver operating characteristic curve, measuring discrimination between good and bad model days.
+-
+•
+Precision at operating point: fraction of active days (when ) that are true good days.
+-
+•
+Recall: fraction of good days on which the gate is active.
+-
+•
+Abstention rate: fraction of all trading dates on which and the strategy holds cash.
+Bucket monotonicity (Spearman between -quantile and mean RankIC) provides a calibration check.
+Portfolio economics.
+Shadow portfolios are constructed as described in Section 3.4: non-overlapping 20-trading-day rebalances, top-10 long / bottom-10 short, 10 basis points turnover-based cost per rebalance. We report annualized Sharpe ratio (), maximum drawdown, and—for gated variants—crisis-period maximum drawdown computed on the same non-overlapping monthly return series (Mar–Jul 2024).. Gated portfolios earn zero return on abstention dates; reported Sharpe ratios therefore reflect both the quality of active-day returns and the cost of abstention, and are not directly comparable to ungated baselines.
+5.3 Baselines and Policy Variants
+Market-regime baselines.
+To assess whether standard market-stress proxies can substitute for the model-specific regime gate, we evaluate three heuristic predictors of model failure: (i) , (ii) (trailing 21-day realized market volatility, sign-flipped), and (iii) (cross-sectional mean of per-stock 20-day volatility, sign-flipped). All are evaluated using AUROC against the same good-day target as .
+Aggregated- baselines.
+To test whether per-stock uncertainty can substitute for strategy-level gating, we evaluate aggregated per-stock as a date-level predictor of model failure. Specifically, we compute the cross-sectional median, 90th percentile, and interquartile range of on each date, and evaluate each as a classifier (AUROC) for good-day prediction.
+Per-stock uncertainty baselines.
+is compared against four heuristic per-stock signals for predicting rank displacement: vol_20d, VIX percentile, , and raw . We report Spearman with realized rank loss in both ALL and FINAL periods (Table 4).
+Deployment policy variants.
+Seven deployment configurations are evaluated, all sharing the binary gate and differing only in position-level sizing within active days (Section 4.5):
+-
+1.
+Gate + Raw (equal-weight, tests gate alone)
+-
+2.
+Gate + Vol (volatility-sized; benchmark from prior work)
+-
+3.
+Gate + UA Sort (Liu et al., 2026) (, calibrated on DEV via grid search over )
+-
+4.
+Gate + Resid- (residualized on per date via OLS; calibrated on DEV)
+-
+5.
+Gate + -Cap (cap top 10% by to 50% weight)
+-
+6.
+Gate + Vol + -Cap (volatility sizing plus cap at 85th percentile, )
+-
+K4.
+Trail-IC (continuous trailing-RankIC sizing; kill baseline to confirm binary gate sufficiency)
+Ungated references (raw scores and vol-sized, without the gate) are included to quantify the gate’s contribution. All hyperparameters are fitted on DEV and frozen for FINAL evaluation.
+5.4 Ablations and Stress Tests
+We evaluate robustness through five categories of ablation.
+(i) Gate component ablation.
+To assess the marginal contribution of drift and disagreement signals, we compare: (a) -only (realized efficacy alone, removing and from Equation 12), (b) the full composite , and (c) each market-regime proxy in isolation. This tests whether the supplementary signals in provide meaningful lift beyond the dominant realized-efficacy component.
+(ii) Gate threshold sensitivity.
+The binary threshold is evaluated via a -bucket analysis: we partition dates into quantiles by value and report mean RankIC and fraction of bad days per bucket. This reveals whether the threshold sits at a natural breakpoint in the precision–abstention tradeoff or is sensitive to the specific cutoff. We additionally report the confusion matrix at (true positives, false positives, true negatives, false negatives) and the Spearman rank correlation of bucket-level RankIC with bucket index.
+(iii) -Cap percentile and weight sweep.
+The -Cap in Variant 6 uses cap percentile and cap weight , both calibrated on DEV. To assess sensitivity, we compare against an alternative parameterization (Variant 5: , ) and report the incremental Sharpe improvement of adding the -Cap layer on top of Gate + Vol across both configurations. The primary question is whether the tail-risk guard concept is robust to the exact percentile choice or is an artifact of a single calibration point.
+(iv) Multi-crisis window validation.
+The regime-trust gate could be overfit to the 2024 AI rotation episode, the only regime failure in the FINAL holdout. To test generalization, we evaluate across five crisis episodes and three calm reference periods spanning the full 2016–2025 walk-forward sample (Section 4.3.1): COVID recovery (Jun–Dec 2020), meme mania (Jan–Sep 2021), inflation shock (Jan–Jun 2022), late rate hiking (Jul–Dec 2023), and AI rotation (Mar–Jul 2024); calm references are full-year 2018, full-year 2019, and H1 2023. All statistics are computed from frozen walk-forward outputs with no retraining or recalibration. A VIX-percentile gate (abstain if VIX exceeds the 67th rolling-252-day percentile on of window days) serves as the head-to-head comparison. Verdicts are assigned by comparing the gate’s action (active or abstain) against the sign of mean realized RankIC in each window.
+(v) Cross-model robustness (Rank Average 2).
+To confirm that the DEUP framework is not an artifact of the LightGBM architecture, we replicate the full pipeline on a second base model—Rank Average 2 (RA2), an ensemble of LightGBM and FinText-TSFM signals. We compare across base models, verify that the structural coupling persists, and evaluate shadow portfolio performance under the same deployment policy variants to test whether the recommended system (Gate + Vol + -Cap) transfers across model architectures.
+6 Results
+We organize results by the three principal claims, followed by supplementary evidence from conformal prediction intervals.
+6.1 Claim 1: DEUP Ranks Stock-Level Failure Risk
+Quintile monotonicity.
+The strongest validation of as a per-stock error signal is quintile monotonicity: stocks sorted into quintiles by predicted epistemic uncertainty should exhibit monotonically increasing realized rank loss. Table 8 reports results at the 20d primary horizon for both DEV and FINAL periods, as well as at 90d for cross-horizon confirmation.
+The Q5/Q1 rank-loss ratio increases from 1.51 to 1.69 at 20d and from 1.53 to 1.88 at 90d between DEV and FINAL, indicating that the epistemic signal generalizes to the out-of-sample regime shift with improved discriminative power. This is the opposite of the overfitting pattern one would expect from a spurious signal.
+Correlation with realized rank loss.
+Table 9 reports the Spearman correlation between and realized rank displacement across periods and horizons.
+The increase from DEV to FINAL at all horizons suggests that becomes more informative when the base model’s prediction environment shifts—precisely the setting where uncertainty estimates are most needed.
+AUROC for high-loss events.
+At the stock level, achieves AUROC 0.56–0.61 for predicting above-median rank loss across horizons and periods (20d FINAL: 0.583; 90d FINAL: 0.609). These values indicate moderate but genuine discriminative power for identifying individual high-error predictions.
+Baseline dominance.
+Table 4 (reported in Section 4) establishes that and dominate heuristic baselines by – in correlation with rank loss. The dominance widens in FINAL: vol_20d and VIX percentile lose essentially all predictive power (), while improves. This differential robustness under regime shift is the core practical argument for learned uncertainty over volatility-based heuristics.
+Stability across conditioning cuts.
+The –rank-loss correlation is positive under all tested subpopulations: pre-2020 vs. post-2020 ( vs. at 20d), low-VIX vs. high-VIX ( vs. ), and low-volatility vs. high-volatility stocks ( vs. ). The signal is not an artifact of a single market regime or stock characteristic.
+Disentanglement from volatility.
+After OLS residualization of on vol_20d, vol_60d, vix_percentile_252d, and mom_1m, the residualized signal retains – with rank loss across all horizons. The maximum absolute correlation between and VIX percentile is 0.074. is not repackaged volatility.
+6.2 Claim 2: Structural Coupling Breaks Inverse Sizing
+The coupling is pervasive.
+Across 1,865 walk-forward trading dates, the cross-sectional Spearman correlation has a median of 0.616, with positive values on more than 90% of dates. This is not an occasional artifact: the coupling between epistemic uncertainty and signal magnitude is a persistent structural feature of cross-sectional ranking.
+Inverse-sizing variants underperform.
+Table 5 (Section 4.2) reports the deployment policy comparison. The three variants that use as a continuous sizing input all underperform the simple Gate + Vol benchmark:
+-
+•
+Gate + UA Sort (Variant 3, ): ALL Sharpe 0.726 vs. 0.817 for Gate + Vol. The optimal calibrated on DEV is effectively zero, confirming that the uncertainty adjustment is absorbed by the existing score structure.
+-
+•
+Gate + Resid- (Variant 4): ALL Sharpe 0.810 vs. 0.817; FINAL Sharpe vs. . Residualizing on removes the coupling statistically, but the resulting signal is too noisy for continuous monthly sizing.
+-
+•
+Kill baseline K4 (Trail-IC): ALL Sharpe 0.754, matching Gate + Raw (0.758). Continuous trailing-IC sizing adds nothing beyond the binary gate decision.
+Deployability ablation (oracle vs. PIT-safe ).
+Because our position-level policy uses only through cross-sectional percentiles (the P85 cap threshold), it is essential to verify that deployment-facing results do not rely on a hindsight . Table 10 reports the required ablation for the best policy (Gate + Vol + -Cap) under (same-date ) versus a strictly PIT-safe constructed from matured losses (rolling with ). Performance is identical across ALL/DEV/FINAL and Crisis MaxDD (computed on the same non-overlapping monthly series). This is not a null result: it establishes that the cap policy is deployment-ready by construction. The mechanism is that enters as a date-level constant; within each date, preserves the ordering of and therefore selects the same capped tail under either or .111Empirically, the within-date Spearman correlation is for every date in the sample, and the set of names above the P85 threshold is identical.
+The tail-risk cap resolves the dilemma.
+In contrast to continuous sizing, the discrete -Cap (Variant 6: Gate + Vol + -Cap at P85, ) achieves the highest Sharpe across all periods. Importantly, the deployment-facing version of this policy is computed using PIT-safe and matches the oracle variant exactly (Table 10). By capping only the top 15% most uncertain positions rather than modulating all weights, the tail-risk guard avoids the structural coupling while still extracting economic value from . An alternative parameterization (Variant 5: P90, ) also improves over Gate + Vol (ALL 0.855, FINAL ), confirming that the concept is robust to exact calibration.
+Cross-model confirmation.
+The structural coupling persists for Rank Average 2: RA2’s -sizing also underperforms RA2 raw (ALL Sharpe 0.430 vs. 0.622), confirming that the coupling is a property of cross-sectional ranking geometry, not an artifact of the LightGBM base model.
+6.3 Claim 3: Two-Level Deployment Improves Robustness
+6.3.1 Strategy-Level Gate: Regime-Trust Classification
+AUROC comparison.
+Table 11 extends the gate classification results with full ALL and FINAL coverage for all candidate predictors (; ; positive rate 66.0% ALL, 56.0% FINAL).
+VIX percentile is effectively random in FINAL (AUROC 0.504); mean stock volatility reverses sign (AUROC 0.460, below chance). In contrast, achieves its highest AUROC in the holdout (0.750 vs. 0.721 ALL), exactly the generalization pattern needed to justify deployment. The realized-efficacy-only variant () achieves AUROC 0.715, confirming that the drift and disagreement components provide a modest supplementary contribution ().
+Operating point and confusion matrix.
+At the threshold, the gate achieves 80.0% precision, 64.0% recall, and 47.2% abstention rate. The confusion matrix over the walk-forward sample yields 937 true positives, 234 false positives, 527 false negatives, and 520 true negatives out of 2,218 evaluated dates (59 early warm-up dates dropped).
+Bucket monotonicity.
+-value buckets exhibit perfect calibration monotonicity (Spearman ):
+The lowest bucket has mean RankIC with a near-coinflip bad-day rate (51.2%), while the highest bucket has mean RankIC with only 11.5% bad days—a reduction in failure frequency.
+Per-stock cannot substitute for strategy-level gating.
+Aggregated per-stock uncertainty (cross-sectional median, 90th percentile, or IQR of ) achieves AUROC for the good-day classification target—no better than random. This confirms the architectural separation: per-stock measures within-date heterogeneity in prediction quality, while regime failure is a latent variable that shifts all stocks uniformly.
+6.3.2 Combined Deployment Policy
+Policy comparison.
+Table 5 (Section 4.2) reports the full deployment policy comparison. The key result is that the best deployment policy is Gate + Vol + -Cap (Variant 6). For deployment-facing uses of magnitude, we evaluate the policy under a PIT-safe (rolling matured-loss baseline), and report the oracle-vs-deployable ablation in Table 10. In this architecture, the PIT-safe version matches the oracle exactly; therefore the headline policy performance is deployable without adjustment.
+Binary vs. continuous gating.
+Binary abstention (: trade or hold cash) outperforms continuous scaling () because continuous throttling destroys recovery convexity: during regime transitions, the strategy stays partially “off” during rebounds, compressing realized returns. The kill baseline K4 (continuous trailing-IC sizing) confirms this: its Sharpe (0.754) matches the simple Gate + Raw baseline (0.758) and adds no value beyond the binary decision.
+6.3.3 Multi-Crisis Validation
+Table 13 reports behavior across five crisis episodes and three calm reference periods, compared against a VIX-percentile gate. All statistics use frozen walk-forward outputs with no retraining.
+’s advantage over VIX is concentrated in the calm periods: the VIX gate produces three false alarms in 2019, 2023 H1, and 2023 H2—precisely the windows where the model performs best (IC to )—because VIX percentile was elevated despite the model working well. correctly stays active in all three windows because it tracks model efficacy, not market anxiety.
+’s single failure is mild: during the 2021 meme mania, mean (barely above the 0.2 threshold for the window average), the abstention rate was already 73% (heavy throttling), and mean IC was only marginally negative (). VIX correctly abstained in this window—but for the wrong reason (elevated implied volatility from retail-driven dislocations, not direct detection of model failure).
+6.3.4 Cross-Model Robustness (Rank Average 2)
+Replicating the DEUP pipeline on Rank Average 2 yields with at 20d ALL (vs. 0.144 for LGB, a 35% improvement) and 0.153 at 60d (vs. 0.106, a 44% improvement). A more robust base model produces a more predictive epistemic uncertainty signal, validating that DEUP quality responds to base-model calibration rather than being a fixed artifact of the training features.
+Despite higher uncertainty quality, RA2’s shadow portfolio Sharpe is substantially lower (ALL 0.622 vs. 1.497 for LGB raw scores), reflecting RA2’s weaker base signal (DEV median RankIC 0.059 vs. 0.091). However, once the gate is applied, RA2 and LGB converge: gated-vol-sized FINAL Sharpe is 0.958 (RA2) vs. 1.017 (LGB). The regime gate is the dominant value driver for both models, and the -sizing structural conflict is confirmed model-agnostic (RA2 -sizing ALL Sharpe 0.430 vs. RA2 raw 0.622).
+6.4 Supplementary: Conformal Prediction Intervals
+DEUP-normalized conformal prediction intervals validate as a calibrated uncertainty measure, independent of the portfolio application. Because conformal scaling uses the magnitude of as a normalizer, deployment requires a PIT-safe . Table 14 therefore reports raw conformal alongside DEUP-normalized conformal under both an oracle (same-date ) and PIT-safe constructed from matured losses with trailing windows .
+Raw conformal provides 98.19% coverage for low- stocks—substantially more than the nominal 90%—but only 78.11% for high- stocks, a 20.08 percentage-point disparity. DEUP normalization substantially reduces conditional miscalibration. Under the oracle , tercile coverages are nearly equalized (0.94 pp spread), whereas the PIT-safe variants retain a smaller but non-trivial residual spread (4.20–4.61 pp). This degradation from oracle to PIT-safe is expected: the trailing matured-loss is smoother than the same-date , compressing cross-sectional dispersion in and therefore weakening the degree to which normalization can equalize conditional coverage across terciles. Despite this, both PIT-safe variants maintain excellent marginal coverage near the 90% nominal target (0.898–0.905 across DEV/FINAL) and produce slightly narrower mean widths than the oracle-normalized intervals.
+At 90d, the same qualitative pattern holds: raw conformal exhibits a large conditional disparity, while DEUP-normalized conformal reduces it substantially, with the oracle variant providing the strongest conditional equalization and the PIT-safe variant retaining most of the gain.
+7 Discussion
+7.1 Why Market-Regime Baselines Fail, and Why They Reverse in the Holdout
+The poor performance of VIX percentile, market volatility, and mean stock volatility as regime-trust predictors (Table 11) is not merely a matter of low signal strength; in FINAL, two of the three baselines reverse sign. Mean stock volatility drops to AUROC 0.460—below chance—meaning that higher average stock volatility in the AI universe actually predicts better model days in 2024, the opposite of the DEV-period relationship. VIX percentile reaches 0.504, indistinguishable from a coin flip.
+The reversal has a concrete economic explanation. The 2024 regime failure is driven by a thematic rotation within the AI-exposed equity universe—sector leadership shifts that disrupt the cross-sectional factor structure the model relies on—rather than by a market-wide stress event. During this period, VIX percentile was elevated (mean 95.1% in the AI-rotation window) and individual-stock volatility was high, yet these reflect healthy dispersion in a strongly trending sector, not the kind of “stress” that hurts cross-sectional models. Conversely, during 2023 H1 and 2023 H2, VIX percentile exceeded the 94th percentile on average, yet the model produced its strongest signal quality (IC and , respectively). The VIX gate would have abstained during both windows—a costly false alarm.
+The fundamental issue is that market-stress proxies measure the environment’s difficulty for a generic investor, while model failure depends on whether this specific model’s factor loadings remain informative. Feature importance analysis confirms this distinction: the LightGBM ranker relies consistently on the same three features (momentum and volume signals) across all regimes. The 2024 failure occurs not because the model overfits to noise, but because the factor structure itself becomes temporarily uninformative during thematic rotations. No amount of VIX monitoring can detect this; only direct observation of the model’s realized efficacy can.
+7.2 Why the Gate’s Advantage Widens in the Holdout
+achieves higher AUROC in FINAL (0.750) than in ALL (0.721), a pattern that initially seems counterintuitive—one might expect a signal constructed from DEV-period data to degrade out of sample. Two mechanisms explain the improvement.
+First, the FINAL period contains a more extreme regime failure (20d mean RankIC , down from 0.072 in DEV), which produces a larger separation between good and bad days. A classifier with moderate discriminative power benefits from wider class separation: the “easy” classification instances (clearly good days with IC ; clearly bad days with IC ) become more prevalent relative to ambiguous cases near IC .
+Second, —the dominant gate component—is an EWMA of matured RankIC with a structural 20-day lag. During gradual regime transitions, the lagged signal tracks the shift with a delay but eventually catches up. The 2024 regime failure is sufficiently persistent (March through July) that the EWMA converges to a low state well before the worst months, enabling correct abstention from May onward. In contrast, the baselines (VIX, market volatility) respond to contemporaneous market conditions that happen to be poorly correlated with model failure in 2024. The gate’s advantage is that it measures the right quantity—model efficacy—even if it does so with a delay.
+The drift and disagreement components (, ) provide only a modest supplementary contribution ( AUROC over alone). This is reassuring for deployment: the gate’s value is concentrated in the simple, interpretable realized-efficacy signal rather than in complex feature-engineering that might overfit.
+7.3 Why the Tail-Risk Cap Succeeds Where Inverse Sizing Fails
+The structural coupling () creates a fundamental tension for any continuous sizing rule that uses as a denominator: the stocks with the highest predicted uncertainty are precisely those with the strongest model scores—the positions that contribute most to the long–short spread. Inverse-uncertainty sizing resolves this tension in the wrong direction, systematically de-levering the portfolio’s highest-conviction ideas.
+Residualizing on (Variant 4) addresses the coupling statistically—after OLS projection, the residual has zero linear correlation with score magnitude—but does not resolve the economic problem. The residualized signal captures “excess uncertainty beyond what is expected for this score level,” which is a coherent concept, but is empirically too noisy for monthly position sizing. The FINAL Sharpe of confirms that residualization introduces more noise than it removes coupling.
+The -Cap succeeds because it sidesteps the coupling entirely. By applying a discrete weight reduction only to the top 15% of the distribution, it leaves 85% of positions—including most high-conviction extreme-rank stocks—untouched. The cap targets the intersection of high uncertainty and portfolio membership: stocks that are both in the top/bottom 10 and in the extreme tail of . These are the positions where the model has the weakest justification for its extreme ranking, and where a 30% weight reduction provides genuine tail-risk protection without wholesale degradation of the score-tail convexity that drives portfolio returns.
+The robustness of this concept across two parameterizations (Variant 5: P90/; Variant 6: P85/) and two base models (LGB and RA2) suggests that the tail-risk guard is not an artifact of a single calibration point. It reflects a stable property of the distribution: the extreme right tail genuinely identifies the most error-prone positions within the portfolio, and a discrete intervention at that tail is the economically appropriate action.
+7.4 Practical Deployment Considerations
+This system as an “expert” inside a multi-expert allocator.
+We view the AI Stock Forecaster as one expert among several alpha sources inside a broader expert-selection layer. In that setting, the objective of this paper is not to maximize the standalone Sharpe of a single expert, but to make its deployment selective and fail-safe: when the expert is likely to be informative, it should express its signal; when it is likely to be unreliable, it should either abstain (zero exposure) or have its highest-risk positions clipped. The regime gate is therefore interpretable as an expert-level trust score that can feed an allocator (e.g., winner-take-most, softmax over experts, or a constrained risk-budgeting layer), while the per-stock -Cap is a within-expert tail-risk guard that reduces blowups without destroying convexity.
+Monitoring and recalibration.
+The deployment system requires monitoring of two quantities: at the strategy level and the distribution of at the position level. can be computed daily from matured RankIC values (available with a -day structural lag) plus real-time drift and disagreement signals. In production, we recommend logging the three components separately to diagnose whether a gate closure is driven by realized IC decay (the dominant case) or by feature/score drift (a potential early warning). If drift triggers precede IC decay consistently, the drift component’s weight () could be increased; if not, a simplified -only gate (AUROC 0.715) is operationally sufficient.
+Gate threshold selection.
+The threshold was selected on DEV to maximize precision at a reasonable abstention rate. The bucket analysis (Table 12) indicates that this threshold sits at a natural breakpoint: below , mean RankIC is approximately zero with a 51% bad-day rate, while above the bad-day rate drops to 34% and continues improving monotonically. A practitioner operating under tighter risk constraints could raise the threshold (e.g., ) to achieve higher precision at the cost of greater abstention and reduced opportunity. The monotonic bucket structure means that any threshold in produces a meaningful improvement over unfiltered deployment; the specific choice is a precision–opportunity tradeoff rather than a fragile calibration point.
+Avoiding hindsight in : explicit critique, deployable rerun, and boundary.
+A legitimate critique of the original formulation is that the aleatoric floor uses same-date realized losses and is therefore an oracle quantity. To address this, we re-ran all operational uses of with a strictly PIT-safe estimator computed from matured losses only (rolling with , and additionally for robustness).
+The results split cleanly into two cases. For the cap policy (Gate + Vol + -Cap), the oracle and PIT-safe variants are identical in performance (Table 10). This is expected: within a date, is a constant shift inside , so the cross-sectional ordering of equals the ordering of and the P85 cap selects the same tail regardless of whether is oracle or PIT-safe. This ablation is therefore a deployability guarantee: the best-performing policy does not rely on hindsight.
+For conformal prediction intervals, where is used as a magnitude normalizer, replacing with produces an expected degradation in conditional equalization (Table 14). The oracle normalizer yields a 0.94 pp tercile spread, whereas PIT-safe normalizers yield 4.20–4.61 pp spreads (still a improvement over raw). This drop is acceptable for two reasons: (i) PIT-safe variants retain excellent marginal validity near the 90% target across DEV and FINAL, and (ii) the degradation is a predictable consequence of smoothing in the trailing baseline, which compresses dispersion in and therefore reduces its ability to perfectly equalize conditional coverage.
+This establishes a clear boundary. Oracle is acceptable for diagnostics (e.g., understanding coupling mechanisms, sanity-checking whether tracks realized loss, and benchmarking the best-case conditional equalization). For policy actions—gating, sizing, caps, or any live risk control— is required. In our main deployment-relevant policy, the PIT-safe variant matches the oracle exactly, so the headline conclusions remain fully operational.
+When the system should not be trusted.
+The two-level architecture has a known failure mode: regime shifts that are too gradual or too brief for the EWMA-based to detect. The 2021 meme mania illustrates this: produced a window-average of 0.210 (barely above threshold) with 73% abstention—heavy throttling, but not full abstention. For regimes where model failure is mild (IC ) and intermittent, the gate provides incomplete protection. A complementary safeguard—for example, a maximum drawdown circuit breaker applied to the gated portfolio itself—would address this residual risk. Additionally, the -Cap’s 30% weight reduction is deliberately conservative; for strategies with higher concentration risk or less liquid names, more aggressive capping (e.g., full exclusion of P95 stocks) may be warranted.
+8 Limitations
+Single thematic universe.
+All experiments are conducted on a single investable universe: up to 100 AI-exposed U.S. equities filtered by price, liquidity, and membership in a fixed thematic ticker list. This universe is narrow by institutional standards (typical cross-sectional equity models cover 500–3,000 names), sector-concentrated (technology and AI-adjacent names dominate), and exhibits high average pairwise correlation during momentum-driven rallies. The structural coupling between and arises in part from the bounded rank-displacement geometry of cross-sectional ranking, which should generalize, but its magnitude () may differ in broader, more heterogeneous universes where extreme-rank stocks are drawn from diverse sectors with less correlated error profiles. Similarly, the regime-trust gate is validated against failures specific to AI-thematic rotations; whether it generalizes to other failure modes (e.g., liquidity crises, factor crowding in value/momentum universes) remains untested. External validation on at least one additional universe—ideally a broad U.S. equity cross-section—would be needed before drawing general conclusions about the two-level architecture.
+Sensitivity to the aleatoric baseline choice (deployability and recalibration).
+While the headline cap policy is robust to oracle vs. PIT-safe aleatoric floors in this setting, the scale of can still depend on the specific PIT-safe estimator (rolling window length , quantile level, and whether a rolling vs. expanding construction is used). This matters whenever is used in a magnitude-sensitive way (e.g., conformal normalisation, reporting absolute levels, or alternative deployment rules that use fixed thresholds rather than within-date percentiles), and it can also matter for tail-based policies in broader universes where distributional shape changes could shift percentile membership. We report results for rolling PIT-safe baselines with and an expanding-window alternative, but extensions to different universes, horizons, or holding periods may require re-calibration of , the chosen quantile, and cap hyperparameters.
+Warm-up, lag, and effective sample reduction.
+Both the regime gate and PIT-safe aleatoric estimation impose structural lags. The gate’s realized-efficacy component uses matured RankIC with a -day delay, and PIT-safe uses only matured losses; together these create warm-up periods in which quantities are undefined and dates are dropped (e.g., early-window drops for AUROC evaluation). Even when the full backtest spans 2016–2025, the effective sample for certain diagnostics and online-calibrated procedures is smaller and skewed away from the earliest dates. This is unavoidable for strict point-in-time evaluation, but it reduces statistical power for rare-event analysis and makes early-period estimates noisier.
+No delisting-return modeling.
+CRSP-style delisting returns are not modeled. When a security delists within the holding period and no exit price is available at , the label is silently dropped rather than replaced with a terminal delisting return. In this 100-name AI universe, the issue is empirically negligible: only one mid-sample delisting (ABB, a Swiss ADR that exited the U.S. market) affects 0.05% of evaluation rows. However, for broader universes—particularly those including small-cap or financially distressed names—omitting delisting returns would introduce survivorship bias that could inflate both RankIC and portfolio Sharpe estimates. Any extension of this framework to broader equity universes should incorporate explicit delisting-return handling.
+Inherent lag in the regime gate.
+The dominant component of is , an EWMA of matured RankIC values with a structural -day lag (20 trading days at the primary horizon). This means the gate cannot detect regime failure until approximately one month after it begins. The 2024 crisis timeline illustrates both the cost and the eventual benefit: in March 2024, remained at 0.495 (normal) while RankIC was already , so March losses were not avoided. By April, had dropped to 0.122, and by May the system was in full abstention (). For regime failures that are brief (e.g., a single bad month followed by recovery), the lagged gate may impose abstention after the damage is done and miss the subsequent rebound. The drift component is real-time and could in principle provide earlier warning, but its empirical contribution is modest ( AUROC over alone). Faster-reacting alternatives—for example, intraday score-distribution monitoring or real-time factor-exposure tracking—could reduce detection latency but would require careful validation to avoid increasing the false-alarm rate.
+Sensitivity to cost assumptions and rebalance cadence.
+The shadow portfolio applies a fixed 10 basis point turnover-based transaction cost per rebalance on a non-overlapping 20-trading-day cadence. Both choices are simplifications. First, actual trading costs vary by name, market conditions, and order size; in a concentrated 10-name long/short portfolio within a liquid AI-stock universe, 10 bps is plausible but may understate costs during high-volatility periods or for the least liquid constituents near the bottom of the universe. Second, the non-overlapping monthly rebalance ignores the possibility that more frequent rebalancing (e.g., weekly) could interact differently with the gate and -cap—higher turnover would amplify cost sensitivity and could change the relative ranking of policy variants. The “good day” classification target () is also a design choice; alternative thresholds (e.g., , or a cost-adjusted IC target) would shift the precision–abstention tradeoff and could alter the optimal gate threshold.
+Dependence on a second model for cross-expert disagreement.
+The component of the health index requires a second base model (Rank Average 2) to compute cross-expert Spearman correlation. When only one model is available, the implementation falls back to a score-dispersion proxy (the ratio of current-date score dispersion to its expanding mean), which is a weaker signal. In practice, many production systems operate with a single model, making the disagreement component unavailable. The empirical impact is limited—-only achieves AUROC 0.715 versus 0.721 for the full composite—but the marginal value of disagreement monitoring is untested in settings where it would matter most (e.g., slow-onset regime shifts where realized IC has not yet decayed but model agreement has broken down).
+Deployment policies evaluated primarily at d.
+The seven deployment policy variants and associated portfolio economics (Table 5) are evaluated exclusively at the 20d horizon, which is the primary deployment target. Signal quality (), quintile monotonicity, and baseline comparisons are reported at all three horizons (20d, 60d, 90d), but the policy ablation—which sizing rule to use, which cap percentile, and which gate threshold—has not been repeated at longer horizons. At 60d, the distribution is qualitatively different (85% of stocks have due to the per-stock quantile-regression aleatoric baseline), meaning that the P85 cap calibrated at 20d would not transfer directly. At 90d, the base signal inverts in FINAL (mean RankIC ), raising the question of whether any deployment policy can salvage a fundamentally broken signal. A complete treatment would require horizon-specific policy calibration and separate DEV/FINAL evaluation at each , which we leave to future work.
+9 Conclusion
+Cross-sectional equity rankers are typically deployed without uncertainty-aware safeguards, leaving practitioners exposed to regime failures that can silently invert a historically profitable signal. We studied this problem in the context of a specialist expert within a multi-strategy trading system: the AI Stock Forecaster, a LightGBM ranker over AI-exposed U.S. equities where a 2024 thematic rotation weakened 20d RankIC from 0.072 to 0.010 and inverted longer-horizon signals entirely. The narrow, thematic universe is by design—in a system of many specialist experts, each covering a distinct market niche, the relevant question is not whether any single expert is globally robust, but whether the system can detect when each expert should be trusted and when it should be sidelined.
+We adapted DEUP to cross-sectional ranking by training an error predictor on rank displacement, producing a per-stock epistemic signal that achieves perfect quintile monotonicity with realized rank loss in both development and holdout periods (Q5/Q1 ratio 1.69 at 20d FINAL), dominates volatility-based baselines by –, and improves its discriminative power under regime shift ( in FINAL vs. 0.142 in DEV). Critically, we documented a structural coupling between epistemic uncertainty and signal strength in ranking (median ), arising because extreme ranks—where the strongest trade ideas reside—also have the largest expected rank displacement. This coupling causes inverse-uncertainty sizing to systematically de-lever the portfolio’s highest-conviction positions, and the finding is model-agnostic, persisting across both LightGBM and an ensemble alternative.
+To resolve this, we proposed a two-level deployment architecture. At the strategy level, a regime-trust gate built from trailing realized model efficacy decides whether to trade (AUROC 0.75 in FINAL; 80% precision at 47% abstention; 7/8 correct verdicts across eight crisis and calm windows, versus 5/8 for a VIX-based gate). At the position level, a discrete epistemic tail-risk cap reduces exposure only for the top 15% most uncertain predictions, avoiding the structural coupling that defeats continuous sizing. The combined system—Gate + Vol + -Cap—achieves the best risk-adjusted performance across all evaluation periods (ALL Sharpe 0.884; FINAL Sharpe 0.316 vs. 0.191 for Gate + Vol alone). All deployment rules are implementable online; all operational results use a PIT-safe computed from matured losses.
+Three findings carry implications beyond this specific expert. First, per-stock uncertainty and strategy-level regime risk are orthogonal failure modes requiring independent signals: aggregated achieves AUROC for regime detection, confirming that one cannot substitute for the other. In a multi-expert system, this means each expert needs both a per-prediction uncertainty estimate (for position-level risk) and a per-date health monitor (for the meta-controller’s capital allocation decision). Second, the structural coupling between uncertainty and signal strength should be diagnosed in any cross-sectional ranking system before operationalizing uncertainty for sizing; the coupling is a geometric property of ranking loss, not an artifact of a particular model or universe, and it implies that the standard inverse-uncertainty sizing paradigm from the return-prediction literature does not transfer directly to ranking. Third, model-specific regime monitoring (“does this expert work right now?”) substantially outperforms market-regime proxies (“is the market stressed?”) for deployment decisions. In a system with many specialists, this distinction is especially consequential: a thematic rotation that breaks one expert may leave others unaffected, and only expert-specific monitoring can make that distinction.
+Looking forward, the per-expert gate and -Cap developed here provide the building blocks for system-level expert selection. The gate’s binary health verdict maps naturally to an upper-confidence-bound (UCB) framework in which the meta-controller compares -calibrated uncertainty across active experts: when one expert’s falls below threshold, capital can be reallocated to experts whose regime-trust signals remain high, rather than simply going to cash. The present work validates the per-expert components; the system-level integration—comparing across experts with different loss scales, learning switching costs, and managing portfolio-level risk across the full ensemble of specialists—is the natural next step.
+References
+- Barroso and Saxena (2021) Barroso, P. and Saxena, K. (2021). Lest we forget: Learn from out-of-sample forecast errors. Review of Financial Studies, 34(7), 3609–3647.
+- Chaudhuri and Lopez-Paz (2023) Chaudhuri, K. and Lopez-Paz, D. (2023). Selective prediction. Transactions on Machine Learning Research.
+- Chow (1970) Chow, C.K. (1970). On optimum recognition error and reject tradeoff. IEEE Transactions on Information Theory, 16(1), 41–46.
+- El-Yaniv and Wiener (2010) El-Yaniv, R. and Wiener, Y. (2010). On the foundations of noise-free selective classification. Journal of Machine Learning Research, 11, 1605–1641.
+- Franc et al. (2021) Franc, V., Prusa, D., and Voracek, V. (2021). Optimal strategies for reject option classifiers. JMLR, 24, 1–49.
+- Gal and Ghahramani (2016) Gal, Y. and Ghahramani, Z. (2016). Dropout as a Bayesian approximation: Representing model uncertainty in deep learning. In ICML.
+- Garlappi et al. (2007) Garlappi, L., Uppal, R., and Wang, T. (2007). Portfolio selection with parameter and model uncertainty: A multi-prior approach. Review of Financial Studies, 20(1), 41–81.
+- Geifman and El-Yaniv (2017) Geifman, Y. and El-Yaniv, R. (2017). Selective classification for deep neural networks. In NeurIPS.
+- Gibbs and Candès (2021) Gibbs, I. and Candès, E. (2021). Adaptive conformal inference under distribution shift. In NeurIPS.
+- Hamilton (1989) Hamilton, J.D. (1989). A new approach to the economic analysis of nonstationary time series and the business cycle. Econometrica, 57(2), 357–384.
+- Hentschel (2025) Hentschel, L. (2025). Contextual alpha: Emphasizing forecasts where they work best. Working paper.
+- Kotelevskii and Panov (2025) Kotelevskii, N. and Panov, M. (2025). From risk to uncertainty: A generalized framework for uncertainty quantification. In ICLR.
+- Lahlou et al. (2023) Lahlou, S., Jain, M., Neber, H., Ortiz-Jimenez, G., Hjelm, D., and Bengio, Y. (2023). DEUP: Direct epistemic uncertainty prediction. Transactions on Machine Learning Research.
+- Lakshminarayanan et al. (2017) Lakshminarayanan, B., Pritzel, A., and Blundell, C. (2017). Simple and scalable predictive uncertainty estimation using deep ensembles. In NeurIPS.
+- Liu et al. (2026) Liu, Y., Tao, X., and Yuan, Y. (2026). Uncertainty-adjusted sorting for asset pricing with machine learning. arXiv:2601.00593.
+- Mucsányi et al. (2024) Mucsányi, B., Kirchhof, M., Oh, S.J., and Berner, J. (2024). Benchmarking uncertainty disentanglement: Specialized uncertainties for specialized tasks. In NeurIPS.
+- Nystrup et al. (2017) Nystrup, P., Hansen, B.W., Madsen, H., and Lindström, E. (2017). Dynamic allocation or diversification: A regime-based approach to multiple assets. Journal of Portfolio Management, 44(2), 62–73.
+- Oprisor and Kwon (2021) Oprisor, R. and Kwon, R. (2021). Multi-period portfolio optimization with investor views under regime switching. Journal of Risk and Financial Management, 14(1), 3.
+- Plassier et al. (2025) Plassier, V., Makni, A., Rubashevskii, A., Moulines, E., and Panov, M. (2025). Probabilistic conformal prediction. In ICLR.
+- Pun et al. (2023) Pun, C.S., Zheng, Z., and Zhao, J. (2023). Reinforcement learning for regime-switching portfolio allocation. Quantitative Finance, 23(7–8), 1059–1078.
+- Rabanser (2025) Rabanser, S. (2025). Selective prediction: Methods and applications. PhD thesis, ETH Zurich.
+- Spears et al. (2021) Spears, T., Zohren, S., and Roberts, S. (2021). Investment sizing with deep learning prediction uncertainties for high-frequency Eurodollar futures trading. Journal of Financial Data Science, 3(1), 58–75.
+- Vovk et al. (2005) Vovk, V., Gammerman, A., and Shafer, G. (2005). Algorithmic Learning in a Random World. Springer.
+
+KAYNAK : https://arxiv.org/abs/2603.13252

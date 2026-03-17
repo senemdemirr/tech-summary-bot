@@ -1,0 +1,96 @@
+--- claude | Elevated errors on Claude Sonnet 4.6 | score=46.50 ---
+Mar
+16
+,
+16:35
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+16
+,
+15:35
+UTC
+Update
+- We are continuing to work on a fix for this issue. This is currently only impacting free Claude.ai users.
+Mar
+16
+,
+15:13
+UTC
+Update
+- We are continuing to work on a fix for this issue.
+Mar
+16
+,
+14:05
+UTC
+Update
+- We are continuing to work on a fix for this issue.
+Mar
+16
+,
+14:04
+UTC
+Update
+- We are continuing to work on a fix for this issue.
+Mar
+16
+,
+14:02
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+Mar
+16
+,
+14:02
+UTC
+Investigating
+- There's an elevated error rate for free tier users on Claude Sonnet 4.6. We are investigating
+
+KAYNAK : https://status.claude.com/incidents/0266tzhrb7rn
+
+--- claude | Elevated errors on Claude.ai | score=24.91 ---
+Mar
+16
+,
+12:36
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+16
+,
+12:27
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+16
+,
+12:01
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/t2m389x6k1tq
+
+--- claude | Elevated errors on Claude.ai | score=24.46 ---
+Mar
+16
+,
+14:21
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+16
+,
+13:56
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/81m3f5p97qkk
+
