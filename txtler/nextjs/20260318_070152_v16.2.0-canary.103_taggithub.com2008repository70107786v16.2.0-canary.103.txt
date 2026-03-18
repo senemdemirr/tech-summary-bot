@@ -1,4 +1,3 @@
---- nextjs | v16.2.0-canary.103 | score=72.47 ---
 Core Changes
 Error when accessing undefined root params in
 generateStaticParams
@@ -77,72 +76,3 @@ Huge thanks to
 for helping!
 
 KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.103
-
---- nextjs | v16.2.0-canary.102 | score=63.71 ---
-Core Changes
-docs(turbopack): Fix all warnings in
-cargo doc --no-deps --workspace
-, and run rustdoc as part of our CI checks:
-#91339
-Patch improvements into
-http-proxy
-lib:
-#91480
-Disallow Server Action submissions from privacy-sensitive contexts:
-#91478
-Fix startup warmup for empty-shell app route cache:
-#91470
-Fix
-unstable_catchError
-type inference for fallback props:
-#91485
-Support accessing root params in
-"use cache"
-functions:
-#91191
-Fix inconsistent cache life/tags propagation for cache handler hits:
-#91454
-Upgrade React from
-5e9eedb5-20260312
-to
-c80a0750-20260312
-:
-#91324
-Misc Changes
-Turbopack: Enable server HMR by default for app pages:
-#91476
-Allow blocking cross-site dev-only websocket connections from privacy sensitive origins:
-#91479
-Fix DataUriSource description to include "data:" prefix:
-#91455
-Deflake per-page dynamic stale time test:
-#91492
-Improve RSC error messages:
-#90702
-docs:
-unstable_catchError()
-:
-#89847
-Improve CSS parse error recovery and reporting:
-#90025
-Credits
-Huge thanks to
-@wbinnssmith
-,
-@bgw
-,
-@ztanner
-,
-@gnoff
-,
-@sokra
-,
-@devjiwonchoi
-,
-@unstubbable
-, and
-@acdlite
-for helping!
-
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.0-canary.102
-

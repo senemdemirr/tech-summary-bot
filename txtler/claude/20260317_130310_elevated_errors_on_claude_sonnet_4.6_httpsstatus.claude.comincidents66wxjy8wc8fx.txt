@@ -1,0 +1,44 @@
+Mar
+17
+,
+13:03
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+17
+,
+12:13
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+17
+,
+11:59
+UTC
+Update
+- We are continuing to work on a fix for this issue.
+Mar
+17
+,
+10:05
+UTC
+Update
+- We are continuing to work on a fix for this issue.
+Mar
+17
+,
+08:23
+UTC
+Identified
+- The issue has been identified and a fix is being implemented. At this stage, only free Claude.ai users are being impacted.
+Mar
+17
+,
+08:04
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/66wxjy8wc8fx

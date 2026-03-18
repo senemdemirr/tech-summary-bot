@@ -1,0 +1,834 @@
+Jay Chooi1,
+Paul Gölz2,
+Ariel D. Procaccia1,
+Benjamin Schiffer3, and
+Shirley Zhang1 1 Paulson School of Engineering and Applied Sciences, Harvard University
+2 School of Operations Research and Information Engineering, Cornell University
+3 Department of Statistics, Harvard University
+jeqin_chooi@college.harvard.edu, paulgoelz@cornell.edu, arielpro@seas.harvard.edu,
+bschiffer1@g.harvard.edu, szhang2@g.harvard.edu
+Abstract
+We study the problem of selecting a statement that finds common ground across diverse population preferences. Generative AI is uniquely suited for this task because it can access a practically infinite set of statements, but AI systems like the Habermas machine (Tessler et al., 2024) leave the choice of generated statement to a voting rule. What it means for this rule to find common ground, however, is not well-defined.
+In this work, we propose a formal model for finding common ground in the infinite alternative setting based on the proportional veto core from social choice. To provide guarantees relative to these infinitely many alternatives and a large population, we wish to satisfy a notion of proportional veto core using only query access to the unknown distribution of alternatives and voters.
+We design an efficient sampling-based algorithm that returns an alternative in the (approximate) proportional veto core with high probability and prove matching lower bounds, which show that no algorithm can do the same using fewer queries. On a synthetic dataset of preferences over text, we confirm the effectiveness of our sampling-based algorithm and compare other social choice methods as well as LLM-based methods in terms of how reliably they produce statements in the proportional veto core.
+1 Introduction
+In many countries, polarization has reached unhealthy levels (Silver, 2022),
+dividing politics into “us” versus “them”.
+This division exacts a heavy toll: it reduces trust between people, entails political gridlock and democratic erosion, and increases political violence (Lee, 2022; Piazza, 2023; McCoy et al., 2018; Orhan, 2022).
+To stem the tide of polarization, recent initiatives encourage people to discuss politics across divides and find points of agreement.
+The nonprofit Braver Angels111https://braverangels.org/, for example, brings groups of Democrats and Republicans face to face, and citizens’ assemblies (Dryzek et al., 2019; OECD, 2020) convene a representative sample of constituents to design common policy proposals.
+Major obstacles, however, stand in the way of scaling these efforts to a society-wide level, including the cost of trained facilitators and cognitive limits that prevent high-quality deliberation in large groups (Fishkin, 2009).
+The recent success of large language models (LLMs) in processing natural language text shows promise in overcoming these obstacles (Landemore, 2024; McKinney and Chwalisz, 2025; Small et al., 2023; Dembrane, 2023; Konya et al., 2023).
+Perhaps the most prominent AI tool with this goal is the Habermas machine, presented by Tessler et al. (2024) in Science.
+To help a group deliberate on a topic, the Habermas machine transforms opinion statements from the group members into possible group statements, which are pieces of text representing the common ground of opinions.
+Tessler et al. (2024) test the Habermas machine in the context of a citizens’ assembly and find that groups interacting with the Habermas machine converge in their beliefs towards a common position, decreasing polarization.
+Besides LLM components (for the generation of text and prediction of agreement), the Habermas machine also crucially relies on voting to select among generated proposals.
+Voting happens on two levels:
+first, to generate alternative statements, 16 statements are sampled from a fine-tuned LLM, ranked by a proxy model for each group member, and only the winner according to the Schulze voting rule (Schulze, 2011) is kept;
+second, four alternative statements generated in this fashion are ranked by the actual group members, and the winning statement is again selected by Schulze.
+For finding common ground, Schulze may not be the right tool for selecting among statements because this voting rule is inherently majoritarian: it readily overrides the preferences of a minority to satisfy even a slight majority, as evidenced by axioms such as Condorcet consistency and the mutual majority criterion.
+While Tessler et al. (2024)
+find that minority opinions have an influence on the winning statement,222Specifically, Tessler et al. (2024) embed the opinions by all group members using a text embedding model, and run a regression to predict the embedding of the winning statement as a mixture of these opinion statements. Group members are partitioned into a “majority” and “minority” group based on whether they answered “somewhat agree/agree/strongly agree” or “somewhat disagree/disagree/strongly disagree” in an initial question on the topic. Tessler et al. (2024) find that minority agents tend to have non-negligible weight in this regression.
+this is an empirical finding and only holds on average across their experiments.
+To robustly find common ground, we should aim for guarantees on the influence of minorities that hold for every possible group deliberation.
+What, then, can social choice offer as an axiom for finding common ground and as a voting rule to be embedded inside the Habermas machine?
+We argue that the proportional veto core (PVC) of Moulin (1981, 1982) is the right notion since it gives explicit outcome guarantees to cohesive voter coalitions of all sizes.
+Consider a coalition of, say, 30% of the participants and some alternative statement .
+If the coalition can find a set with of the alternatives that they all rank above , the PVC guarantees that will not be selected.
+In this way, minority groups are guaranteed an influence on the outcome, and they can avoid the statements they disagree with the most, which is important for a claim of common ground.
+To pursue this guarantee, the Habermas machine could use a voting rule whose output always lies in the PVC (like Vote by Veto (Moulin, 1981)), one could constrain any voting rule to alternatives in the PVC, or one could evaluate voting rules (classical or LLM-based) in terms of how reliably their output lies in the PVC.
+One more challenge of using social choice in settings like the Habermas machine is that the space of alternatives is tremendously large and often infinite. This leads to the natural question:
+Are the 16 statements sampled i.i.d. from the fine-tuned LLM enough to find common ground, and are the four statements resulting from independent runs of sampling and simulated voting enough?
+How can we capture what “enough” is?
+In this paper,
+we define proportional veto core guarantees with respect to a very large set of statements and design practical algorithms that satisfy them.
+Our pursuit of guarantees with respect to a large set of textual alternatives is closely aligned with the generative social choice framework by Fish et al. (2026).
+Like them, we can only access this space of alternatives indirectly through queries, which in our case means sampling from an unknown distribution over alternatives.
+1.1 Our Contributions
+We start by giving a formal mathematical model of what it means for a statement to find common ground when there are an infinite number of alternatives.
+We propose using the -proportional veto core (-PVC), which extends the standard PVC to the setting with a distribution over alternatives. We define the critical of an alternative as the smallest for which that alternative is in the -PVC. Therefore, a smaller critical indicates that a statement better represents common ground.
+To model information elicitation when there are infinite alternatives, we study a query-based information model with two types of queries. First, we explore generative queries, which return alternatives sampled from an unknown distribution of interest over the alternative space, such as the output of an LLM with respect to a given prompt. Second, we explore discriminative queries, which return user preferences over alternatives. We focus on two types of discriminative queries: min-queries that return a voter’s least favorite alternative among a given set and pairwise queries that return a voter’s preference between two given alternatives.
+Theoretical Results
+Our theoretical work focuses on providing upper and lower bounds for how many queries are necessary to find an element in the -PVC. We begin by showing that the -PVC always has size at least . We then present a query-based algorithm that with high probability finds an element of the -PVC using generative queries and min-queries. We prove that no algorithm can always find an element of the -PVC using fewer than generative queries and min-queries, which shows that our algorithm is worst-case optimal for both types of queries.
+Pairwise queries are perhaps the easiest information elicitation method from the voters’ perspective. Therefore, we show that our algorithm can be adapted to use pairwise queries while giving the same theoretical guarantees. The key modification is showing that with pairwise queries, we can find an element of the PVC for finite sets of voters and alternatives. We provide an efficient method for doing this and further show that there is a matching lower bound for this step; i.e., no algorithm can find an element of the PVC with fewer than pairwise queries for voters and alternatives.
+Experimental Results
+We conclude by empirically evaluating the critical achieved by different methods for selecting alternatives on simulated preference data. We obtain diverse preference data sets for a variety of topics by using ChatGPT to generate both alternatives and preference data for different personas. To model a query-based setting, the different voting rules are only given access to a small subset of voters and alternatives and must select an alternative from this subset.
+Our first empirical result confirms that the sampling-based approach from the theory section finds alternatives in the -PVC for small . We then show that different social choice methods such as Schulze and plurality can select alternatives with large critical , indicating that these methods may not necessarily choose a good common-ground statement. Finally, we conclude our experiments by studying generative voting rules that use LLMs to generate common-ground statements. We show that these generative voting rules do generate statements with small critical , which indicates that the notion of PVC aligns well with how an LLM tries to find common ground. We also show that when the LLM is not properly tuned to the population, the generative voting rules give statements with significantly higher critical compared to our algorithm.
+1.2 Related Work
+Many recent works have studied how to use AI for finding consensus on a large scale (Kahng et al., 2019; Gudiño et al., 2024; Landemore, 2024; Konya et al., 2023; Tessler et al., 2024; Bakker et al., 2022; Blair and Larson, 2026).
+The most similar of these methods is the Habermas machine (Tessler et al., 2024), which we already discussed at length.
+At the end of Section2, we further discuss the clone-proofness axiom satisfied by the Schulze rule, and why our approach to common ground does not require it.
+Finding common-ground statements is an important goal of online deliberation platforms like Polis (Small et al., 2021) and Remesh333https://www.remesh.ai/, on which users submit statements and rate their agreement with the statements written by others.
+Both platforms (Computational Democracy Project, 2025; Konya et al., 2023) present user-submitted statements based on a “bridging-based ranking” (Ovadya and Thorburn, 2023), which
+measures if a statement has high approval rates in all clusters of users.
+Our approach is much more general because we give guarantees to all subsets of voters rather than only some prespecified groups.
+The idea of finding common-ground and bridging has also been popular in the context of annotating social media posts (De et al., 2025; Wojcik et al., 2022). For example, Wojcik et al. (2022) study a bridging-based algorithm for finding common-ground and selecting notes to append to tweets. Furthermore, Slaughter et al. (2025) show that this approach to finding common ground successfully reduces engagement with and proliferation of misinformation on social media platforms. While these methods for finding common ground have had practical success, they lack formal theoretical guarantees.
+The PVC was first studied by Moulin (1981, 1982) in the traditional social choice setting of perfect information about a finite number of voters and alternatives. In the same setting, Ianovski and Kondratev (2023) give a polynomial time algorithm for computing the PVC and a neutral and anonymous algorithm for finding an element from the PVC.
+Ideas from these algorithms inspire some of our algorithmic procedures, as discussed in later sections.
+More recently, the PVC has been studied in a variety of contexts including approval ballots (Halpern et al., 2025), federated learning (Chaudhury et al., 2024), and policy aggregation (Alamdari et al., 2024). The settings studied by Chaudhury et al. (2024) and (Alamdari et al., 2024) both can have an infinite number of alternatives, which lead these works to notions similar to the -PVC.
+Like us,
+the work on generative social choice (Fish et al., 2026; Boehmer et al., 2025) uses generative models for social choice over an infinite space of textual alternatives.
+Similar to our setting, they study generative queries that generate alternatives and discriminative queries that access voter preferences.
+A major difference, however, is that their goal is to find a set of several representative statements, which enables them to give guarantees to minority groups without finding common ground within each statement.
+A second major difference is that their space of alternatives lacks our structure of a probability distribution.
+As a result, their generative queries (finding a statement maximizing a function of voter preferences) are much more complex and much harder to implement than our query of sampling from a fixed distribution.
+Beyond the generative social choice model, there has also been significant work on applying social choice techniques to settings with many or infinite alternatives and limited information in the setting of AI alignment (Ge et al., 2024; Procaccia et al., 2025b; Gölz et al., 2025; Conitzer et al., 2024) and AI evaluation (Procaccia et al., 2025a; Zhang and Hardt, 2024). Due to the size of the alternative space in these settings, these works also focus on choosing subsets of alternatives and voters to give approximate or probabilistic generalization guarantees.
+2 Model
+Let be a (possibly infinite) set of alternatives and let be a finite (but potentially very large) set of voters. Each voter has a ranking over all alternatives in . For alternatives and voter , we use to mean that voter prefers alternative to alternative . Importantly, we do not assume perfect information about the preferences of the voters.
+Instead, we assume that we can access information about the alternatives and voters using two types of queries: generative queries and discriminative queries. Generative queries allow us to access the set of alternatives . Specifically, let be a fixed distribution over . For a set of alternatives , define as the measure of the set for distribution . A generative query returns a random sample from the distribution . Note that no information about the distribution or the rankings of the voters is known a priori.
+Discriminative queries allow us to gather information about voter preferences. We study two types of discriminative queries. The first type of discriminative query we study is a min-query, which takes as input a voter and a set of alternatives and returns voter ’s least favorite alternative in . The second type of discriminative query we study is a pairwise query, which takes as input a voter and two alternatives , and returns which alternative in is ranked higher by voter . Our main goal is to use a combination of generative and discriminative queries to efficiently find an alternative in that finds common ground for the entire population .
+We argue that the -Proportional Veto Core (-PVC) is a mathematically principled way of finding common ground. Informally, an alternative is blocked by a coalition of voters if all voters in the coalition prefer a sufficiently large set of alternatives to . The -PVC is simply the set of alternatives that is not blocked by any coalition of voters.
+By ruling out alternatives for which
+some sizable minority ranks a large block of options higher, the -PVC excludes polarizing alternatives.
+Definition 2.1.
+An alternative is -blocked by a coalition of voters if there exists a blocking set of alternatives such that
+•
+Each voter prefers each alternative to (i.e. ), and
+•
+The -Proportional Veto Core (-PVC) is the set of all alternatives that are not -blocked by any coalition of voters.
+When and are finite, the Proportional Veto Core (PVC) (Moulin, 1981) refers to the special case when and is the uniform distribution over all alternatives in . See Appendix A for more details.
+A higher makes it harder for coalitions to block alternatives and therefore makes the -PVC a less demanding notion.
+Hence, the -PVC naturally leads to a metric for how well an alternative does at finding common ground for the voters .
+Intuitively, the critical for an alternative is the smallest fraction of voters that must be ignored in each coalition so that no coalition will veto that alternative. Therefore, a critical closer to implies that an alternative is better for finding common ground while a larger critical implies that an alternative is worse at it.
+Definition 2.2.
+For any alternative , the critical for is the smallest such that is in the -PVC.
+Role of the Statement Distribution
+plays a crucial role in our notion of common ground since it determines how many alternatives a coalition must agree on to block an alternative .
+For example, let be defined by an LLM, which produces a neutral summary with 99% probability, but sometimes insults a minority instead.
+The -PVC allows the small minority to block the insulting statements, whose small measure in the distribution reflects its fringe nature.
+This marks a major difference in perspective to Tessler et al. (2024), who use the Schulze voting rule due to its clone-proofness.
+If the Habermas machine samples 99 neutral statements and one insulting statement from the LLM and voters see the neutral statements as interchangeable, clone-proofness actually ensures that a slight majority preference for the insulting statement makes it the winner. In addition, clone-proofness is a brittle axiom that only applies to exact clones, so similar but not identically ranked alternatives can still have a large effect on the outcome. 444While the winner of Schulze on samples from is independent of the multiplicities of identical samples, we want to caution that the precondition of clone-proofness, requiring alternatives to be treated the same by every voter, makes it a brittle axiom. For example, Pierczynski and Szufa (2024) give an election where Schulze does not satisfy clone-proofness for alternatives that are almost clones. In this way, multiplicities can still have unpredictable effects under Schulze.
+As illustrated in the above example, having a distribution over alternatives enables us to guarantee rights to coalitions by forming a yardstick for how much influence each of them deserves.
+This does mean, of course, that the distribution must be carefully chosen to be broadly acceptable to the voters.
+In many cases, the statement distribution generated by an LLM might be a sufficiently neutral ground — say, from a base model, which seem to be more politically moderate than post-trained models (Rozado, 2024), or a model specifically fine-tuned for this purpose.
+Another option could be to define in terms of the distribution of voters as we do in our experiments: we draw characteristics of a random voter and ask the LLM to answer from their perspective.
+We continue our discussion on the choice of distribution in Section6.
+3 Basic Properties
+To begin our investigation of the -PVC, we start by bounding its size and developing a polynomial-time algorithm that can compute the critical and the -PVC if is the uniform distribution over a given set of alternatives.
+3.1 Size of -PVC
+As a warm-up, we study the size of the -PVC, which will tell us how many generative queries are necessary to even see an element of the -PVC.
+We begin by showing that, for any , the -PVC is not only non-empty but always has a size (with respect to the measure ) of at least . Previous papers that have looked at variants of the -PVC (Alamdari et al., 2024; Chaudhury et al., 2024) give similar proofs of existence, but do not explicitly study the size of the -PVC.
+Proposition 3.1.
+For any instance of the problem and any , the size of the -PVC (with respect to the measure ) is at least .
+Proof sketch.
+The key idea of this proof relies on an algorithm we call vote by -veto (Algorithm 3 in SectionB.1), which is guaranteed to return a set of alternatives with mass at least such that all alternatives in are also in the -PVC. In this algorithm, the voters are ordered randomly, and then in this order each voter vetoes their least favorite mass of alternatives that has not yet been vetoed. Clearly, once all voters have vetoed mass, the remaining alternatives must have mass at least . The proof that the remaining alternatives are in the -PVC follows similarly to the proof for the Vote by Veto rule of Moulin (1982). Intuitively, any alternative not in the -PVC must get removed before the algorithm ends, as the last voter to veto from the blocking set for this alternative is guaranteed to veto if has not yet been vetoed.
+For the full proof, see SectionB.1.
+∎
+A direct corollary of Proposition3.1 is that, among sufficiently many generative queries, there will with high probability be an alternative in the -PVC:
+Corollary 3.2.
+For any , a set of generative queries will with probability contain an element of the -PVC.
+Proof.
+Let be the result of generative queries and let be the -PVC. Then
+where the first inequality is by Proposition 3.1. Therefore, the probability that at least one element of is in is at least .
+∎
+While generative queries contain at least one element of the -PVC with high probability, we show in Section 5 that a larger number, specifically , of generative queries is needed to identify an element of the -PVC. Therefore, identifying an element of the -PVC with generative queries is statistically harder than simply generating an element of the -PVC.
+In contrast to the traditional PVC, the -PVC can, in general, be empty:
+Proposition 3.3.
+For an infinite number of alternatives, the -PVC can be empty.
+Proof.
+Let , and let each alternative have mass .
+Suppose that all voters prefer alternatives with larger numbers.
+We prove, by contradiction, that no alternative is in the -PVC.
+Indeed, any such is blocked by the grand coalition and the alternative set , since all voters prefer over and since .
+∎
+3.2 Computing Critical
+As mentioned in the previous section, the critical of an alternative measures how well a given alternative does at finding common ground.
+In this section, we give an algorithm for finding the critical of a given alternative in polynomial time when the number of alternatives is finite and is the uniform distribution over .
+Our algorithm generalizes the algorithm of Ianovski and Kondratev (2023) for deciding if an alternative is in the traditional PVC.
+By running this algorithm for all alternatives, we can construct
+the entire -PVC in polynomial time in the same setting.
+Theorem 3.4.
+When is finite, Algorithm 1 computes the critical of a given alternative in polynomial time.
+Proof Sketch.
+Our proof generalizes the ideas of Ianovski and Kondratev (2023) for computing the PVC.
+Their algorithm checks whether an alternative is in the PVC by constructing a graph such that there exists a complete biclique in if and only if is not in the PVC. We show that for the same graph , the size of the maximum biclique is larger than if and only if that alternative is not in the -PVC. In order to efficiently compute the size of the maximum biclique, we follow the same method as Ianovski and Kondratev (2023) of constructing the flow graph in Algorithm1 such that the weight of the max flow in this graph plus the size of the maximum biclique in equals . In the last line of Algorithm1, we use this fact to find the smallest for which the maximum biclique of is larger than . The runtime of the algorithm is polynomial because the min-cut can be found in polynomial time (SectionC.2.2). For the detailed proof, see AppendixC.
+∎
+4 Algorithmic Results
+In this section, we present our main algorithmic results for efficiently finding an element of the -PVC. We give a simple algorithm using generative queries and min-queries that finds an alternative in the -PVC, with high probability, using queries of each type. A key takeaway from this result is that the number of generative and discriminative queries does not depend on the size of (the number of voters) or the distribution over alternatives. This is important because the population may be large and the generative distribution altogether unknown to the algorithm. Then, we discuss how the same algorithm can be modified to use pairwise discriminative queries instead of min-queries.
+4.1 Min-Queries
+We now present and analyze Algorithm 2, which finds an element of the -PVC using generative queries and min-queries.
+Theorem 4.1.
+Using generative and min-queries, Algorithm 2 returns an element of the -PVC with probability at least .
+Proof.
+By construction, Algorithm 2 uses generative queries and min-queries, which gives the desired bound on the number of queries, observing that, for small enough ,
+Let be the set of voters that are selected in Lines 2–2 of Algorithm 2. Note that a voter could be chosen in two different iterations of the while loop, in which case we view these as distinct copies of the voter in the set . This means we must have that .
+We first show that any alternative in the PVC for voters and alternatives will, with probability , be in the -PVC for . We defer the proof of this result to Lemma 4.2 below. With this result, all we need to show is that the alternative we return is in the PVC for and .
+In Lines 2–2, we are functionally applying the Vote by Veto rule from (Moulin, 1982) to find an element of the PVC for and using one min-query for each voter in .
+Let be the alternative returned by Algorithm 2, and assume for contradiction that is not in the PVC for and , i.e., not in the -PVC for the uniform distribution over .
+Hence, there exists a coalition of voters and a set of alternatives such that for each and and such that
+Each voter removed one alternative from the set .
+Since was available in at the time and the voter chose to remove , it must hold that .
+This means that the set of alternatives removed by the voters in is disjoint from .
+Moreover, is clearly not part of either set (because it was not removed and cannot be strictly preferred over itself).
+This means that and hence .
+It follows that
+where the last inequality follows since .
+This contradicts Eq.1, showing that is indeed in the PVC for and .
+Together with the lemma, we conclude that the returned statement is in the -PVC with probability at least .
+∎
+The key to concluding the proof of the theorem is Lemma4.2, a quite technical result that connects the -PVC of the full instance with the PVC for the sampled voters and alternatives.
+At a high level, the proof must argue that the randomly selected set of voters and alternatives are sufficiently representative of the population and alternative distribution.
+But it is not immediately obvious how to do so, given the exponential number of coalitions, and infinite collection of alternative sets that could show that an alternative is -blocked.
+Instead, we apply concentration inequalities in a more subtle manner so that the number of generative queries needed depends only on and is independent of (see Line 2 of Algorithm 2). Specifically, we show that we do not need enough samples to sufficiently approximate every subset of voters and alternatives, but rather only need enough samples to sufficiently approximate the voters and alternatives for the blocking coalitions of the generated alternatives.
+Lemma 4.2.
+Let be the set of (not necessarily distinct voters) selected in Lines 2–2 of Algorithm 2. For any , every element of the PVC for and from Algorithm 2 will be in the -PVC for and .
+Proof.
+The key observation is that every alternative not in the -PVC for must have some blocking coalition of voters and alternatives satisfying Definition 2.1. Denote the th alternative sampled on Line 2 as . If is not in the -PVC for , then we will show that with high probability, the corresponding blocking sets and are sufficiently accurately proportionally represented in the sampled sets and up to a factor of . If this is the case, then Definition 2.1 implies that will also not be in the PVC for and . For each , define the event as the event that the above holds if is not in the -PVC. If we show that holds with high probability for every alternative , then we can conclude that every alternative in falls in one of two cases:
+Either is in the -PVC for or is not in the PVC for and .
+This implies the desired result that any element of the PVC for and is in the -PVC for .
+We now proceed with the formal proof:
+Let be a set of alternatives sampled as generative queries from with size and let be a random subset of with size . We will show that with probability , any alternative that is not in the -PVC for the full set of alternatives will not be in the PVC for alternatives and voters . This implies that any element of the PVC for alternatives and voters will with probability be in the -PVC for , . Define as the PVC for alternatives and voters .
+Define as the -PVC for .
+For any element such that , there exists some and such that for all and , and .
+Let be the ordered set of generative queries. Now we define the event
+First, note that if holds, then every element of is either in or is not in . This implies that every element not in is not in .
+All that remains is to show that
+First, we will start with lower bounding (which by symmetry is the same for all ). We have:
+Focusing on the middle probability and using Hoeffding’s inequality, we have that
+Returning to bounding , we have that
+Finally, we can conclude that
+as desired.
+∎
+4.2 Pairwise Discriminative Queries
+While Algorithm 2 uses min-queries,
+it would be much more practically useful to have an algorithm based on pairwise discriminative queries,
+which are easier for voters to respond to.
+Fortunately, we can achieve this with one simple change to Algorithm 2.
+Specifically, we can simulate each min-query in Line 2 with a simple iterative algorithm to find the least-preferred alternative for a given voter in a linear number of pairwise comparisons:
+First, choose an arbitrary ordering of the candidates in and do a single pairwise query asking voter to compare the first two alternatives in the ordering. Then, ask voter to compare the least-preferred alternative from that first comparison to the next alternative in the ordering. Repeat this process, always keeping the least-preferred alternative from each comparison. After iterating through all alternatives in , this is guaranteed to only use pairwise queries to find voter ’s least favorite alternative among .
+5 Lower Bounds
+In this section, we show that Algorithm 2 is tight in terms of both generative and discriminative queries. To prove this for each of generative and min-queries, we give a specific hard instance of the problem that requires of that type of query in order to find an element of the -PVC. We then show that the number of pairwise queries in the modification of Section 4.2 is also tight.
+5.1 Generative and Min-Queries
+In Theorem 5.1, we give a lower bound on the number of generative queries needed in order to identify an element of the -PVC. Importantly, this result combined with Corollary 3.2 implies a fundamental gap between the number of queries needed to generate versus identify an element of the -PVC. Specifically, Corollary 3.2 says that generative queries suffice to generate an element of the -PVC with high probability, while Lemma 5.1 says that we need at least generative queries to identify an element of -PVC. This highlights a surprising subtlety about generative queries, which is that it can be easier to stumble across a statement in the -PVC than to certify which statement is in the -PVC.
+Theorem 5.1.
+For any , no algorithm can use fewer than generative queries and for every distribution identify an element of the -PVC with probability greater than .
+Proof.
+Consider the following two discrete distributions with support .
+Distribution puts probability mass on and probability mass on . Distribution puts probability mass on and probability mass on . Suppose that half of the voters in have preferences and the other half of the voters have preference . With this voter population, the -PVC under distribution is while the -PVC under distribution is . Therefore, in order to find the -PVC, we must have sufficient information to distinguish between distributions and . Next, note that the KL distance between these distributions satisfies . Therefore, a standard information theory result (stated and proven in Lemma 5.3 for completeness) gives that with fewer than generative queries, it is impossible to distinguish between these two distributions with probability greater than , which implies the desired result.
+∎
+A similar construction shows that in the worst case, we also need at least min-queries to distinguish between two populations that are both close to ambivalent between two alternatives. The main difference between this construction and the one in Theorem 5.1 is that it is difficult to distinguish between two similar populations rather than two similar distributions.
+Theorem 5.2.
+For any , no algorithm can use fewer than discriminative queries and for every distribution identify an element of the -PVC with probability greater than .
+Proof.
+Consider the uniform distribution with support . Consider the following two sets of voters. In , a fraction of voters have preference and a fraction of voters have preference . In , a fraction of voters have preference and a fraction of voters have preference . The -PVC for voters is just while the -PVC for the voters is . Distinguishing between these two voter populations with discriminative queries is equivalent to distinguishing between a distribution and a distribution. We can again appeal to Lemma 5.3 to get the desired result that no algorithm can use fewer than queries to identify an element of the -PVC with probability higher than for both of these settings.
+∎
+The proofs of Theorem5.1 and Theorem5.2 both rely on the following standard result from information theory, which we state here formally and reprove for completeness.
+Lemma 5.3.
+If two distributions and have Kullback-Leibler distance satisfying for some constant , then no algorithm can achieve minimax misclassification error of less than for these two distributions using fewer than samples.
+Proof.
+Let and be the product distributions for samples from and respectively. Then by definition, . By the Bretagnolle-Huber Inequality, this implies that the . By Le Cam’s method, the minimax misclassification error for any classifier distinguishing between must be lower bounded by . Plugging in gives a misclassification error of at least , which is the desired result.
+∎
+5.2 Pairwise Discriminative Queries
+Theorems 5.1 and 5.2 together imply that Algorithm 2 is tight in terms of the number of generative queries and min-queries needed. As discussed in Section 4, Algorithm 2 works by finding an element of the PVC for a set of voters and alternatives . We also showed that this algorithm can be modified to use pairwise queries, where and . In Theorem 5.4, we show that finding the PVC from a set of alternatives and alternatives (with sizes and respectively) cannot be done in fewer than pairwise discriminative queries, which implies that there is no better subroutine than this modification in the worst case. Theorem 5.4 and its proof may be of independent interest to those studying the elicitation of voter preferences using pairwise comparisons. The proof below establishes a lower bound of ; we present a longer proof of the same result that achieves a tighter lower bound of in Appendix B.2.
+Theorem 5.4.
+When the sets of alternatives and voters are finite, no algorithm can always find an element in the PVC using fewer than pairwise discriminative queries.
+Proof.
+Let for any . By definition, any alternative in the PVC must not be ranked in the last alternatives by any voter. We will show that any algorithm needs at least queries to find any alternative not ranked in the last by any voter, which implies we need at least queries to find any alternative in the PVC.
+Consider the following adversary. The adversary answers pairwise queries by arbitrarily (and consistently with previous queries), and for every alternative keeps track of a counter which counts the number of pairwise queries involving alternative up to this point. The adversary also keeps track of a set of “active” voters which is initialized to be . As soon as the counter for an alternative hits , the adversary arbitrarily chooses one of the remaining “active” voters for which can be in the bottom , and assigns to be one of voter ’s worst ranked alternatives. The adversary then truthfully tells that is ranked in one of the last spots for voter . Similarly, if the queries answered so far force an alternative to be ranked in the last of a voter , then is also assigned to voter . If voter has distinct alternatives assigned to voter ’s last spots, then voter is no longer active and is removed from the set of active voters.
+Now suppose that has asked fewer than discriminative queries. Partition the full set of alternatives into and , such that contains all alternatives that have been involved in at least discriminative queries up until this point, and contains all alternatives that have been involved in strictly less than discriminative queries. Note that for any alternative in , the adversary has already placed that alternative in the last spots of at least one voter, and therefore no alternative in is in the PVC.
+To conclude the proof, we must show that cannot determine whether or not any alternative in is in the PVC. Because has asked fewer than queries so far and each query involves exactly two alternatives, the number of alternatives involved in at least discriminative queries is at most . This implies that . An alternative is only assigned to a voter if either it is in or if the queries for a specific voter force to be in ’s bottom spots. For the latter case, there must have been at least queries per such assigned . Therefore, there are at least remaining spots left in the bottom positions of the active voters, which implies there are at least active voters remaining. For any alternative , we know that strictly less than voters have been queried about . Therefore, since there are at least active voters remaining, there must be at least active voters (for sufficiently large ) who have not yet been queried about alternative . Importantly, this means that may be in one of the last spots of these voters’ rankings, which further implies that is unable to determine whether is in the PVC. This is true for every alternative , so we can conclude that cannot find any element of the PVC with fewer than queries.
+∎
+6 Interpretation of
+In this section, we further discuss the significance of the distribution . One way to think about is to view it as a weighting scheme that puts more weight on more “important” alternatives. Traditional voting theory does not explicitly assume such a weighting scheme, but does commonly assume neutrality. A voting rule satisfies neutrality if it is indifferent to the identity of the alternatives, in other words the outcome does not change if the alternatives are permuted. Therefore, any voting rule that satisfies neutrality must implicitly weight the alternatives equally, i.e. use a uniform weighting. Similarly, when there is a compact space of infinite alternatives, any voting rule satisfying neutrality must implicitly use a distribution that is the uniform distribution over all alternatives.
+All of our theoretical results (both positive and negative) apply when is the uniform distribution. However, when there are infinite alternatives, the uniform distribution may not always be the correct choice. As an example, consider the alternative space with voters. of these voters only like alternative and one voter only likes alternative . In this example, despite infinite alternatives existing in the interval , the only two alternatives that should be relevant are , which have measure under the uniform distribution. Unfortunately, the natural generalization of many voting rules (e.g., Borda count) ignore sets of size , and therefore may even select an alternative not from . Similarly, when computing the -PVC, both of the alternatives in with measure could be vetoed depending on tie-breaking. This is clearly an undesirable outcome, and can be easily avoided by choosing a more appropriate distribution .
+Motivated by the example above, one way to choose the distribution is to put more weight on alternatives that are more “important”. This means that the distribution is implicitly capturing the cardinal preferences of the voters by putting higher weight on alternatives for which voters have higher utilities. A common choice for such a distribution is the Bradley-Terry-Luce (BTL) model, where the probability of selecting an alternative is proportional to a score for that alternative. Suppose each player has a utility function such that . Then we could let be the mixture of BTL models over all voters, i.e. . This is equivalent to a BTL model with scores equal to the sum of voter utilities.
+Happily, choosing to be this BTL model also gives us an intuitive interpretation for the -PVC. If is this BTL model, then the size of a coalition necessary to veto an alternative is proportional to the utilitarian social welfare (total population utility) for that alternative. This means that a larger coalition of voters is needed to veto an alternative that has higher utility among the voters. We formalize this idea below in the extreme case .
+Theorem 6.1.
+If satisfies then the following holds for any subset . If at least an fraction of voters rank every alternative in above every alternative not in and the total utility of is greater than fraction of the total utility of all alternatives, then the -PVC must be a subset of .
+Proof.
+Let be the coalition of voters that prefers to every alternative not in and satisfies . We will show that the coalition with alternatives can veto every alternative . This follows directly from the fact that which satisfies Definition 2.1.
+∎
+In the discrete setting, we have the following corollary:
+Corollary 6.2.
+If satisfies then the following holds. If at least an fraction of the population ranks alternative first and the utilitarian social welfare of is greater than fraction of the total utility of all alternatives, then is the only alternative in the -PVC.
+For intuition, suppose and is the BTL distribution (as above). In this case, Corollary 6.2 says that if there is any alternative such that a majority of voters rank first and has more than half of the total population utility, then is the only alternative in the -PVC. Similarly, if at least a fraction of voters have utility for and utility for every other alternative, then is the only alternative in the -PVC. Examples such as these demonstrate how the -PVC combines both ordinal and cardinal preferences when is the utility-based BTL model.
+7 Experimental Results
+We now analyze the -PVC of synthetically generated preference data, modeling the preferences of individuals over opinion statements on various policy issues.
+Our first experimental goal is to verify that our algorithm performs well in practical settings. This complements our asymptotic analysis in Section4, demonstrating that our algorithm also performs well at small sample sizes.
+Our second goal
+is to measure how often popular voting rules choose alternatives that are in the -PVC. Our third goal is to understand how well LLMs can generate statements in the -PVC given different generative capabilities and types of information.
+For each experiment, we first use the persona dataset of Castricato et al. (2024) to select the 100 distinct voters in .
+We then generate a different alternative for each voter for a total of alternatives.
+We let be the uniform distribution over these alternatives, to capture a distribution
+defined by
+first choosing a random voter, and then generating a statement based on that user’s preferences, as discussed in Section2.
+As in our theoretical model, the voting rules in our experiments only have access to a random subset of alternatives and voters, specifically 20 of each.
+Of course, practical situations may have more than 100 voters and alternatives, and one would want to sample as many as possible, but this small-scale experiment allows us to run many experiments with LLMs at reasonable cost.
+We compute the critical with respect to all alternatives and voters to measure how well the alternative selected by each voting rule does at finding common ground for the overall population.
+Recall that the critical (Definition 2.2) measures the smallest for which the alternative is in the -PVC.
+Therefore, a method that is better at finding common ground will choose alternatives with critical close to while a method that is worse at finding common ground will choose alternatives with relatively large critical .
+555We open source our implementation of various -PVC computations at PVC Toolbox. The pip-installable library is performance-optimized with a max-flow algorithm compiled with C through SciPy (Virtanen et al., 2020). Furthermore, we release the codebase for our experiments at this GitHub repository.
+7.1 Methodology
+Our experiment setup is illustrated in Figure1. For each of six topics, we perform 10 replications, each with 100 voters and 100 alternatives drawn from the persona dataset.
+We then obtain a ranking of the generated alternatives for each voter to form the overall preference profile.
+From there, we subsample to get 20 voters and 20 statements yielding a preference profile, which we do 4 times per replication. Finally, various voting rules are run on this preference profile, and we compare the critical epsilons of the selected alternatives (with respect to the original preference profile). We elaborate on the details of each step of the experiment below.
+Topics
+We originally formulated 13 topics covering contemporary political issues (SectionD.1.1). To study if certain voting rules do better or worse on polarized or less polarized questions, we rate each topic by degree of polarization.
+For each topic, we generate 100 statements and sample 100 voters independently to assign a Likert score from 0-10 to each statement indicating how much they agree with that statement (Figure4). We then compute the mean Likert score and take its absolute difference from 5 to measure how strongly voters feel about different topics, i.e. how polarizing topics are. Finally, we selected the top three and bottom three topics by this metric.
+Personas
+We use the 1,000 synthetic personas generated by Castricato et al. (2024). Their choice of personas is informed by the US census and intended to be ideologically and demographically diverse. Each persona contains comprehensive personal characteristics, such as race, occupation, and how they spend their personal time. An example of a persona can be found in SectionD.2. We filter the personas to those above the age of 18, thus obtaining 815 adult personas.
+Alternatives
+For each persona and topic, we generate a representative statement from that persona for that topic by querying an LLM (specifically, gpt-5-mini). We explore other methods to generate alternatives in Appendix D.3.
+Preference Profiles
+We construct preference profiles by asking each voter (powered by gpt-5-mini and conditioned on a persona) to sequentially rank their top 10 and bottom 10 statements until all 100 statements are ranked. We term this approach iterative ranking and discuss further details in SectionD.4. Each preference profile consists of 100 voters and 100 statements.
+Calculating Critical Epsilons
+We compute the critical epsilons for each statement using Algorithm1 (where the critical is with respect to the full preference profile and the uniform distribution over these alternatives).
+7.2 Voting Rules
+In this section, we compare the critical epsilon of the statements selected by various voting rules. Veto-By-Consumption (VBC) (Ianovski and Kondratev, 2023), like Algorithm 2, finds an element of the PVC for the subsampled preference profile.
+We then compare VBC to other standard voting rules, including Borda count, Schulze (Schulze, 2011), Instant Runoff Voting (IRV), and plurality. We also include a baseline that is the critical of a uniform randomly chosen statement among the . Figure2 shows the cumulative distribution function (CDF) of critical epsilons across all iterations for the three controversial topics, and Table1 shows the mean critical epsilons for all six topics.
+CDF graphs for the other topics and additional figures can be found at SectionD.7. Across topics there is a consistent pattern: the voting rules ranked in increasing order of critical epsilons are:
+As expected from our theoretical results, even with access to only a small number of voters and alternatives, finding an element of the PVC for the subset gives an alternative with very low critical for the full sets. The critical for VBC is almost always , with mean consistently less than across topics. This supports using methods for finding elements of the PVC in practical situations even without having access to full information.
+Unsurprisingly, the other voting rules select alternatives that have higher critical . For example, Schulze (used by the Habermas machine) selects alternatives with an order of magnitude higher critical epsilon than VBC. Perhaps more surprisingly, plurality consistently selects alternatives with higher critical than just choosing a random alternative. The social choice function that consistently does the best after VBC is Borda count. In practice, Borda count could be a good compromise as a scoring rule that is easily computable, interpretable, and also chooses alternatives with small critical .
+In addition to these synthetic experiments for preferences over textual statements, we also tested how well each of these voting rules perform on preference datasets from Preflib (Mattei and Walsh, 2013), without subsampling, i.e., when the voting rule has full access to voters and alternatives.
+In these real-world scenarios, we observe the same pattern of Equation2, with Borda count consistently having the lowest critical among the standard voting rules and Plurality consistently having the highest. See SectionD.5 for more details.
+7.3 Generative Voting Rules
+In this section we examine generative voting rules, which do not have to select among the existing alternatives and instead can use an LLM-generated new alternative. We consider several different generative voting rules that each use different amounts of information about the problem to generate common-ground statements:
+•
+GPT-Blind: the model is only given the topic and no information about voters or alternatives
+•
+GPT-Synthesize: the model is given the topic and the 20 alternatives.
+•
+GPT-Synthesize+Rankings: the model is given the topic, the 20 alternatives, and the preference profile.
+•
+GPT-Synthesize+Personas: the model is given the topic and the persona descriptions of the 20 voters.
+To keep the values comparable, we do not compute the critical epsilon of a generated statement with respect to the uniform distribution over 101 statements.
+Instead, we continue to consider the uniform distribution over the 100 original statements, and treat the generated statement as having zero probability mass in .
+Table2 shows the mean critical for these different generative voting rules. From this table, we can see that the generative voting rules do generate alternatives with smaller critical than many standard voting rules like Schulze, IRV, and Plurality. VBC and Borda both slightly outperform the generative voting rules despite the fact that the generative methods can produce their own alternatives. Overall, the generative voting rules choose alternatives with relatively low critical , indicating that what an LLM believes represents common ground is well aligned with the concept of the PVC.
+In addition to generative LLM-based methods, we also evaluate LLM-based methods that are still restricted to choosing one of the original alternatives. We discuss these methods and results in more detail in SectionD.8.
+Clustered Voter Populations
+In the previous section, we showed that the generative voting rules are able to generate alternatives with very low critical , and the low numbers make it difficult to distinguish between the generative and non-generative methods. As LLMs are post-trained to be aligned to the general population, we hypothesize that generative voting rules will struggle in elections where the voter base is skewed to a particular ideology. To investigate this, we partition the 815 adult personas into 431 progressives and 255 conservatives by keyword filtering, with 129 unmatched personas (see SectionD.9 for details). We plot our results for conservative voters in Figure3 and report the mean critical epsilon in Table3. We find that generative voting rules degraded significantly compared to Table2 and sometimes perform worse than the random baseline, while VBC maintains its performance of having most critical epsilons close to .
+We also find that providing more information to the generative voting rules helps them significantly. Interestingly, providing personas of the voters is the most helpful to the generative voting rules, but with this information the mean critical epsilon is still 10 times larger than that of VBC. Due to space constraints, we report the results for progressive voters in Table 12 in SectionD.9.3.
+8 Discussion
+One of the main theoretical contributions of this paper is analyzing the sample complexity of finding alternatives in the -PVC using different types of queries. While we studied certain forms of generative and discriminative queries, there are many other ways to elicit information about both alternatives and voters. A natural open question is whether there are other reasonable query models that are more effective at finding elements of the -PVC. For example, different forms of discriminative or generative queries may be able to reduce the complexity of identifying an element of the -PVC and close the to gap we showed in Section 5.
+One of our key assumptions is that the number of alternatives is large or infinite, a setting in which many voting rules are not well-defined. Therefore, another open question is how to generalize other voting rules to the setting of infinite alternatives. For example, despite the PVC technically requiring a number of constraints which is exponential in , Theorem 4.1 shows that the number of samples needed to find an element of the -PVC does not depend on the distribution or the number of voters. One could ask whether other voting rules also have such shortcuts in the infinite alternative setting, and whether similar sample complexity results hold.
+Finally, we use the critical to measure the degree to which a given statement represents common ground for the population. However, there may be many alternatives with critical equal to , in which case it may not be obvious how to choose among them. One practical way to break ties would be to choose the alternative from the -PVC with the highest score according to some social choice scoring function. For example, we could select the alternative with the highest Borda score among all alternatives in the -PVC. If we take the Borda score as a proxy for maximizing welfare, then the Borda winner in the -PVC can be interpreted as the common-ground alternative with the highest welfare. One direction for future work is to further explore the best way to combine the -PVC with different scoring functions to select alternatives with small critical and high welfare.
+Acknowledgements
+This work was partially supported by the National Science Foundation under grant IIS-2229881, by the Office of Naval Research under grants N00014-24-1-2704 and N00014-25-1-2153, and by grants from the Cooperative AI Foundation and the Foresight Institute. Schiffer and Zhang were supported by an NSF Graduate Research Fellowship.
+We thank Teddy Lee and OpenAI for the generous support of API credits for running our experiments.
+References
+Alamdari et al. (2024)
+Parand A Alamdari, Soroush Ebadian, and Ariel D Procaccia.
+Policy aggregation.
+Advances in Neural Information Processing Systems, 37:68308–68329, 2024.
+Bakker et al. (2022)
+M. Bakker, M. Chadwick, H. Sheahan, M. Tessler, L. Campbell-Gillingham, J. Balaguer, N. McAleese, A. Glaese, J. Aslanides, M. Botvinick, and C. Summerfield.
+Fine-tuning language models to find agreement among humans with diverse preferences.
+In Proceedings of the 36th Annual Conference on Neural Information Processing Systems (NeurIPS), 2022.
+Blair and Larson (2026)
+Carter Blair and Kate Larson.
+Generating fair consensus statements with social choice on token-level mdps.
+In Proceedings of the 25th International Conference on Autonomous Agents and Multi-Agent Systems (AAMAS), 2026.
+Forthcoming.
+Boehmer et al. (2022)
+Niclas Boehmer, Robert Bredereck, Piotr Faliszewski, and Rolf Niedermeier.
+A quantitative and qualitative analysis of the robustness of (real-world) election winners.
+In Proceedings of the 2nd ACM Conference on Equity and Access in Algorithms, Mechanisms, and Optimization (EAAMO ’22), pages 7:1–7:10. ACM, 2022.
+doi: 10.1145/3551624.3555292.
+URL https://doi.org/10.1145/3551624.3555292.
+Boehmer et al. (2025)
+Niclas Boehmer, Sara Fish, and Ariel D. Procaccia.
+Generative social choice: The next generation.
+In Proceedings of the 42nd International Conference on Machine Learning, 2025.
+Castricato et al. (2024)
+Louis Castricato, Nathan Lile, Rafael Rafailov, Jan-Philipp Fränken, and Chelsea Finn.
+Persona: A reproducible testbed for pluralistic alignment, 2024.
+Chaudhury et al. (2024)
+Bhaskar Ray Chaudhury, Aniket Murhekar, Zhuowen Yuan, Bo Li, Ruta Mehta, and Ariel D Procaccia.
+Fair federated learning via the proportional veto core.
+In Forty-first International Conference on Machine Learning, 2024.
+Conitzer et al. (2024)
+Vincent Conitzer, Rachel Freedman, Jobst Heitzig, Wesley H. Holliday, Bob M. Jacobs, Nathan Lambert, Milan Mossé, Eric Pacuit, Stuart Russell, Hailey Schoelkopf, Emanuel Tewolde, and William S. Zwicker.
+Position: social choice should guide ai alignment in dealing with diverse human feedback.
+In Proceedings of the 41st International Conference on Machine Learning (ICML), 2024.
+De et al. (2025)
+Soham De, Michiel A Bakker, Jay Baxter, and Martin Saveski.
+Supernotes: Driving consensus in crowd-sourced fact-checking.
+In Proceedings of the ACM on Web Conference 2025, pages 3751–3761, 2025.
+Dinitz (1970)
+E. A. Dinitz.
+Algorithm for solution of a problem of maximum flow in networks with power estimation.
+Doklady Akademii Nauk SSSR, 194(4):754–757, 1970.
+Dryzek et al. (2019)
+John S. Dryzek, André Bächtiger, Simone Chambers, Joshua Cohen, James N. Druckman, Andrea Felicetti, James S. Fishkin, David M. Farrell, Archon Fung, Amy Gutmann, Hélène Landemore, Jane Mansbridge, Sofie Marien, Michael A. Neblo, Simon Niemeyer, Maija Setälä, Rune Slothuus, Jane Suiter, Dennis Thompson, and Mark E. Warren.
+The crisis of democracy and the science of deliberation.
+Science, 363(6432):1144–1146, March 2019.
+ISSN 0036-8075, 1095-9203.
+doi: 10/gfw5hq.
+Fish et al. (2026)
+Sara Fish, Paul Gölz, David C. Parkes, Ariel D. Procaccia, Gili Rusak, Itai Shapira, and Manuel Wüthrich.
+Generative Social Choice.
+Journal of the ACM, 2026.
+To Appear.
+Fishkin (2009)
+James S. Fishkin.
+When the People Speak: Deliberative Democracy and Public Consultation.
+Oxford University Press, 2009.
+Garey and Johnson (1990)
+Michael R. Garey and David S. Johnson.
+Computers and Intractability; A Guide to the Theory of NP-Completeness.
+W. H. Freeman & Co., USA, October 1990.
+ISBN 978-0-7167-1045-5.
+Ge et al. (2024)
+Luise Ge, Daniel Halpern, Evi Micha, Ariel D Procaccia, Itai Shapira, Yevgeniy Vorobeychik, and Junlin Wu.
+Axioms for ai alignment from human feedback.
+Advances in Neural Information Processing Systems, 37:80439–80465, 2024.
+Gölz et al. (2025)
+Paul Gölz, Nika Haghtalab, and Kunhe Yang.
+Distortion of ai alignment: Does preference optimization optimize for preferences?
+arXiv preprint arXiv:2505.23749, 2025.
+Gudiño et al. (2024)
+Jairo F Gudiño, Umberto Grandi, and César Hidalgo.
+Large language models (llms) as agents for augmented democracy.
+Philosophical Transactions A, 382(2285):20240100, 2024.
+Halpern et al. (2025)
+Daniel Halpern, Ariel D. Procaccia, and Warut Suksompong.
+The proportional veto principle for approval ballots.
+In Proceedings of the Thirty-Fourth International Joint Conference on Artificial Intelligence, IJCAI ’25, 2025.
+ISBN 978-1-956792-06-5.
+doi: 10.24963/ijcai.2025/434.
+URL https://doi.org/10.24963/ijcai.2025/434.
+Ianovski and Kondratev (2023)
+Egor Ianovski and Aleksei Y. Kondratev.
+Computing the proportional veto core, April 2023.
+URL http://arxiv.org/abs/2003.09153.
+arXiv:2003.09153 [cs].
+Kahng et al. (2019)
+A. Kahng, M. K. Lee, R. Noothigattu, A. D. Procaccia, and C.-A. Psomas.
+Statistical foundations of virtual democracy.
+In Proceedings of the 36th International Conference on Machine Learning (ICML), pages 3173–3182, 2019.
+Konya et al. (2023)
+Andrew Konya, Lisa Schirch, Colin Irwin, and Aviv Ovadya.
+Democratic Policy Development using Collective Dialogues and AI, November 2023.
+Landemore (2024)
+Hélène Landemore.
+Can Artificial Intelligence Bring Deliberation to the Masses?
+In Ruth Chang and Amia Srinivasan, editors, Conversations in Philosophy, Law, and Politics, pages 39–69. Oxford University PressOxford, 1 edition, March 2024.
+doi: 10.1093/oso/9780198864523.003.0003.
+Lee (2022)
+Amber Hye-Yon Lee.
+Social Trust in Polarized Times: How Perceptions of Political Polarization Affect Americans’ Trust in Each Other.
+Political Behavior, 44(3):1533–1554, September 2022.
+ISSN 0190-9320, 1573-6687.
+doi: 10.1007/s11109-022-09787-1.
+Mattei and Walsh (2013)
+N. Mattei and T. Walsh.
+Preflib: A library for preferences.
+In Proceedings of the 3rd International Conference on Algorithmic Decision Theory (ADT), pages 259––270, 2013.
+McCoy et al. (2018)
+Jennifer McCoy, Tahmina Rahman, and Murat Somer.
+Polarization and the Global Crisis of Democracy: Common Patterns, Dynamics, and Pernicious Consequences for Democratic Polities.
+American Behavioral Scientist, 62(1):16–42, January 2018.
+ISSN 0002-7642, 1552-3381.
+doi: 10/gdfg7m.
+McKinney and Chwalisz (2025)
+Sammy McKinney and Claudia Chwalisz.
+Five dimensions of scaling democratic deliberation: With and beyond AI.
+Technical report, DemocracyNext, 2025.
+Moulin (1981)
+Herve Moulin.
+The Proportional Veto Principle.
+The Review of Economic Studies, 48(3):407, July 1981.
+ISSN 00346527.
+doi: 10.2307/2297154.
+Moulin (1982)
+Hervé Moulin.
+Voting with proportional veto power.
+Econometrica: Journal of the Econometric Society, pages 145–162, 1982.
+OECD (2020)
+OECD.
+Innovative Citizen Participation and New Democratic Institutions: Catching the Deliberative Wave.
+Organisation for Economic Co-operation and Development, June 2020.
+doi: 10.1787/339306da-en.
+Orhan (2022)
+Yunus Emre Orhan.
+The relationship between affective polarization and democratic backsliding: Comparative evidence.
+Democratization, 29(4):714–735, May 2022.
+ISSN 1351-0347, 1743-890X.
+doi: 10.1080/13510347.2021.2008912.
+Ovadya and Thorburn (2023)
+Aviv Ovadya and Luke Thorburn.
+Bridging systems: Open problems for countering destructive divisiveness across ranking, recommenders, and governance, October 2023.
+URL https://knightcolumbia.org/content/bridging-systems.
+Essays and Scholarship.
+Piazza (2023)
+James A. Piazza.
+Political Polarization and Political Violence.
+Security Studies, 32(3):476–504, May 2023.
+ISSN 0963-6412, 1556-1852.
+doi: 10.1080/09636412.2023.2225780.
+Pierczynski and Szufa (2024)
+Grzegorz Pierczynski and Stanislaw Szufa.
+Single-Winner Voting with Alliances: Avoiding the Spoiler Effect.
+In Mehdi Dastani, Jaime Simão Sichman, Natasha Alechina, and Virginia Dignum, editors, Proceedings of the International Conference on Autonomous Agents and Multi-Agent Systems (AAMAS), pages 1567–1575, 2024.
+doi: 10.5555/3635637.3663017.
+Plassmann and Tideman (2014)
+Florenz Plassmann and T. Nicolaus Tideman.
+How frequently do different voting rules encounter voting paradoxes in three-candidate elections?
+Social Choice and Welfare, 42(1):31–75, 2014.
+doi: 10.1007/s00355-013-0720-8.
+Procaccia et al. (2025a)
+Ariel Procaccia, Benjamin Schiffer, Serena Wang, and Shirley Zhang.
+Metritocracy: Representative metrics for lite benchmarks.
+arXiv preprint arXiv:2506.09813, 2025a.
+Procaccia et al. (2025b)
+Ariel D. Procaccia, Benjamin Schiffer, and Shirley Zhang.
+Clone-robust ai alignment.
+In Proceedings of the 42nd International Conference on Machine Learning, volume 267, pages 49903–49926, 2025b.
+Rozado (2024)
+David Rozado.
+The political preferences of LLMs.
+PLOS ONE, 19(7):e0306621, July 2024.
+ISSN 1932-6203.
+doi: 10.1371/journal.pone.0306621.
+Schulze (2011)
+Markus Schulze.
+A new monotonic, clone-independent, reversal symmetric, and condorcet-consistent single-winner election method.
+Social Choice and Welfare, 36(2):267–303, February 2011.
+ISSN 0176-1714, 1432-217X.
+doi: 10.1007/s00355-010-0475-4.
+Slaughter et al. (2025)
+Isaac Slaughter, Axel Peytavin, Johan Ugander, and Martin Saveski.
+Community notes reduce engagement with and diffusion of false information online.
+Proceedings of the National Academy of Sciences, 122(38):e2503413122, 2025.
+Small et al. (2021)
+C. Small, M. Bjorkegren, T. Erkkilä, L. Shaw, and C. Megill.
+Polis: Scaling deliberation by mapping high dimensional opinion spaces.
+Revista De Pensament I Anàlisi, 26(2), 2021.
+Small et al. (2023)
+Christopher T. Small, Ivan Vendrov, Esin Durmus, Hadjar Homaei, Elizabeth Barry, Julien Cornebise, Ted Suzman, Deep Ganguli, and Colin Megill.
+Opportunities and Risks of LLMs for Scalable Deliberation with Polis, June 2023.
+Tessler et al. (2024)
+Michael Henry Tessler, Michiel A. Bakker, Daniel Jarrett, Hannah Sheahan, Martin J. Chadwick, Raphael Koster, Georgina Evans, Lucy Campbell-Gillingham, Tantum Collins, David C. Parkes, Matthew Botvinick, and Christopher Summerfield.
+AI can help humans find common ground in democratic deliberation.
+Science, 386(6719):eadq2852, October 2024.
+ISSN 0036-8075, 1095-9203.
+doi: 10.1126/science.adq2852.
+Tideman and Plassmann (2012)
+T. Nicolaus Tideman and Florenz Plassmann.
+Modeling the outcomes of vote-casting in actual elections.
+In Dan S. Felsenthal and Moshé Machover, editors, Electoral Systems: Paradoxes, Assumptions, and Procedures, pages 217–251. Springer, Berlin, 2012.
+doi: 10.1007/978-3-642-20441-8˙9.
+Tideman and Plassmann (2014)
+T. Nicolaus Tideman and Florenz Plassmann.
+Which voting rule is most likely to choose the “best” candidate?
+Public Choice, 158(3):331–357, 2014.
+doi: 10.1007/s11127-012-9935-y.
+Virtanen et al. (2020)
+Pauli Virtanen, Ralf Gommers, Travis E. Oliphant, Matt Haberland, Tyler Reddy, David Cournapeau, Evgeni Burovski, Pearu Peterson, Warren Weckesser, Jonathan Bright, Stéfan J. van der Walt, Matthew Brett, Joshua Wilson, K. Jarrod Millman, Nikolay Mayorov, Andrew R. J. Nelson, Eric Jones, Robert Kern, Eric Larson, C J Carey, İlhan Polat, Yu Feng, Eric W. Moore, Jake VanderPlas, Denis Laxalde, Josef Perktold, Robert Cimrman, Ian Henriksen, E. A. Quintero, Charles R. Harris, Anne M. Archibald, Antônio H. Ribeiro, Fabian Pedregosa, Paul van Mulbregt, and SciPy 1.0 Contributors.
+SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python.
+Nature Methods, 17:261–272, 2020.
+doi: 10.1038/s41592-019-0686-2.
+Wojcik et al. (2022)
+Stefan Wojcik, Sophie Hilgard, Nick Judd, Delia Mocanu, Stephen Ragain, MB Hunzaker, Keith Coleman, and Jay Baxter.
+Birdwatch: Crowd wisdom and bridging algorithms can inform understanding and reduce the spread of misinformation.
+arXiv preprint arXiv:2210.15723, 2022.
+Zhang and Hardt (2024)
+Guanhua Zhang and Moritz Hardt.
+Inherent trade-offs between diversity and stability in multi-task benchmarks.
+In Proceedings of the 41st International Conference on Machine Learning (ICML), 2024.
+Zhang et al. (2025)
+Jiayi Zhang, Simon Yu, Derek Chong, Anthony Sicilia, Michael R. Tomz, Christopher D. Manning, and Weiyan Shi.
+Verbalized sampling: How to mitigate mode collapse and unlock llm diversity, 2025.
+URL https://arxiv.org/abs/2510.01171.
+Appendix
+Appendix A Reduction of -PVC to PVC
+The standard definition of PVC (as in (Moulin, 1982)) is the following.
+Definition A.1.
+Let there be a set of voters with , and a set of alternatives with . Each voter has a ranking over all alternatives. Let the veto function for some positive integer be defined as follows:
+An alternative is vetoed if there exists some group of voters such that there exists a set of alternatives with where every voter prefers every alternative to . The set of alternatives which are not vetoed is called the proportional veto core.
+Now consider Definition 2.1 with , , , and as the uniform distribution over . We will show this is equivalent to Definition A.1 Define and . In this choice of parameters for Definition 2.1, an alternative is blocked if there exists a and such that
+Defining , this can be rewritten as
+Note that if and only if . Therefore, Equation (3) is equivalent to
+This is exactly the same definition of being blocked as in Definition A.1, and therefore we are done.
+A key technical tool we use in the proof of Proposition 3.1 is a linear time algorithm that, given full access to and the preferences of the voters, can return a set of alternatives that are in the -PVC. This algorithm is based on the Veto by Voting (VBV) algorithm in (Moulin, 1982) for finding the PVC when is finite. For any instance of the problem with finite , VBV always output an element of the PVC. Our modification allows these algorithms to generalize to the setting of -PVC with infinitely many alternatives.
+Proposition 3.1 follows directly from the following lemma analyzing Algorithm 3.
+Lemma B.1.
+Every alternative in the set returned by Algorithm 3 is in the -PVC. Furthermore, .
+Proof.
+We first will show that the set of alternatives returned by Algorithm 3 must all be in the -PVC. Proof by contradiction. Suppose that is returned by Algorithm 3 and that is not in the -PVC. By definition of -PVC, there must exist a coalition and set of alternatives such that for all and and
+For , let be the set of alternatives that ranks lower than , and let . By construction, we must have that and are disjoint, so
+Because is in when the algorithm terminates, every voter in must have removed or decreased the capacity of alternatives they like less than or equal to , so every voter in must have removed or decreased the capacity of alternatives in . Each voter in consumes mass, therefore the total amount of mass that is consumed from must be at least
+Therefore, all alternatives in must have been removed from by the time that the algorithm terminated, and therefore must have been removed from . This is a contradiction with the fact that is returned by the algorithm, which completes the first part of the proof.
+To see that , define
+By construction, decreases by exactly in each round of the for loop.
+Since and there are rounds of the for loop, this implies that when the algorithm terminates. Furthermore, by definition , therefore implies that as desired.
+∎
+In this section, we present an alternative proof for Theorem 5.4 that achieves a tighter lower bound of (improvement over as shown in the proof in Section 5). Note that our algorithm using Median of Medians only uses pairwise discriminative queries, and therefore this tighter lower bound is only a factor of from being fully tight.
+First, assume that we know we are in one of two cases:
+•
+Alternative is ranked second to last in every single ranking, and every alternative in is ranked last in exactly one ranking
+•
+Alternative is ranked second to last by voters and is ranked last in exactly one ranking, in which some alternative is ranked second to last. Every alternative in is ranked last in exactly one ranking.
+In the first option above, the PVC is just . In the second option above, the PVC is just . Therefore, in order to find the proportional veto core, the algorithm must be able to distinguish between these two cases.
+We will show that no algorithm can distinguish between these two cases with fewer than queries by giving an adversary that requires at least this many queries.
+Define . We therefore will consider the easier problem of determining if every element of is ranked last exactly once in . Note that any queries not involving will not give any information for this alternate problem, therefore we will only consider queries involving .
+We will prove the desired result using induction. Let be a set of queries of the form for and where . For any such that , define as the minimum number of queries in this adversarial setting necessary to determine whether or not every element in is ranked last in exactly one ranking in assuming that we start by doing the queries in .
+Base case: If then and are both singletons (i.e. and ). If , then clearly . If , then we then need one query of to determine whether or not is ranked last by . Therefore, for any such that and any , we have that
+Inductive Hypothesis: Assume that for all such that .
+Consider any such that .
+Case 1:
+There exists a set and such that and such that the only possible way to assign every alternative in to be last in some ranking in is to assign every alternative in to be last in some ranking in . Define and . Let be the set of all queries in involving alternatives in and voters in and let be the set of all queries in involving alternatives in and voters in . We will show that
+To see this result, note that since alternatives must be ranked last in some ranking in and alternatives in must be ranked last in some ranking in , from now on the player only needs to ask queries involving alternatives in and voters in or ask queries involving alternatives in and voters in . This explains the first two recursive terms in the above equation. To show the last additive term, we must show that the number of queries in ( or equivalently the number of queries involving alternatives in and voters in or involving alternatives in and voters in ) is at least .
+This is because in order for such an and to exist, we must be in one of the following two situations:
+•
+Every alternative has been compared to in every ranking and
+•
+Every alternative has been compared to in every ranking and
+Option 1 above requires comparisons in and option 2 requires comparisons in . In both cases, we must have that
+Using the inductive hypothesis, Equation (4) implies that
+Case 2: If we are not in case 1, then for any query of the form , suppose that the adversary responds that . In this case, we have that (for )
+There are a finite number of potential queries, so eventually we will reach some where and such that and such that falls in case 1. We already showed that in Case 1 we must have that , so we can conclude that
+In order to show that the above adversary is valid, we must maintain that at any point given the query feedback from the adversary, could either never ranked last or could be ranked last exactly once. Because the adversary always responds that for all queries, at any point it is still possible that could be ranked last by every voter. Therefore, we must show that for this adversary, we also could have that is not ranked last by one voter. This will follow from the following lemma. This lemma implies that any time one query response from the adversary would result in a query set for which must be ranked last by every voter in , we must be in the setting of case 1. This implies that the adversary never needs to answer a query in such a way that forces to be ranked last by every voter until at least queries have already been asked.
+Lemma B.2.
+For a given , suppose that there exists a matching of alternatives in to voters in such that every alternative in could be ranked last by exactly one voter in given the results of the queries in . Further, assume that there exists a query such that if , then this is no longer the case. Then there must exist a set and such that and such that the only possible way to assign every alternative in to be last in some ranking in is to assign every alternative in to be last in some ranking in .
+Proof.
+Because there exists a matching of alternatives in to voters in , choose one such mapping and call it . Create the following directed graph with vertices corresponding to . Add a directed edge from to if and only if the alternative could be ranked last by the voter . If there exists an as assumed in the lemma, then there cannot be a directed cycle containing the vertex . This is because if there is a directed cycle containing , then there still exists a valid matching that satisfies , which violates the lemma assumption. To construct , we could simply modify by matching ever vertex in the cycle to .
+Now we show that the lack of cycles containing implies that there exists some subset of vertices such that there are no edges from to and . The simplest way to do this is to reduce the graph into strongly connected components. Because there is no cycle containing , must be alone in its component. The strongly connected component graph is a DAG so it must have a source, which is a component with no incoming edges. Furthermore, because is alone in its component there are at least two components. Therefore, taking to be the source component gives that there are no edges from to . Taking gives that and satisfy the desired property that the only possible way to assign every alternative in to be last in some ranking in is to assign every alternative in to , so we are done.
+∎
+∎
+Appendix C Deferred Proofs for Computing -PVC and Critical Epsilons
+C.1 Computing the PVC and Critical Epsilons
+In this section, we first discuss computing the -PVC efficiently when we have access to full information about voters and alternatives when is finite. Ianovski and Kondratev (2023) showed that for the original definition of PVC, the problem of finding all statements in the PVC can be reduced to a biclique problem, for which a polynomial time algorithm is known. We adapt the proof to show that a similar reasoning applies to -PVC.
+Fix an alternative . As we will use a graph reduction, we first present the definition of a blocking graph.
+Definition C.1(Blocking graph).
+[Ianovski and Kondratev (2023)]
+Given an election instance and an alternative . The blocking graph of is a bipartite graph where there are left vertices, where each vertex can be identified as one of the copies of the voters, and there are right vertices, where each vertex can be identified as one of the copies of the alternatives of . An edge exists from a left vertex to a right vertex if and only if the left vertex corresponds to a voter and the right vertex corresponds to an alternative such that prefers to .
+We now present two statements and show that they are equivalent:
+Condition C.2(Blocking Set).
+There exists a coalition and a blocking set such that and every voter in prefers every alternative in to .
+Condition C.3(Blocking Graph).
+The blocking graph of has a biclique with left vertices and right vertices such that .
+To bridge these two statements, we use and . By showing that SectionC.1 is equivalent to SectionC.1, or in words, that the existence of the blocking set is equivalent to the existence of a sufficiently large biclique in the blocking graph, we can use a known polynomial time algorithm for SectionC.1 to check SectionC.1, which in turn determines membership in PVC.
+(SectionC.1SectionC.1) Note that by multiplying the inequality in SectionC.1 by , we get . By construction of the blocking graph, the vertices on the left that correspond to the copies each of the voters in are all connected to the vertices on the right that correspond to the copies each of the alternatives in .
+(SectionC.1SectionC.1) Take one left vertex in the biclique. Say corresponds to a copy of voter . Enlarge the biclique by including all left vertices that correspond to copies of voter . This is possible because these vertices have the same set of neighbours by construction of the blocking graph. Do the same for every left vertex in the biclique. Similarly, do a corresponding enlargement for the right vertices in the biclique. Now, since there are at least left vertices, of which we included all copies of their corresponding voters, we must have at least voters included in the biclique. Similarly, as we have at least right vertices, of which we included all copies of their corresponding alternatives, we must have at least alternatives included in the biclique. Let these voters be and these alternatives be . Then note that . By construction of the blocking graph, these voters in all prefers every alternative in to .
+∎
+Prior work has established that SectionC.1 can be checked in polynomial time:
+Proposition C.5.
+[Garey and Johnson (1990), pg. 196, GT24]
+Let be a bipartite graph and an integer. We can, in polynomial time, determine whether there exists a biclique with left vertices and right vertices such that .
+We can thus determine whether a given alternative is in the PVC by using the polynomial time algorithm in PropositionC.5 and iterating from to , giving us CorollaryC.6.
+Corollary C.6.
+The PVC can be computed in polynomial time.
+C.2 A Faster Algorithm through a Correspondence with Min-Cut
+With proof of existence of a polynomial time algorithm out of the way, here we proceed to present the proof and runtime analysis for the faster algorithm that is used in our implementation (Algorithm1). Many ideas for this algorithm, including the max-flow correspondence, are from Ianovski and Kondratev (2023)’s algorithm for computing the PVC. The core of the idea is that instead of copies of the same vertex in a blocking graph, we turn these copies into weighted edges in a flow graph where the weight is the number of copies.
+C.2.1 Correctness
+Proof.
+Consider the flow graph after applying the min cut. The min cut could not cut the edges between the voter nodes and the alternative nodes as the edge weights are infinite, so the only edges possibly cut are those between the source node and the voter nodes, and those between the alternative nodes and the sink node. Note that whenever an edge is cut, that node contributes to the min-cut, while the remaining nodes after the min-cut forms a biclique of the blocking graph, which is in fact maximum. To be precise, all voter nodes and alternative nodes are partitioned into either contributing to the min-cut or the biclique. When an edge between the source and a voter node is cut, that voter node contributes to the min-cut. When an edge between the sink and an alternative node is cut, that alternative node contributes to the min-cut. The remaining nodes after the min-cut will form a biclique in the corresponding blocking graph. To see this, note that since the remaining voter nodes are still connected to the source, and the remaining alternative nodes are still connected to the sink, there must not be any edges left between any remaining voter nodes and alternative nodes. Otherwise, a single edge between a voter node and an alternative node, which has infinite edge weight, could transmit positive flow.666The careful reader will find that the infinite edge will not transmit flow if all voter nodes are cut from the source, or all alternative nodes are cut from the sink. Indeed this is the baseline case, which is to cut all alternative nodes from the sink for a cut of (which is less than cutting voter nodes from the source for ), and will yield (here loses its meaning as the maximum biclique, but the algorithm is still valid). By finding smaller cuts than , the algorithm will obtain a bigger corresponding blocking set, and raise . Since no edges exist between the remaining voter nodes and alternative nodes, by construction, all of these voters must approve all of these alternatives over the given alternative, which is precisely the blocking set, or equivalently, the maximum biclique in the blocking graph. Now, the size of this biclique in the blocking graph involves the number of copies, which is precisely the weights of the edges leftover from the min-cut. Since the min-cut minimizes the weights cut, the constructed biclique is the biggest possible. To be precise, , where is the size of the biclique, is the min-cut, and is the total weight of the flow graph (excluding infinities), or equivalently, the total number of vertices in the blocking graph. With obtained, the correspondence in PropositionC.4 where allows us to check PVC membership with as desired.
+∎
+C.2.2 Runtime
+The runtime of the algorithm is chiefly that of the construction of the flow graph, and finding the min-cut. The flow graph construction takes time, since the flow graph could be fully connected. For example, consider the case where the given alternative is ranked first by all voters. The min-cut algorithm depends on implementation. By the max-flow min-cut theorem, we could use standard max-flow algorithms. Dinic’s algorithm (Dinitz, 1970) requires , which in our case where and , the algorithm runs in .
+Appendix D Additional Experiment Details
+We present additional details for the experiments described in Section7.
+D.1 Details on Topics
+Below we present the long list of topics and their degree of polarization.
+D.1.1 Long List of Topics
+•
+How should we increase the general public’s trust in US elections?
+•
+What are the best policies to prevent littering in public spaces?
+•
+What are your thoughts on the way university campus administrators should approach the issue of Israel/Gaza demonstrations?
+•
+What should guide laws concerning abortion?
+•
+What balance should exist between gun safety laws and Second Amendment rights?
+•
+What role should the government play in ensuring universal access to healthcare?
+•
+What balance should be struck between environmental protection and economic growth in climate policy?
+•
+What principles should guide immigration policy and the path to citizenship?
+•
+What limits, if any, should exist on free speech regarding hate speech?
+•
+What responsibilities should tech companies have when collecting and monetizing user data?
+•
+What role should artificial intelligence play in society, and how should its risks be governed?
+•
+What reforms, if any, should replace or modify the Electoral College?
+•
+What strategies should guide policing to address bias and use-of-force concerns while maintaining public safety?
+The Likert scores for each topic used to calculate degree of polarization can be found in Figure4.
+D.2 Example Persona
+In this section we present an example persona that we use as a voter and for generating statements.
+D.3 Alternative Methods to Generate Alternatives
+D.3.1 Description of Methods to Generate Alternatives
+In addition to the experiment set-up presented in the body (listed below as Persona Only), we also explored three different methods of generating statements.
+•
+Blind: Given only the topic, the LLM is queried using verbalized sampling (Zhang et al., 2025) to generate diverse statements.
+•
+Persona Only: Given the topic and a persona to conditioned on, the LLM is queried to produce a response. This is used for the experiments presented in the body.
+•
+Deliberation Round Only: Within a rep, given 100 statements generated using Persona, the LLM is queried using verbalized sampling (Zhang et al., 2025) to generate diverse statements taking into account the 100 statements. This is to simulate a ”deliberation round” where a user sees statements written by others and is informed by their stances to write a new statement.
+•
+Persona+Deliberation Round: Within a rep, first generate 100 statements using Personas. Then conditioning on each persona, the LLM is queried to produce a single statement that also takes into account the other 99 statements.
+In Figures5 and 6 we show the CDFs for the same experiment as in the body but using different methods of generating alternatives. Using the Persona method gives a more interesting distribution of alternatives and has the added benefits of being relatively simple and motivated by the theory in Section 6.
+(a)Environment
+(b)Policing
+(c)Public Trust
+Figure 6: CDF of critical epsilons across various topics (bottom three topics by degree of polarization). The leftmost subplot (Persona) allows for clearer analysis than other alternative generation methods.
+D.4 Building Preference Profiles
+In this section, we discuss why we selected iterative ranking as our process for using an LLM to build a preference profile.
+D.4.1 The Problem of Preference Degeneracy
+Preference degeneracy occurs when the preference rankings produced by generative AI are very similar even for very different profiles. We found that this can happen when the AI is “overwhelmed” with the task complexity of ranking too many alternatives at once, and outputs a default ranking of the alternatives (for example, in the order presented to the AI, or its reverse).
+D.4.2 Mitigating Preference Degeneracy
+There are two natural ways to mitigate preference degeneracy:
+1.
+Increase model capabilities.
+2.
+Scaffold the task easier to make it easier for the model to complete.
+Item1 has the tradeoff of budget concerns. To illustrate, order of magnitude capability jumps between gpt-5-nano, gpt-5-mini, and gpt-5.2 are accompanied by similar order of magnitude price jumps. We fix the model as gpt-5-mini as a compromise between capability and price.
+Another axis of increasing model capabilities is to increase reasoning effort (the length of the model’s chain-of-thought). As the number of tokens get higher, there is also an associated cost increase. Latency also increases as more tokens need to be generated before the tokens related to the extractable ranking is produced. We ran a sweep on the available options for reasoning efforts in Table4.
+We repeatedly show the model two alternatives, and ask the model which one to pick, until a full ranking is obtained. However, if there are voters and alternatives, and an API call takes tokens, then the number of tokens required (which is usually dominated by input tokens for seeding techniques) is . For a reasonable experiment of , a single preference profile will take about 33 million tokens, which is about $8.25.
+Using this option, the full experiment will cost: 6 topics 10 repetitions 3 voter distributions $8.25/profile $1,485.
+Direct Ranking
+The other extreme is to simply give the model all the statements and ask it to output its ranking in one API call. This is the cheapest possible approach. Unfortunately, this approach frequently gives degenerate rankings, even for the most capable models currently available.
+Top-K/Bottom-K Ranking (Iterative Ranking)
+Given all remaining alternatives, we ask the model to pick its top K statements and bottom K statements. We then iterate for rounds with the subsequent set of remaining alternatives until all alternatives haven been chosen.
+Scoring
+Given a set of alternatives, we ask the model to give a score to each alternative. The benefit to this approach is that compared to producing the ranking, the model is not heavily constrained by other alternatives it has processed or will process when processing a new alternative. In other words, the model could ignore the scores it gave to any previous alternatives and focus on giving a score to the current alternative. When the scoring is done, a ranking is induced, and any duplicate scores could be randomly tie-broken. Another approach is to ask the model not to give duplicate scores.
+Because pairwise comparisons were too expensive and direct ranking produced degenerate rankings, we focus on the remaining two methods and report results in Table4. When we receive a ranking, we screen it for invalid rankings (e.g. hallucinated statement IDs, or duplicate statement IDs, etc). If it is invalid, we retry the query, up to 20 times.
+Table 4: Degeneracy Mitigation Experiment Results
+•
+Note: “Pres. Order Corr.” stands for presentation order correlations. Values near indicate degenerate rankings.
+As shown in Table4, the scoring method frequently resulted in degenerate rankings as measured by correlation with presentation order. To minimize preference degeneracy, we use the top-K/bottom-K method for all of our experiments. We found that the low reasoning effort produce a high number of unique rankings with minimal retries (67 compared to minimal’s 807) and have better latency (11.1s vs medium’s 30s). The rankings produced with low reasoning also has a Spearman’s correlation of 0.802 with that of medium reasoning. We thus generate the preference profiles for our full experiment using the top-K/bottom-K approach (iterative ranking) using gpt-5-mini on low reasoning effort.
+D.5 Using different methods to find common ground in real election instances
+We validate the pattern in Equation2 on real-world election instances from Preflib (Mattei and Walsh, 2013). We plot our results in Figure7.
+(a)Critical epsilons for Electoral Reform Society (Tideman and Plassmann, 2012, 2014; Plassmann and Tideman, 2014)
+(b)Critical epsilons for Poland Local Elections (Boehmer et al., 2022)
+(c)Critical epsilons for Habermas (Tessler et al., 2024)
+(d)Critical epsilons for Eurovision (Böhmer, 2023)
+Figure 7: Comparison of critical epsilons across voting rules on various real-world datasets from PrefLib. Standard errors depicted.
+D.6 Inserting a New Statement to a Preference Profile
+In this section, we discuss different methods for inserting a single alternative into an already constructed ranking of 100 existing alternatives, which is a necessary step for evaluating generative voting rules.
+•
+Insert into 100: we give the model all 100 statements and ask the model to output the position for the new statement.
+•
+Chunked insertion: we split the 100 statements into 5 contiguous chunks. We ask the model to output the position it will insert the new statement into for each chunk. We then tally the positions and according to its chunk assign the appropriate ranking. For example, if the new statement gets position 0, 3, 15, 8, 9 in the 5 chunks, then the insertion position is .
+•
+Pairwise comparison: we ask the model to compare the new statement with every other statement in separate API calls to obtain the insertion position.
+•
+Iterative ranking: we rerun the algorithm for building preference profiles as in Section7.1 and extract the resulting position of the new statement as its insertion position.
+In Figure8, we evaluate the performance of these insertion algorithms by randomly selecting a statement from a preference profile to be (re-)inserted. We did this for 10 randomly sampled statements and 100 voters for 1,000 insertion tests for each method. We found that the iterative ranking provided the best fit while still being cost-efficient, and this is the method used in our main experiments.
+(a)Insert 100 Method
+(b)Chunked Method
+(c)Pairwise Method
+(d)Iterative Ranking Method
+Figure 8: Binned scatter plots comparing various statement insertion methods by plotting reconstruction position versus original position. Error units are in the ranks, e.g. an error of -20 means that the method ranks the new statement on average 20 positions below its original.
+D.7 Detailed Results for Critical Epsilons of Voting Rules
+In Tables5, 6 and 9, we present additional detailed statistics of the critical epsilons achieved by various traditional voting rules.
+Table 5: P99 of critical epsilons for various voting rules across various topics
+Table 6: Percentage of critical epsilons that are less than 0.01 for various voting rules across various topics
+Figure 9: CDF of critical epsilons for least controversial topics for various voting rules.
+D.8 LLM-Powered Voting Rules as a Selector
+In addition to testing LLM methods that generate their own statement, we also tested methods that use LLMs to select an existing statement. We tested six different variants that vary in how much information is given to the model.
+•
+GPT-Select: the model is given the 20 sampled statements.
+•
+GPT-Select+Rankings: the model is given the 20 sampled statements, and the preference profile.
+•
+GPT-Select+Personas: the model is given the 20 sampled statements and the personas of the 20 voters.
+•
+GPT-Full: the model is given the 100 statements.
+•
+GPT-Full+Rankings: the model is given the 100 statements, and the preference profile.
+•
+GPT-Full+Personas: the model is given the 100 statements and the personas of the 20 voters.
+We present the results in Tables7, 8 and 9. VBC still outperforms the LLM methods. Interestingly, that providing more information, like voter personas or the rankings, slightly degrades performance.
+Table 7: Mean critical epsilons for VBC, voting rules with GPT as a selector and a random baseline across various topics. Smallest epsilons are bolded.
+Table 8: P99 critical epsilons for for VBC, voting rules with GPT as a selector and a random baseline across various topics. Smallest epsilon for each topic is bolded.
+Table 9: Percentage of critical epsilons that are less than 0.01 for VBC, voting rules with GPT as a selector and a random baseline across various topics. Largest percentages for each topic is bolded.
+D.9 Details on Clustered Voters
+D.9.1 Keywords Used for Classification
+To cluster voters, we applied case-insensitive keyword matching on the idealogy field in the personas using the following sets of keywords.
+Conservative/Traditional
+•
+conservative
+•
+traditional
+•
+traditionalist
+•
+libertarian
+•
+libertarianism
+•
+fiscal conservatism
+•
+social conservatism
+•
+christian values
+•
+family values
+•
+small government
+Progressive/Liberal
+•
+progressive
+•
+liberal
+•
+social liberal
+•
+social justice
+•
+feminist
+•
+feminism
+•
+egalitarian
+•
+environmentalism
+•
+environmentalist
+•
+environmental conservation
+•
+environmental protection
+•
+social equality
+•
+workers’ rights
+•
+social welfare
+•
+humanism
+•
+humanistic
+•
+humanitarian
+D.9.2 More Results on Conservative Voters
+We report additional statistics in Tables10 and 11.
+Table 10: P99 critical epsilons for for VBC, generative voting rules and random baselines across various topics for conservative voters. Smallest epsilon for each topic is bolded.
+Table 11: Percentage of critical epsilons that are less than 0.01 for VBC, generative voting rules and random baselines across various topics for conservative voters. Largest percentages for each topic is bolded.
+D.9.3 Results on Progressive Voters
+We present the critical epsilons of generative voting rules on progressive voters in Tables12, 13 and 14.
+Table 12: Mean critical epsilons for for VBC, generative voting rules and random baselines across various topics for progressive voters. Smallest epsilon for each topic is bolded.
+Table 13: P99 critical epsilons for for VBC, generative voting rules and random baselines across various topics for progressive voters. Smallest epsilon for each topic is bolded.
+Table 14: Percentage of critical epsilons that are less than 0.01 for VBC, generative voting rules and random baselines across various topics for progressive voters. Largest percentages for each topic is bolded.
+D.10 Prompts
+Here we present the prompt templates used to generate statements, build preference profiles, and insert statements.
+D.10.1 Generating Alternatives
+With persona, without deliberation round
+These are the prompts we used for the main experiments.
+With persona, with deliberation round
+Without persona, with deliberation round
+Without persona, without deliberation round
+D.10.2 Building Preference Profiles
+Using iterative ranking (SectionD.4.2), the first few rounds ask the model to pick the top and bottom statements, and the final round asks the model to rank the remaining statements.
+Initial Rounds
+Where stmt_lines is formatted as:
+Final Round
+D.10.3 Winner Selection
+GPT-Select: Select from P Alternatives
+Where statements_text is formatted as:
+GPT-Select+Rank: Select with Rankings
+Where rankings_text is formatted as ( sampled voters, full rankings over alternatives):
+GPT-Select+Pers: Select with Personas
+Where personas_text is formatted as ( sampled voters, filtered to 7 key fields to save token costs):
+GPT-Full: Select from All 100
+The GPT-Full+Rank and GPT-Full+Pers variants add rankings_text and personas_text respectively, using the same format as GPT-Select.
+GPT-Synthesize: Generate New Statement
+The GPT-Synthesize+Rank and GPT-Synthesize+Pers variants add rankings_text and personas_text respectively as in GPT-Select.
+
+KAYNAK : https://arxiv.org/abs/2603.16751

@@ -1,0 +1,30 @@
+Mar
+17
+,
+11:45
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+17
+,
+11:37
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+17
+,
+10:02
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+Mar
+17
+,
+09:46
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/h04m7sftmtk5

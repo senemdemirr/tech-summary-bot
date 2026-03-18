@@ -1,4 +1,3 @@
---- dotnet | RT.Assistant: A Multi-Agent Voice Bot Using .NET and OpenAI | score=93.28 ---
 This is a guest post by
 Faisal Waris
 , an AI strategist in the telecom industry. Faisal built RT.Assistant to explore how .NET, F#, and the OpenAI Realtime API can come together in a production-style, multi-agent voice application.
@@ -387,4 +386,3 @@ appeared first on
 .
 
 KAYNAK : https://devblogs.microsoft.com/dotnet/rt-assistant-a-realtime-multiagent-voice-bot-using-dotnet-and-open-ai-api/
-

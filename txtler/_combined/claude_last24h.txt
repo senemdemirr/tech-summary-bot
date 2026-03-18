@@ -1,96 +1,167 @@
---- claude | Elevated errors on Claude Sonnet 4.6 | score=46.50 ---
+--- claude | Elevated errors on Claude Opus 4.6 | score=51.05 ---
 Mar
-16
+18
 ,
-16:35
-UTC
-Resolved
-- This incident has been resolved.
-Mar
-16
-,
-15:35
-UTC
-Update
-- We are continuing to work on a fix for this issue. This is currently only impacting free Claude.ai users.
-Mar
-16
-,
-15:13
-UTC
-Update
-- We are continuing to work on a fix for this issue.
-Mar
-16
-,
-14:05
-UTC
-Update
-- We are continuing to work on a fix for this issue.
-Mar
-16
-,
-14:04
-UTC
-Update
-- We are continuing to work on a fix for this issue.
-Mar
-16
-,
-14:02
-UTC
-Identified
-- The issue has been identified and a fix is being implemented.
-Mar
-16
-,
-14:02
-UTC
-Investigating
-- There's an elevated error rate for free tier users on Claude Sonnet 4.6. We are investigating
-
-KAYNAK : https://status.claude.com/incidents/0266tzhrb7rn
-
---- claude | Elevated errors on Claude.ai | score=24.91 ---
-Mar
-16
-,
-12:36
-UTC
-Resolved
-- This incident has been resolved.
-Mar
-16
-,
-12:27
+07:29
 UTC
 Monitoring
 - A fix has been implemented and we are monitoring the results.
 Mar
-16
+18
 ,
-12:01
+06:41
 UTC
 Investigating
 - We are currently investigating this issue.
 
-KAYNAK : https://status.claude.com/incidents/t2m389x6k1tq
+KAYNAK : https://status.claude.com/incidents/s914kvccjthq
 
---- claude | Elevated errors on Claude.ai | score=24.46 ---
+--- claude | Elevated errors on Claude Opus 4.6 | score=46.84 ---
 Mar
-16
+18
 ,
-14:21
+00:25
 UTC
 Resolved
 - This incident has been resolved.
 Mar
-16
+17
 ,
-13:56
+22:34
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+17
+,
+20:41
+UTC
+Investigating
+- We are currently investigating this issue. We have identified mitigations which we are continuing to regularly employ as we investigate the root cause.
+Mar
+17
+,
+20:02
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+17
+,
+19:47
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+
+KAYNAK : https://status.claude.com/incidents/mhnzmndv58bt
+
+--- claude | Elevated errors on Claude Sonnet 4.6 | score=34.24 ---
+Mar
+17
+,
+15:45
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+17
+,
+15:28
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+17
+,
+15:21
+UTC
+Update
+- We are continuing to work on a fix for this issue.
+Mar
+17
+,
+14:07
+UTC
+Identified
+- The issue has been identified and a fix is being implemented. At this stage, only free Claude.ai users are being impacted.
+
+KAYNAK : https://status.claude.com/incidents/t252hkdgt81f
+
+--- claude | Elevated errors on Claude Sonnet 4.6 | score=31.82 ---
+Mar
+17
+,
+13:03
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+17
+,
+12:13
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+17
+,
+11:59
+UTC
+Update
+- We are continuing to work on a fix for this issue.
+Mar
+17
+,
+10:05
+UTC
+Update
+- We are continuing to work on a fix for this issue.
+Mar
+17
+,
+08:23
+UTC
+Identified
+- The issue has been identified and a fix is being implemented. At this stage, only free Claude.ai users are being impacted.
+Mar
+17
+,
+08:04
 UTC
 Investigating
 - We are currently investigating this issue.
 
-KAYNAK : https://status.claude.com/incidents/81m3f5p97qkk
+KAYNAK : https://status.claude.com/incidents/66wxjy8wc8fx
+
+--- claude | Elevated errors on Claude Opus 4.6 | score=25.86 ---
+Mar
+17
+,
+11:45
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+17
+,
+11:37
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+17
+,
+10:02
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+Mar
+17
+,
+09:46
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/h04m7sftmtk5
 
