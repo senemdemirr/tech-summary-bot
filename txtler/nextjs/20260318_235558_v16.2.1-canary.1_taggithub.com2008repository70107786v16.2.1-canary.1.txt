@@ -1,0 +1,18 @@
+Core Changes
+Fix(pages-router): restore Content-Length and ETag for /_next/data/ JSON responses:
+#90304
+Misc Changes
+Add .claude/skills symlink:
+#91616
+Update tokio from 1.43.0 to 1.47.3:
+#90945
+Credits
+Huge thanks to
+@lllomh
+,
+@devjiwonchoi
+, and
+@lukesandberg
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.1

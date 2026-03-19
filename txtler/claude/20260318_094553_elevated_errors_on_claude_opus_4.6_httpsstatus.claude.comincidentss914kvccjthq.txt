@@ -1,6 +1,13 @@
 Mar
 18
 ,
+09:45
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+18
+,
 07:29
 UTC
 Monitoring

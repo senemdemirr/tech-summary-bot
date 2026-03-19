@@ -1,4 +1,4 @@
---- arxiv_ai | Finding Common Ground in a Sea of Alternatives | score=104.51 ---
+--- arxiv_ai | Finding Common Ground in a Sea of Alternatives | score=104.63 ---
 Jay Chooi1,
 Paul Gölz2,
 Ariel D. Procaccia1,
@@ -834,7 +834,7 @@ The GPT-Synthesize+Rank and GPT-Synthesize+Pers variants add rankings_text and p
 
 KAYNAK : https://arxiv.org/abs/2603.16751
 
---- arxiv_ai | Algorithmic Trading Strategy Development and Optimisation | score=104.28 ---
+--- arxiv_ai | Algorithmic Trading Strategy Development and Optimisation | score=104.41 ---
 INF2006 - Cloud Computing and Big Data
 Singapore Institute of Technology
 Infocomm Technology
@@ -1133,7 +1133,7 @@ Lastly, future works may look to explore on dynamic portfolio allocation methods
 
 KAYNAK : https://arxiv.org/abs/2603.15848
 
---- arxiv_ai | FactorEngine: A Program-level Knowledge-Infused Factor Mining Framework for Quantitative Investment | score=104.28 ---
+--- arxiv_ai | FactorEngine: A Program-level Knowledge-Infused Factor Mining Framework for Quantitative Investment | score=104.41 ---
 FactorEngine: A Program-level Knowledge-Infused Factor Mining Framework for Quantitative Investment
 Abstract
 We study alpha factor mining—the automated discovery of predictive signals from noisy, non-stationary market data—under a practical requirement that mined factors be directly executable and auditable, and that the discovery process remain computationally tractable at scale. Existing symbolic approaches are limited by bounded expressiveness, while neural forecasters often trade interpretability for performance and remain vulnerable to regime shifts and overfitting. We introduce FactorEngine (FE), a program-level factor discovery framework that casts factors as Turing-complete code and improves both effectiveness and efficiency via three separations: (i) logic revision vs. parameter optimization, (ii) LLM-guided directional search vs. Bayesian hyperparameter search, and (iii) LLM usage vs. local computation. FE further incorporates a knowledge-infused bootstrapping module that transforms unstructured financial reports into executable factor programs through a closed-loop multi-agent extraction–verification–code-generation pipeline, and an experience knowledge base that supports trajectory-aware refinement (including learning from failures). Across extensive backtests on real-world OHLCV data, FE produces factors with substantially stronger predictive stability and portfolio impact-for example, higher IC/ICIR (and Rank IC/ICIR) and improved AR/Sharpe, than baseline methods, achieving state-of-the-art predictive and portfolio performance.
@@ -1299,7 +1299,7 @@ To concretely demonstrate how FactorEngine (FE) operationalizes program-level ev
 
 KAYNAK : https://arxiv.org/abs/2603.16365
 
---- arxiv_ai | Nonstandard Errors in AI Agents | score=104.28 ---
+--- arxiv_ai | Nonstandard Errors in AI Agents | score=104.41 ---
 Nonstandard Errors in AI Agents
 Abstract
 We study whether state-of-the-art AI coding agents, given the same data and research question, produce the same empirical results. Deploying 150 autonomous Claude Code agents to independently test six hypotheses about market quality trends in NYSE TAQ data for SPY (2015–2024), we find that AI agents exhibit sizable nonstandard errors (NSEs), that is, uncertainty from agent-to-agent variation in analytical choices, analogous to those documented among human researchers. AI agents diverge substantially on measure choice (e.g., autocorrelation vs. variance ratio, dollar vs. share volume). Different model families (Sonnet 4.6 vs. Opus 4.6) exhibit stable “empirical styles,” reflecting systematic differences in methodological preferences. In a three-stage feedback protocol, AI peer review (written critiques) has minimal effect on dispersion, whereas exposure to top-rated exemplar papers reduces the interquartile range of estimates by 80–99% within converging measure families. Convergence occurs both through within-family estimation tightening and through agents switching measure families entirely. These findings have implications for the growing use of AI in automated policy evaluation and empirical research.
@@ -1579,7 +1579,7 @@ This contrasts with Menkveld et al. (2024), where PE quality predicts NSE across
 
 KAYNAK : https://arxiv.org/abs/2603.16744
 
---- arxiv_ai | Beyond Reward Suppression: Reshaping Steganographic Communication Protocols in MARL via Dynamic Representational Circuit Breaking | score=104.28 ---
+--- arxiv_ai | Beyond Reward Suppression: Reshaping Steganographic Communication Protocols in MARL via Dynamic Representational Circuit Breaking | score=104.41 ---
 Beyond Reward Suppression: Reshaping Steganographic Communication Protocols in MARL via Dynamic Representational Circuit Breaking
 Abstract
 In decentralized Multi-Agent Reinforcement Learning (MARL), steganographic collusion—wherein agents develop private communication protocols that evade external monitoring while maintaining high joint utility—constitutes a fundamental and underaddressed AI safety threat. Existing defense mechanisms operate at the behavioral output or reward layer and are structurally blind to covert coordination embedded in high-dimensional latent communication channels. This study introduces the Dynamic Representational Circuit Breaker (DRCB), a multi-layered architectural defense that operates directly at the optimization substrate rather than at the semantic surface.

@@ -1,30 +1,30 @@
 Mar
-17
+18
 ,
-11:45
+13:58
 UTC
 Resolved
 - This incident has been resolved.
 Mar
-17
+18
 ,
-11:37
+13:25
+UTC
+Update
+- A fix has been implemented and we are monitoring the results.
+Mar
+18
+,
+13:19
 UTC
 Monitoring
 - A fix has been implemented and we are monitoring the results.
 Mar
-17
+18
 ,
-10:02
-UTC
-Identified
-- The issue has been identified and a fix is being implemented.
-Mar
-17
-,
-09:46
+12:30
 UTC
 Investigating
 - We are currently investigating this issue.
 
-KAYNAK : https://status.claude.com/incidents/h04m7sftmtk5
+KAYNAK : https://status.claude.com/incidents/0dvq4gvy5f5f

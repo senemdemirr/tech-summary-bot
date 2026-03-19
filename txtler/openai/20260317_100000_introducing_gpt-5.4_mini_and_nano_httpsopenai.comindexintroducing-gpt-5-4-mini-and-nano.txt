@@ -1,3 +1,0 @@
-GPT-5.4 mini and nano are smaller, faster versions of GPT-5.4 optimized for coding, tool use, multimodal reasoning, and high-volume API and sub-agent workloads.
-
-KAYNAK : https://openai.com/index/introducing-gpt-5-4-mini-and-nano
