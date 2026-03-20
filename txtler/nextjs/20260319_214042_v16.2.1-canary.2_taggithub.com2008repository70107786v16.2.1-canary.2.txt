@@ -1,4 +1,3 @@
---- nextjs | v16.2.1-canary.2 | score=69.80 ---
 Core Changes
 Turbopack: enable server HMR for app route handlers:
 #91466
@@ -86,25 +85,3 @@ Huge thanks to
 for helping!
 
 KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.2
-
---- nextjs | v15.5.14 | score=44.16 ---
-Note
-This release is backporting bug fixes. It does
-not
-include all pending features/changes on canary.
-Core Changes
-feat(next/image): add lru disk cache and images.maximumDiskCacheSize (
-#91660
-)
-Fix(pages-router): restore Content-Length and ETag for /_next/data/ JSON responses (
-#90304
-)
-Credits
-Huge thanks to
-@styfle
-and
-@lllomh
-for helping!
-
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v15.5.14
-

@@ -1,0 +1,16 @@
+Mar
+19
+,
+16:16
+UTC
+Resolved
+- This incident started at 8:53 PT / 15:53 UTC and the errors have now returned to baseline since 9:14 PT / 16:14 UTC.
+Mar
+19
+,
+15:59
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/bf1hsq5gbm9b

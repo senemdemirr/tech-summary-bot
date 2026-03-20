@@ -1,4 +1,3 @@
---- huggingface | **Introducing SPEED-Bench: A Unified and Diverse Benchmark for Speculative Decoding** | score=89.41 ---
 Introducing SPEED-Bench: A Unified and Diverse Benchmark for Speculative Decoding
 SD uses a lightweight draft model to speculate multiple future tokens, which are then verified in parallel by the target model. This way, SD can significantly improve throughput while preserving the exact output distribution of the target model.
 Despite rapid progress in SD algorithms, their evaluation remains fragmented and often unrepresentative of real-world data and serving conditions.
@@ -132,4 +131,3 @@ Resources
 We hope SPEED-Bench helps drive more rigorous, realistic, and deployment-aware evaluation of speculative decoding!
 
 KAYNAK : https://huggingface.co/blog/nvidia/speed-bench
-

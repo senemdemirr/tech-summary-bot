@@ -1,0 +1,16 @@
+Mar
+19
+,
+15:46
+UTC
+Resolved
+- As of 8:42 PT / 15:42 UTC the error rate has now returned to baseline.
+Mar
+19
+,
+15:37
+UTC
+Investigating
+- We are currently investigating elevated errors that started at 8:23 PT / 15:23 UTC.
+
+KAYNAK : https://status.claude.com/incidents/mfhmykgrbzt5
