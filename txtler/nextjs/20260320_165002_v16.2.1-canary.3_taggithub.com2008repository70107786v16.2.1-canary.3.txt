@@ -1,0 +1,42 @@
+Core Changes
+Fix layout segment optimization: move app-page imports to server-utility transition:
+#91701
+Fix server actions in standalone mode with
+cacheComponents
+:
+#91711
+Turbopack: lazy require metadata and handle TLA:
+#91705
+Misc Changes
+[turbopack] Optimize compaction cpu usage:
+#91468
+[test] Unflake rendering indicator test & skip building indicator tests:
+#91650
+[test] Fix
+edge-async-local-storage
+deploy test timeout & race condition:
+#91643
+docs: fix broken Activity Patterns demo link in preserving UI state guide:
+#91698
+turbo-persistence: remove Unmergeable mmap advice:
+#91713
+turbopack: move "compact database" tracing span to backend layer:
+#91693
+docs: post release amends:
+#91715
+Credits
+Huge thanks to
+@lukesandberg
+,
+@unstubbable
+,
+@abhishekmardiya
+,
+@sokra
+,
+@icyJoseph
+, and
+@mischnic
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.3

@@ -1,0 +1,40 @@
+Core Changes
+Fix adapter outputs for dynamic metadata routes:
+#91680
+Misc Changes
+Turbopack: fix webpack loader runner layer:
+#91727
+[turbopack] Remove incorrect debug_assert in try_read_task_cell:
+#91699
+Add module count field to module graph tracing spans:
+#91697
+turbopack-cli: add --persistent-caching flag for filesystem-backed cache:
+#91657
+Turbopack: pull in updated vercel/nft tests:
+#91651
+Update Rspack development test manifest:
+#91695
+[test] Unflake
+use-node-streams-env-precedence
+test:
+#91733
+Update Rspack production test manifest:
+#91694
+[turbopack] Improve regressed build speed on cross-compiled MUSL:
+#91477
+Credits
+Huge thanks to
+@ijjk
+,
+@mischnic
+,
+@sokra
+,
+@vercel-release-bot
+,
+@unstubbable
+, and
+@mmastrac
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.4
