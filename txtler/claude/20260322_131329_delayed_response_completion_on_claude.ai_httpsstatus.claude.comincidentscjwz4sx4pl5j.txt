@@ -1,0 +1,23 @@
+Mar
+22
+,
+13:13
+UTC
+Resolved
+- As of 13:02 UTC / 06:02 PT this incident has been mitigated.
+Mar
+22
+,
+12:34
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+Mar
+22
+,
+11:14
+UTC
+Investigating
+- Since approximately 20:00 UTC / 13:00 PT on Friday, March 20, Claude.ai responses may appear to "hang" for around 5 seconds after the text has finished streaming before the message completes. The Anthropic API is not affected.
+
+KAYNAK : https://status.claude.com/incidents/cjwz4sx4pl5j

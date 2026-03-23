@@ -1,0 +1,220 @@
+TrustFlow: Topic-Aware Vector Reputation Propagation for Multi-Agent Ecosystems
+Abstract
+We introduce TrustFlow, a reputation propagation algorithm that assigns each software agent a multi-dimensional reputation vector rather than a scalar score. Reputation is propagated through an interaction graph via topic-gated transfer operators that modulate each edge by its content embedding, with convergence to a unique fixed point guaranteed by the contraction mapping theorem. We develop a family of Lipschitz-1 transfer operators and composable information-theoretic gates that achieve up to 98% multi-label Precision@5 on dense graphs and 78% on sparse ones. On a benchmark of 50 agents across 8 domains, TrustFlow resists sybil attacks, reputation laundering, and vote rings with at most 4 percentage-point precision impact. Unlike PageRank and Topic-Sensitive PageRank, TrustFlow produces vector reputation that is directly queryable by dot product in the same embedding space as user queries.
+Keywords reputation • trust propagation • multi-agent systems • PageRank • topic-sensitive • embedding space
+1 Introduction
+The emergence of autonomous software agents that interact, delegate tasks, and transact on behalf of users creates a fundamental trust problem: how does a user—or another agent—select the right agent for a task from a marketplace of millions? Traditional approaches (star ratings, manual curation, call counts) fail at scale because they are easily gamed, domain-agnostic, and cannot propagate transitive trust.
+PageRank (Brin and Page 1998) demonstrated that the link structure of the web encodes a useful notion of importance: a page is important if important pages link to it. Topic-Sensitive PageRank (TSPR) (Haveliwala 2002) extended this insight by computing multiple PageRank scores, each biased toward a different topic, to yield query-sensitive importance scores. Both algorithms operate on a single, topic-independent transition matrix and produce scalar rankings.
+Agent reputation, however, has structural properties absent from web-page ranking that demand a fundamentally different formulation:
+-
+1.
+Multi-domain expertise. An agent may be expert in both medicine and data science. A scalar reputation score cannot represent this; a vector can.
+-
+2.
+Content–competence decoupling. Web pages are inherently content-bearing—text and links are the signal. Agents may be pure service providers; trust must derive from interaction history, not static content.
+-
+3.
+Economic signals. When agent delegates a paid task to agent , the economic commitment is a trust signal absent from hyperlink graphs.
+-
+4.
+Adversarial moderation. Malicious agents may attempt sybil attacks, reputation laundering, or vote rings. The system must resist these while maintaining fairness.
+-
+5.
+Directional discovery. Users search for agents by natural-language queries. Reputation should be queryable in the same vector space as queries, enabling a single dot-product retrieval.
+TrustFlow addresses all five through a unified framework of vector reputation propagation with topic-gated trust transfer. Our contributions:
+-
+1.
+Topic-aware vector reputation propagation in both discrete ( matrix) and continuous ( embedding) formulations, with convergence guarantees via contraction mapping (§3).
+-
+2.
+A family of Lipschitz-1 transfer operators—projection, squared gating, scalar-gated, and hybrid—that modulate reputation flow by interaction content, with composable information-theoretic gates (KL-divergence, entropy, confidence) and empirically characterized precision–information tradeoffs (§3.3).
+-
+3.
+Negative trust edges for moderation flags with joint convergence guarantees (§3.6).
+-
+4.
+Comprehensive evaluation demonstrating structural resilience to four attack classes, with pp P@5 impact across all transfer operators (§5).
+2 Preliminaries
+We briefly review the mathematical foundations on which TrustFlow builds.
+2.1 PageRank
+Let be the number of pages on the web and let be the row-stochastic transition matrix of the web graph, where if page links to page . The PageRank vector is the stationary distribution of the random walk:
+where is the damping factor and is the teleportation vector (uniform in standard PageRank). The teleportation term ensures ergodicity—stochasticity, irreducibility, and aperiodicity—guaranteeing convergence to a unique fixed point (Langville and Meyer 2006). Each entry is a scalar importance score.
+2.2 Topic-Sensitive PageRank
+Haveliwala (2002) observed that a single PageRank vector cannot capture topic-dependent importance. TSPR computes biased PageRank vectors , each using a topic-specific teleportation vector that concentrates probability mass on pages known to belong to topic :
+At query time, the query is classified into topics and the final score is a linear combination . Crucially, the transition matrix is the same for all topics—TSPR cannot distinguish “A links to B in a medical context” from “A links to B in a coding context.”
+2.3 Notation
+3 The TrustFlow Algorithm
+3.1 Overview
+TrustFlow generalizes PageRank along two axes:
+-
+•
+Scalar vector. Each agent’s reputation is a vector , not a scalar. The direction encodes the agent’s expertise profile; the magnitude encodes accumulated trust.
+-
+•
+Single transition matrix topic-gated transfer. Rather than TSPR’s approach of biasing the teleportation vector while sharing a single , TrustFlow gates each edge’s reputation transfer by the interaction’s content embedding, producing topic-dependent transfer without requiring pre-defined topic categories.
+We present the continuous formulation first, then the discrete specialization.
+3.2 Continuous Formulation
+Each agent has a reputation vector that lives in the same embedding space as interaction content and discovery queries. Each directed edge carries a unit interaction embedding derived from the content of their interaction. The core iteration is:
+where:
+-
+•
+is a topic-gated transfer operator that modulates the sender’s reputation by the interaction embedding. We study a family of such operators (§3.3)—projection, element-wise squared gating, Hadamard relu, scalar-gated, and hybrid—each satisfying a Lipschitz-1 bound that guarantees convergence.
+-
+•
+is the row-normalized edge weight. Raw weights incorporate interaction frequency and optional payment delegation multipliers (e.g., for economically backed edges); row normalization is applied afterward so that for each sender , preserving the contraction guarantee regardless of multiplier magnitude.
+-
+•
+is the teleportation prior, playing the same structural role as in Equation 1: scaled by , it ensures ergodicity (stochasticity, irreducibility, aperiodicity) exactly as in PageRank’s Google Matrix. is derived from agent ’s public content embeddings, weighted by engagement and quality scores.
+-
+•
+is the exogenous authority injection, an additive term that absorbs external reputation signals (content engagement, web authority, economic intent, cross-platform reputation) into the embedding space. Because is not scaled by , the operator can tune exogenous signal strength independently of the damping factor; an alternative formulation couples under alongside when exogenous signals should naturally diminish as graph evidence accumulates.
+The iteration begins with and converges to a unique fixed point by the contraction mapping theorem (§3.5).
+Blind edges. Edges whose content is not available (e.g., encrypted API calls) are called blind edges. Because no interaction text can be embedded, blind edges carry less signal than labeled ones and are discounted (weighted at in our experiments). Their quality can be improved with proxy embeddings: in this work we use , the mean of the two agents’ profile embeddings, which assumes the interaction concerns a topic between their areas of expertise. A learned model conditioned on richer caller–callee features (capability overlap, historical call patterns, task metadata) could predict a more accurate proxy and is a direction for future work. We evaluate the averaging proxy in §5.
+Unnormalized reputation. We retain full magnitude during iteration: is not L2-normalized between steps. An agent that accumulates reputation from many high-quality interactions in a given direction will have a larger component in that direction. The L2 norm naturally reflects total accumulated reputation—analogous to how PageRank propagates more authority from high-scoring nodes—while the direction encodes the expertise profile. An alternative, per-iteration normalization variant constrains all vectors to the unit sphere; we compare both in §5.3.
+Comparison with PageRank and TSPR. Equation 3 generalizes Equation 1 in three ways: (i) scalar becomes vector ; (ii) the uniform transfer becomes the topic-gated transfer ; and (iii) the teleportation is supplemented by an independent exogenous injection . Unlike TSPR (Equation 2), which biases only the teleportation vector while retaining a single topic-independent , TrustFlow makes every edge’s transfer depend on the interaction’s semantic content.
+3.3 Transfer Operator Family
+The transfer operator in Equation 3 determines how reputation is modulated by the interaction embedding before propagation. We study five base operators, each satisfying a Lipschitz-1 bound (ensuring convergence, §3.5) but occupying a different point in the precision–information tradeoff space.
+Projection: , where . The output is always parallel to (rank 1), confining transfer strictly to the interaction topic direction. This provides maximum cross-domain isolation but collapses directional information on content-free (blind) edges ( for uniform ).
+Squared gating: . Each dimension of the sender’s reputation is gated by the squared activation of the interaction embedding in that dimension. Because , the gating is always non-negative, acting as a spectral filter. On blind edges (), the output is —the sender’s full profile with perfect directional preservation ().
+Scalar-gated: , where and is a clamped relu. The clamp ensures , so , satisfying the Lipschitz-1 bound. A single go/no-go gate based on overall cosine alignment, transferring the full profile when the gate opens. Excels on dense labeled graphs but degrades on blind-heavy graphs where the gate closes.
+Hadamard relu: . A variant of squared gating that applies element-wise relu instead of squaring. Unlike squared gating, relu clips the of dimensions where dense E5 embeddings have negative components, losing information.
+Hybrid: Per-edge operator selection based on content availability (e.g., squared gating for content-free edges, projection for content-rich edges), or a convex interpolation .
+All operators are Lipschitz-1. For squared gating: since implies . For projection: projection onto a unit vector is nonexpansive. Combined with , all variants converge.
+KL-divergence gating. Any transfer operator can be composed with an information-theoretic gate that suppresses cross-domain reputation leakage. The gated transfer replaces with , where:
+Here is the interaction’s topic distribution and is agent ’s reputation treated as a distribution. When the interaction aligns with the sender’s expertise (), the gate ; when off-topic, the gate decays exponentially. In the continuous formulation, an efficient cosine proxy avoids the softmax conversion: , where is the angle between and . The gate is bounded in and Lipschitz-continuous in , preserving the contraction guarantee, though the composite contraction constant increases slightly, requiring more iterations to converge.
+Additional gating mechanisms. The gating architecture is modular: KL-divergence is one instance of a family of composable gates, all bounded in and convergence-preserving. Other members include: (i) an entropy gate that suppresses unfocused or spam-like interactions with high topic entropy; (ii) a magnitude-ratio gate that measures the fraction of the sender’s reputation concentrated in the interaction direction, penalizing incidental transfers far from the sender’s core profile; and (iii) a confidence gate that discounts interactions where the embedding model reports low certainty (particularly useful for blind edges). Gates compose multiplicatively——providing layered defense against different forms of cross-domain leakage. We evaluate KL-divergence gating in §5.4; the remaining gates are left to future work.
+3.4 Discrete Specialization
+When pre-defined domains are available (e.g., medicine, law, finance), each interaction is classified into top- domains via soft assignment against domain centroids. This produces separate transition matrices , each row-stochastic, capturing the fraction of interactions between agents relevant to domain . The per-domain iteration is:
+This is the key structural difference from TSPR: where TSPR uses the same for all topics and varies only the teleportation vector, TrustFlow uses different per domain. When agent calls agent for a medical task, this edge appears with high weight in and low weight in . TSPR cannot make this distinction.
+Each per-domain iteration is an independent PageRank with domain-specific structure, converging in iterations (approximately 11 for , ) (Langville and Meyer 2006).
+Continuous vs. discrete. The discrete formulation requires a pre-defined domain taxonomy and cannot represent cross-domain expertise without dilution. A biostatistics agent must split its reputation mass across medicine and data-science bins. The continuous formulation eliminates this bottleneck: a 384-dimensional vector can simultaneously align with both domain centroids. The discrete formulation is a specialization of the continuous one—obtained by replacing the embedding space with a domain indicator space and the content-gated transfer with domain-conditioned matrices.
+3.5 Convergence
+Theorem 1 (Convergence). For any Lipschitz-1 transfer operator and damping factor , the TrustFlow iteration (Equation 3) is a contraction mapping with factor and converges to a unique fixed point from any initialization.
+Proof sketch. For any two reputation states :
+The first inequality uses the Lipschitz-1 property of ; the second uses the convexity of row-normalized weights (). The teleportation and exogenous terms cancel in the difference. By Banach’s fixed-point theorem, a unique fixed point exists and is reached with linear convergence rate .
+Corollary 1 (Steady-state bound). The converged reputation satisfies .
+The bound follows from evaluating Equation 3 at the fixed point and applying the triangle inequality. The teleportation prior provides a bounded restart (the factor) while provides an exogenous injection whose influence is amplified by at steady state—bounding the total reputation any agent can accumulate.
+3.6 Negative Trust Edges
+The core iteration can optionally be extended with negative trust edges for moderation. Moderation flags (spam, harmful, low-quality, malicious) create negative edges, and the iteration becomes:
+where is constructed from flag edges, weighted by flag severity and reporter reputation.
+Theorem 2 (Convergence with negative edges). The iteration (Equation 6) converges when .
+Proof sketch. The combined linear operator has spectral radius bounded by : for any row-stochastic , , the triangle inequality gives . Multiplying by yields contraction factor , which is strictly less than 1 by hypothesis. Banach’s theorem then guarantees a unique fixed point. Reputation components may become negative under heavy flagging; in practice, a floor is applied post-iteration, which preserves convergence since clamping is nonexpansive.
+With and , this gives , satisfying the condition for any row-stochastic and . In our experiments, flagging two malicious agents with severity 0.95 reduces their reputation by 60–66% while legitimate agents’ ranks are unchanged (§5.5). Flags carry weights based on reporter credibility: verified flags (backed by cryptographic response signing) carry the weight of unverified flags, creating a strong incentive for response-signing adoption. Negative edges are not required for the base algorithm—the system operates without them when no moderation infrastructure is available.
+4 Discovery and Retrieval
+A distinctive property of the continuous formulation is that the converged reputation vector lives in the same embedding space as discovery queries. This enables reputation-based retrieval without a separate ranking infrastructure.
+4.1 Direct Dot-Product Discovery
+The simplest and most effective retrieval strategy ranks agents by the dot product between the query and the unnormalized reputation vector:
+Because is unnormalized, this score naturally incorporates both topical alignment (the cosine component) and accumulated reputation (the magnitude component). An agent with strong demonstrated medical expertise—reputation pointing in the medical direction with high magnitude—is retrieved for medical queries regardless of what its description says. This single-score approach requires no multi-stage pipeline; the reputation vector is the searchable representation.
+4.2 Direction–Magnitude Separation
+When embedding preprocessing (§6.3) is not applied or when high-magnitude generalist agents would otherwise dominate, it is beneficial to separate reputation direction from magnitude. We propose a three-stage pipeline:
+Stage 1 (Recall). Four parallel channels: BM25 on agent descriptions, SPLADEv2 learned sparse expansion (Formal, Piwowarski, and Clinchant 2021), dense cosine against description embeddings (declared expertise), and dense cosine against L2-normalized reputation vectors (demonstrated expertise). Reputation magnitude is not used in this stage.
+Stage 2 (Merge). Reciprocal Rank Fusion () merges the four channels without score calibration.
+Stage 3 (Rerank). Scalar reputation enters as a quality signal on the already-relevant candidate set: , where is the stored magnitude. Alternatively, the full dot product (Equation 7) can serve as a reranking score over the multi-channel candidate set.
+The direction-only architecture is recommended as a defensive practice: with proper mean-centering (§6.3), the magnitude-mixing penalty is mild (pp), but with uncorrected anisotropic embeddings, magnitude mixing causes up to 58pp precision collapse.
+5 Experimental Evaluation
+5.1 Setup
+Agent corpus. 50 agents across 8 domains (medicine, law, finance, coding, cybersecurity, education, creative, data science) with 6 cross-domain specialists. Each agent has a professional description embedded with multilingual-e5-small () after mean-centering. Agent archetypes: 5 hubs (highly connected), 39 active (moderate interactions), 4 dormant (near-zero transactions), 2 malicious (sybil pair).
+Interaction graph. 70 labeled edges with E5-embedded text (14 carrying weight from payment delegation—edges where one agent paid another for task execution, providing a high-fidelity economic endorsement), plus 612 blind edges using avg(caller, callee) embedding as topic proxy, weighted at . The 8.7:1 blind-to-labeled ratio models the real-world scenario where most agent interactions lack inspectable content.
+Discovery queries. 10 natural-language queries across all domains, including 2 cross-domain queries (biostatistics, legal-tech). Ground truth: agents whose primary or secondary domain matches the expected domain.
+Metrics. P@5 (precision at 5); scalar reputation (, total reputation magnitude); self-alignment (how well converged reputation preserves the original expertise direction). We report two P@5 variants: strict P@5 counts only agents whose primary domain matches the query; multi-label P@5 also counts agents whose secondary domain matches, rewarding cross-domain specialists retrieved for relevant queries.
+Configuration. , , blind discount , content authority weight , all embeddings mean-centered.
+5.2 Discrete vs. Continuous
+On the sparse labeled-only graph, the discrete formulation is competitive (74%) because mean-centered embeddings give clean domain-bin classification. On the combined graph with blind edges, the continuous formulation pulls ahead at 78%—the embedding space handles the avg(caller, callee) blind-edge proxy naturally, while the discrete formulation has no mechanism for blind edges. A cross-domain biostatistics agent that must split its reputation 0.65 medicine + 0.10 data science in the discrete formulation can simultaneously align with both domain centroids in the 384-dimensional continuous space.
+5.3 Transfer Operators
+Projection achieves the highest combined-graph P@5 (78%) due to its rank-1 output structure: trust transfers exclusively in the interaction topic direction, producing constructive interference when multiple incoming edges agree on topic. Squared gating’s full-rank output preserves more information per edge but produces weaker domain concentration when aggregated.
+Scalar-gated excels on labeled-only graphs (74%) where the alignment signal is strong, but degrades on combined graphs (62%) because the cosine gate closes on low-quality blind edges. The Hadamard relu variant (68%) is strictly inferior to squared gating (72%), consistent with its information loss from clipping negative embedding components.
+Blind-edge information preservation. We measure how much directional information survives a blind edge by computing :
+Squared gating uniquely achieves on uniform blind edges: with , the output is —a uniformly discounted copy of with perfect directional preservation. Projection collapses to a near-uniform vector (). In practice, blind edges use the avg(caller, callee) proxy rather than uniform, providing substantially more topic signal, which explains why projection still achieves 78% P@5 on the combined graph.
+Unnormalized iteration. Squared gating converges faster than projection in unnormalized mode (4 vs. 12 iterations) while matching P@5 at 72%, a consequence of its higher self-alignment ( vs. 0.982).
+5.4 KL-Divergence Gating
+KL gating with provides the best balance: self-alignment increases by 24.5% with a P@5 improvement of 8pp (68% 76%). At , the gate becomes too restrictive, suppressing legitimate cross-domain transfer. The effect is strongest in domains with high cross-domain interaction: medicine (+28.3%), education (+27.9%), law (+26.1%).
+5.5 Attack Resistance
+We evaluate TrustFlow against four attack scenarios (Douceur 2002) on the combined graph (70 labeled + 612 blind edges, 50 agents, 8 domains).
+Cross-domain sybil. Two malicious finance agents form a mutual-boosting ring with 30 heavy edges and spam-call 5 hub agents with 82 edges. P@5 unchanged (78.0%). The topic-gated transfer resists cross-domain attacks: when finance agent spam-calls medical hub , the transfer embedding is biased toward finance, so the alignment is weak.
+Same-domain sybil. Two medicine agents form a sybil ring with 40 mutual edges and spam 4 medicine targets. P@5 = 74.0% (pp). Same-domain sybil is the hardest attack because edges are domain-relevant and indistinguishable from legitimate interactions. Flagging the pair with severity 0.5 reverses the gains.
+Reputation laundering. Malicious agent pumps edges into clean intermediary , which forwards to hub . P@5 unchanged. Laundering inflates the intermediary but fails to benefit the malicious source, because reputation flows downstream in the interaction embedding direction.
+Vote ring. Five finance agents form a closed loop with 75 heavy edges. P@5 = 80.0% (+2pp). The ring is bounded by the contraction mapping: each hop attenuates by ; after one cycle , with each subsequent cycle contributing exponentially less.
+All operators exhibit strong attack resistance (pp impact). The structural defenses—row normalization, -damping, teleportation prior—operate independently of the transfer operator. Malicious agents rank in the bottom 30% across all operators.
+5.6 Graph Density
+Graph density—the amount of interaction data available—is the single most important factor determining TrustFlow’s precision. Doubling labeled edges from 70 to 156 (avg in-degree 1.4 3.1) improves strict P@5 by 10pp (68% 78%) and multi-label by 8pp (78% 86%). Adding 612 blind edges brings multi-label P@5 to 88%. We discuss the practical implications of this finding in §8.
+On the dense graph, all operators improve substantially:
+Scalar-gated benefits most from graph density (+14pp strict, +24pp multi-label), achieving 98% multi-label P@5 on the dense graph. Its go/no-go gate produces clean transfer when the alignment signal is strong.
+5.7 Retrieval Strategies
+With proper mean-centering, magnitude mixing has a mild impact (pp). Without centering, hub agents have spuriously high baseline cosine with all queries (inter-domain cosine 0.87–0.93), and magnitude mixing amplifies this to a catastrophic 58pp collapse. Separating direction from magnitude is a defensive best practice for systems with embeddings of varying quality.
+6 Analysis
+6.1 Sybil Resistance
+TrustFlow provides four structural defenses against sybil attacks:
+-
+1.
+Teleportation ceiling. The total reputation of a sybil cluster is bounded: . A cluster of fake agents with minimal content and no exogenous authority has a low ceiling regardless of internal edge density.
+-
+2.
+Row normalization dilution. Each additional outgoing edge from an attacker dilutes per-edge weight. In our experiments, 2 malicious agents generated 148 outgoing blind edges—more than double the entire labeled graph—yet ranked #39 and #42 out of 50.
+-
+3.
+Payment delegation asymmetry. Legitimate agents generate -weighted delegation edges via real economic commitment. To match the influence of one payment-backed interaction, an attacker needs blind spam edges ( delegation / blind discount).
+-
+4.
+Same-owner edge discount. Edges between agents detected as sharing ownership (via shared API keys, wallet addresses, or registration metadata) are discounted, increasing the cost of sybil ring construction.
+6.2 Scalability
+The per-iteration cost is for the continuous formulation and for the discrete formulation (sparse matrix–vector multiply), where is the number of edges.
+-
+•
+100K agents: s per batch (single core, 80MB memory).
+-
+•
+1M agents: Connected-component decomposition (most components are small, embarrassingly parallel). Incremental warm start: 2–3 iterations when $<$1% of edges changed.
+-
+•
+10M+ agents: Standard distributed SpMV (MapReduce), the same architecture that powered Google’s original PageRank computation.
+6.3 Embedding Preprocessing
+Dense embedding models (E5, Sentence-BERT, CLIP) produce anisotropic representations: embeddings are clustered in a narrow cone, causing inter-domain cosine similarities of 0.87–0.93. This leaves insufficient angular margin for domain discrimination.
+Mean-centering (isotropic adjustment) removes the dominant shared component:
+where is the global mean computed over all embeddings. After centering, inter-domain cosine improves to 0.25–0.60, dramatically improving both formulations. Without centering, discrete P@5 drops to and the continuous formulation’s magnitude-mixing penalty grows from 2pp to 58pp. Mean-centering is applied uniformly to all embedding types: entity content, interaction, query, and domain centroids.
+7 Related Work
+PageRank (Brin and Page 1998). The foundational link-analysis algorithm. Scalar reputation, single transition matrix, no topic awareness.
+Topic-Sensitive PageRank (Haveliwala 2002). Computes biased PageRank vectors with topic-specific teleportation but the same transition matrix for all topics. TrustFlow differs by using different transition matrices per domain (discrete) or content-gated transfer (continuous)—TSPR cannot distinguish “A calls B for medical tasks” from “A calls B for coding tasks.” Furthermore, TrustFlow produces vector reputation queryable in embedding space, while TSPR produces independent scalars requiring query-time linear combination.
+AgentRank-UC (Krishnamachari and Rajesh 2025). The most closely related work on agent ranking. Produces scalar usage/competence ranks via single transition matrices , , fused via geometric mean. Key differences: single / vs. our domain-conditioned ; scalar output vs. vector output ( or ); no negative edges vs. our with convergence guarantee; no payment signals; no continuous embedding formulation.
+EigenTrust (Kamvar, Schlosser, and Garcia-Molina 2003). Binary trust/distrust with global aggregation. No domain awareness, no vector reputation.
+PeerTrust (Xiong and Liu 2004). Context-aware trust with negative ratings, but no graph propagation and no vector representation.
+GNN-based methods (GraphSAGE, GAT). Learn node embeddings from graph structure but do not propagate reputation via contraction mapping. No convergence guarantees, no interpretable transfer mechanism.
+TraceRank (Shi and Joo 2025). Payment-weighted ranking for crypto-paid API economies. Flat address-to-address payments as trust endorsements. No domain awareness (scalar reputation), no delegation chain structure, no chain depth bonus, no negative edges.
+OpenRank (2025). Decentralized reputation infrastructure running EigenTrust and HITS on verifiable compute. Provides the compute-verification layer but uses existing algorithms. TrustFlow’s domain-conditioned propagation, content-gated transfer, and KL-divergence gating are algorithmically distinct.
+8 Discussion and Future Work
+Blind edge proxy quality. The avg(caller, callee) embedding proxy for blind edges proved effective—the combined graph achieves 78% P@5, exceeding the labeled-only baseline (68%) by 10pp. The additional graph connectivity from blind edges improves propagation, and the discount ensures labeled interactions dominate. Replacing the averaging proxy with a richer learned model (§3.2) could further narrow the gap between blind and labeled edges.
+Exogenous authority and cold start. The additive term gives dormant agents a non-zero cold-start reputation. In a nascent marketplace with sparse interactions, may be the primary reputation signal. As interaction density grows, the relative contribution of diminishes for active agents but remains important for onboarding. Six signal classes are supported: content engagement, web domain authority, economic trust signals, cross-platform reputation, curated endorsements, and economic intent signals.
+Operator selection. No single transfer operator dominates across all conditions. Projection achieves the highest combined-graph P@5 (78%) with maximum cross-domain isolation; squared gating uniquely preserves directional information on blind edges () and converges faster; scalar-gated excels on dense labeled graphs (88%/98%). Content-adaptive hybrid strategies (76% combined) that select the operator per-edge based on content availability offer a practical compromise. Our 50-agent benchmark produces similar headline P@5 across operators; a larger-scale evaluation (thousands of agents, diverse interaction densities) would sharpen the separation and is an important direction for future work.
+Graph density as the dominant factor. Our experiments identify interaction data volume as the single most important determinant of TrustFlow’s precision—more important than operator choice, gating strategy, or normalization mode. Increasing labeled edges from 70 to 156 (avg in-degree 1.4 3.1) improves strict P@5 from 68% to 78%; adding blind edges brings multi-label P@5 to 88%. A mediocre operator on a dense graph outperforms the best operator on a sparse one. This has a direct practical implication: deployment strategies should prioritize generating labeled interaction edges—through content-inspectable API calls, payment delegation chains, and structured feedback—over algorithmic tuning.
+Payment delegation chains. When agent delegates a paid task to agent via a payment token (e.g., a JWT delegation chain), the economic commitment creates a high-fidelity trust edge weighted times the base interaction weight (e.g., ). The directed graph of payment delegation edges forms a cashflow graph—a trust overlay where edges are costly to forge. In our experiments, 14 out of 70 labeled edges carry payment delegation weight, accounting for a disproportionate share of reputation flow to hub agents. Multi-hop chains () amplify trust for the final recipient through compounding economic endorsement. An alternative to the static multiplier is logarithmic scaling of transaction value, , which dampens the influence of heavily capitalized actors and better resists capital-backed sybil attacks; we leave the comparison of weighting schemes to future work.
+Non-repudiation. TrustFlow can ingest interaction evidence from a variety of trusted sources—platform logs, payment processors, curated registries—but its resilience is strengthened when interactions are cryptographically non-repudiable. Emerging agent-to-agent authentication protocols such as AOAuth sign both requests and responses, ensuring that the content underlying each edge is tamper-evident and attributable. Signed interactions produce higher-confidence edges, reducing the surface for fabricated or disavowed transactions. The iteration itself is stateless and can operate on interaction logs from any verifiable data source, including blockchain ledgers.
+Limitations. (1) The 50-agent experiment is small; some effects (e.g., specialist-vs.-generalist discrimination, retrieval diversity) would be more pronounced at scale. (2) Mean-centering is a necessary preprocessing step; domain-specific fine-tuning could further improve separation. (3) Blind edge quality assumes interactions concern a topic between the two agents’ expertise—adversarial interactions designed to mislead the proxy are not handled. (4) The flag system requires a reporting mechanism; attack resistance depends on flag accuracy and timeliness. (5) Graph density is the primary precision driver—real deployments should prioritize generating labeled interaction edges. (6) The current formulation accumulates reputation statically; incorporating temporal decay of edge weights (e.g., ) would prevent stale interactions from dominating and better reflect evolving agent competence.
+9 Conclusion
+TrustFlow introduces topic-aware vector reputation propagation with convergence guarantees, generalizing PageRank and TSPR from scalar web-page importance to multi-dimensional agent expertise. Our key findings:
+-
+1.
+Continuous embedding-space reputation outperforms discrete domain reputation on the combined graph (78% vs. N/A for discrete, which lacks blind-edge handling), while discrete is competitive on labeled-only graphs (74% vs. 68–72%) after proper embedding preprocessing.
+-
+2.
+No single transfer operator dominates. Projection achieves the highest combined-graph P@5 (78%) through constructive rank-1 interference; squared gating uniquely preserves directional information through content-free interactions (, vs. 0.004 for projection) and converges faster; scalar-gated reaches 98% multi-label P@5 on dense graphs. Content-adaptive hybrid strategies offer a practical compromise.
+-
+3.
+Embedding mean-centering is a critical preprocessing step, improving domain separation from 0.87–0.93 to 0.25–0.60 in cosine similarity and preventing up to 58pp precision collapse in magnitude-mixing retrieval.
+-
+4.
+All tested attacks produce pp P@5 impact across all transfer operators. Cross-domain sybil and reputation laundering are structurally resisted by the topic-gated transfer; same-domain sybil and vote rings are bounded by the contraction mapping and mitigable by the flag system.
+-
+5.
+Graph density is the primary P@5 driver: increasing labeled edges from 70 to 156 (avg in-degree 1.4 3.1) improves P@5 from 68% to 78–88%, motivating deployment strategies that actively generate labeled edges—including payment delegation chains, which provide high-fidelity economic endorsement edges resistant to sybil inflation.
+10 References
+References
+- Brin, Sergey, and Lawrence Page. 1998. “The Anatomy of a Large-Scale Hypertextual Web Search Engine.” In Proceedings of the Seventh International World Wide Web Conference.
+- Douceur, John R. 2002. “The Sybil Attack.” In Proceedings of the First International Workshop on Peer-to-Peer Systems (IPTPS).
+- Formal, Thibault, Benjamin Piwowarski, and Stéphane Clinchant. 2021. “SPLADE: Sparse Lexical and Expansion Model for First Stage Ranking.” In Proceedings of SIGIR.
+- Haveliwala, Taher H. 2002. “Topic-Sensitive PageRank.” In Proceedings of the Eleventh International World Wide Web Conference.
+- Kamvar, Sepandar D., Mario T. Schlosser, and Hector Garcia-Molina. 2003. “The EigenTrust Algorithm for Reputation Management in P2P Networks.” In Proceedings of the Twelfth International World Wide Web Conference.
+- Krishnamachari, Bhaskar, and Vivek Rajesh. 2025. “Internet 3.0: Architecture for a Web-of-Agents with Its Algorithm for Ranking Agents.” arXiv Preprint arXiv:2509.04979v1.
+- Langville, Amy N., and Carl D. Meyer. 2006. Google’s PageRank and Beyond: The Science of Search Engine Rankings. Princeton University Press.
+- Shi, Dillon, and Kevin Joo. 2025. “Sybil-Resistant Service Discovery for Agent Economies.” arXiv Preprint arXiv:2510.27554.
+- Xiong, Li, and Ling Liu. 2004. “PeerTrust: Supporting Reputation-Based Trust for Peer-to-Peer Electronic Communities.” IEEE Transactions on Knowledge and Data Engineering 16 (7): 843–57.
+
+KAYNAK : https://arxiv.org/abs/2603.19452

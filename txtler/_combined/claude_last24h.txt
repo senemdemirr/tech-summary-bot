@@ -1,0 +1,57 @@
+--- claude | Claude.ai and Claude login down | score=50.55 ---
+Mar
+22
+,
+18:51
+UTC
+Resolved
+- This incident has been resolved. Logins and authentication for claude.ai and platform.claude.com have returned to normal
+Mar
+22
+,
+18:43
+UTC
+Monitoring
+- A mitigation has been applied. Logins have returned to normal, the team is continuing to monitor the situation.
+Mar
+22
+,
+18:33
+UTC
+Update
+- We are investigating an issue with users authenticating to claude.ai and Claude Console (platform.claude.com)
+Mar
+22
+,
+18:31
+UTC
+Investigating
+- We are investigating an issue preventing logins on Claude Console (platform.claude.com)
+
+KAYNAK : https://status.claude.com/incidents/f4wqmj8rhjsc
+
+--- claude | Delayed response completion on Claude.ai | score=42.90 ---
+Mar
+22
+,
+13:13
+UTC
+Resolved
+- As of 13:02 UTC / 06:02 PT this incident has been mitigated.
+Mar
+22
+,
+12:34
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+Mar
+22
+,
+11:14
+UTC
+Investigating
+- Since approximately 20:00 UTC / 13:00 PT on Friday, March 20, Claude.ai responses may appear to "hang" for around 5 seconds after the text has finished streaming before the message completes. The Anthropic API is not affected.
+
+KAYNAK : https://status.claude.com/incidents/cjwz4sx4pl5j
+

@@ -1,4 +1,3 @@
---- nextjs | v16.2.1-canary.5 | score=40.07 ---
 Misc Changes
 docs: use ErrorInfo type consistently in catchError docs:
 #91744
@@ -8,4 +7,3 @@ Huge thanks to
 for helping!
 
 KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.5
-
