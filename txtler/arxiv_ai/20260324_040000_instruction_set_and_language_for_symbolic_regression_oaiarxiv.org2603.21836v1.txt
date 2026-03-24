@@ -1,0 +1,286 @@
+Instruction Set and Language for Symbolic Regression
+Abstract
+A fundamental but largely unaddressed obstacle in Symbolic regression (SR) is structural redundancy: every expression DAG with internal nodes admits distinct node-numbering schemes that all encode the same expression, each occupying a separate point in the search space and consuming fitness evaluations without adding diversity.
+We present IsalSR (Instruction Set and Language for Symbolic Regression), a representation framework that encodes expression DAGs as strings over a compact two-tier alphabet and computes a pruned canonical string—a complete labeled-DAG isomorphism invariant—that collapses all equivalent representations into a single canonical form.
+We validate five fundamental properties of the representation empirically on the Nguyen and AI Feynman benchmark suites: round-trip fidelity, DAG acyclicity, canonical invariance and idempotence, evaluation preservation, and search-space reduction.
+Keywords symbolic regression, canonical string representation, labeled directed acyclic graph, isomorphism invariant, search space reduction
+1 Introduction
+Symbolic regression (SR) is the task of discovering a closed-form mathematical expression that fits an observed dataset , without restricting the functional form a priori. Unlike parametric regression, SR simultaneously searches over the space of mathematical structures and their numerical parameters, making it combinatorially challenging but uniquely interpretable: a successful model is not a black box but a human-readable formula that can be examined, simplified, and extrapolated beyond the training range (Koza, 1992). This interpretability has driven applications across scientific discovery (Udrescu and Tegmark, 2020), engineering (Randall et al., 2022), and machine learning (Cava et al., 2021).
+Despite decades of progress, SR search spaces suffer from a structural redundancy that no existing method addresses directly. A mathematical expression can be represented as a labeled Directed Acyclic Graph (DAG) in which leaf nodes are input variables or learnable constants, and internal nodes are arithmetic or transcendental operations. For a DAG with internal nodes, there exist distinct node-numbering schemes that all encode the same expression. Every one of these equivalent representations occupies a separate point in the search space, consuming fitness evaluations and population slots without adding diversity. For internal nodes—a modest expression size—this amounts to over redundant copies of every structurally unique candidate. No current SR method deduplicates at this granularity.
+Contribution. We present IsalSR (Instruction Set and Language for Symbolic Regression), a representation framework that encodes expression DAGs as instruction strings and computes a pruned canonical string—a complete labeled-DAG invariant—that collapses all equivalent representations into a single canonical form. Any existing SR algorithm can be augmented with IsalSR by inserting a single canonicalization step before fitness evaluation, reducing the effective search space by without altering the algorithm’s core logic.
+IsalSR shares some similarities with IsalGraph (Lopez-Rubio, 2025), a prior framework for encoding unlabeled undirected graphs as instruction strings. However, IsalSR is fundamentally different because it is devoted to the labeled, directed, acyclic setting required for symbolic regression. The key contributions of IsalSR are: (i) a two-tier instruction alphabet that encodes both graph topology and operation labels so that all strings over the alphabet represent a valid DAG; (ii) a commutative encoding that replaces binary non-commutative operators (subtraction, division) with unary decomposition operators, simplifying the isomorphism definition; (iii) a label-aware pruned backtracking algorithm for computing the canonical string efficiently; and (iv) the formal property that the canonical string is a complete isomorphism invariant for labeled DAGs under the adopted semantics, including operand-order preservation for the sole remaining non-commutative operator (Pow).
+1.1 Related Work
+Genetic programming.
+The dominant paradigm for SR since Koza (Koza, 1992) is genetic programming (GP), which evolves populations of expression trees under crossover and mutation. GP naturally produces redundant populations: two individuals with the same expression but different tree shapes are treated as distinct. Semantic crossover operators (Uy et al., 2011) partially address this by considering behavioral equivalence, but do not handle structural isomorphism. Canonicalization is orthogonal to and composable with all GP variants.
+Deep learning and reinforcement learning approaches.
+Petersen et al. (Petersen et al., 2021) propose Deep Symbolic Regression (DSR), which trains an RNN with a risk-seeking policy gradient to generate expression trees sequentially. The recurrent structure again lacks any mechanism for detecting that two generated sequences correspond to the same expression. Liu et al. (Liu et al., 2025) introduce GraphDSR, which represents expressions as DAGs rather than trees, enabling shared subexpression reuse and achieving state-of-the-art performance on the Nguyen and AI Feynman benchmarks. GraphDSR’s DAG representation makes the redundancy problem more acute: variable-arity addition and multiplication nodes admit many equivalent orderings of their inputs, all of which a DAG-based method may explore without deduplication. IsalSR’s canonical string directly resolves this ambiguity for GraphDSR-style expression DAGs.
+Graph-based symbolic regression.
+Xiang et al. (Xiang et al., 2025) observe, in the context of GraphSR, that non-commutative binary operations (subtraction, division) introduce operand-order ambiguity that complicates the isomorphism definition. They propose a unary decomposition: and , replacing binary non-commutative nodes with commutative binary nodes and new unary operators. IsalSR adopts this decomposition, reducing the set of non-commutative binary operations to Pow alone.
+Uniform depth-first search (UDFS).
+Kahlmeyer et al. (Kahlmeyer et al., 2024) propose a structured enumeration strategy for SR based on uniform depth-first search over expression DAGs, with topological numbering to generate candidates systematically. UDFS demonstrates that structured traversal of the expression space improves coverage over random search, but it does not identify or collapse structurally isomorphic DAGs. The canonical string of IsalSR provides a natural deduplication key that can be integrated into UDFS-style enumeration: candidates with the same canonical string are isomorphic and can be skipped.
+Physics-informed and grammar-based SR.
+Udrescu and Tegmark (Udrescu and Tegmark, 2020) leverage physical symmetry groups and dimensional analysis to constrain the search space of the AI Feynman benchmark. Grammar-guided GP methods impose syntactic constraints via context-free grammars to prune invalid expressions. These approaches reduce the search space by restricting which expressions are generated, whereas IsalSR has no invalid expressions without any need of pruning because each string over the defined alphabet of instructions is associated with a valid DAG. Moreover, IsalSR reduces the search space even further by identifying which generated strings are equivalent.
+BINGO.
+Randall et al. (Randall et al., 2022) introduce BINGO (Boosting of Implicit Non-linear Gene expression programming with Optimization), an open-source SR tool developed at NASA for engineering and scientific applications. BINGO combines age-fitness Pareto optimization with automatic differentiation and constant optimization via BFGS, achieving competitive performance on aerospace applications. Like all GP-based methods, BINGO’s population-based search is susceptible to the structural redundancy that IsalSR eliminates; its efficient constant optimizer and modular architecture make it a natural host for IsalSR canonicalization.
+SRBench.
+La Cava et al. (Cava et al., 2021) provide a large-scale benchmark comparing contemporary SR methods on 252 real-world regression datasets drawn from PMLB, covering methods including GP, DSR, and linear baselines. Their comprehensive evaluation reveals that no single method dominates across all datasets, motivating orthogonal improvements such as the search-space reduction provided by IsalSR.
+1.2 Paper Organization
+The remainder of the paper is structured as follows. Section 2 defines the IsalSR instruction set, the String-to-DAG and DAG-to-String algorithms, the pruned canonical string, and the isomorphism invariance property. Section 3 describes the experimental design, including the Nguyen, AI Feynman, and SRBench benchmark suites. Section 4 presents empirical validation of the five fundamental properties of the canonical representation, as well as empirical proof regarding the representation collapse of isomorphic DAGs to a single instruction string (Section 4.2). Section 5 summarizes contributions and outlines future directions.
+2 Methodology
+This section presents the formal foundations of IsalSR. We define the instruction set (§2.1), the String-to-DAG decoder (§2.2), the DAG-to-String encoder (§2.3), the pruned canonical string (§2.4), and conjectures that it is a complete graph invariant under labeled-DAG isomorphism (§2.5).
+2.1 The IsalSR Instruction Set
+IsalSR represents symbolic expressions as labeled directed acyclic graphs (DAGs), encoded as strings over a compact two-tier alphabet. Before defining the alphabet we fix the underlying data structure.
+Definition 2.1 (Labeled DAG).
+A labeled DAG is a tuple where:
+-
+(i)
+is a finite node set with a fixed total order given by the integer indices;
+-
+(ii)
+is a set of directed edges such that is acyclic;
+-
+(iii)
+assigns each node an operation type from the type set (Table 1);
+-
+(iv)
+stores optional per-node metadata: the variable index for Var nodes (), the constant value for Const nodes, and zero for all other nodes.
+An edge means “ provides input to ” (data-flow direction). The in-neighbors of are ; the out-neighbors are .
+Operand order for Pow. Each node maintains an ordered input list , recording the in-neighbors of in the order their connecting edges were added to the DAG. Pow is the sole binary non-commutative operation: if , the evaluation convention is
+where is the base and is the exponent. The first edge added to determines : the / creation token adds the creation edge first, so the creation-edge source is always , the base. A subsequent / instruction appends the exponent . All other operation nodes (Add, Mul, and all unary ops) are commutative, so the order of their in-neighbors does not affect evaluation.
+Machine state. The IsalSR machine state is the quadruple , where is the partially-built labeled DAG, is the Circular Doubly-Linked List (CDLL) whose elements are node identifiers from , is the CDLL index of the primary pointer, and the secondary pointer. The graph node at CDLL position is retrieved as . Conversely, the position within the CDLL of graph node is retrieved as .
+Definition 2.2 (IsalSR Instruction Set ).
+Let be the set of label characters. The alphabet consists of four categories of tokens:
+-
+1.
+Primary pointer movement (single character): N (advance to next CDLL element), P (retreat to previous CDLL element).
+-
+2.
+Secondary pointer movement (single character): n (advance), p (retreat).
+-
+3.
+Edge creation (single character): C creates the directed edge ; c creates . If the edge would create a cycle, it is silently skipped.
+-
+4.
+No-operation (single character): W.
+-
+5.
+Labeled node insertion (two-character token): creates a new node of type , adds the directed edge , and inserts into the CDLL immediately after the primary-pointer position (the pointer does not move). does the same using the secondary pointer .
+The vocabulary contains single-character tokens and compound tokens (), totaling tokens.
+Commutative encoding of subtraction and division. The two unary operators Neg (label g, ) and Inv (label i, ) implement subtraction and division through a commutative decomposition inspired by GraphSR (Xiang et al., 2025):
+Both Add and Mul are commutative, so the inputs to these nodes are interchangeable and no operand-order tracking is required. The protected inverse is when , and otherwise.
+Initial state. Given input variables, the machine is initialized as:
+-
+•
+with node IDs assigned in variable-index order; , .
+-
+•
+.
+-
+•
+(circular, in variable-index order).
+-
+•
+.
+Because node IDs are assigned in insertion order—starting from for —any node inserted later receives a strictly higher ID. This convention makes the operand-order semantics of Equation (1) well-defined and deterministic for every DAG produced by S2D.
+Acyclicity invariant. After every token, remains acyclic. For /, new nodes have no outgoing edges at creation, so adding an edge to them cannot create a cycle. For /, a BFS reachability test is performed before insertion; the instruction is silently skipped if a cycle would result.
+2.2 String-to-DAG Algorithm (S2D)
+The String-to-DAG (S2D) algorithm is a deterministic state machine that decodes an IsalSR string into a labeled DAG. The LabeledDAG data structure tracks, for each node , an ordered input list that records in-neighbors in edge-insertion order. For the sole binary non-commutative operation Pow, this list encodes evaluation semantics via Equation (1): the / creation token establishes (the base) by adding the creation edge first; the subsequent / token sets (the exponent).
+2.3 DAG-to-String Algorithm (D2S)
+The DAG-to-String (D2S) algorithm is a greedy encoder. Given a labeled DAG , it produces a string such that , where stands for Labeled-DAG isomorphism (see Definition 2.9). D2S maintains a parallel output DAG alongside bidirectional index maps and , initialized by mapping the Var nodes in variable-index order. A key structural property is that node IDs in are assigned in insertion order; consequently, the relative ordering of any two non-variable nodes in —and hence the operand semantics for non-commutative binary operations—is fully determined by the sequence in which D2S inserts them.
+Definition 2.4 (Spiral Displacement Set).
+For an output DAG of current size , the candidate displacement set is
+sorted by the key (total cost, then lexicographic tie-breaking). This spiral enumeration guarantees that lower-cost displacements are tried first.
+The greedy loop iterates over and, for each pair , evaluates four candidate operations in strict priority order: (insert via primary), (insert via secondary), C, c. The first valid operation is emitted, pointers are updated, and the loop continues until all nodes and edges of are placed.
+2.4 Pruned Canonical String
+The greedy D2S string depends on the internal node-numbering of the input DAG; two structurally equivalent DAGs with different numberings may yield different strings, and—crucially—different numberings may reverse the operand order of non-commutative binary operations. The canonical string eliminates this dependency by exploring all valid insertion orderings at each / branch point, thereby also exploring all possible operand orders for non-commutative nodes.
+Definition 2.5 (Valid String Set).
+Let denote the set of all strings producible by the D2S procedure on when, at each / branch point with uninserted out-neighbors of the tentative pointer position, any one of those neighbors may be chosen as the next inserted node.
+Definition 2.6 (Canonical String).
+The canonical string of labeled DAG is:
+i.e., the lexicographically smallest element among all shortest strings in , under a fixed total order on .
+6-Component structural tuple. To prune the exponential backtracking search while preserving the invariant property, we associate with each node a directed structural descriptor.
+Definition 2.7 (6-Component Structural Tuple).
+For node in labeled DAG , define the directed -hop neighborhoods:
+The 6-component structural tuple of is:
+All components are computed by truncated BFS in each direction up to depth 3, at cost per node.
+Definition 2.8 (Pruned Canonical String).
+The pruned canonical string is computed by the same backtracking search as , with two additional restrictions at each / branch point.
+Restriction 1 (first-operand eligibility). When the acting pointer node is and the candidate is a Pow node that already has at least one in-neighbor recorded in , is eligible for / insertion via only if would become —the base. Formally, is excluded if is non-empty and . This ensures that each Pow node is created via its designated base source.
+Restriction 2 (label-aware -pruning). Given the eligible candidate set after applying Restriction 1, candidates are partitioned by label: for each distinct label . Within each group, only the maximum-tuple candidates are retained:
+The explored candidate set is . The selection criterion (shortest string, then lexmin) is applied over all branches in .
+The complete algorithm is given in Table 4, using in-place state mutation with explicit undo on backtrack.
+2.5 Canonical String as a Graph Invariant
+We now prove the central theoretical result of IsalSR. The key step is a definition of labeled-DAG isomorphism that faithfully captures the semantic equivalence of two expression DAGs, including the operand-order convention for non-commutative operations.
+Definition 2.9 (Labeled-DAG Isomorphism).
+Two labeled DAGs and are isomorphic, written , if there exists a bijection satisfying:
+-
+(i)
+Edge preservation: ;
+-
+(ii)
+Label preservation: for all ;
+-
+(iii)
+Variable anchoring: for every Var node , , i.e., for all ;
+-
+(iv)
+Operand-order preservation: for every Pow node with ordered input list ,
+That is, maps the base of in to the base of in , and the exponent to the exponent. All other operation nodes are commutative and impose no ordering constraint.
+Two main results follow. They are stated as conjectures. Their proof is left as future work.
+Conjecture 2.10 (Round-Trip Fidelity).
+Let with variables and . If every non-variable node of is reachable from some variable via directed paths, then
+Conjecture 2.11 (Pruned Canonical String is a Complete Labeled-DAG Invariant).
+Let and be labeled DAGs with variables, both satisfying the reachability condition of Conjecture 2.10. Then:
+3 Computational experiments
+Conjectures 2.10 and 2.11 assert that the pruned canonical string is a complete labeled-DAG invariant, but their proofs are left as future work. We therefore validate the representation empirically by testing five fundamental properties of the canonical string:
+- P1
+-
+Round-trip fidelity. Encoding a DAG to a string and decoding it back recovers an isomorphic DAG: (Conjecture 2.10).
+- P2
+-
+DAG acyclicity. Every DAG produced by is acyclic (§2.2).
+- P3
+-
+Canonical invariance. The pruned canonical string is a complete isomorphism invariant: (Conjecture 2.11). As a corollary, canonicalization is idempotent.
+- P4
+-
+Evaluation preservation. A round-tripped DAG evaluates identically to the original at every test point, up to a tolerance of .
+- P5
+-
+Search space reduction. Canonicalization collapses the equivalent node-numbering representations of each expression into a single canonical form (§2.5).
+Properties P1–P4 are validated by a single-pass randomized experiment (§3.3). Property P5 is validated by a separate search-space analysis (§3.4). A scalability study (§3.5) measures the CPU time of the pruned canonicalization algorithm as a function of DAG size. Two illustrative experiments (§3.6.1–3.6.2) provide qualitative evidence that the canonical string induces a meaningful metric on expression DAGs. All experiments use a global random seed of and are fully reproducible from the public code repository. Results are presented in Section 4.
+3.1 Benchmark Suites
+We draw benchmark expressions from two standard SR suites: the Nguyen benchmarks and a subset of the AI Feynman equations.
+Nguyen benchmarks.
+Table 5 lists the 12 Nguyen benchmark expressions originally introduced by Uy et al. (2011) and adopted in the configuration of Liu et al. (2025). Eight are single-variable polynomials, trigonometric, logarithmic, or radical functions over bounded intervals; four are two-variable expressions involving products, sums, and the sole non-commutative operator Pow. Training data consist of points sampled uniformly from the specified input range; test data consist of points from the same range.
+AI Feynman benchmarks.
+Table 6 lists 10 physics equations selected from the AI Feynman dataset of Udrescu and Tegmark (2020), following the subset and variable ranges of Liu et al. (2025). The selection spans one single-variable, five two-variable, and four three-variable equations, covering polynomial, trigonometric, and rational functional forms. Data consist of samples with an / train/test split.
+3.2 Random Expression Generation
+Two complementary procedures generate test inputs across the experiments.
+Random DAG generation.
+The scalability (§3.5) and search-space (§3.4) experiments require random DAGs with a prescribed number of internal nodes. Given input variables and a target of internal nodes, the generator creates Var leaf nodes and then iteratively adds operation nodes. At each step, with probability a unary operation is selected uniformly from ; otherwise a binary operation is selected from . If fewer than two nodes exist, a unary operation is forced. Each new node receives one (unary) or two (binary) incoming edges from nodes selected uniformly at random among all previously created nodes. Pow is excluded by default, so all binary operations are commutative under the decomposition of §2.1 (, ). The per-sample seed is deterministic: , where is the sample index.
+Random string generation.
+The property-validation experiment (§3.3) generates random IsalSR strings as its input. A random string is produced by first sampling a token count and then drawing each token independently and uniformly from the full IsalSR token set (Definition 2.2). Each string is parsed via (Table 2); strings that produce DAGs with only Var nodes (no internal nodes) are discarded. This strategy samples the string space uniformly rather than targeting a particular DAG topology, exercising all token types including movement, edge creation, and no-op instructions.
+3.3 Property Validation: P1–P4
+We validate properties P1–P4 in a single pass over randomly generated IsalSR strings. For each input variables, we generate random strings with tokens. Each valid, non-VAR-only DAG undergoes the following four tests:
+-
+1.
+P2 (Acyclicity): A topological sort of is computed; the test passes if the sort includes all nodes.
+-
+2.
+P1 (Round-trip): The greedy encoding is decoded to ; the test passes if under Definition 2.9.
+-
+3.
+P4 (Evaluation preservation): Both and the round-tripped are evaluated at five fixed test points per configuration, spanning negative, zero, and positive inputs. The test passes if the maximum absolute error across all test points is below . When both DAGs produce the same evaluation error at a test point (e.g., division by zero), that point is counted as preserved.
+-
+4.
+P3 (Canonical invariance): The pruned canonical string is decoded to ; invariance passes if . Canonicalization is then applied a second time to ; idempotence passes if the resulting string equals . The canonicalization timeout is s; samples that exceed the timeout are excluded from the P3 denominator but remain in P1, P2, and P4 counts.
+Pass rates are reported with Clopper–Pearson exact binomial confidence intervals, for a total of random strings.
+3.4 Property Validation: P5 — Search Space Reduction
+This experiment directly validates the central claim: that canonicalization collapses the equivalent node-numbering representations of each expression into a single canonical form.
+Rather than sampling random strings and measuring collision rates—an approach that underestimates the true equivalence class size because the string space is vastly larger than the number of structurally unique DAGs—we deliberately construct all equivalent representations of each expression and verify that canonicalization maps them to the same string.
+A labeled DAG with variable nodes (IDs ) and internal nodes (IDs ) admits distinct node-numbering schemes: permutations of the internal node IDs that produce structurally distinct labeled DAGs, all encoding the same mathematical expression. If the canonical string is a complete isomorphism invariant, it must map all numbering schemes to the same string.
+For each value of and input variables, we generate structurally unique random DAGs (§3.2), deduplicating by canonical string to ensure that each DAG represents a distinct isomorphism class. For each DAG with internal nodes, we proceed as follows:
+-
+1.
+Compute the pruned canonical string once.
+-
+2.
+Generate permutations: all permutations if (); otherwise random permutations.
+-
+3.
+For each permutation of , construct by remapping internal node to position , preserving all edges, labels, and operand order. Compute a structural fingerprint: the tuple for each node in new-ID order, where is the ordered input list (Definition 2.1).
+-
+4.
+Verify canonical invariance on a subset of permutations: compute and check that it equals .
+Two distinct permutations produce the same structural fingerprint if and only if they differ by an automorphism of . By the Orbit-Stabilizer theorem, the number of distinct fingerprints is exactly
+where is the size of the automorphism group of . For generic DAGs with no symmetry (), this equals . The normalized ratio therefore measures the structural asymmetry of each DAG, and we report it alongside the canonical invariance success rate.
+3.5 Canonicalization Scalability
+This experiment measures how the wall-clock time of the pruned canonicalization algorithm (Definition 2.8) scales with DAG size, and quantifies the speedup that -tuple pruning provides over exhaustive search (Definition 2.6).
+We generate random DAGs in a full factorial design over internal nodes and input variables, with independently seeded samples per configuration, for a total of DAGs. Each DAG is canonicalized twice: once by the exhaustive backtracking algorithm and once by the pruned algorithm. Both calls are subject to a per-canonicalization timeout of s. Wall-clock time is measured via a monotonic high-resolution counter.
+Because canonicalization times are heavily right-skewed, we report medians and interquartile ranges (IQR) rather than means. The speedup ratio is defined as the median exhaustive time divided by the median pruned time for each configuration.
+3.6 Metric Space Properties
+If the pruned canonical string is a complete invariant (Conjecture 2.11), the Levenshtein edit distance (Levenshtein, 1966) on canonical strings satisfies the identity of indiscernibles and defines a metric on isomorphism classes of expression DAGs. We probe this metric with two illustrative experiments.
+3.6.1 Shortest-Path Distance Between Expression DAGs
+We select five expression pairs that span a range of structural relationships: (A) structurally different expressions ( vs. ), (B) identical operand structure with a different binary combinator ( vs. ), (C) a containment relationship ( vs. ), (D) identical topology with a different unary operator ( vs. ), and (E) mixed two-variable expressions ( vs. ). For each pair, both expressions are converted to labeled DAGs, their pruned canonical strings are computed, and the Levenshtein distance is obtained via the Wagner–Fischer dynamic-programming algorithm with full edit-operation backtrace. This experiment is illustrative and involves no randomization or statistical analysis.
+3.6.2 Distance-1 Neighbourhood Analysis
+This experiment quantifies the redundancy that canonicalization eliminates in the immediate neighbourhood of a canonical string. We take the expression with variable, whose pruned canonical string is of length .
+We enumerate all character-level Levenshtein distance- neighbours of . Let denote the character-level alphabet size (here , comprising 7 single-character instruction tokens and 10 label characters that appear as the second character of compound tokens). The total number of neighbours is:
+Each neighbour string is parsed via ; strings that fail to parse or produce VAR-only DAGs are classified as invalid. Valid DAGs are canonicalized (timeout s), and the number of distinct canonical forms is counted. The redundancy rate is defined as , where is the number of distinct canonical strings among the valid neighbours. Results are further disaggregated by edit operation type (deletion, substitution, insertion). This experiment is a single-expression case study.
+3.7 Statistical Methods and Computational Infrastructure
+Statistical methods.
+The property-validation experiment (§3.3) reports Clopper–Pearson exact binomial confidence intervals for each pass rate, which are conservative and valid for all sample sizes. The search-space experiment (§3.4) reports exact counts for exhaustive permutation runs () and lower-bound counts for sampled runs (); the canonical invariance success rate is an exact binomial proportion. The scalability experiment (§3.5) reports medians and interquartile ranges, which are robust to the right-skewed distributions typical of execution-time measurements. All experiments use a base random seed of , with per-sample seeds derived deterministically from the base seed, the number of variables, the DAG size, and the sample index.
+Computational infrastructure.
+The two illustrative experiments (§3.6.1–3.6.2) are deterministic, single-expression computations that run in under one minute on a standard workstation. The remaining experiments run on the Picasso supercomputer at the Supercomputing and Bioinnovation Center (SCBI) of the University of Málaga, using CPU-only nodes. Table 7 summarizes the parameters and computational scale of each experiment.
+4 Results
+We present the results of the experiments described in Section 3. We first report the property-validation results (P1–P4) and the search-space reduction analysis (P5), then the scalability measurements, and finally the two metric-space case studies.
+4.1 Property Validation (P1–P4)
+We report the results of the randomized property-validation experiment described in §3.3. Of the random strings generated ( per ), produced valid DAGs with at least one internal node and constitute the test pool for properties P1, P2, and P4. For P3, samples exceeded the s canonicalization timeout and were excluded from the denominator, leaving evaluable samples.
+P1 (Round-trip fidelity).
+All samples pass: in every case. The Clopper–Pearson confidence interval for the true pass rate is . Figure 3 illustrates the round-trip for the Nguyen-1 benchmark, where the canonical and pruned algorithms produce identical strings (), while the greedy encoder yields a longer string (, a overhead).
+P2 (DAG acyclicity).
+All decoded DAGs are acyclic, with the same confidence interval . P2 holds by construction: assigns strictly increasing IDs to new nodes and rejects C/c edges that would create cycles (§2.2). The experiment confirms that the implementation matches this specification.
+P4 (Evaluation preservation).
+All round-tripped DAGs evaluate identically to their originals at every test point (maximum absolute error below ), with confidence interval . Cases where both original and round-tripped DAGs produce the same evaluation error (e.g., division by zero) are counted as preserved.
+Benchmark validation.
+Table 8 reports the deterministic validation of P1–P4 on benchmark expressions from the Nguyen and AI Feynman suites. All four properties hold for every expression, across DAG sizes ranging from (Nguyen-8, ) to (Nguyen-12, a four-term polynomial in two variables).
+P3 (Canonical invariance).
+Of the non-timeout samples, pass (). Table 9 reports the per- breakdown.
+Three samples fail P3: sample index at for and sample index at for . None of these failures are timeouts. We reproduced all three locally and identified a single root cause.
+Root cause of P3 failures.
+In all three cases, the failing DAG contains an edge directed into a Var node—a structure that can arise from when a C/c token targets a variable position on the CDLL. Concretely, in sample (, ), a Const node (ID ) has an edge into Var node (ID ): the DAG contains the edge . Similarly, sample contains an edge from a Const node into at . These edges are semantically vacuous—Var nodes ignore their inputs during evaluation, which explains why P4 (evaluation preservation) passes—but they create a structure that the canonical algorithm cannot encode. The algorithm terminates with a RuntimeError rather than a timeout, because no candidate node satisfies the insertion conditions when the remaining unencoded edges include an edge into a leaf node. Both the exhaustive and pruned canonical algorithms fail identically on these DAGs, confirming that the -tuple pruning heuristic is not at fault.
+The greedy handles these DAGs correctly (P1 passes) by encoding the spurious edge via a C/c token after both endpoints are in the CDLL. The canonical backtracking search, however, tracks remaining edges under the assumption that all edges terminate at operation nodes, and the edge into a Var node violates this invariant.
+These failures do not affect Conjecture 2.11. The conjecture requires that both DAGs satisfy the reachability condition of Conjecture 2.10: “every non-variable node of is reachable from some variable via directed paths.” While the three failing DAGs technically satisfy this condition (the edge into a Var node does not obstruct reachability of operation nodes), they contain a degenerate structure—an input to a leaf node—that lies outside the domain for which was designed. A normalization step that strips incoming edges from Var nodes before canonicalization would eliminate these failures entirely.
+Figure 4 illustrates canonical invariance and idempotence for , a well-formed DAG where canonicalization succeeds: the canonical string is a fixed point of the compose-and-recanonicalize map.
+Summary.
+Properties P1, P2, and P4 hold without exception across all valid samples. P3 holds for of the non-timeout samples whose DAGs contain no edges into Var nodes. The three P3 failures are caused by a single degenerate DAG structure—an edge into a Var node—that the canonical cannot encode. This structure is semantically vacuous and can be eliminated by a normalization step. The failures do not contradict Conjectures 2.10 or 2.11.
+4.2 Search Space Reduction (P5)
+We report the results of the controlled permutation experiment described in §3.4. A total of structurally unique random DAGs were analysed across internal nodes and input variables. For , all permutations were enumerated exhaustively ( DAGs); for , random permutations were sampled per DAG ( DAGs).
+Distinct representations.
+Figure 7(a) plots the number of distinct structural fingerprints per DAG against , on a logarithmic scale, alongside the theoretical curve. In the exhaustive range (), the box plots sit on the line across five orders of magnitude—from at to at —confirming that the equivalence class size equals (Equation 2). At , the median DAG admits the full distinct representations, confirming the scale of redundancy described in Section 1. For , the sampled counts are lower bounds on the true number of distinct representations, yet they continue to track the growth rate. After canonicalization, all equivalent representations collapse to a single canonical string (red line at in Figure 7(a)); the shaded region between the data and this line represents the redundancy that canonicalization eliminates.
+Automorphism structure.
+Figure 7(b) shows the normalized ratio for the exhaustive range. The majority of DAGs achieve the full bound (ratio ), corresponding to generic expressions with trivial automorphism group (). Outliers appear at ratio (), (), and (). These correspond to DAGs with non-trivial symmetry—for example, a commutative binary node (Add or Mul) whose two subtrees are isomorphic, yielding . The observed ratios match the predictions of the Orbit-Stabilizer theorem exactly for every exhaustively verified DAG.
+Canonical invariance.
+For each DAG, canonical invariance was verified on a subset of permutations by recomputing and checking equality with (§3.4, step 4). Across all DAGs, the success rate is : no permutation produced a canonical string different from the original. No failures or timeouts were observed.
+Summary.
+The permutation analysis confirms that each expression with internal nodes admits structurally distinct node-numbering representations, and that the pruned canonical string collapses all of them to a single form. The theoretical bound is tight for generic DAGs and the reduction is exact: canonicalization eliminates every equivalent representation across the DAGs tested.
+4.3 Canonicalization Scalability
+The scalability experiment described in §3.5 has been executed on the Picasso supercomputer. Results are under analysis and will be reported in a subsequent revision.
+4.4 Metric Space Properties
+If Conjecture 2.11 holds, the Levenshtein distance (Levenshtein, 1966) on pruned canonical strings satisfies the identity of indiscernibles and therefore defines a metric on isomorphism classes of expression DAGs. We probe this metric with two experiments: a shortest-path distance computation between selected expression pairs (§4.4.1) and a distance-1 neighbourhood analysis around a single expression (§4.4.2).
+4.4.1 Shortest-Path Distance
+Table 10 reports the Levenshtein distances between the pruned canonical strings of five expression pairs, selected to span a range of structural relationships (§3.6.1).
+The distances align with the structural similarity between the paired expressions. Pairs B and D both yield , corresponding to a single character substitution in the canonical string: the combinator label + * for pair B, and the unary label e l for pair D. In both cases the DAG topology is identical and only the operation type at one node differs, which the encoding captures as a single-character change.
+Pair A () and pair C () involve expressions that differ in both topology and size, requiring multiple insertions, deletions, and substitutions to transform one canonical string into the other. Pair C is particularly informative: although is structurally contained in , the canonical strings of the two expressions share no common prefix, so the edit distance reflects the full structural gap rather than a simple extension.
+Pair E () combines differences in operator type, DAG topology, and variable usage within a shared two-variable setting ().
+Figure 5 traces a separate example: the step-by-step Levenshtein path between and (), chosen because the intermediate distance yields a nontrivial yet visually tractable path. Each intermediate string produces a valid expression DAG. The path traverses structurally distinct intermediate forms, including a detour, illustrating that the edit distance does not always follow a monotone structural interpolation.
+4.4.2 Distance-1 Neighbourhood
+We analyse the distance-1 neighbourhood of (canonical string , length , character-level alphabet size ), following the protocol of §3.6.2. The total neighbourhood consists of strings: deletions, substitutions, and insertions (Equation 3).
+Table 11 summarises the outcome by edit operation type.
+Of the neighbours, () produce valid DAGs with at least one internal node. The remaining strings either fail to parse into a valid DAG or yield trivial variable-only graphs. Among the valid neighbours, only produce canonical strings distinct from one another and from the original, yielding an overall redundancy rate of . The per-operation unique counts in Table 11 sum to more than because some canonical forms are reachable by more than one edit type. An additional valid strings canonicalize back to the original , meaning that the corresponding edits are “absorbed” by the canonicalization and do not change the represented expression.
+The three edit operations exhibit different redundancy profiles. Deletions have the lowest absolute count ( valid out of ) but moderate redundancy (), because removing a single character from a short string often destroys the DAG structure entirely. Substitutions produce the most valid neighbours in absolute terms () and retain moderate redundancy (): many substitutions change only the label character of a compound token, mapping to a distinct operation type and hence a distinct canonical form. Insertions generate the most total candidates () and the highest redundancy (): many inserted characters produce movement tokens or no-ops that the canonicalization discards, collapsing the resulting DAGs back to a small set of canonical forms.
+Figure 6 visualises the neighbourhood, with labels indicating the Levenshtein distance between each neighbour’s canonical string and the original. Substitution neighbours at correspond to single-label changes (e.g., , ) that preserve the operand structure, while insertion and deletion neighbours at produce structurally different DAGs. The high redundancy rate illustrates the search-space compression that canonicalization provides: nearly three quarters of the valid perturbations collapse to a previously seen canonical form.
+5 Conclusion
+We have presented IsalSR, a representation framework that encodes symbolic-regression expressions as instruction strings over a two-tier alphabet and computes a pruned canonical string that serves as a complete isomorphism invariant for labeled expression DAGs. The framework addresses a structural redundancy inherent to all existing SR methods: for a DAG with internal nodes, distinct node-numbering schemes encode the same expression and consume search budget without contributing diversity. IsalSR collapses this redundancy into a single canonical form per isomorphism class and can be integrated into any existing SR algorithm as a preprocessing step, requiring only a canonicalization call before fitness evaluation.
+The key technical contributions are threefold. First, the two-tier alphabet guarantees that every string over the alphabet decodes to a valid DAG, eliminating the need for grammar-based or type-system-based validity filters that prune the search space through rejection. Second, the commutative encoding—replacing subtraction and division with unary Neg and Inv operators—reduces the set of non-commutative binary operations to Pow alone, simplifying the isomorphism definition while preserving the full expressive power of the standard SR function set. Third, the label-aware pruned backtracking canonicalization algorithm computes the canonical string efficiently, with scalability results to be reported in a subsequent revision.
+Empirical validation on the Nguyen and AI Feynman benchmark suites confirms the five fundamental properties of the representation. Round-trip fidelity holds at 100% across all tested expressions, and the pruned algorithm agrees with the full canonical algorithm on more than 99.97% of test cases while producing strings up to 21% shorter than the greedy baseline. Canonical invariance and idempotence are verified at 100% across 961 DAGs, supporting Conjecture 2.11 and providing strong empirical evidence that the pruned canonical string is a complete labeled-DAG invariant. Evaluation preservation holds within a tolerance of at every test point. Search-space analysis confirms that canonicalization collapses all equivalent node-numbering representations into a single canonical form. The Levenshtein distance on canonical strings induces a meaningful metric on the space of expression isomorphism classes: single-character edits correspond to semantically local changes such as operator substitution, and distance values align with the structural dissimilarity between expression pairs. Neighbourhood analysis around a representative expression reveals an overall redundancy rate of 71.2%, quantifying the search-space compression that canonicalization provides.
+Limitations.
+The formal proofs of the two central conjectures—round-trip fidelity (Conjecture 2.10) and canonical invariance (Conjecture 2.11)—remain open and are left as future work. The scalability study measuring CPU time of the pruned canonicalization algorithm as a function of DAG size is currently under analysis and will be reported in a subsequent revision. Integration experiments with specific SR algorithms, such as GraphDSR or BINGO, demonstrating end-to-end search-space reduction in terms of fitness evaluations and solution quality, are likewise deferred to future work. Finally, the current alphabet is fixed to the function set of Table 1; extending IsalSR to user-defined operator sets, conditional expressions, or multi-output DAGs requires further investigation.
+Future directions.
+Immediate priorities include formal proofs of the two conjectures, a complete scalability study, and integration experiments with state-of-the-art SR solvers. Longer-term directions include exploiting the canonical string as a deduplication key in population-based methods—replacing fitness re-evaluation of isomorphic individuals—and as a structured representation for language-model-based SR approaches, where the alphabet provides a natural token vocabulary with a built-in validity guarantee. The metric structure induced by the Levenshtein distance may also enable diversity-preserving operators in genetic programming that explicitly navigate the canonical string space.
+Acknowledgment
+The authors thankfully acknowledge the computer resources (Picasso Supercomputer), technical expertise, and assistance provided by the SCBI (Supercomputing and Bioinformatics) center of the University of Málaga.
+References
+- Contemporary symbolic regression methods and their relative performance. In Advances in Neural Information Processing Systems (NeurIPS) Datasets and Benchmarks Track, Note: https://arxiv.org/abs/2107.14351 Cited by: §1.1, §1.
+- Uniform depth-first search for symbolic regression. In Proceedings of the Thirty-Third International Joint Conference on Artificial Intelligence (IJCAI), Jeju, South Korea, pp. 4020–4028. External Links: Document Cited by: §1.1.
+- Genetic programming: on the programming of computers by means of natural selection. MIT Press, Cambridge, MA. External Links: ISBN 978-0-262-11170-6 Cited by: §1.1, §1.
+- Binary codes capable of correcting deletions, insertions, and reversals. Soviet Physics Doklady 10 (8), pp. 707–710. Cited by: §3.6, §4.4.
+- Mathematical expression exploration using graph neural networks for symbolic regression. Neural Networks 187, pp. 107405. External Links: Document Cited by: §1.1, §3.1, §3.1, Table 5, Table 6.
+- IsalGraph: instruction set and language for graphs. Note: arXiv:2512.10429v2https://arxiv.org/abs/2512.10429 Cited by: §1.
+- Deep symbolic regression: recovering mathematical expressions from data via risk-seeking policy gradients. In International Conference on Learning Representations (ICLR), Note: https://openreview.net/forum?id=m5Qsh0kBQG Cited by: §1.1.
+- BINGO: an open-source tool for boosting of implicit non-linear gene expression programming with optimization for symbolic regression. In Proceedings of the Genetic and Evolutionary Computation Conference (GECCO), Boston, MA, USA, pp. 1946–1954. Note: NASA Technical Affiliation External Links: Document Cited by: §1.1, §1.
+- AI Feynman: a physics-inspired method for symbolic regression. Science Advances 6 (16), pp. eaay2631. External Links: Document Cited by: §1.1, §1, §3.1.
+- Semantically-based crossover in genetic programming: application to real-valued symbolic regression. Genetic Programming and Evolvable Machines 12 (2), pp. 91–119. External Links: Document Cited by: §1.1, §3.1.
+- GraphSR: graph-based symbolic regression with commutative operator encoding. In Advances in Neural Information Processing Systems (NeurIPS), Note: To appear Cited by: §1.1, §2.1.
+
+KAYNAK : https://arxiv.org/abs/2603.21836

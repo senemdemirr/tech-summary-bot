@@ -1,9 +1,0 @@
-Misc Changes
-docs: use ErrorInfo type consistently in catchError docs:
-#91744
-Credits
-Huge thanks to
-@devjiwonchoi
-for helping!
-
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.5

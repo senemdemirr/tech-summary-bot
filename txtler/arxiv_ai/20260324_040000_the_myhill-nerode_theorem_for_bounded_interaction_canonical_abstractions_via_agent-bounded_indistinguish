@@ -1,0 +1,541 @@
+The Myhill–Nerode Theorem for Bounded Interaction:
+Canonical Abstractions via Agent-Bounded Indistinguishability
+Abstract
+Any capacity-limited observer induces a canonical quotient on its environment: two situations that no bounded agent can distinguish are, for that agent, the same. We formalise this principle for finite POMDPs. A fixed probe family of finite-state controllers induces a closed-loop Wasserstein pseudometric on observation histories and a probe-exact quotient that merges histories no controller in the family can distinguish. The resulting quotient is canonical, minimal, and unique—a bounded-interaction analogue of the Myhill–Nerode theorem. For clock-aware probes, the quotient is exactly decision-sufficient for agent-accessible objectives measurable with respect to the joint observation-action trajectory; for latent-state rewards, we instead rely on the observation-Lipschitz approximation bound. The framework also suggests a reusable discrete template for a few neighboring finite or discretised settings; we record those illustrative analogies in the appendix rather than treating them as central contributions of the paper. The exact theorem object is the clock-aware quotient; the scalable deterministic-stationary experiments study a tractable coarsening whose gap is quantified on small exact cases and treated empirically at larger scale. We validate the theorem-level claims on Tiger and GridWorld and report operational case studies of the tractable coarsening on Tiger, GridWorld, and RockSample; these uncertified case studies are included as exploratory diagnostics of approximation behaviour and runtime, not as part of the paper’s theorem-facing claim set once the exact cross-family certificate is unavailable. Heavier operational stress tests are archived separately in the appendix and artifact package.
+1 Introduction
+When are two environments “the same”? The answer depends on who is asking. Two situations that no bounded observer can distinguish are, for that observer, the same; the right abstraction is therefore matched to the observer’s capacity. This paper makes this principle precise for the finite discrete case and shows that the resulting quotient is canonical, minimal, and unique—a bounded-interaction analogue of the Myhill–Nerode theorem from formal language theory. We use the word analogue deliberately: the classical suffix-test theorem is the motivating template, but our object lives on histories under closed-loop bounded control rather than as a literal restatement of the DFA setting. The analogy is structural—canonical minimal quotient under a finite equivalence relation—rather than algorithmic: unlike the classical DFA result, we do not claim a polynomial-time exact construction algorithm, and exact computation and scalable approximation are handled separately through the operational toolkit developed later in the paper.
+Planning under partial observability is hard because both the history tree and the belief process explode with horizon. A natural response is to ask a bounded question: which distinctions in the environment matter to a bounded agent? If two histories induce the same closed-loop future behavior for every controller in a bounded probe class, then no controller in that class can exploit the distinction. The right abstraction target is therefore not the full belief space, but the quotient induced by bounded-agent indistinguishability. In classical Myhill–Nerode terms, two prefixes are merged when no admissible future continuation can separate them; here the continuation is closed-loop and restricted to what a bounded controller can actually do.
+This point of view yields a canonical-form result. For a fixed probe family, the probe-exact quotient (exact for the stated probe family) is the unique minimal abstraction preserving all future observation laws visible to that family. We emphasize the use case that makes this object compelling: for objectives measurable with respect to what the bounded agent actually sees and does, the clock-aware exact quotient is decision-sufficient, not merely compressive. For latent-state rewards, the theory falls back to the approximate value-loss bound rather than exact sufficiency, and we make that limitation explicit in the abstract, experiments, and discussion.
+This paper also makes a clean separation between theory and computation. The theorem-level results are stated for the clock-aware controller class , where stage indexing prevents parameter reuse across time and therefore restores deterministic witness sufficiency. The experiments, by contrast, use the tractable operational family unless stated otherwise. The operational quotient is a coarsening of the theorem object ; Section 7 first quantifies that gap on small clock-aware exact cases and then reports operational case studies of at larger scales. When that cross-family gap is measured on a tractable exact case, Theorem 4.12 turns it into an additive value-transfer certificate. When no such certificate is available, the larger tables are included only as empirical evidence about the tractable surrogate , not as direct empirical validation of the full clock-aware theorem object.
+This paper makes the following contributions:
+- (i)
+- (ii)
+-
+(iii)
+A clock-aware exact sufficiency theorem: for every objective in measurable with respect to the joint observation-action trajectory, the clock-aware quotient preserves expected return exactly and therefore preserves optimal value over .
+-
+(iv)
+A witness boundary: deterministic sufficiency holds for clock-aware bounded controllers, while deterministic stationary controllers are shown explicitly to be insufficient in general.
+-
+(v)
+A formal bridge from theorem to computation on measured exact cases: if one probe family is contained in another, its quotient is a coarsening, and a measured cross-family probe gap yields an additive value-transfer bound on that same bounded regime. In particular, is a tractable coarsening of , with value loss controlled by only when the clock-aware/operational gap is explicitly measured for the benchmark and horizon under discussion.
+-
+(vi)
+A companion operational toolkit built from controller-subset certificates, sampling-based probe estimation, layered horizon decomposition, and observation coarsening, together with exact small-case alignment for (Section 7.2; Table 3) and exact-for-family deterministic-stationary certificates on small benchmarks (Table 5). These certified strata participate in the paper’s claim-evidence chain. Additional medium-scale case studies on GridWorld, random POMDPs, and RockSample are reported later as exploratory diagnostics of the tractable surrogate , not as further theorem-facing contribution claims. Heavier scale-up and long-horizon stress tests are reported separately as appendix-only archival evidence.
+Accordingly, whenever we use the phrase exact decision sufficiency below, it refers only to objectives in measurable on the joint observation-action trajectory; latent-state rewards are covered only by the approximate observation-Lipschitz bound. Likewise, whenever we invoke the cross-family transfer guarantee below, it refers only to the tractable exact cases where the corresponding is explicitly reported; no larger operational scaling row is claimed to inherit that certificate unless the matching gap measurement is shown for that same bounded regime. The paper’s theorem-facing evidence set is therefore exhausted by the theorem statements themselves, the clock-aware exact tables, and the deterministic-stationary rows carrying an explicit subset or cross-family certificate; larger uncertified operational tables are included only as exploratory diagnostics of .
+At the witness boundary, deterministic sufficiency holds for the clock-aware FSC class of Theorem 4.9, but Proposition 4.10 shows that this cannot be extended to stationary looping FSCs in general. The framework’s parametrisation by makes the observer-capacity mismatch explicit without requiring a commitment to any broader operational reduction outside the finite POMDP setting.
+Proof roadmap.
+The main proof structure is short. The pseudometric theorem is the Wasserstein triangle inequality plus maximisation over bounded closed-loop controllers. The value bound is a per-stage observation-Lipschitz transfer summed over horizon. The quotient theorem then combines right-invariance of history equivalence, induction on preserved observation laws, and a universal-object argument for minimality and uniqueness. The same ingredients are reused in the approximate and layered variants later in the paper.
+Related work.
+State abstraction and bisimulation. State abstraction in MDPs has a rich theory: Li et al. [29] provide a taxonomy, Abel et al. [1] introduce agent-aware abstraction, and Abel [2] offers a comprehensive account grounded in category theory. Bisimulation metrics [17, 18] provide a continuous alternative to exact equivalence; Calo et al. [8] recently showed these are optimal-transport distances, and Kemertas and Aumentado-Armstrong [27] extended metric learning to robust settings. Deep bisimulation methods [20, 50, 12] scale these ideas to high dimensions via learned encoders; our model-based framework provides a complementary theoretical target (Appendix C).
+POMDP equivalences and predictive representations. For POMDPs, Castro [10] formalized exact bisimulation, and Dean and Givan [14] introduced homogeneous partitions. Two nearby traditions are worth separating. Restricting probes to open-loop action strings or constant-action FSCs recovers a notion approaching Castro-style conditional observation-sequence equivalence; probabilistic testing equivalence in the Larsen–Skou lineage [28] is close in spirit, but the tests there are external experiments on labelled stochastic processes, whereas ours are embodied as finite-memory controllers interacting with a controlled partially observable environment. The new ingredient is a closed-loop bounded-observer equivalence that is explicitly parameterized by controller capacity and materialized as a quotient POMDP.
+Predictive state representations, observable operator models, and their controlled or spectral variants [30, 25, 7, 4] define state through predictions of future observations, but through open-loop tests or Hankel-style predictive structure rather than closed-loop, bounded-capacity FSC probes. Our quotient is a closed-loop bounded-observer analogue of that predictive-state philosophy, with controller capacity replacing predictive rank as the organizing parameter. The comparison with controlled PSRs—which already incorporate actions—is structural rather than order-theoretic: PSR-style low-rank structure captures linear predictive redundancy, while our anchor-rank condition captures the stronger max-preserving redundancy needed for quotient construction (Appendix B).
+Positioning. FSCs as policy representations are due to Poupart and Boutilier, Hansen, and Amato et al. [41, 22, 3]; we repurpose them as probes determining abstraction granularity. Our indistinguishability criterion is related in spirit to comparison-of-experiments ideas [6, 49], but the signal structure is closed-loop and policy-dependent. Relative to exact POMDP bisimulation, the object here is history-based and explicitly parametrised by controller capacity ; relative to agent-aware abstraction, it yields a canonical minimal quotient preserving the full closed-loop observation law rather than a single value function. Conceptually, the pseudometric is a history-space bounded-agent analogue of Wasserstein bisimulation metrics: the lineage is direct, but compares finite-horizon observation-sequence laws and restricts the supremum to a prescribed bounded controller family. The novelty claim is the bounded-family quotient and its exact/approximate sufficiency consequences, not the mere use of Wasserstein distance. Extended discussion and additional references are in Appendix C.
+2 Preliminaries
+Definition 2.1 (Finite POMDP).
+A finite POMDP is a tuple where is a finite state set, a finite action set, a finite observation set, a transition kernel, an observation kernel, a reward function, and an initial belief.
+Definition 2.2 (Stochastic Finite-State Controller).
+A stochastic FSC is a tuple where is a finite set of internal nodes with , is an action-selection function, is an internal-transition function, and is the initial node.
+Fix a memory bound and horizon . We distinguish two probe families.
+-
+•
+Clock-aware probes : FSCs with stage-indexed maps . Equivalently, these are FSCs on node space , where the external horizon clock does not count against the internal memory budget.
+-
+•
+Operational probes : deterministic stationary FSCs with at most internal nodes. The fully enumerated large-scale experiments use this deterministic-stationary family as a tractable operational restriction.
+Practically, a clock-aware FSC may change its action and node-update rule with the time index even if it revisits the same internal node, whereas a stationary FSC must reuse the same rule whenever that node is revisited. For example, a one-node clock-aware controller may “listen” at stage 1 and “open” at stage 2 while remaining in the same internal node; a one-node stationary controller cannot express that time-indexed switch without enlarging its state. This is why clock-awareness restores deterministic witness sufficiency in the theorem, while the stationary family is a stricter operational restriction. We therefore use as a gold-standard bounded-observer family: it is partly proof-motivated, but it also models bounded agents whose internal logic can legitimately depend on a known stage or deadline (for example countdown-style or phase-based controllers). The stationary family is the stricter operational deployment model when such external clocking is unavailable or intentionally disallowed.
+For any fixed probe family , a policy interacting with POMDP induces a distribution over observation sequences and conditional suffix laws .
+3 Bounded Indistinguishability and the Wasserstein Pseudometric
+Total variation is topologically brittle for model comparison [17]: it treats all non-identical observations as equally distant. When observations carry ordinal or spatial structure, TV forces overly fine partitions. The 1-Wasserstein distance exploits a ground metric on and degrades gracefully under perturbations. Let be a ground metric on observations, extended to sequences via .
+Definition 3.1 (Closed-loop Wasserstein pseudometric).
+For two POMDPs and sharing and a fixed probe family :
+When or , we write or respectively.
+Proposition 3.2.
+is a pseudometric on POMDPs sharing , with iff for all .
+Proof.
+For each fixed , the quantity is a metric on laws over . Non-negativity and symmetry therefore hold pointwise. For the triangle inequality, for any third model and every ,
+and taking the supremum over gives . Finally, iff every term in the supremum is zero, equivalently for all . ∎
+Remark 3.3 (Relation to bisimulation metrics).
+The conceptual lineage to Wasserstein bisimulation metrics is intentional. Both constructions use optimal-transport distances to quantify behavioral distinguishability. The difference is where the supremum lives and what object is being compared. State-based bisimulation metrics compare one-step transition kernels and reward terms through a fixed-point recursion over all actions. Our instead compares finite-horizon observation-sequence laws after concrete histories and takes the supremum only over a prescribed bounded controller family. In that sense is best viewed as a history-space, bounded-agent analogue of bisimulation metrics; the new contribution is that this bounded-family pseudometric induces canonical quotients and exact sufficiency statements for the chosen observer class.
+Definition 3.4 (-observation-Lipschitz reward).
+A reward function is -observation-Lipschitz if, for all equal-length histories and all in the relevant fixed probe family, , where . Constant rewards satisfy ; the standard Tiger reward (listen , correct open , incorrect open ) satisfies (the reward range ); the synthetic 1-Lipschitz observation score used in the value-bound experiments (§7) has .
+Remark 3.5 (When is small?).
+Observation-based rewards for some function satisfy , the Lipschitz constant of under . When is bounded and is normalized to , this gives —the reward range. More generally, any reward depending on the state only through the observation posterior has bounded ; rewards that depend on fine-grained latent state distinctions invisible to observations can have arbitrarily large . The value bound is thus most informative for observation-aligned reward structures—precisely the setting where bounded agents are effective. Note that depends on the choice of probe family through the conditional observation laws ; a richer probe family may expose reward differences that a poorer one cannot, changing the effective Lipschitz constant. In general, the reward range is a valid (but often vacuous) upper bound on under the discrete observation metric , since under the summed discrete metric upper-bounds total variation.
+Theorem 3.6 (Value-function error bound).
+Let be the quotient POMDP (Definition 4.3) constructed from a partition of histories into classes with pairwise probe-distance at most under a fixed probe family , with beliefs aggregated within each class. If is -observation-Lipschitz, then for any :
+Proof.
+Fix and let denote the random history up to time . For each stage define
+The observation-Lipschitz assumption gives an almost-sure stagewise bound
+By hypothesis, the quotient partitions histories into classes of pairwise probe-distance at most . Hence the quotient’s conditional law is a convex combination (via the belief-aggregation weights) of conditional laws , each of which satisfies . Because is convex (as a supremum of linear functionals), the mixture satisfies
+Taking expectations and summing the stagewise differences yields
+which is exactly (2). ∎
+The bound is most informative when rewards align with the observation structure. For Tiger’s standard latent-state reward (), the penalty depends on which door hides the tiger—a latent distinction invisible to observation sequences—making the bound explicitly vacuous. For observation-aligned rewards (), the bound is tight, and the exact quotient preserves value perfectly (Theorem 4.6).
+Corollary 3.7 (Sim-to-real regret).
+Under the same hypotheses as Theorem 3.6, let . Then the regret of the quotient-optimal policy on the original model satisfies
+Proof.
+By the triangle inequality: . ∎
+4 Equivalence on Histories and the Quotient POMDP
+4.1 Quotient Construction
+Definition 4.1 (Bounded indistinguishability).
+Fix a probe family . For equal-length histories , define the history-level probe distance
+Two histories are -equivalent, written , if
+For the two main families we write and , and , for the corresponding history-level distances.
+Proposition 4.2 (Properties of ).
+For every fixed probe family , the relation is (a) an equivalence relation, (b) right-invariant: implies , and (c) of finite index.
+Proof.
+Reflexivity and symmetry are immediate from the definition. For transitivity, if and , then for every the triangle inequality for gives zero distance between the conditional suffix laws from and . For right-invariance, fix . Zero Wasserstein distance between the suffix laws from and implies equality of those conditional laws on every cylinder event, hence the same probability of seeing next and the same law of the remaining suffix after conditioning on that common event. Therefore and induce identical continuation laws for every controller in , so . Finite index holds because at each depth there are only finitely many histories in . ∎
+Definition 4.3 (Quotient POMDP).
+For a fixed probe family , the quotient has state space at time , initial state , and transition , where is the aggregated belief state of the class (any convex combination of member beliefs; by Theorem 4.4(i), the quotient transition is independent of this choice in the exact case). The quotient is a finite-horizon controlled process with time-varying state space; equivalently, one can augment the state with the time index to obtain a stationary representation.
+Theorem 4.4 (Bounded-Interaction Myhill–Nerode).
+Let be the quotient under probe-exact equivalence for a fixed probe family . Then:
+-
+(i)
+Well-definedness. The quotient transition kernel is independent of the choice of representative and aggregation weights.
+-
+(ii)
+Soundness. for every .
+-
+(iii)
+Universality. Any POMDP with for all admits a POMDP morphism .
+-
+(iv)
+Minimality. has the fewest history classes (equivalence classes of the observation-history tree) among all history-based POMDPs satisfying (ii).
+-
+(v)
+Uniqueness. is unique up to isomorphism.
+Proof sketch. The invariant is: two representatives of the same class induce the same family of probe suffix laws after every continuation. Well-definedness follows because probe-exact equivalence forces identical one-step observation laws for all histories in a class; in particular, constant-action FSCs already imply equality of the one-step kernels needed to define , so the quotient transition is representative-independent. Soundness is then an induction on the realized history length: if the current quotient class matches the original history’s probe law at time , the common one-step kernel preserves that match after observing and moving to . For universality, any POMDP reproducing the same probe laws determines a canonical map sending each history of to the unique quotient class with the same family of suffix laws; the same representative-independence argument verifies the morphism identities. Minimality and uniqueness are the usual universal-object consequence: every competing exact model surjects onto , and two minimal such objects therefore surject onto one another and are isomorphic.
+4.2 Structural Properties
+Definition 4.5 (Agent-accessible objectives).
+Let be the class of bounded measurable functionals
+defined on the joint observation-action trajectory.
+This is the natural class for bounded agents whose costs depend on what they sense and do: sensorimotor penalties, action budgets, tracking objectives defined on filtered observations, or other control costs measurable from the observation–action trace itself. When the reward depends on latent state variables that are not measurable from that trace, exact preservation is no longer available and the paper deliberately falls back to the observation-Lipschitz approximation story.
+Theorem 4.6 (Exact sufficiency for agent-accessible objectives).
+For every and every ,
+Proof sketch. The argument proceeds in three stages: observation-law preservation, action-law transfer, and functional integration.
+Stage 1 (Observation law). By the soundness part of Theorem 4.4, reproduces the full observation law for every . In particular, for every history and every , the conditional future-observation law .
+Stage 2 (Action law). Each clock-aware policy selects its stage- action as a deterministic (or stochastic) function of the observation history and the current internal state, which itself evolves deterministically from . The action at stage is therefore measurable with respect to the observation history up to time . Since Stage 1 guarantees identical conditional observation laws at every stage under , an induction on shows that the joint marginals and agree at every stage: at the inductive step, the common observation law at stage and the common policy mapping together fix .
+Stage 3 (Functional integration). Because is a bounded measurable functional on , the expectation depends only on the joint law established in Stage 2. Since that law is identical in and , exact preservation follows.
+Corollary 4.7 (Optimal value preservation on ).
+For every ,
+Remark 4.8 (Refinement and bisimulation recovery).
+The quotient family still forms a refinement lattice indexed by probe capacity, horizon, and approximation level, and the classical bisimulation quotient is recovered in the unbounded limit. The key point is different: the theorem object is the clock-aware quotient , while the deterministic-stationary family used operationally in the experiments is a deliberate coarsening rather than a theorem-certified substitute.
+Theorem 4.9 (Witness for clock-aware bounded agents).
+If two histories are distinguishable by some stochastic clock-aware FSC , then there exists a deterministic clock-aware FSC with .
+Proof sketch. For the clock-aware class, the probability of any fixed future observation sequence is multilinear in the stage-indexed FSC parameters; stage indexing prevents any parameter from being reused at two different times. By a vertex lemma on the corresponding product of simplices, non-vanishing at any interior point implies non-vanishing at a vertex, i.e. a deterministic clock-aware FSC. Proposition 4.10 shows that this argument does not extend to stationary looping FSCs; the experiments use deterministic stationary FSCs as an operational probe family only.
+Proposition 4.10 (Deterministic stationary FSCs do not suffice in general).
+There exists a finite POMDP and histories such that some stochastic stationary -node FSC distinguishes and , while every deterministic stationary -node FSC induces the same future observation law from and .
+Proof sketch. Appendix A gives an explicit , construction with actions and observations . After histories and , the two deterministic stationary controllers (always- and always-) both induce the same suffix law, but the stochastic controller with yields suffix laws and respectively, whose distance under the discrete metric is .
+The construction uses ; analogous counterexamples exist for general by embedding the same branching structure within a larger node space, since the additional nodes cannot compensate for the loss of stochasticity when the branching occurs at the single active node.
+Proposition 4.11 (Smaller probe classes induce coarser quotients).
+Let be two probe families. Then for every pair of histories,
+Consequently,
+so the quotient is a coarsening of . In particular, because , the operational quotient used in the experiments is a tractable coarsening of the theorem-level quotient .
+Theorem 4.12 (Cross-family value transfer).
+Let be probe families, and define the cross-family gap
+Let be the -quotient built under . Then for every -observation-Lipschitz reward and every ,
+Proof.
+If , then by definition of ,
+Hence the partition built under has pairwise -diameter at most . Applying Theorem 3.6 with probe family and merge threshold gives the result. ∎
+Corollary 4.13 (Operational-to-clock-aware transfer).
+Let
+Then for every -observation-Lipschitz reward and every ,
+whenever is constructed as an -quotient under and the gap is measured for that same bounded regime.
+Corollary 4.14 (Subset plus cross-family transfer).
+Let be the subset probe envelope for , and let . Then for every -observation-Lipschitz reward and every ,
+Proof.
+If , then and therefore
+Applying Theorem 3.6 with probe family and merge threshold yields the bound. ∎
+5 -Quotients and Data-Processing Monotonicity
+Exact indistinguishability is often overly restrictive; we relax the framework to -approximate quotients. We write when the probe family and the ground metric are clear from context, to emphasize the Wasserstein dependence.
+Definition 5.1 (-equivalence).
+if . An -quotient of is a reduced POMDP with .
+In the approximate setting, the canonical object is the partition of histories. Materializing a quotient POMDP additionally requires a belief-aggregation rule inside each class; Proposition A.1 fixes the uniform canonical choice used throughout the experiments and bounds.
+Definition 5.2 (Wrapper).
+A wrapper maps a POMDP to via an action remapping and an observation channel with Lipschitz constant .
+Theorem 5.3 (Data-Processing Monotonicity).
+Let be POMDPs sharing , a wrapper with Lipschitz constant , and assume the probe family is closed under pullback through (i.e., for every on the wrapped observation–action space, the induced controller on the original space belongs to ; this holds for any family containing all -bounded stochastic FSCs, in particular for ). Then:
+In particular, equivalent models remain equivalent after wrapping.
+Proof sketch. The wrapper post-processes observation sequences through . By Kantorovich–Rubinstein duality and the Lipschitz property, contracts by factor . Taking the same supremum over the bounded controller family on both sides preserves that contraction, so equivalence is stable under wrapping.
+Definition 5.4 (-coarsened agent class).
+Given a ground metric on observations and resolution , let be a minimal -covering: every satisfies . The -coarsened agent class consists of FSCs whose node-transition function factors through the quantization map defined by .
+Proposition 5.5 (Observation-resolution bounds).
+Let denote the -quotient under .
+-
+(a)
+Distance bound: .
+-
+(b)
+Partition size: has at most equivalence classes.
+-
+(c)
+Value error: for all .
+Proof sketch. Part (a): replacing each observation by its -nearest representative shifts the per-step by at most ; summing over steps gives the additive term. Part (b): the coarsened history space has histories at depth . Part (c): the partition under has -diameter at most ; the same per-step shift from part (a) applies at the history level to conditional suffix distances, so the partition has -diameter at most . Theorem 3.6 then applies with merge threshold .
+Theorem 5.6 (Compositional horizon-scaling bound).
+Let be the end-to-end horizon. Let reference models , approximate models , and wrappers with Lipschitz constants satisfy
+Define . Then the cumulative distortion obeys
+and hence the final-layer distortion satisfies
+In the common zero-initialization case , one has and only the weighted sum of the per-layer residuals remains.
+Proof sketch. The first term comes from propagating the previous layer’s discrepancy through the wrapper, and the second from the fresh approximation introduced at the new layer. Apply Theorem 5.3 and the triangle inequality to obtain (5), then unroll the recursion by induction.
+Corollary 5.7 (Layered value bound).
+If additionally is a partition-based quotient of with class diameter at most (i.e., the partition is chosen so that its pairwise probe-distance does not exceed the propagated bound from Theorem 5.6), and the reward on the final observation space is -observation-Lipschitz, then for any :
+Proposition 5.8 (Layered construction complexity).
+For fixed and uniform segment horizon with , monolithic computation has complexity
+while layered construction costs
+Hence layering replaces the exponential history term in by a linear factor in times an exponential in .
+6 Operational Approximation Machinery
+This section is operational rather than theorem-level. Greedy subset selection gives a practical way to compress the deterministic-stationary probe class, but by itself it only optimizes a coverage objective. The role of is to turn a chosen subset into an a posteriori operational certificate: once computed from the full deterministic-stationary FSC tensor on operational exact-for-family benchmarks, it measures how much probe-envelope information the subset misses and therefore whether the value guarantee survives the compression.
+Worst-case complexity is —polynomial in for fixed . This probe-exact procedure has cost exponential in the horizon parameter , because it expands a depth- history tree and evaluates depth- bounded-controller behavior explicitly; whether the problem itself requires exponential time remains open (Appendix F).
+Structural vs. operational role.
+The classical Myhill–Nerode theorem for DFAs yields an minimization algorithm [23]; our bounded-interaction analogue does not currently come with a comparable polynomial-time algorithm for the probe-exact quotient, and the explicit procedure above remains exponential in the horizon parameter. The paper’s main scientific claim is therefore structural: it identifies the canonical bounded-observer target and proves its uniqueness, minimality, and value-preservation properties. The operational machinery is the companion computational layer. It explains how tractable coarsenings such as can be studied in practice through subset certificates, sampling, layering, and observation coarsening, but those operational studies only support theorem-level statements when an explicit subset or cross-family certificate is reported for the same bounded regime. Otherwise they should be read as empirical case studies of a tractable surrogate rather than as additional theorem validation, and the uncertified medium-scale tables should not be read as part of the paper’s core contribution claims. Appendix B records a stricter structural sufficient condition via anchor families.
+Practical tractability.
+The four complexity factors—histories (), FSCs (), belief propagation (), and observation-alphabet size ()—are addressed by complementary techniques. (1) The history bottleneck is mitigated by layered horizon decomposition (Theorem 5.6, Proposition 5.8): replacing one -step computation by short segments of length changes the dominant history factor from to . (2) The FSC bottleneck is mitigated by greedy controller-subset selection (Algorithm 2): on the operational exact-for-family Tiger and GridWorld benchmarks, small subsets recover the full probe envelope after explicit a posteriori checking (; Table 5), while the same heuristic also underlies the appendix-only archival stress tracks for larger- regimes (Appendix G.3). (3) Sampling-based estimation decouples the per-history cost from : each trajectory simulation costs per step after an belief sample, enabling operational case studies up to in s (Table 6). (4) The observation-alphabet bottleneck is reduced by -coarsening (Proposition 5.5): replacing by reduces the history factor from to at the cost of an additive term in the value bound. Together, these techniques make the operational core experiments practical on a single CPU core, while the heavier long-horizon and larger- stress tracks are reported separately in Appendix G.3.
+Greedy controller-subset selection.
+The FSC distance tensor is operationally compressible: distinguishing power often concentrates on a small number of high-coverage controllers. We therefore select FSCs by maximizing the monotone submodular coverage objective via greedy selection.
+Proposition 6.1 (Submodular guarantee).
+The greedy selection achieves [35].
+This guarantee is a coverage guarantee only: by itself it does not imply operational exact-partition recovery or value preservation. Those stronger claims require measured small probe-envelope gap , and Table 5 is empirical-plus-certified only because is explicitly checked from the full deterministic-stationary FSC tensor.
+Operational certificate for controller subsets.
+Let index the rows of the distance tensor, and write for the full probe envelope and for the subset probe envelope under a selected controller subset . Define the probe-envelope gap of by
+Theorem 6.2 (Uniform probe approximation).
+The -quotient built from satisfies
+Proof.
+Since for every , any pair merged by the full-family -quotient is also merged by the subset-based -quotient. Conversely, if , then , so the subset-built partition has full-family diameter at most . Applying Theorem 3.6 with merge threshold gives the result. ∎
+Appendix B gives a stricter structural sufficient condition for why a small controller subset may achieve small : a -anchor controller family guarantees small probe-envelope error. We keep that result separate from the main flow because the experiments certify the operational quantity directly, not anchor-family membership.
+7 Experiments
+This section separates theorem-aligned clock-aware exact experiments from operational results and then marks the heaviest scale-up rows as archival stress tests. The clock-aware exact experiments use deterministic clock-aware open-loop probes for tractable cases, which coincide with the theorem object for that bounded regime. The larger-scale deterministic-stationary experiments remain operational results for and are included to characterise the behaviour of that tractable surrogate, not to extend the theorem’s claim surface. Only the clock-aware exact tables and the deterministic-stationary tables with an explicit certificate should be read as exact-for-family evidence; the larger scaling tables are intentionally presented as empirical operational demonstrations. Unless stated otherwise, theorem-aligned tables are exhaustive over the stated bounded deterministic clock-aware probe family, while operational scaling tables use deterministic-stationary probes. The new point is quantitative but local: when the cross-family gap is measured on a tractable exact case, Theorem 4.12 upgrades that measured case to an additive value-transfer certificate for the theorem-level family. Where no such measurement is available, the scaling tables remain operational evidence about , not direct empirical verification of , not part of the evidence for contribution (v), and not part of the paper’s theorem-facing claim set. Sampling-based runs use trajectories per history-policy pair, report -resample bootstrap confidence intervals for , and include dedicated convergence and seed-stability checks (five replications for convergence, ten seeds for stability); benchmark definitions, expanded tables, parameter grids, and the command-to-table mapping are collected in Appendix G. All runtimes are single-core wall-clock measurements on a MacBook Pro with an Apple M3 Pro chip (12 cores, 36 GB RAM), macOS 26.3.1, and Python 3.11.14; no GPU was used.
+Table 1 is the evidence contract for the remainder of the section. It separates theorem-level validation, operational exact-for-family certification, and operational empirical stress tests. The paper’s theorem claims are supported only by Tier I and, where applicable, Tier II rows; Tier III rows are reported as scalability evidence about the tractable operational quotient and should not be read as theorem validation unless an explicit cross-family or subset certificate is reported for that benchmark.
+7.1 Clock-Aware vs. Operational Probe Families
+Table 2 compares the theorem-level clock-aware quotient with the operational deterministic-stationary quotient on tractable clock-aware exact cases. The key point is formal rather than numerical: Proposition 4.11 predicts that is a coarsening of , and the small clock-aware exact benchmarks quantify that gap directly. In these tractable rows, the reported column is exactly the measured cross-family gap entering Theorem 4.12.
+Three points matter. First, the operational family is not uniformly too weak: on GridWorld (including ) and GridWorld (, ), it agrees with the theorem object exactly (ARI, identical class counts). Second, the gap is not merely philosophical: the stationary witness benchmark shows that can merge histories that must keep separate, and the reported pseudometric gap makes that mismatch quantitative. Third, the measured gap grows with horizon on Tiger (from at to at ) yet never changes the observation-value decision, confirming that the operational coarsening is conservative in practice even when the pseudometric gap is large. By Theorem 4.12, that same measured gap is a value-transfer certificate on these tractable exact cases: an operational -quotient is also a valid -quotient for the clock-aware family.
+Multi-node probes ().
+Moving beyond open-loop () controllers, we enumerate all deterministic clock-aware FSCs with nodes for Tiger at (Definition 2.2, Section 2), compared to deterministic stationary FSCs. Despite the richer clock-aware family, both produce identical probe-exact partitions ( classes, ARI, ). This indicates that for Tiger at short horizons, the stationary family already saturates the discriminative power of the full clock-aware family—consistent with the intuition that Tiger’s symmetric belief dynamics limit the additional resolution that stage-dependent parameters can provide.
+7.2 Decision Sufficiency for Bounded Planning
+The central theorem-level claim is not exact preservation for arbitrary rewards, but exact preservation for objectives in measurable on the joint observation-action trajectory. Table 3 verifies that claim on the clock-aware exact cases—Tiger (horizons up to ), GridWorld (), and GridWorld (, )—using observation-only and action-observation objectives. In every row, the quotient-selected policy matches the original-model optimum in value, as Theorem 4.6 predicts.
+7.3 Latent-State Planning on Exact Clock-Aware Quotients
+The approximate-value story remains relevant for latent-state rewards that are not measurable with respect to the observation-action trajectory. Table 4 therefore reports the clock-aware exact planning study for Tiger’s standard reward and a goal-reward GridWorld. These rows use the theorem object , but only the approximate latent-state narrative applies.
+7.4 Operational Controller Subsets and A Posteriori Certification
+Table 5 reports partition agreement and the a posteriori probe-envelope certificate for greedy controller-subset selection (Algorithm 2) on the operational deterministic-stationary benchmarks. Because is computed from the full deterministic-stationary FSC tensor, this certification is available only on the operational exact-for-family benchmarks in this subsection. On Tiger ( FSCs), yields and operational exact-partition recovery for all tested . On GridWorld ( FSCs), likewise yields ; in fact already closes the probe gap to numerical precision. As a descriptive spectral summary, the GridWorld effective rank (number of singular values capturing of total variance) is , so less than of FSCs capture of distinguishing variance. Reporting sharpens the empirical story: for example, on GridWorld at , already gives a high ARI, but its nonzero probe gap explains why the subset is not yet operationally certified by Theorem 6.2.
+7.5 Larger-Scale and Sensitivity Results
+Operational exact-for-family computation ().
+On the GridWorld (, ), operational exact classes reduce to at ( compression). Random POMDPs (, ) show operational exact classes reducing to at . Scaling from to increases runtime from s to s (mildly growing over the tested range , where FSC enumeration dominates; the per-entry belief propagation cost will dominate at larger ).
+Operational sampling-based case studies up to .
+Using sampling-based estimation ( trajectories per history-policy pair), we study the operational quotient on POMDPs with up to (Table 6). On the GridWorld (), the quotient produces operational exact classes at , compressing to at and at —the same qualitative pattern as smaller grids, with cache construction in s. Random structured POMDPs with collapse rapidly to classes at . Convergence analysis on GridWorld (where operational exact-for-family computation is feasible) confirms that trajectories achieve mean ARI (min , replications) versus the operational exact partition; even trajectories yield mean ARI. Furthermore, partition class counts are perfectly stable across independent random seeds at trajectories (std at all ), indicating that the sampling noise is well below the clustering threshold. Bootstrap confidence intervals ( resamples) on the maximum pairwise distance confirm tight estimation: CI widths are for all benchmarks at trajectories (Table 6), well below the coarsest threshold that drives the clustering. These medium-scale results belong to the paper’s operational case-study tier rather than the appendix-only archival stress tier: all rows use deterministic-stationary probes, horizon , and the stated -trajectory / -bootstrap protocol. They should be read as evidence about the tractable coarsening and its approximation behaviour, not as direct validation of the clock-aware theorem object .
+RockSample: a semi-realistic benchmark.
+To move beyond grid navigation, we evaluate on the RockSample POMDP (, actions, observations), a standard planning benchmark where an agent must navigate a grid, check rock quality via noisy distance-dependent sensors, and sample good rocks for reward. At and , the quotient produces probe-exact classes at , compressing to at and at (Table 6). The same monotonic compression pattern holds as on smaller benchmarks, confirming that the framework applies to structured domains beyond toy grids. Cache construction completes in s, consistent with the scaling.
+Appendix-only archival stress tracks.
+Appendix G.3 records the optional long-horizon, large-state, and higher-memory operational stress tests. We keep those rows out of the core validation narrative because they are computationally heavier, rely on heuristic calibrated subsets or sampling at the largest scales, and are not required to verify the theorem-aligned claims in the main paper. For inspection without rerunning the heaviest jobs, the repository includes a precomputed Tier III package under artifacts/tier3/ together with verify_tier3_artifacts.py; the intent is that reviewers can audit the reported rows without treating multi-hour reruns as part of the paper’s default verification target.
+Data-processing monotonicity validation.
+We experimentally validate Theorem 5.3 by coarsening GridWorld observations from (NW/NE/SW/SE) to (North/South), merging NWNE and SWSE. On : the original reduces to after coarsening; on : reduces to . The deterministic merging has Lipschitz constant , and monotonicity holds at all tested values for both grids, confirming Theorem 5.3. This merging is a special case of -coarsening (Definition 5.4) with under the geometric observation metric, confirming Proposition 5.5(a).
+Sensitivity and additional benchmarks.
+Effective dimension (, where is the Shannon entropy of the belief) is substantially smaller than in structured benchmarks, yielding – tighter worst-case bounds (though the canonical Prop A.1 bound remains vacuous at moderate , reaching the empirical error at ; see Table 16); observation noise sensitivity is detailed in Appendix G. Two additional benchmarks—Hallway (1D corridor, ) and Network Monitoring (factored binary-failure nodes, )—confirm the same monotonicity patterns with compression ratios comparable to Tiger and GridWorld.
+Downstream planning with real rewards.
+We test whether quotient compression preserves planning quality by exhaustive policy search using the actual POMDP reward function (via and from Theorem 3.6). On Tiger (, up to 147 FSCs) and a goal-reward GridWorld (, , , 5 FSCs), we select the best policy on the quotient and evaluate it on the original. GridWorld at compresses 85 histories to 4 classes (95% reduction at ) with zero value gap: the quotient-selected policy is optimal on the original in all 30 configurations tested. In the single case where a different policy is selected (, ), it achieves the same value, illustrating that bounded-agent indistinguishability merges histories without discarding decision-relevant information.
+vs. TV: metric structure matters.
+To demonstrate that the Wasserstein pseudometric leverages observation-space structure, we compare (with the geometric ground metric) against total variation (the discrete metric) on GridWorld at , . At both metrics yield equivalence classes, as expected. At , produces classes while TV still yields : the Wasserstein metric recognizes that adjacent quadrant observations are spatially close, merging histories that TV treats as maximally separated. This confirms the practical benefit of structured observation metrics motivated in Section 3: when observations carry geometric meaning, achieves strictly more compression at the same tolerance. Appendix Table 18 reports the broader small-benchmark baseline sweep against truncation, random partitions, belief-distance clustering, and a bisimulation baseline. We keep that fuller comparison in the appendix because it is useful for positioning, but not part of the theorem-facing evidence chain in the main paper.
+Quotient-accelerated planning.
+We test whether the materialized quotient POMDP can accelerate downstream planning by comparing point-based value iteration [PBVI; 40] on the original and quotient models (Table 7). On all benchmarks, the quotient preserves the optimal value with zero or near-zero value gap. RockSample () achieves the most dramatic compression, reducing from states to – quotient states.
+8 Discussion and Conclusion
+Limitations.
+Four limitations are explicit. First, the observation-Lipschitz value bound (Theorem 3.6) is the right fallback for latent-state objectives, but it can be loose—the bound achieves a 50% tightness ratio on an exact construction (inspection-choice POMDP) and is within on Tiger (Table 16), confirming the form is structurally correct. For observation-measurable rewards, the exact quotient preserves value perfectly (Theorem 4.6). For latent-state rewards with large (e.g. Tiger’s standard ), the bound is explicitly vacuous but structurally correct in and ; GridWorld’s moderate yields an informative bound (Table 16, Panels B–C). Tighter bounds likely require exploiting belief concentration or reward structure. Second, the distinguishability lower bound remains open; Appendix F records this as an unresolved complexity question rather than a theorem claim. Third, worst-case scaling at larger remains challenging; the bottleneck from larger observation alphabets is only partially addressable through -coarsening (Proposition 5.5). Fourth, the framework assumes a known generative model ; the graceful degradation result ( for per-entry error ) provides robustness but formal sample-complexity guarantees for the full pipeline remain open. Computationally, the linear programs dominate runtime: on the benchmarks, the distance cache accounts for of wall-clock time (Appendix, Table 24), confirming that LP solves are the bottleneck for scaling to larger state spaces.
+The operational story is deliberately weaker than the theorem and the paper’s formal claims stop at the certified part of it. Deterministic stationary probes are enumerable, admit subset certificates, and scale through layering and sampling. Proposition 4.11 and Theorem 4.12 make their relation to the theorem object quantitative on tractable exact cases: is a tractable coarsening of , and the measured gap certifies the extra additive value-transfer penalty. That is the only theorem-facing use we make of the operational pipeline. Where or is reported, the corresponding rows inherit a formal guarantee for the theorem-level family or for the stated operational family. Where no such measurement is available, the larger tables are outside the paper’s central claim set and are included only as exploratory diagnostics of itself: compression patterns, runtime, stability under sampling, and the practical cost of richer probe families. The role of is therefore not to be the scalable algorithmic object on every benchmark, but to serve as the canonical gold standard for the bounded-observer question itself. It pins down exactly what is preserved, proves uniqueness and minimality for that target, and supplies the reference object against which tractable coarsenings such as can be calibrated. Without that theorem object, the operational pipeline would be a heuristic compression procedure with no principled answer to what it is approximating. A practical reading of the clock-aware/stationary gap is now possible. We expect the gap to stay small on structured short-horizon problems when the same bounded controller state need not implement qualitatively different stage-dependent behaviours; that is exactly what the small exact benchmarks suggest. We expect it to matter when stage indexing itself carries strategic content, as in Proposition 4.10, or when revisiting the same controller state should trigger different actions at different times. Typical examples are finite-horizon countdown tasks, staged sensing-then-commit problems, or phase-based controllers whose intended behaviour changes near a deadline even when the internal memory node is revisited. For new domains, an engineering workflow is to start from the smallest that can express the policy class of interest, enlarge or only until partition statistics or downstream value stabilise, and, whenever a tractable exact instance is available, use the measured or certificate as the stopping criterion rather than raw size alone. This workflow guidance is heuristic rather than theorem-level: without those explicit certificates, the larger operational tables remain exploratory evidence about only. A central next step is now narrower: not to define the theory-to-operation gap, but to predict or upper-bound a priori without explicitly computing the clock-aware family, and to combine that with controller-subset or layering certificates at larger scales.
+Initial-belief dependence.
+The quotient partition depends on the initial belief through the belief posteriors that determine conditional observation laws. Under a different initial belief , the equivalence classes may change: histories indistinguishable under could become distinguishable under if the posteriors shift enough to alter observation-law ordering. We validate experimentally that the partition is stable under moderate perturbations of (see supplementary experiments), consistent with the continuity of in .
+Future directions.
+These limitations point to a clear research program: closing the gap between worst-case bounds and empirical behavior. The operational exact-for-family benchmark results partially close this gap operationally: on Tiger and GridWorld , greedy-selected subsets achieve , so Theorem 6.2 applies directly. What remains open is predicting or bounding small without constructing the full deterministic-stationary FSC tensor, using cheaper surrogates such as submodular coverage, anchor rank, or Hankel rank, with effective-rank summaries treated only as possible descriptive surrogates rather than the target quantity itself.
+Conjecture 8.1 (Operational subset rank and predictive complexity).
+Let
+be the minimum controller-subset size achieving probe-envelope error at most . For POMDPs with low intrinsic predictive complexity, is polynomially controlled by open-loop predictive structure, such as the Hankel rank , together with .
+Evidence. On Tiger and GridWorld , greedy selection attains on the operational exact-for-family benchmarks (Table 5). On GridWorld , the open-loop Hankel rank computed from the observation kernels is , consistent with a small gap between predictive complexity and operational subset size. Anchor rank remains a stricter structural sufficient notion: any -anchor family of size implies , but the present experiments do not certify anchor-family membership.
+Toward tighter latent-state bounds.
+The observation-Lipschitz value bound (Theorem 3.6) with the reward-range upper bound on is intentionally conservative for latent-state objectives, and the exact sufficiency guarantee (Theorem 4.6) applies only to agent-accessible objectives in . Four avenues could tighten the latent-state story without abandoning the bounded-agent perspective. First, reward-aware probe families—enriching the probe class with controllers whose action-selection explicitly depends on the reward-relevant partition of observations—could reduce the effective by aligning the pseudometric with reward-relevant distinctions rather than observation-level ones. Second, a hybrid exact/approximate decomposition could split the reward into an observation-measurable component (handled exactly by Theorem 4.6) and a latent residual (bounded by the Lipschitz term), yielding a strictly tighter composite bound whenever the observation-measurable component is nonzero. Third, belief concentration results that exploit specific POMDP structure (e.g., posterior convergence under informative observations) could sharpen the per-stage observation-Lipschitz constant beyond the worst-case . Fourth, dual-side bounding via retention capacity: the current bound takes as the worst-case reward sensitivity over all policies in the probe family, but an agent with finite retention cannot sustain the full policy space and therefore cannot exploit the fine distinctions that drive to its worst case. Restricting the sup in the Lipschitz constant to the sustainable policy subset could yield an effective , potentially making the bound non-vacuous in regimes where the full-family bound is not. This direction is developed in companion work on sustainable quotients.
+Three paths extend this model-based framework toward settings with unknown dynamics. First, when a model is learned from data with per-entry errors , a telescoping argument yields , so the quotient degrades gracefully under model estimation error. Second, the sampling-based distance cache (Algorithm 1) already operates on trajectories rather than explicit transition matrices; in principle, these trajectories could come from a real environment or simulator rather than a known model, yielding a model-free variant at the cost of sample complexity. Third, the canonical quotient suggests a representation-learning objective: an encoder that maps observation histories into a space preserving the bounded-interaction pseudometric would recover the quotient’s equivalence classes, connecting this framework to deep bisimulation methods. Further natural extensions include infinite-horizon discounted POMDPs and PAC-Bayes bounds for bounded agents.
+More broadly, this work offers a principled vocabulary for reasoning about when two environments are the same from a bounded agent’s perspective. The canonical quotient gives the theory object; the operational coarsening shows how much of that object survives contact with tractability.
+Dual-side bounding and retention capacity.
+The quotient developed here bounds from the world side: it reduces the state space to what a -bounded agent can distinguish. A symmetric reduction applies from the policy side. An agent with finite retention—modelled by a learning-forgetting ratio , where is the rate of acquiring new distinctions and the rate of losing them—cannot sustain all policies available to an -agent with perfect memory; the effective policy space is a -dependent subset. The resulting sustainable quotient is the canonical abstraction for an agent bounded on both sides, with the static quotient recovered as the limit. This extension, including a dynamic Myhill–Nerode theorem, the birth-death dynamics of quotient evolution under learning and forgetting, and applications to multi-agent coordination under communication constraints, is developed in companion work.
+Broader impact.
+This work is a foundational theoretical contribution to POMDP abstraction and does not introduce new algorithms deployed in safety-critical systems. The framework could improve the efficiency of planning under partial observability in robotics, autonomous systems, and resource-constrained agents, where principled abstraction reduces computational cost while providing formal guarantees on information loss. As with any model-compression technique, there is a dual-use potential: abstraction that simplifies planning for beneficial agents could equally simplify planning for adversarial ones, though the bounded-agent assumption limits the scope of such concerns. We foresee no direct negative societal impacts from this work.
+Reproducibility.
+Code and experiments are available at https://github.com/alch3mistdev/finite-pomdp-abstraction. Appendix G records benchmark definitions, parameter grids, convergence checks, timing tables, an explicit command-to-table mapping, and a three-tier reproduction contract (Table 9). The pinned software stack is the repository’s requirements.txt (numpy, scipy, pandas, matplotlib); all timed tables use the serial configuration (--no-parallel) so that runtimes are directly comparable across machines, even though the experiment driver can optionally launch process-level parallel workers for non-timing runs. Tier 1 reruns the theorem tables and the operational core tables through Table 6; on the reported hardware, that verification target completes in under 3 minutes. Tier 2 adds the long-horizon package (Tables 10 and 11) and takes roughly 10 minutes serial from the reported row totals. Tier 3 contains the heaviest operational stress rows, including the largest configurations in Table 14, which can require up to 2 hours and are reported as optional archival stress tests rather than prerequisites for the theorem claims. For those Tier 3 rows, artifact-level inspection through the precomputed package under artifacts/tier3/ is the intended default verification path; the repository includes CSV transcriptions of the reported stress-track rows, a runtime/certificate crosswalk, and a lightweight verifier script (python artifacts/tier3/verify_tier3_artifacts.py) that confirms the archived rows match the paper’s reported values in under one second. All reported runtimes were measured on a MacBook Pro with an Apple M3 Pro chip (12 cores, 36 GB RAM) running macOS 26.3.1. On machines with different CPUs, Tier 1 runtimes should scale roughly with single-core throughput; we expect – variation relative to the M3 Pro baseline on contemporary x86 and ARM hardware. Tier 3 runtimes depend more on LP solver performance in SciPy’s HiGHS backend and may show wider variation.
+References
+- [1] Abel, D., Hershkowitz, D. E., and Littman, M. L. (2016). Near optimal behavior via approximate state abstraction. In ICML, pp. 2915–2923.
+- [2] Abel, D. (2022). A Theory of Abstraction in Reinforcement Learning. PhD thesis, Brown University.
+- [3] Amato, C., Bernstein, D. S., and Zilberstein, S. (2010). Optimizing fixed-size stochastic controllers for POMDPs and decentralized POMDPs. Autonomous Agents and Multi-Agent Systems, 21(3):293–320.
+- [4] Balle, B., Hamilton, W. L., and Pineau, J. (2014). Methods of moments for learning stochastic languages. In ICML, pp. 1386–1394.
+- [5] Berger, T. (1971). Rate Distortion Theory. Prentice-Hall.
+- [6] Blackwell, D. (1953). Equivalent comparisons of experiments. Ann. Math. Stat., 24(2):265–272.
+- [7] Boots, B., Siddiqi, S. M., and Gordon, G. J. (2011). Closing the learning-planning loop with predictive state representations. IJRR, 30(7):954–966.
+- [8] Calo, A., Anders, C. J., Schulz, S., and Müller, K.-R. (2024). Bisimulation metrics are optimal transport distances, and can be computed efficiently. In NeurIPS.
+- [9] Carr, S., Jansen, N., and Topcu, U. (2023). Simplifying POMDP verification with bisimulation-based abstractions. In AAAI, pp. 6162–6170.
+- [10] Castro, P. S. (2009). Equivalence Notions and Model Minimization in MDPs. PhD thesis, McGill University.
+- [11] Castro, P. S. and Precup, D. (2010). Using bisimulation for policy transfer in MDPs. In AAAI, pp. 1065–1070.
+- [12] Castro, P. S. (2020). Scalable methods for computing state similarity in deterministic MDPs. In AAAI, pp. 10069–10076.
+- [13] Crutchfield, J. P. and Young, K. (1989). Inferring statistical complexity. Phys. Rev. Lett., 63(2):105–108.
+- [14] Dean, T. and Givan, R. (1997). Model minimization in Markov decision processes. In AAAI, pp. 106–111.
+- [15] Desharnais, J., Gupta, V., Jagadeesan, R., and Panangaden, P. (2004). Metrics for labelled Markov processes. TCS, 318(3):323–354.
+- [16] Even-Dar, E., Kakade, S. M., and Mansour, Y. (2007). The value of observation for monitoring dynamic systems. In IJCAI, pp. 2474–2479.
+- [17] Ferns, N., Panangaden, P., and Precup, D. (2004). Metrics for finite Markov decision processes. In UAI, pp. 162–169.
+- [18] Ferns, N., Panangaden, P., and Precup, D. (2011). Bisimulation metrics for continuous Markov decision processes. SIAM J. Comput., 40(6):1662–1714.
+- [19] Ferns, N., Castro, P. S., Precup, D., and Panangaden, P. (2012). Methods for computing state similarity in MDPs. In UAI, pp. 174–183.
+- [20] Gelada, C., Kumar, S., Buckman, J., Nachum, O., and Bellemare, M. G. (2019). DeepMDP: Learning continuous latent space models. In ICML, pp. 2170–2179.
+- [21] Genewein, T., Leibfried, F., Grau-Moya, J., and Braun, D. A. (2015). Bounded rationality, abstraction, and hierarchical decision-making. Frontiers in Robotics and AI, 2:27.
+- [22] Hansen, E. A. (1998). Solving POMDPs by searching in policy space. In UAI, pp. 211–219.
+- [23] Hopcroft, J. E. and Ullman, J. D. (1979). Introduction to Automata Theory, Languages, and Computation. Addison-Wesley.
+- [24] Hsu, D., Kakade, S. M., and Zhang, T. (2012). A spectral algorithm for learning hidden Markov models. J. Comput. Syst. Sci., 78(5):1460–1480.
+- [25] Jaeger, H. (2000). Observable operator models for discrete stochastic time series. Neural Computation, 12(6):1371–1398.
+- [26] Kaelbling, L. P., Littman, M. L., and Cassandra, A. R. (1998). Planning and acting in partially observable stochastic domains. Artif. Intell., 101(1–2):99–134.
+- [27] Kemertas, M. and Aumentado-Armstrong, T. (2022). Towards robust bisimulation metric learning. In NeurIPS.
+- [28] Larsen, K. G. and Skou, A. (1991). Bisimulation through probabilistic testing. Inf. Comput., 94(1):1–28.
+- [29] Li, L., Walsh, T. J., and Littman, M. L. (2006). Towards a unified theory of state abstraction for MDPs. In AI&M, pp. 531–539.
+- [30] Littman, M. L., Sutton, R. S., and Singh, S. (2001). Predictive representations of state. In NeurIPS, pp. 1555–1561.
+- [31] Liu, M., Zhu, Z., and Jha, S. (2023). Partially observable RL with -stability: unified structural conditions and efficient algorithms. In NeurIPS.
+- [32] Madani, O., Hanks, S., and Condon, A. (2003). On the undecidability of probabilistic planning. Artif. Intell., 147(1–2):5–34.
+- [33] Massey, J. L. (1990). Causality, feedback and directed information. In ISITA, pp. 303–305.
+- [34] Myhill, J. (1957). Finite automata and the representation of events. WADD Tech. Rep., 57–624.
+- [35] Nemhauser, G. L., Wolsey, L. A., and Fisher, M. L. (1978). An analysis of approximations for maximizing submodular set functions—I. Math. Program., 14(1):265–294.
+- [36] Nerode, A. (1958). Linear automaton transformations. Proc. AMS, 9(4):541–544.
+- [37] Panangaden, P. (2009). Labelled Markov Processes. Imperial College Press.
+- [38] Papadimitriou, C. H. and Tsitsiklis, J. N. (1987). The complexity of Markov decision processes. Math. Oper. Res., 12(3):441–450.
+- [39] Paz, A. (1971). Introduction to Probabilistic Automata. Academic Press.
+- [40] Pineau, J., Gordon, G., and Thrun, S. (2003). Point-based value iteration: An anytime algorithm for POMDPs. In IJCAI, pp. 1025–1032.
+- [41] Poupart, P. and Boutilier, C. (2003). Bounded finite state controllers. In NeurIPS, pp. 823–830.
+- [42] Rutten, J. J. M. M. (2000). Universal coalgebra: A theory of systems. TCS, 249(1):3–80.
+- [43] Shalizi, C. R. and Crutchfield, J. P. (2001). Computational mechanics: Pattern and prediction, structure and simplicity. J. Stat. Phys., 104(3/4):817–879.
+- [44] Shannon, C. E. (1959). Coding theorems for a discrete source with a fidelity criterion. IRE Natl. Conv. Rec., 7(4):142–163.
+- [45] Sims, C. A. (2003). Implications of rational inattention. J. Monet. Econ., 50(3):665–690.
+- [46] Smallwood, R. D. and Sondik, E. J. (1973). The optimal control of partially observable Markov processes over a finite horizon. Oper. Res., 21(5):1071–1088.
+- [47] Sutton, R. S., Precup, D., and Singh, S. (1999). Between MDPs and semi-MDPs: Temporal abstraction in RL. Artif. Intell., 112(1–2):181–211.
+- [48] Tatikonda, S. and Mitter, S. K. (2000). Control under communication constraints. In IEEE CDC, pp. 269–274.
+- [49] Torgersen, E. (1991). Comparison of Statistical Experiments. Cambridge Univ. Press.
+- [50] Zhang, A., McAllister, R., Calandra, R., Gal, Y., and Levine, S. (2021). Learning invariant representations for RL without reconstruction. In ICLR.
+- [51] Tishby, N., Pereira, F. C., and Bialek, W. (1999). The information bottleneck method. In Proceedings of the 37th Annual Allerton Conference on Communication, Control, and Computing, pp. 368–377.
+- [52] Yao, A. C.-C. (1979). Some complexity questions related to distributive computing (preliminary report). In Proceedings of the 11th Annual ACM Symposium on Theory of Computing (STOC), pp. 209–213.
+- [53] Miller, G. A. (1956). The magical number seven, plus or minus two: Some limits on our capacity for processing information. Psychological Review, 63(2):81–97.
+- [54] Cowan, N. (2001). The magical number 4 in short-term memory: A reconsideration of mental storage capacity. Behavioral and Brain Sciences, 24(1):87–114.
+- [55] Fournier, N. and Guillin, A. (2015). On the rate of convergence in Wasserstein distance of the empirical measure. Probability Theory and Related Fields, 162(3–4):707–738.
+Supplementary Material
+Appendix A Full Proofs
+A.1 Proof of Proposition 3.2
+Proof.
+Non-negativity and symmetry are inherited from . The triangle inequality follows from
+The equivalence for all follows because on finite spaces. ∎
+A.2 Proof of Theorem 3.6 (Value-function error bound)
+Proof.
+Fix . The value function decomposes per-step as , where is the random observation history at depth and . By hypothesis, the quotient is constructed from a partition with pairwise probe-distance at most . By the observation-Lipschitz condition (Definition 3.4), the per-step expected reward difference at any history satisfies . The quotient model’s conditional suffix law at is a convex combination of the conditional laws of ’s class members, all of which have pairwise distance at most under every . By convexity of , the cross-model conditional discrepancy satisfies . Summing over steps yields .
+For the canonical quotient of Proposition A.1, the partition has pairwise probe-distance at most , so the bound is . ∎
+A.3 Proof of Proposition 4.2
+Proof.
+(a) Reflexivity: . Symmetry: . Transitivity: if and for all , then by the triangle inequality for , for all .
+(b) Appending observation to equivalent histories : fix and write
+Since , these joint laws on are identical: . On a finite space, this common joint law admits a regular conditional kernel for the suffix given the next observation, with any zero-mass handled by an arbitrary common choice (the choice is immaterial: zero-mass observations contribute zero weight to expectations and Wasserstein computations, so the conclusion is convention-independent). Therefore
+for all suffixes . Since was arbitrary, .
+(c) Finiteness: and are finite, so the number of histories is finite. ∎
+A.4 Proof of Theorem 4.4 (Myhill–Nerode)
+Proof.
+(i) Well-definedness. Under , the observation law is identical for all and all . Constant-action FSCs (always play action ) are in for any , so equivalence under all policies implies per-action agreement of one-step observation probabilities. For any , action , and observation : , since both equal under the constant- policy. Any convex combination therefore yields the same , as the linear map takes a common value. Proposition 4.2(b) then ensures successor classes are well-defined.
+(ii) Soundness. By induction on . Base: . Step: . By well-definedness, . The FSC state depends on the observation sequence identically in both systems, so the induction extends.
+(iii) Universality. Let be the probe-exact bounded-agent equivalence on histories of and write for its classes. Let and write for the quotient classes of . Since for every , all cylinder probabilities and agree, hence on the finite history space their conditional future laws and agree as well (with the same arbitrary convention on zero-probability histories). Define
+This is well-defined: if , then by definition of the conditional future laws from and coincide in , hence also in , so and therefore . Surjectivity is immediate because every class has the preimage . We now verify the morphism axioms explicitly.
+-
+•
+(M1). by definition.
+-
+•
+(M2). For any class and policy ,
+where the first equality uses that is an -class, the middle equality is the conditional-law transfer above, and the fourth equality is soundness of .
+-
+•
+(M3). By Proposition 4.2(b), right-appending observations respects both equivalence relations, so for any class ,
+(iv) Minimality. Universality gives a surjection , so .
+(v) Uniqueness. If also satisfies (i)–(iv), universality yields morphisms and . Both compositions are surjective endomorphisms on finite sets, hence bijections. ∎
+A.5 Proof of Theorem 4.6 (Exact sufficiency)
+Proof.
+We show by induction on that for every ,
+Base case (). Both sides equal (the empty trajectory has probability ).
+Inductive step. Assume for all realizations. By the soundness property of Theorem 4.4, the conditional observation law satisfies for every history and action .
+The policy is a clock-aware bounded controller: its internal state evolves deterministically via and its action is selected via (deterministic case) or (stochastic case). In either case, the action at stage is a measurable function of , hence of the observation history alone (since is fixed).
+The joint law at stage decomposes as
+All three factors on the right are equal in and : the first by the inductive hypothesis, the second by soundness, and the third because applies the same deterministic mapping to the same observation history.
+At , we obtain . For any bounded measurable ,
+A.6 Proof of Theorem 4.9 (Clock-aware witness theorem)
+Proof.
+By assumption, there exists stochastic clock-aware with . Hence for some suffix ,
+Multilinear vertex lemma: Let be multilinear with for some . Writing and expanding by multilinearity: . If all vertex values vanished, would be identically zero. Hence some vertex has .
+Let collect the stage-indexed controller parameters
+For a fixed suffix , each trajectory contributing to uses exactly one action simplex and one node-transition simplex at each stage, so no parameter from stage is reused at a different time. Therefore is multilinear in the stage-indexed clock-aware FSC parameters. By the lemma, there exists a vertex with , i.e. a deterministic clock-aware FSC satisfying
+∎
+A.7 Proof of Proposition 4.10
+Proof.
+Consider the POMDP with states
+actions , observations , and initial belief . The transition/observation structure is:
+-
+•
+from (resp. ), either action moves to (resp. ) and emits (resp. );
+-
+•
+from , action moves to and emits , while action moves to from either branch and emits ;
+-
+•
+from , action moves to from either branch and emits , while action moves to from and to from , emitting and respectively;
+-
+•
+are absorbing, with always emitting .
+For deterministic stationary -node FSCs there are only two controllers: always- and always-. Under always-, after either history or the remaining suffix is deterministically . Under always-, after either history or the remaining suffix is again deterministically . Hence every deterministic stationary -node FSC yields identical suffix laws from and , so the maximal distinguishing distance is .
+Now consider the stochastic stationary -node FSC with and the unique node looping to itself after every observation. Conditioned on history , with probability the first post-history action is , giving suffix , and with probability it is , which reaches and then yields with probability and with probability . Therefore
+Symmetrically,
+Under the discrete observation metric, the induced sequence metric assigns distance between and , so the 1-Wasserstein distance between these two suffix laws is . Thus a stochastic stationary -node FSC distinguishes and , while no deterministic stationary -node FSC does. ∎
+A.8 Proof of Theorem 5.3 (Data-processing monotonicity)
+Proof.
+Let be any FSC on . The wrapper induces an FSC on by composing through and . The observation sequence under in is the pushforward of ’s observation sequence in through .
+By Kantorovich–Rubinstein duality and the Lipschitz property of : . Taking the supremum over yields the result. ∎
+A.9 Proof of Proposition 5.5 (Observation-resolution bounds)
+Proof.
+(a) Under -coarsening, each observation is replaced by with . At each time step , the per-step contribution to shifts by at most due to the triangle inequality for . Summing over steps: .
+(b) The coarsened history space has histories at depth , so at most classes.
+(c) The partition under has -diameter at most . At the history level, the same per-step shift from part (a) applies to conditional suffix laws: for any two histories in the same class, . Hence the partition has -diameter at most . Applying Theorem 3.6 with merge threshold : . ∎
+A.10 Proof of Theorem 5.6 and Corollary 5.7
+A.11 Proof of Proposition 5.8
+A.12 Canonical quotient in the approximate setting
+Proposition A.1 (Canonical quotient).
+Define canonical aggregated belief . Then:
+-
+(i)
+Per-step: .
+-
+(ii)
+Trajectory: .
+-
+(iii)
+Combined: .
+Proof.
+Within an -class, all observation laws agree to within in . The mapping is linear in , so any convex combination lies in the convex hull of values , which has diameter at most per observation . Propagating through states and accounting for the convex hull diameter gives (i). Part (ii) follows by telescoping across steps and observations. Part (iii) by the triangle inequality: . ∎
+A.13 Lipschitz continuity of observation laws
+Lemma A.2.
+For any finite POMDP , is Lipschitz continuous from to .
+Proof.
+Each entry is a multilinear polynomial in , hence Lipschitz on the compact domain . ∎
+Appendix B Structural Controller-Subset Conditions
+This appendix records a stricter structural sufficient condition for small probe-envelope error. The main text certifies selected subsets operationally through the measured quantity ; the results here explain one route by which can be small, but they are not the quantity verified in Table 5.
+The correct structural condition for why a small controller subset preserves the partition is not ordinary spectral rank—a matrix can have small effective rank yet contain a single controller column that changes the rowwise maximum on a critical history pair—but rather a max-preserving convex-anchor rank.
+Definition B.1 (-anchor controller family).
+A controller subset is a -anchor family if for every controller there exist coefficients with such that
+Theorem B.2 (Anchor-controller compression).
+If is a -anchor family of size , then . Hence the -quotient built from satisfies
+If , the anchor family recovers the probe-exact partition.
+Proof.
+Fix a history-pair row . For any controller , . Taking the maximum over : . Since , also . Therefore for all , i.e. . The value bound follows from Theorem 6.2. ∎
+Remark B.3 (Anchor rank vs. spectral rank).
+The minimum -anchor family size is a convex-hull approximation notion, related to approximate nonnegative factorization rather than SVD. Since every column of is nonnegative, spectral effective rank upper-bounds anchor rank, but the two can differ. Anchor rank is the structurally correct quantity because it controls the rowwise-max approximation that determines partition quality; effective rank is at most a possible surrogate for it.
+Appendix C Extended Related Work
+State abstraction in RL.
+POMDP model minimization.
+Dean and Givan [14] introduced homogeneous partitions for MDPs. Castro [10] formalized exact bisimulation for POMDPs. Even-Dar et al. [16] studied the value of information in partial observability. Carr et al. [9] recently applied bisimulation-based abstractions to POMDP verification, and Liu et al. [31] introduced structural conditions for tractable partially observable RL. Blackwell and Torgersen’s comparison-of-experiments viewpoint [6, 49] is also relevant in spirit, but our comparisons are closed-loop and indexed by bounded policy classes rather than static observation channels.
+POMDP planning algorithms.
+Point-based value iteration [40] made approximate POMDP solving practical by sampling belief points rather than exhaustively partitioning the belief simplex, as in earlier exact methods [46]. Our quotient construction is complementary: it reduces the state space upstream of any solver, so PBVI (or any planner) operates on a smaller model with formal approximation guarantees.
+Bisimulation metrics.
+Ferns et al. [17, 18] showed TV-based bisimulation is topologically fragile and introduced Wasserstein-based metrics. Extensions to scalable algorithms [19] and continuous spaces [11] followed. Calo et al. [8] recently showed that bisimulation metrics are optimal-transport distances, providing efficient Sinkhorn-based computation; Kemertas and Aumentado-Armstrong [27] extended metric learning to robust settings. Our framework shifts from state-level bisimulation to history-level indistinguishability conditioned on bounded agents. The Calo et al. result is complementary: their efficient OT computation applies to the state-level Wasserstein distance in the bisimulation fixed-point iteration, whereas our is computed over observation-sequence distributions conditional on histories. In principle, their Sinkhorn acceleration could speed up the per-pair computation in Algorithm 1 when is large, since each pairwise distance is itself an OT problem; however, our current bottleneck is the number of history pairs times the number of FSCs, not the per-entry OT solve (which uses -dimensional distributions that are small for the bounded-agent regimes we target). The connection becomes more promising in the sampling-based regime at larger scales.
+Finite-state controllers.
+Rate–distortion and information constraints.
+Predictive state representations.
+PSRs [30], OOMs [25], controlled PSRs [7], and spectral learning of stochastic languages [4] define state via predictions of future observations. Our framework differs: (1) closed-loop vs. open-loop tests, (2) environment equivalence classes vs. state representations, (3) explicit parametrization by agent capacity .
+Controlled PSRs already incorporate actions, so the distinction is not simply “action-aware” versus “action-free.” The sharper difference is what is being minimised: PSR/OOM methods seek a predictive statistic of small linear dimension (rank of a Hankel-style operator or its controlled analogue), whereas our construction fixes a bounded controller family and asks which histories are indistinguishable to that family in closed loop. The FSC memory budget therefore measures observer capacity rather than predictive state dimension. We do not claim a general ordering between these parameters: low predictive rank need not imply that the rowwise-max probe envelope is captured by a small FSC subset, and a small bounded-controller quotient does not by itself imply low spectral rank.
+The low-rank structure of the FSC distance tensor parallels Hankel matrix rank in PSR/OOM theory. Concretely, the PSR Hankel matrix captures open-loop predictive rank, while our tensor captures closed-loop distinguishing rank. Since any open-loop test sequence is realizable by a constant-action FSC, open-loop predictive complexity is a plausible surrogate for small operational subset rank (Conjecture 8.1). Making that link precise—whether directly or via stricter structural notions such as anchor rank—would convert PSR/OOM-style predictive structure into controller-subset certificates for our quotient construction. Appendix B makes the anchor-rank notion formal: it is the minimum number of predictive rows needed to preserve every rowwise supremum appearing in the probe envelope, which is exactly the max-preserving quantity required by the quotient argument and not something low Hankel rank alone guarantees.
+Probabilistic bisimulation.
+Neural bisimulation.
+Gelada et al. [20] (DeepMDP), Zhang et al. [50] (deep bisimulation metrics), and Castro [12] scale bisimulation to high-dimensional observations by learning encoder networks that minimize a bisimulation-inspired loss. These methods operate in the model-free, continuous-state regime—complementary to our model-based, finite-state framework.
+A natural bridge is to view the canonical quotient as a well-defined theoretical target: a deep encoder that maps observations into representations preserving the bounded-interaction Wasserstein pseudometric would, by construction, respect the quotient’s equivalence classes. Conversely, our value bound (Theorem 3.6) applies to any approximate quotient, including one produced by a learned encoder, provided the merging error can be certified. The gap between the two paradigms is primarily one of scale and model access: deep methods handle rich observations without an explicit model, while our construction provides exact guarantees on small-to-medium problems where a model is available. Integrating the two—for example, using probe-based losses as an auxiliary objective in representation learning—is a promising direction for future work.
+Computational mechanics.
+Information bottleneck.
+The information bottleneck [51] compresses a variable while preserving mutual information . Our -quotient is the closed-loop interactive generalisation: the agent’s history plays the role of , and the future observation law (conditional on the agent’s policy) plays the role of . The key difference is that our compression is policy-dependent and uses directed information rather than mutual information, reflecting the interactive structure of POMDPs.
+Communication complexity.
+Yao’s communication complexity framework [52] studies how much communication is needed for two parties to compute a joint function. In the one-way variant, the sender’s optimal encoding is precisely the quotient that merges source symbols indistinguishable to the bounded receiver—recovering the optimal communication protocol as a special case of our quotient construction.
+Cognitive science.
+Miller’s “magical number seven” [53] and Cowan’s refined capacity of items [54] characterise working-memory limits in humans. A human with working memory and attention span is formally a finite-state controller; the quotient induced by represents the environmental distinctions that matter to that human. This connection suggests empirical predictions: humans should be behaviourally indifferent between situations in the same quotient class, testable via reaction-time or choice experiments.
+Summary comparison.
+Table 8 highlights the key axes along which our framework differs from state bisimulation metrics and predictive state representations.
+Appendix D POMDP Morphisms and Canonical Quotient Construction
+Definition D.1 (POMDP morphism).
+A POMDP morphism is a surjection satisfying:
+-
+(M1)
+(initial-state preservation).
+-
+(M2)
+for all (observation-law compatibility).
+-
+(M3)
+for all (transition compatibility).
+An isomorphism is a bijective morphism.
+Condition (M2) constrains maps between different POMDPs, not merely within a single quotient. Together with (M3), these correspond to a coalgebra homomorphism for the functor modelling combined transition-and-output structure [42, 37].
+Remarks on the approximate setting.
+In the -approximate case, different aggregation weights produce genuinely different transition kernels. The canonical quotient (Proposition A.1) resolves this by using uniform weights with explicit error control. The effective dimension can replace in the bounds when beliefs are concentrated.
+Appendix E Worked Examples
+E.1 Tiger POMDP with ,
+Consider the Tiger problem: , , , , uniform prior .
+With , , the single FSC node selects listen deterministically. After observing : ; after : . : specifically, vs. . So and the operational exact-for-family quotient has classes (no merging).
+At : , so and merge. The -quotient has classes: .
+E.2 Tiger pseudometric computation
+With , , full actions, a -node FSC chooses a fixed action distribution . The conditional future distributions differ by under the discrete metric. Maximizing sets , yielding .
+E.3 Sensor grid ( vs. TV)
+A localization POMDP with , . Histories and produce beliefs at grid positions and . Under the discrete metric: (large—all mismatches weighted equally). Under the grid metric: (small—mass shifts by one step). At : merges, TV cannot—demonstrating the strict advantage of on structured observation spaces.
+Appendix F Complexity Note and Open Problem
+The probe-exact algorithm in Section 6 is exponential in the horizon parameter for two direct reasons. First, even before controller enumeration, the history tree contains nodes in the worst case. Second, the bounded-controller probe class contributes an additional factor of , so probe-exact distinguishability testing ranges over exponentially many history–controller interactions as grows.
+This is sufficient to justify the paper’s calibration claims about practical tractability: the probe-exact quotient algorithms target bounded horizons, while longer-horizon results rely on layering, controller subsets, and sampling. It does not by itself establish a formal complexity lower bound for the decision problem
+and we do not claim such a lower bound.
+The natural route would be a reduction from finite-horizon POMDP planning [38], but a complete proof would need to compile accumulated reward thresholds into a purely observational distinguishability instance and prove the required biconditional. We therefore record this as an open problem rather than a theorem claim.
+Appendix G Additional Experiments
+G.1 Execution Protocol and Resource Notes
+All timed tables in the main paper use the serial configuration of the experiment driver (--no-parallel); optional process-level parallelism is available for convenience but was disabled for all reported wall-clock numbers. The theorem-first exact tables are produced from python paper/generate_theory_first_tables.py. The operational quick suite is produced from python -m experiments.run_basic_results --profile quick --seed 7 --no-parallel, while the long-horizon package adds --include-hierarchical-scaling --max-horizon 10. Dependencies are the pinned requirements.txt stack (numpy, scipy, pandas, matplotlib); no GPU, cluster scheduler, or accelerator-specific settings are required.
+The “under 3 minutes” statement in the main reproducibility paragraph refers only to the theorem-first tables and the operational core main-paper subset (Tables 2 through 6) on the reported hardware. It does not include the heavier operational tracks in Tables 13, 14, 10, and 11, which are reported separately because they dominate runtime despite using the same pinned software stack and serial configuration. Table 9 makes that distinction explicit by separating core verification, long-horizon extension, and archival stress tracks.
+The large- experiments are CPU-bound rather than state-tensor-memory-bound: the sampling-based meaningful-scale rows cache trajectories over the -history () or -history () trees listed in Table 13, and do not materialize a dense object. For the largest reported scaling row (Network Monitoring , , , ), the dominant pair-by-FSC tensor has scalar distances, so the operational memory footprint is controlled by history and controller counts rather than raw state count. On the reported Apple M3 Pro / 36 GB RAM machine, these runs fit comfortably in memory; runtime, not memory pressure, is the practical bottleneck.
+G.2 Command-to-Table Mapping
+Theory-first exact tables.
+Running python paper/generate_theory_first_tables.py writes machine-readable artifacts under paper/generated/data/ and LaTeX tables under paper/generated/. Specifically, probe_family_comparison.csv and table_probe_family_comparison.tex feed Table 2; clock_aware_observation_planning.csv and table_observation_planning.tex feed Table 3; and clock_aware_latent_planning.csv together with table_latent_planning.tex feed Table 4.
+Operational quick suite.
+Running python -m experiments.run_basic_results --profile quick --seed 7 --no-parallel --output-dir <DIR> writes the operational CSV artifacts used for the main empirical tables. The files computational_profile.csv, sampling_variance.csv, and bootstrap_coverage.csv populate Appendix Tables 24, 26, and 27. The same quick-suite run emits the operational benchmark artifacts from which Tables 5, 6, 12, 7, 13, and 14 are assembled. For the paper’s reproduction contract, however, only the subset through Table 6 belongs to the fast core-verification tier; the heavier rows are treated as archival stress tracks even though they are produced by the same driver.
+Solver settings.
+All distances in the main pipeline are solved by scipy.optimize.linprog(method="highs") on normalized probability vectors with exact equality constraints for the transport marginals and nonnegative transport variables; no entropic regularization, Sinkhorn approximation, or early stopping is used. The bisimulation baseline in Appendix Table 18 uses the same HiGHS linear-program backend for state-level Wasserstein subproblems, together with fixed-point iterations and discount before complete-linkage clustering. PBVI uses the finite-horizon implementation in experiments.analysis.pbvi_solve with horizon equal to the benchmark horizon, belief points sampled by random forward simulation from , discount , and seed ; the quotient-planning comparison applies these identical settings to the original and quotient POMDPs so that the reported speedups isolate compression rather than planner retuning.
+Heavy operational tracks.
+The same quick-suite command writes meaningful_scale.csv and m2_medium_scale.csv, which populate Tables 13 and 14. These rows are reported separately in the runtime discussion because they dominate the wall-clock budget of the operational pipeline. For inspection without rerunning the heavy jobs, the repository includes artifacts/tier3/meaningful_scale.csv, artifacts/tier3/m2_medium_scale.csv, artifacts/tier3/verify_tier3_artifacts.py, and a short README.md explaining their provenance and table mapping.
+Long-horizon package.
+Running python -m experiments.run_basic_results --profile quick --include-hierarchical-scaling --max-horizon 10 --seed 7 --no-parallel --output-dir <DIR> adds hierarchical_t_scaling.csv, principal_fsc_horizon_scaling.csv, and the figures fig_runtime_vs_horizon_log.png and fig_layered_bound_vs_empirical.png. These populate Tables 10 and 11, and Figures 4 and 5.
+Reproduction tiers.
+G.3 Archival Operational Stress Tracks
+This subsection collects the heavier operational rows that are useful for understanding the computational behaviour of but are intentionally not part of the paper’s core validation target. They remain relevant as appendix-only archival evidence because they stress the same pipeline under longer horizons, larger state spaces, or richer probe families.
+Long-horizon scaling via layering and calibrated subsets.
+To address horizon scalability directly, we evaluate the compositional construction of Theorem 5.6 on Tiger with long horizons. For , we compare monolithic computation against layered segments ( for , for ). For , we calibrate a controller subset at and reuse it at larger horizons as an empirical calibrated-subset heuristic without a full certificate.
+The layered curve in Table 10 demonstrates the intended complexity shift: monolithic runtime grows with the full history tree, while layered runtime tracks short segments. At , layering reduces runtime by roughly three orders of magnitude while preserving the operational error-accumulation narrative from Theorem 5.6. For , Table 11 shows that a calibrated subset (, chosen from a calibration run) preserves near-operational-exact partition structure at (ARI ) and enables extension to without full FSC enumeration. These long-horizon calibrated-subset runs are empirical scalability results: unlike Table 5, we do not report a full probe-gap certificate for them, and we do not present them as theorem-level guarantees.
+Tractability summary.
+Table 12 summarizes how the three scalability dimensions are addressed. The history dimension is addressed by segmenting horizon into short layers (Theorem 5.6, Proposition 5.8), demonstrated up to . The FSC dimension is reduced by greedy selection: on the operational exact-for-family benchmarks, recovers the full probe envelope after a posteriori certification (), while on long-horizon Tiger a calibrated subset provides a near-operational-exact empirical surrogate without a full probe-gap certificate. The state dimension is decoupled by sampling ( s at , Table 6). Core benchmark suites remain lightweight and are the intended serial reproduction target; the stress tracks in this appendix are optional single-core extensions.
+Large-state and high-memory stress rows.
+Table 13 records appendix-level archival rows at scales exceeding or effective horizon . Sampling-based estimation decouples runtime from , enabling direct computation on Network Monitoring with states. The layered construction (Theorem 5.6) extends the effective horizon to by composing five segments, each computed independently via sampling. The observation alphabet remains the true computational bottleneck: at , the history tree has nodes at depth versus at . Bootstrap CI widths at this scale are (Table 13), comparable to medium-scale benchmarks (Table 6), confirming that trajectories provide reliable distance estimates even at .
+Higher-memory probe-family scaling.
+Proposition 4.11 predicts that a richer probe family produces a finer partition. Table 14 illustrates this beyond the operational exact-for-family benchmarks of Table 5, using sampling-based estimation. On RockSample (, actions, observations), the probe family ( FSCs) maintains classes at , while the family ( FSCs) collapses to . On Network Monitoring (, ) at , ( FSCs) sustains classes through , while ( FSCs) drops to . On Network Monitoring (, ), ( FSCs) preserves classes at while ( FSCs) drops to . In all three benchmarks, the max pairwise increases under , confirming that additional controller memory exposes finer-grained behavioural differences (Proposition 4.11). These rows are reported as archival stress tests rather than as part of the core theorem-validation suite.
+G.4 Tiger Reproduction and GridWorld Capacity Sweep
+With , on the listen-only Tiger POMDP, the experiment reproduces , operational exact classes at , and classes at .
+The GridWorld capacity sweep below shows quotient class counts across memory bounds and thresholds.
+G.5 Value-Function Error Bounds (Full)
+G.6 Horizon Gap Analysis
+As increases from to on Tiger (), empirical value error remains small while the pseudometric bound stays informative. The canonical worst-case aggregation bound grows from (at ) to (at ), confirming its conservative worst-case nature. The non-monotone (sawtooth) pattern arises because the set of merged history classes changes discretely at each threshold, so per-class distortions can drop when a coarser partition happens to align better with the reward structure.
+G.7 Operational Probe Family Sanity Check
+Across all deterministic FSCs (, Tiger), the maximum between is . Among sampled stochastic FSCs ( per seed, seeds ), the per-seed maximum is (mean std, range –)—no sampled stochastic stationary controller exceeds the deterministic maximum of on this benchmark. This is a benchmark-specific sanity check for the operational stationary probe family only: Proposition 4.10 gives a separate clock-aware exact POMDP where stochastic stationary FSCs strictly outperform deterministic stationary ones.
+G.8 Observation Noise Sensitivity
+G.9 Full Baseline Comparison
+G.10 Ablation Studies
+G.11 Low-Rank Analysis
+G.12 Larger-Scale Results
+G.13 Scaling and Timing
+G.14 Computational Bottleneck Breakdown
+G.15 Sampling Convergence and Variance
+The zero variance at trajectories indicates that the sampling noise in the estimated distances is well below the complete-linkage clustering threshold at all tested values. Even at trajectories, mean ARI exceeds , and the minimum ARI stabilizes at by trajectories, confirming that the partition is robust to sampling noise.
+Remark G.1 (Sample complexity of empirical ).
+On a finite support of size , the empirical distance converges at rate in expectation [55], where is the number of samples per distribution and is the number of possible future observation sequences at depth . For the bounded-agent regimes targeted here (, ), remains modest (at most ), and trajectories per (history, policy) pair suffice empirically (Table 25). The max-over-policies aggregation introduces a union-bound factor of ; in practice, the greedy-selected subsets () keep this overhead negligible.
+G.16 Bootstrap CI Coverage Validation
+Coverage is within of the nominal level at all sample sizes, confirming reliable uncertainty quantification for the max-distance statistic.
+G.17 Additional Benchmark Results
+Both benchmarks exhibit the expected monotonicity: class count is non-increasing in . Hallway’s chain topology produces identical compression at and (the cyclically assigned landmarks create equivalent observation structure at both scales). Network Monitoring shows slightly finer resolution (4 classes at ) due to the probing actions creating action-dependent observation structure.
+G.18 Downstream Planning Impact
+The value gap (difference between the original-optimal and quotient-optimal policy values, both evaluated on the original POMDP) is zero at for all settings. At on Hallway, the quotient selects a different policy with value gap , consistent with the bound . The compression from classes to at would reduce the effective planning state space by for planners that operate on history equivalence classes.
+G.19 Initial-Belief Sensitivity
+The partition is stable under moderate perturbations of : ARI for at all . Only extreme beliefs () at intermediate produce a different partition (3 vs. 4 classes, ARI ), consistent with the continuity of belief posteriors in .
+
+KAYNAK : https://arxiv.org/abs/2603.21399

@@ -1,0 +1,29 @@
+<div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
+  <h1>GitHub Copilot Coding Agent: Onunla Geçen On Ay</h1>
+  <p>Mayıs 2025'te GitHub'ın Copilot Coding Agent (CCA) ilk kez kullanılabilir hale geldiğinde, bulut tabanlı AI kodlama ajanlarının vaatleri büyük bir heyecan ve eşit derecede şüphecilik yaratıyordu. Biz de bir deney başlattık ve birçok yazılım mühendisliği deneyinde olduğu gibi, basit bir soruyla başladık: Bulut tabanlı bir AI kodlama ajanı, dünyanın en karmaşık, en çok incelenen ve en kritik açık kaynak kod tabanlarından birine anlamlı bir katkıda bulunabilir mi?</p>
+  <p><strong>dotnet/runtime</strong> deposu tipik bir kod tabanı değildir. .NET'in kalbi olan bu depo, .NET çalışma zamanı (çöp toplayıcı, JIT derleyici, AOT araç zinciri dahil) ve .NET'in çekirdeğini oluşturan yüzlerce kütüphaneyi içerir. Milyonlarca satır kodu kapsar ve Windows, Linux, macOS, iOS, Android ve WebAssembly üzerinde çalışır. Trilyon dolarlık finansal sistemlerden telefonunuzdaki oyunlara kadar her şeyi güçlendirir ve Microsoft'un kendi hizmetlerinin büyük çoğunluğunun can damarıdır.</p>
+
+  <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
+  <p>Bu yazı, CCA'nın .NET ekosistemindeki en karmaşık ve talepkar kod tabanlarından biri olan <strong>dotnet/runtime</strong> üzerinde nasıl test edildiğine odaklanıyor. .NET ekosisteminde AI destekli geliştirme için titiz bir test ortamı sunar. CCA'nın bulut tabanlı kodlama ajanı olarak nasıl kullanıldığını, insanlarla nasıl işbirliği yaptığını ve hangi görevlerde başarılı olduğunu anlamak için önemli bir örnek teşkil ediyor.</p>
+
+  <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
+  <p>CCA'nın <strong>dotnet/runtime</strong> üzerindeki deneyimi, 878 pull request (PR) ile sonuçlandı; bunların 535'i birleştirildi. Bu süreçte 95.000'den fazla satır kod eklendi ve 31.000 satır kod kaldırıldı. CCA PR'ları, Microsoft kaynaklı tüm PR'ların %22,2'sini temsil ediyor. Ancak, CCA PR'ları daha sınırlı kapsamda olduğundan, bu oran mühendislik çabasını tam olarak yansıtmıyor. CCA'nın başarı oranı %67,9 iken, Microsoft insan PR'larının başarı oranı %87,1'dir.</p>
+
+  <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
+  <p>CCA'nın kullanımı, yazılım geliştirme süreçlerinde önemli bir değişiklik yaratıyor. .NET ekibi, CCA'yı bir araç olarak kullanarak, daha önce zaman bulamayan işleri hızlandırıyor. Ancak, bu aynı zamanda inceleme süreçlerinde bir darboğaz yaratıyor; çünkü CCA'nın ürettiği PR'lar hızlı bir şekilde incelenmeli ve onaylanmalıdır. Bu durum, AI'nın kod üretim ekonomisini nasıl değiştirdiğini ve insan gözden geçirmelerinin önemini vurguluyor.</p>
+
+  <h2>Kısa Özet</h2>
+  <ul>
+    <li>CCA, <strong>dotnet/runtime</strong> üzerinde 878 PR oluşturdu, 535'i birleştirildi.</li>
+    <li>CCA'nın başarı oranı %67,9, Microsoft insan PR'larının ise %87,1.</li>
+    <li>CCA, daha sınırlı ve iyi tanımlanmış görevlerde başarılı oluyor.</li>
+    <li>AI'nın kullanımı, yazılım geliştirme süreçlerinde yeni fırsatlar ve zorluklar yaratıyor.</li>
+    <li>İnsan incelemeleri, AI tarafından üretilen kodların kalitesini sağlamak için kritik öneme sahip.</li>
+  </ul>
+
+  <h2>Kapanış</h2>
+  <p>CCA ile geçen on ay, AI'nın yazılım geliştirme süreçlerindeki potansiyelini ve sınırlarını anlamak için değerli bir deneyim sundu. AI'nın doğru kullanımı, yazılım mühendisliğinde verimliliği artırabilir, ancak insan incelemeleri ve rehberliği hala vazgeçilmezdir. Gelecekte, AI'nın kod yazma ve inceleme süreçlerinde daha fazla rol alması bekleniyor.</p>
+
+  <h2>Kaynak</h2>
+  <p>Detaylı okumak için: <a href="https://devblogs.microsoft.com/dotnet/ten-months-with-cca-in-dotnet-runtime/" target="_blank" rel="noopener noreferrer">https://devblogs.microsoft.com/dotnet/ten-months-with-cca-in-dotnet-runtime/</a></p>
+</div>

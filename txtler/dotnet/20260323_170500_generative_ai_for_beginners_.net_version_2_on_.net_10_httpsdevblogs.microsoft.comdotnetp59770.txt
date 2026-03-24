@@ -1,0 +1,109 @@
+Today we’re releasing Version 2 of
+Generative AI for Beginners .NET
+, our free, open-source course for building AI-powered .NET applications.
+If you want to understand and build generative AI applications, from core concepts to production-ready patterns, this is your starting point!
+This new version restructured the entire curriculum into five focused lessons with full explanations, rebuilt everything on .NET 10, and moved to Microsoft.Extensions.AI as the primary abstraction.
+If you went through v1, this is a different course.
+TL;DR
+Completely rewritten curriculum with five structured lessons
+All samples updated to .NET 10
+New AI abstraction layer using Microsoft.Extensions.AI
+Updated RAG implementations using native SDKs
+New Microsoft Agent Framework lesson
+Five lessons, fully rewritten
+The biggest change in Version 2 is the course itself! We threw out the old lesson structure and rewrote everything from scratch into five lessons, each with complete explanations, working samples, and a clear learning arc.
+Introduction to Generative AI
+– What generative AI is, how large language models work, and how they connect to .NET, helping you understand the foundation for everything that follows.
+Generative AI Techniques
+– The practical core. Learn about chat completions, prompt engineering, function calling, RAG, reasoning, and structured outputs. Basically, write and understand AI code for real applications.
+AI Patterns and Applications
+– Taking the techniques from Lesson 2 and applying them to real application patterns. Learn how to apply generative AI techniques to real application architectures and production patterns.
+Agents with MAF
+– Multi-agent systems using the Microsoft Agent Framework. Tool use, orchestration, and how agents collaborate to solve complex tasks.
+Responsible AI
+– Safety, content filtering, evaluation, and the practices you need to ship AI features responsibly.
+Version 2 goes deeper. Each lesson explains the concepts fully, walks through the code, and connects to the next lesson. You come out of it understanding not just how to call an API, but why the patterns work the way they do and how to apply them in real applications.
+#
+Lesson Link
+Description
+01
+Introduction to Generative AI
+What generative AI is and how it differs from traditional programming
+Why .NET is a first-class citizen for AI development
+The Microsoft AI stack and where each piece fits
+How to run samples in GitHub Codespaces or configure local development
+02
+Generative AI Techniques
+How to create chat conversations with context and memory
+How text embeddings work and why they matter
+How to process different content types including images and documents
+How to call AI models using Microsoft.Extensions.AI abstractions
+03
+AI Patterns and Applications
+How to build semantic search that understands meaning
+How to implement retrieval augmented generation (RAG)
+How to create applications that process and understand documents
+When to use each pattern and how to combine them
+04
+AI Agents with Microsoft Agent Framework
+What makes an agent different from a chatbot
+How to build agents that use tools and take actions
+How to orchestrate multiple agents working together
+How to integrate with Model Context Protocol (MCP)
+05
+Responsible AI
+How to identify and mitigate bias in AI applications
+How to implement content safety and guardrails
+How to build transparency and explainability into your systems
+Ethical considerations specific to agentic systems
+.NET 10 across the board
+The samples now follow modern .NET patterns such as dependency injection, middleware pipelines, and file-based apps introduced in .NET 10.
+Authentication has also been standardized. All file-based samples now use
+AzureCliCredential
+, so you authenticate once through the Azure CLI and every sample picks it up. No more juggling connection strings or API keys across dozens of projects.
+We also updated all model references to
+gpt-5-mini
+across the documentation and samples, reflecting the latest available models.
+Microsoft.Extensions.AI as the foundation
+Version 1 used Semantic Kernel as the primary way to talk to AI models. Version 2 uses Microsoft.Extensions.AI (MEAI).
+The reasoning was straightforward. MEAI ships as part of the .NET 10 ecosystem, follows the same patterns as
+ILogger
+and
+IConfiguration
+, and works across providers without locking you into a specific orchestration framework.
+In practice, this meant rewriting every core sample to use
+IChatClient
+and the MEAI middleware pipeline. The code got simpler. A basic chat completion that previously needed SK kernel setup, plugins, and connector configuration now looks like any other .NET service registration.
+For example, the classic Space Invaders sample to learn how to integrate classic apps with AI!
+https://devblogs.microsoft.com/dotnet/wp-content/uploads/sites/10/2026/03/DemoGenAi.webm
+RAG samples rewritten with native SDKs
+We moved 11 pure Semantic Kernel samples to
+samples/deprecated/
+. They still build, they still work, and you can still reference them. But they’re no longer part of the main learning path.
+For projects that mixed both SK and MEAI (like
+BasicChat-05AIFoundryModels
+and
+BasicChat-11FoundryClaude
+), we removed the SK dependency entirely and kept them running on pure MEAI.
+We archived these samples because a beginner course should teach the foundational layer first, and in .NET 10, that layer is MEAI, and for agentic use, Microsoft Agent Framework is the premier toolkit to deploy and create agents.
+Microsoft Agent Framework RC
+Lesson 4 now covers the Microsoft Agent Framework, and we’ve documented it in the course materials! The five Microsoft Agent Framework web application samples continue to cover multi-agent orchestration, PDF ingestion, and chat middleware patterns.
+Updated translations
+All eight language translations (Chinese, French, Portuguese, Spanish, German, Japanese, Korean, Traditional Chinese) have been updated to reflect the new lesson structure, deprecation changes, and .NET 10 migration.
+Getting started
+Join the fun at
+Generative AI for Beginners – .NET
+!
+Pick a provider (Microsoft Foundry or Ollama for local development), open Lesson 1, and work through the five lessons in order. Each one builds on the last.
+If you run into issues or have suggestions,
+open an issue
+. If you want to contribute,
+PRs are welcome
+.
+The post
+Generative AI for Beginners .NET: Version 2 on .NET 10
+appeared first on
+.NET Blog
+.
+
+KAYNAK : https://devblogs.microsoft.com/dotnet/generative-ai-for-beginners-dotnet-version-2-on-dotnet-10/

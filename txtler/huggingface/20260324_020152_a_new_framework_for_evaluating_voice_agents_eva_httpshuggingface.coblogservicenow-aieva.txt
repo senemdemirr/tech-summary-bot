@@ -1,4 +1,3 @@
---- huggingface | A New Framework for Evaluating Voice Agents (EVA) | score=106.40 ---
 A New Framework for Evaluating Voice Agents (EVA)
 Introduction
 Conversational voice agents present a distinct evaluation challenge: they must simultaneously satisfy two objectives — accuracy (completing the user's task correctly and faithfully) and conversational experience (doing so naturally, concisely, and in a way appropriate for spoken interaction). These objectives are deeply intertwined: mishearing a confirmation code renders perfect LLM reasoning meaningless, a wall of options overwhelms a caller who can't skim spoken output, and delayed responses can pass every accuracy check while remaining unusable in practice. Existing frameworks treat these as separate concerns — evaluating task success or conversational dynamics, but not both.
@@ -64,4 +63,3 @@ url={https://github.com/ServiceNow/eva}
 }
 
 KAYNAK : https://huggingface.co/blog/ServiceNow-AI/eva
-

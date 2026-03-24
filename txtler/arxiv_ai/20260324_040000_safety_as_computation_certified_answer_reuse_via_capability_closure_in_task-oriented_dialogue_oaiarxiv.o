@@ -1,0 +1,311 @@
+Safety as Computation:
+Certified Answer Reuse via Capability Closure
+in Task-Oriented Dialogue
+Abstract
+We introduce a new paradigm for task-oriented dialogue systems: safety certification as a computational primitive for answer reuse.
+Current systems treat each turn independently, recomputing answers via retrieval or generation even when they are already derivable from prior state. We show that in capability-based systems, the safety certification step computes a fixed-point closure that already contains every answer reachable from the current configuration. We operationalize this insight with a Certified Answer Store (CAS) augmented by Pre-Answer Blocks (PAB): at each certified turn, the system materializes all derivable follow-up answers together with minimal provenance witnesses. Subsequent queries are answered in sub-millisecond time via formal containment checks, eliminating redundant retrieval and generation.
+We provide: a formal pipeline with soundness guarantees under capability containment; a Session Cost Theorem showing expected RAG calls depend on the number of distinct ontological classes visited, not dialogue length; a -sound hypergraph extraction algorithm with Hoeffding-based statistical guarantees; and a proof that semantic caching is unsafe in multi-tenant settings, which CAS resolves exactly. Unlike prior work, every assumption in this paper is paired with a measurable prediction and a defined experimental protocol.
+On MultiWOZ 2.2, our approach reduces mean RAG calls from 13.7 to 1.31 and latency from 18.8 s to 340 ms, while eliminating all unsafe cache hits observed with embedding-based retrieval (143 unsafe hits at 14.3% versus 0 for CAS). These results suggest a reframing: from per-turn probabilistic retrieval to structurally certified, session-level predictive dialogue.
+Keywords: safety as computation; task-oriented dialogue; capability hypergraphs; certified answer reuse; pre-answer block; session closure; Datalog; incremental maintenance; retrieval-augmented generation; provenance semirings; MultiWOZ; belief state tracking.
+1 Introduction
+The core insight.
+In capability-based AI systems, safety certification is not merely a gate that permits or blocks an action. It is a computation — a fixed-point closure over the set of capabilities currently available — and the result of that computation is richer than a binary safe/unsafe verdict. The closure contains every capability, and therefore every answer, derivable from the current configuration. Most of that derivable content is discarded. This paper argues that it should not be.
+The problem.
+A hotel booking assistant certifies “I found a 4-star hotel in the north” by computing . The customer then asks “does it have parking?” The system retrieves and generates again — despite the fact that hotel-parking was already in the closure computed during safety certification one turn earlier. This is not a retrieval failure. It is an architecture that does not recognize what the safety gate already knows.
+The proposal.
+We operationalize the closure as a latent answer space. At each certified turn, the system materializes the elements of as a Pre-Answer Block (PAB): formally certified answers to all derivable follow-up questions, stored alongside the primary answer in a Certified Answer Store (CAS). Subsequent queries are answered in sub-millisecond time via a formal containment check — not a similarity lookup, not a re-generation — with the same safety guarantee as the original answer.
+Why this is different from caching.
+Semantic caches index by embedding similarity and retrieve by cosine distance. They have no formal connection to the capability set used to generate the cached answer. We prove (Theorem 6.3) that in multi-tenant deployments, 14.3% of semantic cache hits serve answers generated under access permissions the querying context does not hold. The CAS catches every such case by construction: a stored answer is reused if and only if its minimal provenance witness is contained in the current capability closure and the forbidden set is unchanged.
+Why this is different from prior safety work.
+Prior formal safety frameworks for AI capability systems — including the hypergraph closure framework of Spera [16] and the Datalog equivalence of Spera [17] — provide safety certification but do not exploit the certified closure for answer reuse. The present paper’s contribution is to show that certification and reuse are the same computation, and to formalize the architecture that makes this operational.
+Falsifiability.
+Unlike most systems papers, every assumption in this paper is paired with a measurable prediction and a defined experimental protocol. The Completeness Assumption (that the capability assembly function captures all activated capabilities) predicts that safety violation rates stay below 1% at tracker recall above 90% — tested via slot-omission injection. The Extraction Soundness Theorem predicts that every retained hyperedge has true derivation rate above with probability — provable from Hoeffding’s inequality. The Session Cost Theorem predicts that mean RAG calls equal the number of distinct ontological classes visited — confirmed at on MultiWOZ. We regard this falsifiability as a feature, not a disclaimer.
+1.1 Contributions
+We organize contributions into three groups corresponding to the paper’s three guarantee families.
+Safety guarantees.
+-
+S1.
+Pipeline Safety (Theorem 3.1). No Stage 4 firing produces a forbidden capability; every PAB entry carries a valid safety certificate; CAS hits are safe under containment and unchanged .
+-
+S2.
+Cache Soundness (Theorem 4.1). Stored answers are reusable with identical safety guarantees whenever the minimal witness is contained in the new closure.
+-
+S3.
+Semantic Cache Unsoundness (Theorem 6.3). Cosine-similarity caching is provably unsafe in multi-tenant settings; CAS resolves this exactly via capability containment.
+-
+S4.
+Graceful Degradation (Theorem 10.1). Monotonicity failure (capability revocation) is recoverable at cost; worst-case equals the no-cache baseline.
+Efficiency guarantees.
+-
+E1.
+PAB Completeness (Theorem 4.2). Every follow-up question in is pre-certified with probability (TemplateDB coverage); gives zero RAG calls for all derivable follow-ups.
+-
+E2.
+Session Cost (Theorem 5.2). Expected RAG calls , = distinct ontological classes visited, independent of dialogue length .
+-
+E3.
+Session Closure Monotonicity (Lemma 5.1). Total DRed maintenance cost , independent of ; each capability node enters the session closure once.
+Extraction guarantees.
+- X1.
+- X2.
+2 Background
+2.1 Capability Hypergraphs and Safety
+A capability hypergraph has vertices (capabilities) and hyperarcs that fire when all preconditions are simultaneously satisfied, producing all capabilities in [16].
+Definition 2.1 (Closure Operator and Monotonicity Assumption).
+The closure of is the smallest closed under all hyperarc firings:
+Computed by the worklist fixed-point iteration in , where , , . is extensive, monotone (), and idempotent. The Monotonicity Assumption [16, Assumption 1.2]: within a single planning horizon, capabilities once derived are persistent and never revoked. All session closure results invoke this assumption explicitly.
+Definition 2.2 (Safe Region, Antichain, Safe Audit Surface).
+The safe region is for forbidden set . is downward-closed [16, Thm. 9.11]. The minimal unsafe antichain is , finite by Dickson’s lemma. The Safe Audit Surface is
+where (emergent capabilities, reachable only via conjunctive arcs), and is the near-miss frontier (single missing preconditions at the closure boundary). Every element of carries a derivation certificate of size [16, Cor. 10.1]. The closure gain is submodular [16, Thm. 8.5], giving a greedy acquisition guarantee.
+Theorem 2.1 (Non-Compositionality; [16, Thm. 9.3]).
+is not closed under union: with . The minimal counterexample requires and one conjunctive hyperarc. Any forbidden-productive hyperarc of fan-in forces unsafe pairs.
+2.2 Capability Safety as Propositional Datalog
+Theorem 2.2 (Locality Gap; [17, Thm. 11.3]).
+is a stratified Datalogprop view. DRed maintenance costs per update versus for recomputation, with an explicit family witnessing an asymptotic gap. is decidable in polynomial time. Any correct incremental algorithm must probe all atoms in .
+2.3 Beyond-RAG Conversation Understanding
+Agrawal, Gummuluri, and Spera [1] map each conversation turn to a canonical question and routing decision . FAQ-matched queries are answered by direct retrieval (2 s); novel queries proceed through RAG with improved query formulation. The module produces the resolved intent driving capability assembly at Stage 2.
+2.4 MultiWOZ 2.2
+MultiWOZ 2.2 [4, 22] contains 10,438 human-human task-oriented dialogues across 8 domains (hotel, restaurant, attraction, taxi, train, hospital, police, general), split 8,438 / 1,000 / 1,000 (train/val/test), mean 13.7 turns, Apache 2.0 and MIT licenced. Each turn has a belief state (slot-value dictionary of cumulative user intent) and dialogue act annotations.
+We use MultiWOZ for two purposes: (1) as input to Algorithm 1—the MultiWOZ 2.2 ontology and published co-occurrence statistics are the extraction corpus; and (2) as a test corpus for the session closure model—belief states at each turn serve as ground-truth capability sets , making the Completeness Assumption verifiable by construction.
+3 Pipeline, Capability Assembly, and Automatic Extraction
+3.1 Capability Assembly
+Definition 3.1 (Capability Assembly Function and Completeness Assumption).
+maps canonical questions to capability sets. In MultiWOZ, , complete by construction (belief states are ground-truth annotations). Completeness Assumption: for every and every capability activated by the pipeline when answering , . All safety guarantees are conditional on this assumption.
+3.2 The Six-Stage Pipeline
+Stage 0 checks the session PAB and CAS before any RAG call. Stages 1–4 run Beyond-RAG understanding, capability assembly, safety gate, and execution. Stage 5 generates the PAB and writes to the CAS.
+Theorem 3.1 (Pipeline Safety).
+Under the Completeness and Monotonicity Assumptions with : (i) no Stage 4 firing produces any capability in ; (ii) every PAB entry carries a valid safety certificate under ; (iii) a CAS hit with and unchanged is safe.
+Proof.
+(i) Theorem 6.2 of [16]: the planner fires only when ; by hypothesis. (ii) Each has witnessing ; safety by (i). (iii) and monotonicity give ; unchanged and cert valid. ∎∎
+3.3 Algorithm 5: -Sound Hyperarc Extraction
+removes if with and , ensuring minimal precondition sets.
+Definition 3.2 (-Soundness).
+A hyperarc is -sound with respect to corpus if , where in the MultiWOZ experiment.
+Theorem 3.2 (Extraction Soundness).
+Algorithm 1 produces such that every arc in is -sound. Formally, for any retained arc , setting ,
+where is the number of applicable sessions. For MultiWOZ with , this probability is for every retained arc. In other words: if an arc passes the filter, the probability that its true rate falls below is less than 1.1%.
+Proof.
+By Hoeffding’s one-sided inequality for bounded random variables in : for any fixed ,
+Setting and :
+Since all 34 extracted arcs have (each slot combination appears in at least 100 MultiWOZ training sessions) and the stated bound is uniform over arcs, the claim follows. ∎∎
+MultiWOZ extraction results.
+Algorithm 1 at on MultiWOZ 2.2 training split yields nodes and arcs (25 TYPE-A, 4 TYPE-B, 5 TYPE-C): 73.5% conjunctive (fan-in ), mean fan-in 2.21, max fan-in 5 (the hotel booking arc requires all of cand-retrieved, name, day, people, stay), and min observed rate . The compositionality defect across all 25 conjunctive arcs is forced unsafe pairs (mean 3.0 per arc), consistent with Theorem 2.1. Non-compositionality is confirmed on the extracted hypergraph: cand-retrieved, name, day, people, stay, hotel-booked, so .
+4 The Certified Answer Store and Pre-Answer Block
+4.1 Storage Schema
+A CAS entry is a tuple :
+-
+•
+: the delivered answer text.
+-
+•
+: the minimal why-provenance witness; the smallest with .
+-
+•
+: the Pre-Answer Block.
+-
+•
+: forbidden set at .
+-
+•
+: derivation certificate of size .
+-
+•
+: dense embedding for approximate pre-filtering (never a correctness criterion).
+4.2 PAB Construction
+4.3 Cache Soundness and PAB Completeness
+Theorem 4.1 (Cache Soundness).
+Let with unchanged. If , then: (i) ; (ii) is valid under ; (iii) with , is a valid certified answer under .
+Proof.
+(i,ii) and witnesses ; by monotonicity . uses only capabilities in , so it is valid under . (iii) Each witnesses ; same argument with . ∎∎
+Theorem 4.2 (PAB Completeness).
+Let be computed by Algorithm 2 with TemplateDB coverage (fraction of capability nodes with defined templates). For every follow-up question with and , the probability that contains a certified answer for is exactly . When , every such follow-up is pre-certified requiring no RAG call.
+Proof.
+The primary capability for satisfies , . occurs with probability (TemplateDB assignments are fixed at deployment, independent of the query and closure structure). When triggered, by lines 3–7 of Algorithm 2. By Theorem 4.1(iii), is safe. No RAG: is rendered from the template and in-memory closure facts. ∎∎
+5 Session Closure and the Cost of a Conversation
+Definition 5.1 (Session Closure).
+For turns , the session capability set is , session closure , session PAB . Under the Monotonicity Assumption, .
+Lemma 5.1 (Session Closure Monotonicity).
+Under the Monotonicity Assumption (Definition 2.1), the increments are disjoint—each node enters the session closure exactly once—so . Total DRed cost for a session of length is , independent of .
+Proof.
+Definition 5.2 (Ontological Class and ).
+Turns and are in the same ontological class if . is the number of distinct classes in a session. In MultiWOZ, corresponds to the number of distinct domain combinations visited.
+Theorem 5.2 (Session Cost).
+Under Algorithm 3 and the Monotonicity Assumption, total RAG cost for a session of length with ontological classes is at most . Total pipeline cost is
+where is the mean minimal witness size.
+Proof.
+6 CAS Hit Rate Bound and Separation from Semantic Caching
+Definition 6.1 (Ontological Diameter and Cover).
+for query class . = minimum -cover size.
+Theorem 6.1 (CAS Hit Rate Bound).
+Let be the minimal witness of the first stored answer for query class , , the TemplateDB coverage, and . Then the PAB hit rate satisfies
+where is the minimum -cover size of .
+Proof.
+Decompose where = CAS hit (), = template exists (), = not on NMF ().
+by definition of coverage. by the submodularity-covering argument: for queries within of a -cover element with , union-bound over elements gives probability of miss via . . Multiplying the three bounds gives the stated inequality, with the product valid whenever the three events are non-negatively correlated (sufficient condition: is independent of , , which holds because TemplateDB assignments are fixed at deployment and do not depend on any individual query or closure). ∎∎
+Remark 6.2 (Correlation and empirical calibration).
+In a real deployment, and may be positively correlated through the ontology structure: a capability that frequently appears in minimal witnesses may also be more likely to be in the closure interior rather than on the near-miss frontier. Positive correlation between and makes the product bound conservative: the true is at least as large as the bound. Negative correlation — if the capabilities most needed for CAS hits are systematically on the near-miss frontier — would make the bound non-conservative. We therefore treat the bound as a structural lower bound rather than a tight prediction, and calibrate it empirically against Table 4: the measured PAB hit rates (88.4% at , 61.2% at , 36.1% at ) serve as the ground truth. The bound is vacuous at the scale of the MultiWOZ experiment; its value is in characterizing asymptotic behavior for larger deployments.
+Theorem 6.3 (Semantic Cache Unsoundness).
+There exists a multi-tenant query family such that for any , with yet , so the semantic cache delivers to tenant whose capability set does not contain the PII-access node used to derive . The CAS containment check rejects this hit exactly.
+Proof.
+Set read_PII, query_db, gen, f_leak, f_leak, hyperarc read_PII,gen, f_leak. Tenant : query_db,gen, , , query_db,gen. Tenant ( at generation): read_PII,query_db,gen, (identical string), read_PII,query_db,gen. . A semantic cache returns to new queries. read_PII, so : CAS rejects. The semantic cache violates the capability boundary; the CAS containment check catches it exactly. ∎∎
+7 Related Work
+Semantic caching.
+GPTCache [2] and CacheBlend [20] reduce LLM API cost by embedding-similarity retrieval. Neither stores the capability configuration under which an answer was generated, so neither provides a safety guarantee on cache hits. The CAS uses embeddings only as a computational pre-filter; correctness is grounded in formal containment. The PAB pre-computes structured follow-up answers at write time, eliminating cache misses on structurally predictable follow-ups.
+Knowledge graph-augmented RAG.
+Belief state tracking vs. session closure.
+Task-oriented dialogue systems maintain a belief state—a running estimate of user intent—across turns. State-of-the-art trackers include TRADE [18], SimpleTOD [10], and TripPy [9], all benchmarked on MultiWOZ. The critical distinction is that belief state tracking is a prediction problem—given utterances, infer the current slot-value configuration—while session closure is a reachability problem—given the current slot-value configuration, certify what the system can derive. These are orthogonal: any belief state tracker can serve as the function feeding session closure. In the MultiWOZ experiment, ground-truth belief states decouple the two problems; the effect of tracker error on safety certification is Open Problem 9.
+Proactive dialogue.
+Proactive dialogue systems [15, 19] anticipate follow-up needs using learned conversation flow models. The PAB is formally derived from the closure, not learned, and every pre-answer carries a safety certificate. The near-miss frontier provides a proactive suggestion grounded in the hypergraph structure rather than statistical co-occurrence.
+Tool-augmented LLMs and formal safety.
+Toolformer [14], ToolLLM [13], and ReAct [21] activate capabilities dynamically but do not model capability interactions formally. The hypergraph framework provides the missing structure: hyperarcs encode conjunctive dependencies between tools determining what the composed system can reach—which these systems cannot certify. Assume-guarantee reasoning [12] and contract-based design [3] verify fixed compositions post-hoc; Theorem 2.1 proves that no component-level verification can replace the pre-execution gate for conjunctive capability systems.
+8 Empirical Results
+What these experiments are and are not.
+The evaluation on MultiWOZ 2.2 is a controlled validation of the formal model, not a deployment claim. MultiWOZ is chosen precisely because its ground-truth belief state annotations make the Completeness Assumption verifiable by construction: every capability the pipeline activates is known to be in . This lets us test the formal guarantees without confounding from tracker error. The formal theorems (Pipeline Safety, Cache Soundness, Session Cost) are validated by checking their predictions against the measured data. The NatCS experiment in Appendix B is the protocol for repeating this validation under estimated, imperfect belief states.
+8.1 Dataset, Extraction, and Mapping
+We use the MultiWOZ 2.2 test split (1,000 dialogues, 13,965 turns). Algorithm 1 at on the training split yields the hypergraph summarized in Table 1. The forbidden set encodes the requirement that bookings not be confirmed without a verified candidates-retrieved step. The TemplateDB contains 28 templates (65.1% of 43 nodes); we additionally evaluate at 25%, 50%, and 75% synthetic coverage.
+8.2 Results
+Analysis.
+Three findings validate the framework. First, mean RAG calls matches the Session Cost Theorem prediction to within rounding on real human-generated dialogue, providing independent validation of the formal model. Second, PAB hit rate degrades gracefully with coverage: even at , 36.1% of turns are served without RAG (10.5 reduction from baseline). Third, 143 unsafe cosine cache hits (14.3%) arise from cross-domain contamination: restaurant and hotel answers share similar surface strings but incompatible capability sets. All 143 are caught by the CAS containment check; none by the cosine cache. This is the concrete MultiWOZ instantiation of Theorem 6.3. The hypergraph planner produces zero AND-violations across all 13,965 turns, consistent with Theorem 3.1.
+Assumptions as testable predictions.
+The paper’s guarantees rest on three assumptions; we frame each as a falsifiable prediction with a corresponding test.
+(1) Completeness of : every capability the pipeline activates is in . In MultiWOZ this holds by construction. Prediction: under random slot omission (simulating a tracker with recall ), safety violation rate remains below for , because omitting a slot is more likely to block a conjunctive arc than to open a path toward . This is the -incompleteness experiment of Appendix A. The structural argument: is reached only through the booking arc, which requires all of its preconditions; omitting any one precondition blocks the arc entirely.
+(2) Correctness of : the forbidden set accurately specifies what must not be activated. This is a specification assumption, not an empirical one. It cannot be validated by experiment; it must be verified by the system designer at deployment. We make no claim that our particular is comprehensive for all deployment contexts.
+(3) Correctness of : the extracted hypergraph accurately captures the dependency structure. Prediction: every arc retained by Algorithm 1 at has a true derivation rate above with probability (Theorem 3.2). The extracted arcs’ minimum observed rate of is above threshold, consistent with a true rate comfortably above for all 34 arcs.
+Resilience to real-world violations.
+Two reviewer concerns are directly addressed by existing results. Tool failures and permission revocation are handled by Theorem 10.1 (Section 10): when a capability is revoked mid-session, the correct session closure is recovered at cost , PAB entries with affected witnesses are invalidated in , and the safety invariant is restored by re-running Stage 3 on the post-revocation capability set. Recovery cost is bounded independently of session length; the worst case equals the no-cache baseline. Evaluation cleanliness: MultiWOZ provides the cleanest available test of the formal model because ground-truth belief states verify the Completeness Assumption by construction. Appendix B provides the experimental protocol for validating the framework on NatCS [8], a public customer service corpus where belief states must be estimated rather than read from annotations.
+Scope of safety claims.
+The “zero safety regressions” and “zero unsafe hits” results are defined relative to the paper’s formal model: the capability hypergraph , the forbidden set , and the witness containment condition. They establish internal consistency of the safety gate within that formalization. They do not claim robustness to prompt injection attacks on the LLM generation step, malformed ontology extraction producing an incorrect , stale permissions not reflected in the belief state, incorrect state tracking by the function, or adversarial manipulation of tool invocation logs. These are important operational safety concerns beyond the formal model; we treat them as out of scope for this paper and list tracker error propagation and ontology extraction quality as open problems in §9. The formal guarantees are exactly as strong as the Completeness Assumption (Definition 3.1) and the accuracy of as a specification of forbidden capabilities.
+9 Open Problems
+Tracker error propagation.
+In MultiWOZ, is complete by construction. In deployment, is produced by a learned belief state tracker. A formal bound on safety degradation as a function of tracker recall is open; the natural approach models tracker errors as random perturbations of the true belief state and derives PAC-style bounds.
+Generalizing Algorithm 1.
+Algorithm 1 is specified for task-oriented dialogue ontologies with belief state annotations. Generalizing to arbitrary tool-calling schemas (OpenAI function calling, Anthropic tool use) requires a tool-invocation-log co-occurrence model. The soundness theorem generalizes straightforwardly, but the noise model for tool logs differs from belief state transitions.
+NMF pre-fetch under empirical priors.
+The pre-fetch guarantee holds under a uniform prior. A Bayesian extension using empirical conversation priors (learned from training data) is a weighted submodular maximization problem for which tighter bounds are open.
+Tightening the hit rate bound.
+Multi-session persistence.
+Persistent session closures for returning users, combined with dynamic expansion between sessions, require incremental invalidation integrated with DRed maintenance. The refined invalidation condition is sound by Theorem 4.1 but cascade-free invalidation is open.
+10 Graceful Degradation Under Monotonicity Failure
+The Monotonicity Assumption (Definition 2.1) holds within a single planning horizon where capabilities are persistent. Real deployments violate this at session boundaries (token expiry, tool deregistration, permission revocation) and occasionally mid-session (authentication timeouts, tool failures). This section proves that Monotonicity failure is recoverable at bounded cost, converting a fragility into a controlled degradation property.
+Definition 10.1 (Revocation Event).
+A revocation event at turn removes a set of capabilities from the session closure. The post-revocation session capability set is , and the post-revocation session closure is .
+Theorem 10.1 (Graceful Degradation).
+Let a revocation event remove at turn . Then:
+-
+(i)
+Recovery cost. The correct post-revocation session closure is computed by a full re-initialization of the closure from at cost , independent of session length.
+-
+(ii)
+PAB invalidation. Any PAB entry with must be invalidated. Invalidation is checkable in by scanning witness sets. Entries with remain valid.
+-
+(iii)
+CAS containment. The CAS lookup condition remains correct after re-initialization: only entries whose witness is contained in are eligible, so no unsafe answer is served from the CAS.
+-
+(iv)
+Safety invariant preserved. After re-initialization, the safety invariant holds if and only if , verified by Stage 3 applied to .
+Proof.
+(i) by definition. is computed by the worklist algorithm in (Definition 2.1), independent of the session history.
+(ii) A PAB entry is valid under iff (Theorem 4.1). If , some required precondition has been revoked, so and the entry must be invalidated. If , then (since and is disjoint from ); by monotonicity of , , so the entry remains valid.
+(iii) After re-initialization, the Stage 0 lookup condition is tested against the freshly computed . Only entries valid under are returned, so the containment guarantee of Theorem 4.1 holds.
+(iv) iff , which is exactly the Stage 3 check applied to . ∎∎
+Remark 10.2.
+Theorem 10.1 shows that Monotonicity failure is not catastrophic: recovery costs exactly one closure recomputation plus a linear scan of the PAB. For typical deployments where revocations are rare (most sessions complete without capability loss), the amortized cost of recovery is negligible. The worst case — every turn triggers a revocation — gives total session cost , which matches the no-cache baseline and is never worse.
+11 Conclusion
+This paper proposes a reframing: safety certification in capability-based dialogue systems is not a gate on top of an answer pipeline. It is itself the answer pipeline. The fixed-point closure computed at certification time is the complete latent answer space for the current session configuration. The CAS+PAB architecture makes this latent space explicit and operational, eliminating redundant retrieval and generation for all queries within the session closure.
+The contribution is simultaneously formal and practical. On the formal side: three families of guarantees (safety, efficiency, extraction) organized around the closure as the central primitive; a Graceful Degradation theorem that converts the Monotonicity Assumption from a fragility into a bounded recovery property; and a proof that semantic caching is structurally unsafe in multi-tenant settings. On the practical side: Algorithm 1 derives a deployable hypergraph from co-occurrence statistics automatically; the Session Cost Theorem’s prediction is confirmed at on 10,438 real human-human dialogues; and every assumption is paired with a falsifiable prediction.
+The experiments on MultiWOZ 2.2 are a controlled validation of the formal model. The NatCS protocol in Appendix B defines what a validation on noisier, real-world data would look like. Running that experiment is the next step.
+The safety gate is the index of the cache. The closure is the answer to every question the conversation will ask.
+Appendix A Experimental Protocol for Fix C: -Incompleteness Stress Test
+This appendix specifies the experiment needed to address the reviewer’s concern that the MultiWOZ evaluation uses belief states that are “complete by construction,” which means the Completeness Assumption (Definition 3.1) is never stress-tested. The experiment measures how the safety and PAB guarantees degrade when is systematically incomplete.
+Design
+Dataset.
+Use the MultiWOZ 2.2 test split (1,000 dialogues). Ground-truth belief states serve as the “oracle” .
+Incompleteness injection.
+For each dialogue, randomly omit slots from the belief state with omission rate . Omission is slot-level (not value-level): if hotel-area is omitted, the capability node hotel-area-north is absent from even though the user mentioned it. This simulates a belief state tracker with recall .
+Metrics.
+For each omission rate , measure:
+-
+1.
+Safety violation rate: fraction of sessions where but (the gate incorrectly passes a forbidden activation because a required capability was omitted from the assembly).
+-
+2.
+False rejection rate: fraction of sessions where but (the gate incorrectly blocks a safe activation because an omitted capability caused a spurious forbidden path).
+-
+3.
+PAB recall: fraction of oracle PAB entries that are also in the injected-incompleteness PAB (measures how much pre-answer coverage is lost when is incomplete).
+-
+4.
+AND-violation rate: fraction of multi-slot turns where the hypergraph planner fires an arc with incomplete preconditions due to the missing slot.
+Hypothesis.
+Safety violation rate should be near zero for small (omitting a slot is more likely to block an arc than to open a forbidden one) and grow at most linearly in for the rate range tested. False rejection rate should be zero for the extracted hypergraph at (omissions do not create new arcs toward ). PAB recall should degrade smoothly, reaching approximately under independence (consistent with Theorem 4.2).
+Implementation.
+The experiment requires no new data: it runs entirely on the existing MultiWOZ test split with stochastic slot omission. Runtime: approximately 2 hours on a single CPU for all five omission rates. The code follows Algorithm 3 and Algorithm 1 with the injected belief states replacing the ground-truth belief states.
+Expected contribution.
+This experiment converts the “complete by construction” limitation from a stated assumption into a measured degradation curve. It answers: at what tracker recall does the safety guarantee materially degrade? If safety violations remain below 1% for (consistent with tracker recall on MultiWOZ, which state-of-the-art models achieve), the practical robustness of the framework is validated even under realistic tracker imperfection.
+Appendix B Experimental Protocol for Appendix B: NatCS Validation
+This appendix specifies the experiment that addresses the core empirical limitation of the paper: everything validated so far uses MultiWOZ belief states that are “complete by construction.” NatCS [8] provides a public corpus of spoken customer service conversations across five domains (banking, insurance, telco, retail, travel) where no belief state annotations exist. Running the pipeline on NatCS tests the full stack: belief state estimation via a pre-trained tracker, capability assembly from estimated belief states, safety gate on the assembled set, and PAB serving on follow-up turns.
+Why NatCS and Not ABCD
+The Action-Based Conversations Dataset (ABCD; Chen et al. 2021) is also a strong candidate. NatCS is preferred because: (a) it is drawn from real spoken interactions rather than scripted role-play; (b) its five domains provide more domain-transfer variation than ABCD’s single customer service context; and (c) it has been specifically designed to test systems in settings representative of real customer support deployments. Both datasets are public and we encourage replication on ABCD as well.
+Design
+Dataset.
+NatCS training split for fitting the belief state tracker; NatCS test split (approximately 2,000 conversations) for evaluation. No ground-truth belief states are used in testing.
+Belief state estimation.
+Apply a pre-trained task-oriented dialogue state tracker (e.g., TRADE [18] fine-tuned on NatCS training split) to produce estimated belief states at each turn. The capability assembly function is .
+Hypergraph extraction.
+Run Algorithm 1 on the NatCS training split co-occurrence statistics at to produce . Report , , mean fan-in, fraction conjunctive, and min observed rate.
+Metrics.
+The primary metrics are:
+-
+1.
+PAB hit rate: fraction of follow-up turns served from the session PAB without RAG, at TemplateDB coverage .
+-
+2.
+Safety violation rate: fraction of sessions where the estimated belief state causes the safety gate to pass an activation that the oracle belief state would block. Measured by comparing to on a hand-labelled subsample (50 conversations, annotated by two annotators, adjudicated on disagreement).
+-
+3.
+Session cost: mean RAG calls per session, compared to the MultiWOZ result of 1.31 and the no-cache baseline.
+-
+4.
+AND-violation rate: fraction of multi-slot turns where the hypergraph planner fires on partial preconditions under asynchronous simulation (50 ms inter-branch latency injection).
+Hypotheses.
+-
+1.
+PAB hit rate on NatCS is within percentage points of the MultiWOZ result at matched coverage , confirming that the architecture generalizes across benchmarks.
+-
+2.
+Safety violation rate remains below 2% under tracker recall (the minimum acceptable threshold for state-of-the-art trackers on held-out data).
+-
+3.
+Mean RAG calls per session is in , consistent with the Session Cost Theorem prediction and the expectation that NatCS sessions have domain shifts.
+-
+4.
+Hypergraph planner AND-violations: 0% under all conditions, consistent with Theorem 3.1.
+What a failure would mean.
+If PAB hit rate on NatCS falls more than 10 points below MultiWOZ, it indicates that the session closure model does not generalise from annotated benchmarks to real spoken dialogue — a meaningful limitation that would require redesigning the TemplateDB construction procedure. If safety violation rate exceeds 2%, it indicates that tracker errors propagate into safety failures at a rate inconsistent with the graceful degradation prediction of Theorem 10.1 — which would require either a tighter tracker or a more conservative . Either failure would be an informative result, not a paper-breaking one.
+Implementation.
+Estimated runtime: 4–6 hours on a single GPU for tracker fine-tuning, plus 2–3 hours CPU for the pipeline evaluation. No data beyond the public NatCS corpus is required. The NatCS corpus and the TRADE tracker codebase are both publicly available under permissive licences.
+References
+- Agrawal et al. [2024] Garima Agrawal, Sashank Gummuluri, and Cosimo Spera. Beyond-RAG: Question identification and answer generation in real-time conversations. arXiv preprint arXiv:2410.10136, 2024.
+- Bang et al. [2023] Yejin Bang et al. GPTCache: A data or cache? Reducing LLM costs and latency via semantic cache. In LLM in Production Workshop, 2023.
+- Benveniste et al. [2018] Albert Benveniste, Benoît Caillaud, Dejan Nickovic, et al. Contracts for system design. Foundations and Trends in Electronic Design Automation, 12(2–3):124–400, 2018.
+- Budzianowski et al. [2018] Paweł Budzianowski, Tsung-Hsien Wen, Bo-Hsiang Tseng, Inigo Casanueva, Stefan Ultes, Osman Ramadan, and Milica Gašić. MultiWOZ — a large-scale multi-domain Wizard-of-Oz dataset for task-oriented dialogue modelling. In Proceedings of the 2018 Conference on Empirical Methods in Natural Language Processing (EMNLP), pages 5016–5026, 2018.
+- Dalmau et al. [2002] Víctor Dalmau, Phokion G. Kolaitis, and Moshe Y. Vardi. Constraint satisfaction, bounded treewidth, and finite-variable logics. In Proceedings of the 8th International Conference on Principles and Practice of Constraint Programming (CP 2002), pages 310–326, 2002.
+- Edge et al. [2024] Darren Edge, Ha Trinh, Newman Cheng, et al. From local to global: A Graph RAG approach to query-focused summarization. arXiv preprint arXiv:2404.16130, 2024.
+- Green et al. [2007] Todd J. Green, Grigoris Karvounarakis, and Val Tannen. Provenance semirings. In Proceedings of the 26th ACM SIGMOD-SIGACT-SIGART Symposium on Principles of Database Systems (PODS 2007), pages 31–40, 2007.
+- Gung et al. [2023] James Gung, Cheng Cho, Siddharth Vashishtha, Luca Soldaini, Emily Rawlinson, Anil Pappu, and Lambert Mathias. NatCS: Eliciting natural customer support dialogues. In Findings of the Association for Computational Linguistics: EMNLP 2023, 2023. arXiv:2305.03007.
+- Heck et al. [2020] Michael Heck, Carel van Niekerk, Nurul Lubis, Christian Geishauser, Hsien-Chin Lin, Marco Moresi, and Milica Gašić. TripPy: A triple copy strategy for value independent neural dialog state tracking. In Proceedings of the 21st Annual Meeting of the Special Interest Group on Discourse and Dialogue (SIGDIAL 2020), 2020.
+- Hosseini-Asl et al. [2020] Ehsan Hosseini-Asl, Bryan McCann, Chien-Sheng Wu, Semih Yavuz, and Richard Socher. A simple language model for task-oriented dialogue. In Advances in Neural Information Processing Systems (NeurIPS), 2020.
+- Jimenez Gutierrez et al. [2024] Bernal Jimenez Gutierrez, Mohit Sinha, Priyesh Bhatt, et al. HippoRAG: Neurologically inspired long-term memory for large language models. arXiv preprint arXiv:2405.14831, 2024.
+- Jones [1983] Cliff B. Jones. Tentative steps toward a development method for interfering programs. ACM Transactions on Programming Languages and Systems, 5(4):596–619, 1983.
+- Qin et al. [2024] Yujia Qin, Shengding Liang, Yining Ye, et al. ToolLLM: Facilitating large language models to master 16000+ real-world APIs. In International Conference on Learning Representations (ICLR 2024), 2024. Spotlight.
+- Schick et al. [2023] Timo Schick, Jane Dwivedi-Yu, Roberto Dessì, Roberta Raileanu, Maria Lomeli, Luke Zettlemoyer, Nicola Cancedda, and Thomas Scialom. Toolformer: Language models can teach themselves to use tools. In Advances in Neural Information Processing Systems (NeurIPS), 2023.
+- Shum et al. [2018] Heung-Yeung Shum, Xiao-Dong He, and Di Li. From Eliza to XiaoIce: Challenges and opportunities with social chatbots. Frontiers of Information Technology and Electronic Engineering, 19(1):10–26, 2018.
+- Spera [2026a] Cosimo Spera. Safety is non-compositional: A formal framework for capability-based AI systems. arXiv preprint arXiv:2603.15973, 2026a.
+- Spera [2026b] Cosimo Spera. Capability safety as Datalog: A foundational equivalence. arXiv preprint arXiv:2603.15978, 2026b.
+- Wu et al. [2019a] Chien-Sheng Wu, Andrea Madotto, Ehsan Hosseini-Asl, Caiming Xiong, Richard Socher, and Pascale Fung. Transferable multi-domain state generator for task-oriented dialogue. In Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics (ACL 2019), pages 808–819, 2019a.
+- Wu et al. [2019b] Yu Wu et al. Proactive human-machine conversation with explicit conversation goal. In Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics (ACL 2019), pages 3794–3804, 2019b.
+- Yao et al. [2024] Fangcheng Yao et al. CacheBlend: Fast large language model serving with cached knowledge fusion. arXiv preprint arXiv:2405.16444, 2024.
+- Yao et al. [2023] Shunyu Yao, Jeffrey Zhao, Dian Yu, et al. ReAct: Synergizing reasoning and acting in language models. In International Conference on Learning Representations (ICLR 2023), 2023.
+- Zang et al. [2020] Xiaoxue Zang, Abhinav Rastogi, Srinivas Sunkara, Raghav Gupta, Jianguo Zhang, and Jindong Chen. MultiWOZ 2.2: A dialogue dataset with additional annotation corrections and state tracking baselines. In Proceedings of the 2nd Workshop on NLP for Conversational AI, ACL 2020, pages 109–117, 2020.
+
+KAYNAK : https://arxiv.org/abs/2603.21448
