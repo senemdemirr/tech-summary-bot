@@ -1,4 +1,4 @@
---- arxiv_ai | Maximum Entropy Relaxation of Multi-Way Cardinality Constraints for Synthetic Population Generation | score=104.50 ---
+--- arxiv_ai | Maximum Entropy Relaxation of Multi-Way Cardinality Constraints for Synthetic Population Generation | score=104.31 ---
 Maximum Entropy Relaxation of Multi-Way Cardinality Constraints for Synthetic Population Generation
 Abstract
 Generating synthetic populations from aggregate statistics is a core component of microsimulation, agent-based modeling, policy analysis, and privacy-preserving data release. Beyond classical census marginals, many applications require matching heterogeneous unary, binary, and ternary constraints derived from surveys, expert knowledge, or automatically extracted descriptions. Constructing populations that satisfy such multi-way constraints simultaneously poses a significant computational challenge. We consider populations where each individual is described by categorical attributes and the target is a collection of global frequency constraints over attribute combinations. Exact formulations scale poorly as the number and arity of constraints increase, especially when the constraints are numerous and overlapping. Grounded in methods from statistical physics, we propose a maximum-entropy relaxation of this problem. Multi-way cardinality constraints are matched in expectation rather than exactly, yielding an exponential-family distribution over complete population assignments and a convex optimization problem over Lagrange multipliers. We evaluate the approach on NPORS-derived scaling benchmarks with 4 to 40 attributes and compare it primarily against generalized raking. The results show that MaxEnt becomes increasingly advantageous as the number of attributes and ternary interactions grows, while raking remains competitive on smaller, lower-arity instances.
@@ -154,7 +154,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2603.22558
 
---- arxiv_ai | Exposure-Normalized Bed and Chair Fall Rates via Continuous AI Monitoring | score=104.50 ---
+--- arxiv_ai | Exposure-Normalized Bed and Chair Fall Rates via Continuous AI Monitoring | score=104.31 ---
 Exposure-Normalized Bed and Chair Fall Rates via Continuous AI Monitoring
 Abstract
 This retrospective cohort study used continuous AI monitoring to estimate fall rates by exposure time rather than occupied bed-days. From August 2024 to December 2025, 3,980 eligible monitoring units contributed 292,914 hourly rows, yielding probability-weighted rates of 17.8 falls per 1,000 chair exposure-hours and 4.3 per 1,000 bed exposure-hours. Within the study window, 43 adjudicated falls matched the monitoring pipeline, and 40 linked to eligible exposure hours for the primary Poisson model, producing an adjusted chair-versus-bed rate ratio of 2.35 (95% confidence interval 0.87 to 6.33; p=0.0907). In a separate broader observation cohort (n=32 deduplicated events), 6 of 7 direct chair falls involved footrest-positioning failures. Because this was an observational study in a single health system, these findings remain hypothesis-generating and support testing safer chair setups rather than using chairs less.
@@ -387,7 +387,7 @@ Shepherd J, McCarthy A. Advancing nursing practice through artificial intelligen
 
 KAYNAK : https://arxiv.org/abs/2603.22785
 
---- arxiv_ai | Computational Arbitrage in AI Model Markets | score=104.28 ---
+--- arxiv_ai | Computational Arbitrage in AI Model Markets | score=104.09 ---
 Computational Arbitrage in AI Model Markets
 Abstract
 Consider a market of competing model providers selling query access to models with varying costs and capabilities. Customers submit problem instances and are willing to pay up to a budget for a verifiable solution. An arbitrageur efficiently allocates inference budget across providers to undercut the market, thus creating a competitive offering with no model-development risk. In this work, we initiate the study of arbitrage in AI model markets, empirically demonstrating the viability of arbitrage and illustrating its economic consequences. We conduct an in-depth case study of SWE-bench GitHub issue resolution using two representative models, GPT-5 mini and DeepSeek v3.2. In this verifiable domain, simple arbitrage strategies generate net profit margins of up to 40%. Robust arbitrage strategies that generalize across different domains remain profitable. Distillation further creates strong arbitrage opportunities, potentially at the expense of the teacher model’s revenue. Multiple competing arbitrageurs drive down consumer prices, reducing the marginal revenue of model providers. At the same time, arbitrage reduces market segmentation and facilitates market entry for smaller model providers by enabling earlier revenue capture. Our results suggest that arbitrage can be a powerful force in AI model markets with implications for model development, distillation, and deployment111Code, data, and models available at https://github.com/RicardoDominguez/computational-arbitrage.
@@ -520,7 +520,7 @@ In turn, models distilled on more data dominate those distilled on less data in 
 
 KAYNAK : https://arxiv.org/abs/2603.22404
 
---- arxiv_ai | MuQ-Eval: An Open-Source Per-Sample Quality Metric for AI Music Generation Evaluation | score=104.28 ---
+--- arxiv_ai | MuQ-Eval: An Open-Source Per-Sample Quality Metric for AI Music Generation Evaluation | score=104.09 ---
 MuQ-Eval: An Open-Source Per-Sample Quality Metric for AI Music Generation Evaluation
 Abstract
 Distributional metrics such as Fréchet Audio Distance cannot score individual music clips and correlate poorly with human judgments, while the only per-sample learned metric achieving high human correlation is closed-source. We introduce MuQ-Eval, an open-source per-sample quality metric for AI-generated music built by training lightweight prediction heads on frozen MuQ-310M features using MusicEval, a dataset of generated clips from 31 text-to-music systems with expert quality ratings. Our simplest model, frozen features with attention pooling and a two-layer MLP, achieves system-level SRCC = 0.957 and utterance-level SRCC = 0.838 with human mean opinion scores. A systematic ablation over training objectives and adaptation strategies shows that no addition meaningfully improves the frozen baseline, indicating that frozen MuQ representations already capture quality-relevant information. Encoder choice is the dominant design factor, outweighing all architectural and training decisions. LoRA-adapted models trained on as few as 150 clips already achieve usable correlation, enabling personalized quality evaluators from individual listener annotations. A controlled degradation analysis reveals selective sensitivity to signal-level artifacts but insensitivity to musical-structural distortions. Our metric, MuQ-Eval, is fully open-source, outperforms existing open per-sample metrics, and runs in real time on a single consumer GPU. Code, model weights, and evaluation scripts are available at https://github.com/dgtql/MuQ-Eval.
@@ -700,7 +700,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2603.22677
 
---- arxiv_ai | ProGRank: Probe-Gradient Reranking to Defend Dense-Retriever RAG from Corpus Poisoning | score=104.28 ---
+--- arxiv_ai | ProGRank: Probe-Gradient Reranking to Defend Dense-Retriever RAG from Corpus Poisoning | score=104.09 ---
 11email: {yinxi,chengch}@chalmers.se22institutetext: University of Leeds, United Kingdom
 22email: Y.Qi@leeds.ac.uk 33institutetext: Carl von Ossietzky University of Oldenburg, Germany
 33email: chih-hong.cheng@uni-oldenburg.de
@@ -831,61 +831,336 @@ In the mixed setting, we combine encoder dropout and token dropout. Specifically
 
 KAYNAK : https://arxiv.org/abs/2603.22934
 
---- nextjs | v16.2.1-canary.7 | score=49.35 ---
+--- google_ai | Lyria 3 Pro: Create longer tracks in more Google products | score=88.22 ---
+Lyria 3 Pro: Create longer tracks in more Google products
+Last month, we introduced Lyria 3, featuring custom music generation designed to spark creative expression. Now, we’re bringing our most advanced music generation model to more Google products, and introducing Lyria 3 Pro. This advanced version allows the creation of tracks up to 3 minutes long, with customization and creative control. Lyria 3 Pro better understands musical composition, so you can now prompt for specific elements like intros, verses, choruses and bridges. It’s great for experimenting with different styles or generating songs with complex transitions.
+Providing new places to generate music
+High-quality music generation should be accessible wherever creativity happens. Whether you are an app developer, a business or music professional, or a creator, these integrations allow you to use Lyria’s advanced musical awareness to scale your production.
+Vertex AI: Lyria 3 Pro is now in public preview on Vertex AI for businesses who require on-demand audio at scale. It gives organizations the ability to scale high-fidelity production, from rapidly generating bespoke soundtracks for gaming to integrating into creative tools, music and video platforms.
+Google AI Studio and the Gemini API: For developers building the next generation of creative tools, Lyria 3 provides improved musical awareness and structural coherence to offer creative flexibility. Lyria 3 Pro is now available alongside Lyria RealTime in AI Studio.
+Google Vids: Vids is an AI-powered video creation app that anyone can use. With Lyria 3 and Lyria 3 Pro in Vids, you can add custom music that matches your style for everything from creative projects to marketing videos. This is rolling out to Google Workspace customers and Google AI Pro & Ultra subscribers starting this week.
+Gemini app: Longer generations with Lyria 3 Pro are now available in the Gemini app, starting with paid subscribers. Lyria 3 Pro’s enhanced customization offers more space to experiment and play with longer tracks. So now, you can add more details to bring your full vision to life, or create personalized tracks for vlogs, podcasts or tutorial videos.
+ProducerAI: We recently introduced ProducerAI, a collaborative music creation tool, built by musicians looking for new ways to enhance their creative process. With Lyria 3 Pro, ProducerAI offers an agentic experience designed to help artists, producers and songwriters at every level iterate on comprehensive songs. It’s available globally to free and paid subscribers.
+Partnering with creatives
+We have been developing our music generation tools responsibly and in close partnership with the industry to ensure AI serves as a tool for creative expression.
+Through our Music AI Sandbox, we provide musicians, producers and songwriters with a suite of experimental tools designed to expand their creative horizons. The insights from this collaboration helped shape the development of Lyria 3.
+We’re inviting artists to integrate AI into their workflows to make sure our technology helps the people who use it. Grammy-winning producer Yung Spielburg used Lyria in his composition and production process for the score of the Google DeepMind short film “Dear Upstairs Neighbors.” And we’re also collaborating with DJ and producer François K, who used Lyria in an iterative process to create a soon-to-be-released song.
+Responsibility was foundational, and remains integral in the design and training of Lyria 3, using materials that YouTube and Google has a right to use under our terms of service, partner agreements, and applicable law. To protect original expression, Lyria 3 and Gemini do not mimic artists; if a prompt names a creator, the model takes that as broad inspiration. Additionally, we employ filters to check outputs against existing content and users must adhere to the Terms of Service and Gen AI prohibited use policies, which prohibit violating others' intellectual property and privacy rights. All Lyria 3 and Lyria 3 Pro outputs are embedded with SynthID, our imperceptible watermark for identifying Google AI-generated content.
+Lyria 3 Pro is rolling out to professionals, developers, organizations and everyday creators to help craft high quality music generations.
+
+KAYNAK : https://blog.google/innovation-and-ai/technology/ai/lyria-3-pro/
+
+--- mit_ai | This startup wants to change how mathematicians do math | score=81.41 ---
+Axiom Math, a startup based in Palo Alto, California, has released a
+free new AI tool for mathematicians
+, designed to discover mathematical patterns that could unlock solutions to long-standing problems.
+The tool, called Axplorer, is a redesign of an
+existing one called PatternBoost
+that François Charton, now a research scientist at Axiom, co-developed in 2024 when he was at Meta. PatternBoost ran on a supercomputer; Axplorer runs on a Mac Pro.
+The aim is to put the power of PatternBoost, which was used to crack a hard math puzzle known as the Turán four-cycles problem, in the hands of anyone who can install Axplorer on their own computer.
+Last year, the US Defense Advanced Research Projects Agency set up a new initiative called expMath—short for Exponentiating Mathematics—to encourage mathematicians
+to develop and use AI tools
+. Axiom sees itself as part of that drive.
+Breakthroughs in math have enormous knock-on effects across technology, says Charton. In particular, new math is crucial for advances in computer science, from building next-generation AI to improving internet security.
+Most of the successes with AI tools have involved finding solutions to existing problems. But finding solutions is not all that mathematicians do, says Axiom Math founder and CEO Carina Hong. Math is exploratory and experimental, she says.
+MIT Technology Review
+met with Charton and Hong last week for an exclusive video chat about their new tool and how AI in general could change mathematics.
+Math by chatbot
+In the last few months, a number of mathematicians have used LLMs, such as OpenAI’s GPT-5, to find solutions to unsolved problems, especially ones set by the 20th-century mathematician Paul Erdős, who left behind hundreds of puzzles when he died.
+But Charton is dismissive of those successes. “There are tons of problems that are open because nobody looked at them, and it’s easy to find a few gems you can solve,” he says. He’s set his sights on tougher challenges—“the big problems that have been very, very well studied and famous people have worked on them.” Last year, Axiom Math used another of its tools, called AxiomProver, to
+find solutions
+to four such problems in mathematics.
+The Turán four-cycles problem that PatternBoost cracked is another big problem, says Charton. (The problem is an important one in graph theory, a branch of math that’s used to analyze complex networks such as social media connections, supply chains, and search engine rankings. Imagine a page covered in dots. The puzzle involves figuring out how to draw lines between as many of the dots as possible without creating loops that connect four dots in a row.)
+“LLMs are extremely good if what you want to do is derivative of something that has already been done,” says Charton. “This is not surprising—LLMs are pretrained on all the data that there is. But you could say that LLMs are conservative. They try to reuse things that exist.”
+However, there are lots of problems in math that require new ideas, insights that nobody has ever had. Sometimes those insights come from spotting patterns that hadn’t been spotted before. Such discoveries can open up whole new branches of mathematics.
+PatternBoost was designed to help mathematicians find new patterns. Give the tool an example and it generates others like it. You select the ones that seem interesting and feed them back in. The tool then generates more like those, and so on.
+It’s a similar idea to Google DeepMind’s AlphaEvolve, a
+system that uses an LLM to come up with novel solutions to a problem
+. AlphaEvolve keeps the best suggestions and asks the LLM to improve on them.
+Special access
+Researchers have already used both AlphaEvolve and PatternBoost to discover new solutions to long-standing math problems. The trouble is that those tools run on large clusters of GPUs and are not available to most mathematicians.
+Mathematicians are excited about AlphaEvolve, says Charton. “But it’s closed—you need to have access to it. You have to go and ask the DeepMind guy to type in your problem for you.”
+And when Charton solved the Turán problem with PatternBoost, he was still at Meta. “I had literally thousands, sometimes tens of thousands, of machines I could run it on,” he says. “It ran for three weeks. It was embarrassing brute force.”
+Axplorer is far faster and far more efficient, according to the team at Axiom Math. Charton says it took Axplorer just 2.5 hours to match PatternBoost’s Turán result. And it runs on a single machine.
+Geordie Williamson, a mathematician at the University of Sydney, who worked on PatternBoost with Charton, has not yet tried Axplorer. But he is curious to see what mathematicians do with it. (Williamson still occasionally collaborates with Charton on academic projects but says he is not otherwise connected to Axiom Math.)
+Williamson says Axiom Math has made several improvements to PatternBoost that (in theory) make Axplorer applicable to a wider range of mathematical problems. “It remains to be seen how significant these improvements are,” he says.
+“We are in a strange time at the moment, where lots of companies have tools that they’d like us to use,” Williamson adds. “I would say mathematicians are somewhat overwhelmed by the possibilities. It is unclear to me what impact having another such tool will be.”
+Hong admits that there are a lot of AI tools being pitched at mathematicians right now. Some also require mathematicians to train their own neural networks. That’s a turnoff, says Hong, who is a mathematician herself. Instead, Axplorer will walk you through what you want to do step by step, she says.
+The code for Axplorer is open source and
+available via GitHub
+. Hong hopes that students and researchers will use the tool to generate sample solutions and counterexamples to problems they’re working on, speeding up mathematical discovery.
+Williamson welcomes new tools and says he uses LLMs a lot. But he doesn’t think mathematicians should throw out the whiteboards just yet. “In my biased opinion, PatternBoost is a lovely idea, but it is certainly not a panacea,” he says. “I’d love us not to forget more down-to-earth approaches.”
+
+KAYNAK : https://www.technologyreview.com/2026/03/25/1134642/this-startup-wants-to-change-how-mathematicians-do-math/
+
+--- mit_ai | Agentic commerce runs on truth and context | score=68.16 ---
+Imagine telling a digital agent, “Use my points and book a family trip to Italy. Keep it within budget, pick hotels we’ve liked before, and handle the details.” Instead of returning a list of links, the agent assembles an itinerary and executes the purchase.
+That shift, from assistance to execution, is what makes agentic AI different. It also changes the operating speed of commerce. Payment transactions are already clear in milliseconds. The new acceleration is everything before the payment: discovery, comparison, decisioning, authorization, and follow-through across many systems. As humans step out of routine decisions, “good enough” data stops being good enough. In an agent-driven economy, the constraint isn’t speed; it’s trust at machine speed and scale.
+Automated markets already work because identity, authority, and accountability are built in. As agents transact across businesses, that same clarity is required.
+Master data management (MDM)
+—the discipline of creating a single master record—becomes the exchange layer: tracking who an agent represents, what it can do, and where responsibility sits when value moves. Markets don’t fail from automation; they fail from ambiguous ownership. MDM turns autonomous action into legitimate, scalable trust.
+To make agentic commerce safe and scalable, organizations will need more than better models. They will need a modern data architecture and an authoritative system of context that can instantly recognize, resolve, and distinguish entities. It is the difference between automation that scales and automation that needs constant human correction.
+The agent is a new participant
+Digital commerce has long been built on two primary sides: buyers and suppliers/merchants. Agentic commerce adds a third participant that must be treated as a first-class entity: the agent acting on the buyer’s behalf.
+That sounds simple until you ask the questions every enterprise will face:
+Who is the individual, across channels and devices, with enough certainty for automation?
+Who is the agent, and what permissions and limits define what it can do?
+Who is the merchant or supplier, and are we sure we mean the right one?
+Who holds liability if the agent acts with permission, but against user intent?
+The practical risk is confusion. Humans, for example, can infer that “Delta” means the airline when they are booking a flight, not the faucet company. An agent needs deterministic signals. If the system guesses wrong, it either breaks trust or forces a human confirmation step that defeats the promise of speed.
+Why ‘good enough’ data breaks at machine speed
+Most organizations have learned to live with imperfect data. Duplicate customer records are tolerable. Incomplete product attributes are annoying. Merchant identities can be reconciled later.
+Agentic workflows change that tolerance. When an agent takes action without a human checking the output, it needs data that is close to perfect, because it cannot reliably notice when data is ambiguous or wrong the way a person can.
+The failure modes are predictable, and they show up in places that matter most:
+Product truth
+: If the catalog is inconsistent, an agent’s choices will look arbitrary (“the wrong shirt,” “the wrong size,” “the wrong material”), and trust collapses quickly.
+Payee truth
+: Agentic commerce expands beyond cards to account-to-account and open-banking-connected experiences, broadening the universe of payees and the need to recognize them accurately in real time.
+Identity truth
+: People operate in multiple contexts (work versus personal). Devices shift. A system that cannot distinguish amongst these contexts will either block legitimate activity or approve risky activity, both of which damage adoption.
+This is why unified enterprise data and entity resolution move from nice to have to operationally required. The more autonomy you want, the more you must invest in modern data foundations that ensure it is safe.
+Context intelligence: The missing layer
+When leaders talk about agentic AI, they often focus on model capability: planning, tool use, and reasoning. Those are necessary, but they are not sufficient.
+Agentic commerce also requires a layer that provides authoritative context at runtime. Think of it as a real-time system of context that can answer instantly and consistently:
+• Is this the right person?
+• Is this the right agent, acting within the right permissions?
+• Is this the right merchant or payee?
+• What constraints apply right now (budget, policy, risk, loyalty rules, preferred suppliers)?
+Two design principles matter.
+First, entity truth must be deterministic enough for automation. Large language models are probabilistic by nature. That is helpful for creating options for writing and drawing. It is risky for deciding where money goes, especially in B2B and finance workflows, where “probably correct” is not acceptable.
+Second, context must travel at the speed of interaction and remain portable across the entire connected network value chain. Mastercard’s experience optimizing payment flows is instructive: the more services you layer onto a transaction, the more you risk slowing it down. The pattern that scales pre-resolves, curates, and packages the signal so that execution is lightweight.
+This is also where tokenization is heading. Initiatives like Mastercard’s Agent Pay and
+Verifiable Intent
+signal a future in which consumer credentials, agent identities, permissions, and provable user intent are encoded as cryptographically secure artifacts — enabling merchants, issuers and platforms to deterministically verify authorization and execution at machine speed.
+What leaders should do in the next 12 to 24 months
+Adoption will not be uniform. Early traction will often depend less on industry and more on the sophistication of an organization’s systems and data discipline.
+That makes the next two years a window for practical preparation. Five moves stand out.
+Treat agents as governed identities, not features. Define how agents are onboarded, authenticated, permissioned, monitored, and retired.
+Prioritize entity resolution where the cost of being wrong is highest. Start with payees, suppliers, employee-versus-personal identity, and high-volume product categories.
+Build a reusable context service that every workflow and agent can call. Do not force each system to reconstruct identity and relationships from scratch.
+Precompute and compress signals. Resolve and curate context upstream so that runtime decisioning stays fast and predictable.
+Expand autonomy only as trust is earned. Build a governance framework to address disputes, keep humans in the loop for higher-risk actions, measure accuracy, and expand automation as outcomes prove reliable.
+A tsunami effect across industries
+Agentic AI will not be confined to shopping carts. It will touch procurement, travel, claims, customer service, and finance operations. It will compress decision cycles and remove manual steps, but only for organizations that can supply agents with clean identity, precise entity truth, and reliable context.
+The winners will treat entity truth and context as core infrastructure for automation, not as a back-office cleanup project. In commerce at machine speed, trust is not a brand attribute; it is an architectural decision encoded in identity, context, and control.
+This content was produced by Reltio. It was not written by MIT Technology Review’s editorial staff.
+
+KAYNAK : https://www.technologyreview.com/2026/03/25/1134516/agentic-commerce-runs-on-truth-and-context/
+
+--- claude | Elevated errors on Claude Opus 4.6 | score=52.66 ---
+Mar
+26
+,
+00:14
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+25
+,
+20:06
+UTC
+Monitoring
+- The issue has been mitigated. We are monitoring.
+Mar
+25
+,
+20:01
+UTC
+Update
+- We are currently investigating this issue.
+Mar
+25
+,
+19:53
+UTC
+Update
+- We got elevated errors back. Investigating.
+Mar
+25
+,
+16:58
+UTC
+Investigating
+- We are currently investigating this issue.
+Mar
+25
+,
+15:37
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+25
+,
+15:04
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/9qwph3lqc885
+
+--- nextjs | v16.2.1-canary.8 | score=52.33 ---
 Core Changes
-Avoid deprecated TS node10 moduleResolution defaults:
-#91847
-[turbopack] Rebuild the docker build scripts:
-#91799
-Fix TS6 baseUrl deprecation for extended tsconfig:
-#91855
-Add
-next internal post-build
-CLI command for Turbopack database compaction:
-#91336
-Example Changes
-chore(examples): remove
-with-styletron
-example:
-#81842
+Perf: Skip turning Set into Array:
+#91383
+Perf: Move chunkloading instrumentation to separate function:
+#91382
+Perf: Use headers object directly in checkIsOnDemandRevalidate:
+#91381
+Use charCodeAt for normalizePathTrailingSlash:
+#91380
+Turbopack: Only patch lockfile when bindings fails to load:
+#91379
+[devtools] Make instant navs panel draggable:
+#91914
 Misc Changes
-ci: upload adapter deploy test results:
-#91846
-Turbopack: Define
-Effect
-as a trait instead of a closure:
-#89080
-test: scope css data-url typing to fixture:
-#91877
-Turbopack: Implement TraceRawVcs and NonLocalValue correctly for Effects:
-#89133
+docs: add verified adapters section:
+#91849
+ci: only upload adapter results for canary runs:
+#91881
+turbo-tasks-backend: improve print_cache_item_size instrumentation:
+#91742
+Turbopack: switch from base40 to base38 hash encoding (remove ~ and . from charset):
+#91832
+[create-next-app] Skip interactive prompts when CLI flags are provided:
+#91840
+docs: document CSS decimal precision difference between Turbopack and webpack:
+#91909
+[test] Deflake instant-navs-devtools:
+#91912
 Credits
 Huge thanks to
-@JamBalaya56562
+@feedthejim
 ,
 @ijjk
 ,
-@mmastrac
-,
 @sokra
+,
+@timneutkens
+,
+@gaojude
 , and
-@bgw
+@eps1lon
 for helping!
 
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.7
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.8
 
---- openai | Helping developers build safer AI experiences for teens | score=44.85 ---
-OpenAI releases prompt-based teen safety policies for developers using gpt-oss-safeguard, helping moderate age-specific risks in AI systems.
+--- claude | Elevated connection reset errors in Cowork | score=49.89 ---
+Mar
+25
+,
+16:56
+UTC
+Update
+- We are continuing to investigate connection errors which occur during Claude Cowork sessions. This issue can be resolved by restarting the Claude Desktop application.
+Mar
+25
+,
+14:33
+UTC
+Investigating
+- We are currently investigating this issue.
 
-KAYNAK : https://openai.com/index/teen-safety-policies-gpt-oss-safeguard
+KAYNAK : https://status.claude.com/incidents/d8r794mwjg8d
 
---- openai | Update on the OpenAI Foundation | score=35.71 ---
-The OpenAI Foundation announces plans to invest at least $1 billion in curing diseases, economic opportunity, AI resilience, and community programs.
+--- google_ai | Build with Lyria 3, our newest music generation model | score=49.53 ---
+Lyria 3 is now available in paid preview through the Gemini API and for testing in Google AI Studio.
 
-KAYNAK : https://openai.com/index/update-on-the-openai-foundation
+KAYNAK : https://blog.google/innovation-and-ai/technology/developers-tools/lyria-3-developers/
 
---- openai | Powering product discovery in ChatGPT | score=29.10 ---
-ChatGPT introduces richer, visually immersive shopping powered by the Agentic Commerce Protocol, enabling product discovery, side-by-side comparisons, and merchant integration.
+--- nextjs | v16.2.1-canary.9 | score=46.85 ---
+Core Changes
+[Segment Bundling] Bundle static prefetches based on size:
+#91439
+Credits
+Huge thanks to
+@acdlite
+for helping!
 
-KAYNAK : https://openai.com/index/powering-product-discovery-in-chatgpt
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.9
+
+--- claude | Elevated Errors on claude.ai | score=43.98 ---
+Mar
+25
+,
+15:43
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+25
+,
+15:27
+UTC
+Monitoring
+- We are currently seeing recovery, and our engineers are working to ensure no further recurrences. We will provide an update as soon as possible.
+Mar
+25
+,
+14:33
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+Mar
+25
+,
+13:52
+UTC
+Update
+- We are continuing to investigate this issue.
+Mar
+25
+,
+13:45
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/9rt6y2y4gkh1
+
+--- openai | Inside our approach to the Model Spec | score=41.86 ---
+Learn how OpenAI’s Model Spec serves as a public framework for model behavior, balancing safety, user freedom, and accountability as AI systems advance.
+
+KAYNAK : https://openai.com/index/our-approach-to-the-model-spec
+
+--- deepmind | Lyria 3 Pro: Create longer tracks in more | score=38.40 ---
+Introducing Lyria 3 Pro, which unlocks longer tracks with structural awareness. We’re also bringing Lyria to more Google products and surfaces.
+
+KAYNAK : https://deepmind.google/blog/lyria-3-pro-create-longer-tracks-in-more/
+
+--- mit_ai | The AI Hype Index: AI goes to war | score=35.97 ---
+AI is at war. Anthropic and the Pentagon feuded over how to weaponize Anthropic’s AI model Claude; then OpenAI swept the Pentagon off its feet with an “
+opportunistic and sloppy
+” deal. Users quit ChatGPT in droves. People marched through London in the
+biggest protest against AI
+to date. If you’re keeping score, Anthropic—the company founded to be ethical—is now turbocharging US strikes on Iran.
+On the lighter side, AI agents are now going viral online. OpenAI hired the creator of OpenClaw, a popular AI agent. Meta snapped up Moltbook, where AI agents seem to ponder their own existence and invent new religions like Crustafarianism. And on RentAHuman, bots are hiring people to deliver CBD gummies. The future isn’t AI taking your job. It’s AI becoming your boss and finding God.
+
+KAYNAK : https://www.technologyreview.com/2026/03/25/1134571/the-ai-hype-index-ai-goes-to-war/
+
+--- claude | Elevated errors on Claude Opus 4.6 | score=27.69 ---
+Mar
+25
+,
+13:10
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+25
+,
+10:06
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+25
+,
+09:35
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/yvb76l3ryzpb
 

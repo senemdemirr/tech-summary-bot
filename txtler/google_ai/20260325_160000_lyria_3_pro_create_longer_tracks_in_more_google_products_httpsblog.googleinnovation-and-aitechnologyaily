@@ -1,4 +1,3 @@
---- google_ai | Lyria 3 Pro: Create longer tracks in more Google products | score=88.22 ---
 Lyria 3 Pro: Create longer tracks in more Google products
 Last month, we introduced Lyria 3, featuring custom music generation designed to spark creative expression. Now, we’re bringing our most advanced music generation model to more Google products, and introducing Lyria 3 Pro. This advanced version allows the creation of tracks up to 3 minutes long, with customization and creative control. Lyria 3 Pro better understands musical composition, so you can now prompt for specific elements like intros, verses, choruses and bridges. It’s great for experimenting with different styles or generating songs with complex transitions.
 Providing new places to generate music
@@ -16,9 +15,3 @@ Responsibility was foundational, and remains integral in the design and training
 Lyria 3 Pro is rolling out to professionals, developers, organizations and everyday creators to help craft high quality music generations.
 
 KAYNAK : https://blog.google/innovation-and-ai/technology/ai/lyria-3-pro/
-
---- google_ai | Build with Lyria 3, our newest music generation model | score=49.53 ---
-Lyria 3 is now available in paid preview through the Gemini API and for testing in Google AI Studio.
-
-KAYNAK : https://blog.google/innovation-and-ai/technology/developers-tools/lyria-3-developers/
-

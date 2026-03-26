@@ -1,0 +1,5 @@
+--- deepmind | Lyria 3 Pro: Create longer tracks in more | score=38.40 ---
+Introducing Lyria 3 Pro, which unlocks longer tracks with structural awareness. We’re also bringing Lyria to more Google products and surfaces.
+
+KAYNAK : https://deepmind.google/blog/lyria-3-pro-create-longer-tracks-in-more/
+

@@ -1,0 +1,135 @@
+--- claude | Elevated errors on Claude Opus 4.6 | score=52.66 ---
+Mar
+26
+,
+00:14
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+25
+,
+20:06
+UTC
+Monitoring
+- The issue has been mitigated. We are monitoring.
+Mar
+25
+,
+20:01
+UTC
+Update
+- We are currently investigating this issue.
+Mar
+25
+,
+19:53
+UTC
+Update
+- We got elevated errors back. Investigating.
+Mar
+25
+,
+16:58
+UTC
+Investigating
+- We are currently investigating this issue.
+Mar
+25
+,
+15:37
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+25
+,
+15:04
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/9qwph3lqc885
+
+--- claude | Elevated connection reset errors in Cowork | score=49.89 ---
+Mar
+25
+,
+16:56
+UTC
+Update
+- We are continuing to investigate connection errors which occur during Claude Cowork sessions. This issue can be resolved by restarting the Claude Desktop application.
+Mar
+25
+,
+14:33
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/d8r794mwjg8d
+
+--- claude | Elevated Errors on claude.ai | score=43.98 ---
+Mar
+25
+,
+15:43
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+25
+,
+15:27
+UTC
+Monitoring
+- We are currently seeing recovery, and our engineers are working to ensure no further recurrences. We will provide an update as soon as possible.
+Mar
+25
+,
+14:33
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+Mar
+25
+,
+13:52
+UTC
+Update
+- We are continuing to investigate this issue.
+Mar
+25
+,
+13:45
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/9rt6y2y4gkh1
+
+--- claude | Elevated errors on Claude Opus 4.6 | score=27.69 ---
+Mar
+25
+,
+13:10
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+25
+,
+10:06
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Mar
+25
+,
+09:35
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/yvb76l3ryzpb
+

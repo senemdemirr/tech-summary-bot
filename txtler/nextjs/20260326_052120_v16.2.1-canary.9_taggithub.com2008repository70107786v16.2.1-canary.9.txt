@@ -1,0 +1,9 @@
+Core Changes
+[Segment Bundling] Bundle static prefetches based on size:
+#91439
+Credits
+Huge thanks to
+@acdlite
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.9

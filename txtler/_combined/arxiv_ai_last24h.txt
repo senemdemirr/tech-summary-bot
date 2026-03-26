@@ -1,4 +1,4 @@
---- arxiv_ai | Maximum Entropy Relaxation of Multi-Way Cardinality Constraints for Synthetic Population Generation | score=104.50 ---
+--- arxiv_ai | Maximum Entropy Relaxation of Multi-Way Cardinality Constraints for Synthetic Population Generation | score=104.31 ---
 Maximum Entropy Relaxation of Multi-Way Cardinality Constraints for Synthetic Population Generation
 Abstract
 Generating synthetic populations from aggregate statistics is a core component of microsimulation, agent-based modeling, policy analysis, and privacy-preserving data release. Beyond classical census marginals, many applications require matching heterogeneous unary, binary, and ternary constraints derived from surveys, expert knowledge, or automatically extracted descriptions. Constructing populations that satisfy such multi-way constraints simultaneously poses a significant computational challenge. We consider populations where each individual is described by categorical attributes and the target is a collection of global frequency constraints over attribute combinations. Exact formulations scale poorly as the number and arity of constraints increase, especially when the constraints are numerous and overlapping. Grounded in methods from statistical physics, we propose a maximum-entropy relaxation of this problem. Multi-way cardinality constraints are matched in expectation rather than exactly, yielding an exponential-family distribution over complete population assignments and a convex optimization problem over Lagrange multipliers. We evaluate the approach on NPORS-derived scaling benchmarks with 4 to 40 attributes and compare it primarily against generalized raking. The results show that MaxEnt becomes increasingly advantageous as the number of attributes and ternary interactions grows, while raking remains competitive on smaller, lower-arity instances.
@@ -154,7 +154,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2603.22558
 
---- arxiv_ai | Exposure-Normalized Bed and Chair Fall Rates via Continuous AI Monitoring | score=104.50 ---
+--- arxiv_ai | Exposure-Normalized Bed and Chair Fall Rates via Continuous AI Monitoring | score=104.31 ---
 Exposure-Normalized Bed and Chair Fall Rates via Continuous AI Monitoring
 Abstract
 This retrospective cohort study used continuous AI monitoring to estimate fall rates by exposure time rather than occupied bed-days. From August 2024 to December 2025, 3,980 eligible monitoring units contributed 292,914 hourly rows, yielding probability-weighted rates of 17.8 falls per 1,000 chair exposure-hours and 4.3 per 1,000 bed exposure-hours. Within the study window, 43 adjudicated falls matched the monitoring pipeline, and 40 linked to eligible exposure hours for the primary Poisson model, producing an adjusted chair-versus-bed rate ratio of 2.35 (95% confidence interval 0.87 to 6.33; p=0.0907). In a separate broader observation cohort (n=32 deduplicated events), 6 of 7 direct chair falls involved footrest-positioning failures. Because this was an observational study in a single health system, these findings remain hypothesis-generating and support testing safer chair setups rather than using chairs less.
@@ -387,7 +387,7 @@ Shepherd J, McCarthy A. Advancing nursing practice through artificial intelligen
 
 KAYNAK : https://arxiv.org/abs/2603.22785
 
---- arxiv_ai | Computational Arbitrage in AI Model Markets | score=104.28 ---
+--- arxiv_ai | Computational Arbitrage in AI Model Markets | score=104.09 ---
 Computational Arbitrage in AI Model Markets
 Abstract
 Consider a market of competing model providers selling query access to models with varying costs and capabilities. Customers submit problem instances and are willing to pay up to a budget for a verifiable solution. An arbitrageur efficiently allocates inference budget across providers to undercut the market, thus creating a competitive offering with no model-development risk. In this work, we initiate the study of arbitrage in AI model markets, empirically demonstrating the viability of arbitrage and illustrating its economic consequences. We conduct an in-depth case study of SWE-bench GitHub issue resolution using two representative models, GPT-5 mini and DeepSeek v3.2. In this verifiable domain, simple arbitrage strategies generate net profit margins of up to 40%. Robust arbitrage strategies that generalize across different domains remain profitable. Distillation further creates strong arbitrage opportunities, potentially at the expense of the teacher model’s revenue. Multiple competing arbitrageurs drive down consumer prices, reducing the marginal revenue of model providers. At the same time, arbitrage reduces market segmentation and facilitates market entry for smaller model providers by enabling earlier revenue capture. Our results suggest that arbitrage can be a powerful force in AI model markets with implications for model development, distillation, and deployment111Code, data, and models available at https://github.com/RicardoDominguez/computational-arbitrage.
@@ -520,7 +520,7 @@ In turn, models distilled on more data dominate those distilled on less data in 
 
 KAYNAK : https://arxiv.org/abs/2603.22404
 
---- arxiv_ai | MuQ-Eval: An Open-Source Per-Sample Quality Metric for AI Music Generation Evaluation | score=104.28 ---
+--- arxiv_ai | MuQ-Eval: An Open-Source Per-Sample Quality Metric for AI Music Generation Evaluation | score=104.09 ---
 MuQ-Eval: An Open-Source Per-Sample Quality Metric for AI Music Generation Evaluation
 Abstract
 Distributional metrics such as Fréchet Audio Distance cannot score individual music clips and correlate poorly with human judgments, while the only per-sample learned metric achieving high human correlation is closed-source. We introduce MuQ-Eval, an open-source per-sample quality metric for AI-generated music built by training lightweight prediction heads on frozen MuQ-310M features using MusicEval, a dataset of generated clips from 31 text-to-music systems with expert quality ratings. Our simplest model, frozen features with attention pooling and a two-layer MLP, achieves system-level SRCC = 0.957 and utterance-level SRCC = 0.838 with human mean opinion scores. A systematic ablation over training objectives and adaptation strategies shows that no addition meaningfully improves the frozen baseline, indicating that frozen MuQ representations already capture quality-relevant information. Encoder choice is the dominant design factor, outweighing all architectural and training decisions. LoRA-adapted models trained on as few as 150 clips already achieve usable correlation, enabling personalized quality evaluators from individual listener annotations. A controlled degradation analysis reveals selective sensitivity to signal-level artifacts but insensitivity to musical-structural distortions. Our metric, MuQ-Eval, is fully open-source, outperforms existing open per-sample metrics, and runs in real time on a single consumer GPU. Code, model weights, and evaluation scripts are available at https://github.com/dgtql/MuQ-Eval.
@@ -700,7 +700,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2603.22677
 
---- arxiv_ai | ProGRank: Probe-Gradient Reranking to Defend Dense-Retriever RAG from Corpus Poisoning | score=104.28 ---
+--- arxiv_ai | ProGRank: Probe-Gradient Reranking to Defend Dense-Retriever RAG from Corpus Poisoning | score=104.09 ---
 11email: {yinxi,chengch}@chalmers.se22institutetext: University of Leeds, United Kingdom
 22email: Y.Qi@leeds.ac.uk 33institutetext: Carl von Ossietzky University of Oldenburg, Germany
 33email: chih-hong.cheng@uni-oldenburg.de
