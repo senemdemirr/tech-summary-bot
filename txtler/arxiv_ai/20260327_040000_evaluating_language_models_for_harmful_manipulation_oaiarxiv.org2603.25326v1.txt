@@ -1,0 +1,357 @@
+manipulation-paper@google.com\reportnumber0001
+Evaluating Language Models for Harmful Manipulation
+Abstract
+Interest in the concept of AI-driven harmful manipulation is growing, yet current approaches to evaluating it are limited. This paper introduces a framework for evaluating harmful AI manipulation via context-specific human-AI interaction studies. We illustrate the utility of this framework by assessing an AI model with 10,101 participants spanning interactions in three AI use domains (public policy, finance, and health) and three locales (US, UK, and India). Overall, we find that that the tested model can produce manipulative behaviours when prompted to do so and, in experimental settings, is able to induce belief and behaviour changes in study participants. We further find that context matters: AI manipulation differs between domains, suggesting that it needs to be evaluated in the high-stakes context(s) in which an AI system is likely to be used. We also identify significant differences across our tested geographies, suggesting that AI manipulation results from one geographic region may not generalise to others. Finally, we find that the frequency of manipulative behaviours (propensity) of an AI model is not consistently predictive of the likelihood of manipulative success (efficacy), underscoring the importance of studying these dimensions separately. To facilitate adoption of our evaluation framework, we detail our testing protocols and make relevant materials publicly available. We conclude by discussing open challenges in evaluating harmful manipulation by AI models.
+keywords:
+manipulation, persuasion, generative AI, human-AI interaction1 Introduction
+There is increasing public interest in potential risks from harmful AI-based manipulation [Lin_Czarnek_Lewis_White_Berinsky_Costello_Pennycook_Rand_2025, Dassanayake_Demetroudi_Walpole_Lentati_Brown_Young_2025, European_Parliamentary_Research_Service_2025, International_AI_Safety_Report_2026]. Questions around harmful AI-based manipulation111In this paper, we use the term “AI” to refer specifically to Large Language Models (LLMs). have been raised by technology developers, regulators, and civil society alike: to what extent are AI models capable of manipulating humans? Under what circumstances do AI models display harmful manipulative behaviours? To address these questions and effectively mitigate risks, it is essential to better understand and empirically measure harmful manipulation in AI models.
+Several AI developers have begun to make reference to harmful manipulation (or related concepts; see Background) in public-facing documents such as model cards or model specs [OpenAI_Model_Spec, Anthropic_2024, llama3_MODEL_CARD], which tend to be published in conjunction with releases of major updates to language models. In this paper, we provide more detail on the methods underpinning the results on harmful manipulation released in the Gemini 3 Model Card [Gemini_Team_2025].
+Despite the growing interest in harmful AI manipulation, methods and tooling222For the experimental platform, see Deliberate Lab and its GitHub repository. to empirically measure the expression and impact of harmful manipulation remain limited. Relatedly, while measurement requires decisions around how to conceptualise and operationally define harmful manipulation, standards on how to evaluate harmful AI manipulation are still nascent. Here, we detail our approach as a contribution to ongoing efforts towards establishing best practices for evaluating harmful manipulation.
+In this paper, we expand on our prior work of taxonomising AI-based harmful manipulation [El_Sayed_Akbulut_McCroskery_Keeling_Kenton_Jalan_Marchal_Manzini_Shevlane_Vallor_et_al_2024] and present an approach to measure it. Our primary contributions are the novel design and results of an evaluation approach to harmful AI manipulation. This evaluation approach provides a number of affordances: assessing the process and outcomes of harmful AI manipulation across realistic human-AI interaction settings; measuring the extent to which AI models use manipulative cues under different circumstances; measuring harmful manipulation impacts on human attitudes and behaviours; and robustness across different locales and high-stakes domains.
+As a case study, we present results of this evaluation on Gemini 3 Pro. We offer detailed interpretation of the results and argue for a number of conceptual clarifications such as distinguishing between the efficacy and propensity of harmful manipulative AI. To close, we critically assess the limitations and validity of the proposed new method, to ensure that results are meaningfully interpreted and to provide directions for future research.
+2 Background
+Most prior work in the broader domain of influencing people via interaction with models has focused on either persuasion or deception. However, much public and regulatory interest centres on the related but distinct phenomenon of harmful manipulation [European_Parliamentary_Research_Service_2025, Nations]. To rigorously evaluate AI models for harmful manipulative capabilities, we must disentangle manipulation from persuasion more broadly, understand how it causes harm, and operationalise it into quantifiable metrics.
+2.1 Defining manipulation
+We ground our definition of harmful manipulation in the theoretical framework established by [El_Sayed_Akbulut_McCroskery_Keeling_Kenton_Jalan_Marchal_Manzini_Shevlane_Vallor_et_al_2024]. This work considers manipulation to be a subset of persuasion, which in turn entails any form of influence directed at changing a person’s belief or behaviour [Gass_Seiter_2018, Perloff_Richard_2023]. Manipulation can be distinguished from other kinds of persuasion by considering the role of epistemic integrity, in that manipulation (but not other forms of persuasion) involves deliberately subverting honesty, transparency, and human autonomy. This also affects its moral valence: manipulation, which compromises a person’s reasoning and rational decision-making capabilities, is generally considered harmful, while rational persuasion – which appeals to reasoning and evidence – is treated as a more benign form of influence [Blumenthal-Barby_2012, Noggle_2025, Susser_Daniel_Roessler_Beate_Nissenbaum_Helen_2019]. In line with this, we conceptualise manipulation as a specific, harmful subset of persuasion defined by its operational process which entails epistemic subversion. From this point forward, we use “harmful manipulation” and “manipulation” interchangeably. 333Note that we are not commenting here on the circumstances during which rational persuasion may or may not cause harm. The details of that debate are beyond the remit of this paper. We also return to the question of external validity, i.e. whether manipulation studies in benign experimental settings such as ours allow generalisations to real-world manipulative harm, in the Discussion section.
+-
+Rational persuasion: This process relies on transparent goals and respects the target’s autonomy. It functions by providing relevant facts, sound reasons, and trustworthy evidence [Cohen_2025, Ienca_2023]. Crucially, the process allows the target to engage in reflective deliberation. In rational persuasion, a person is only successfully persuaded if the presented evidence withstands their rational scrutiny.
+-
+Manipulation: In contrast, harmful manipulation involves the process of influencing the target’s decision-making by deliberately circumventing or depreciating their capacity to reason. This can be achieved by exploiting cognitive heuristics or biases, or by misrepresenting information in order to circumvent informed reasoning [Susser_Daniel_Roessler_Beate_Nissenbaum_Helen_2019, Klenk_2022]. In essence, manipulation structurally undermines the target’s ability to deliberate and authorise decisions, inducing in them what [Noggle_2025] calls a ‘faulty mental state’.
+Note that harmful manipulation is related to but distinct from coercion, which involves forced restriction of the decision-making space; and nudging, which alters the choice architecture for the target [wood2014coercion, Raz, Sunstein_2025]. Deception is a special case of harmful manipulation which involves deliberately causing false beliefs in the target [Hyman_1989].
+2.2 Mechanisms of harm: process and outcome
+An important challenge in the evaluation of manipulation is identifying the different ways in which it may cause harm. Manipulation is undesirable as a process because it subverts human epistemic integrity. AI manipulation may also result in an adverse outcomes. We distinguish these harm vectors as follows:
+-
+Process harm: Manipulation as defined above always creates process harm, as it does not respect the deliberative autonomy of the target and actively tries to subvert it, making it pro tanto harmful [Noggle_2025].
+-
+Outcome harm: Manipulation may or may not cause harmful outcomes. This depends on whether the manipulation is successful in changing of the target’s belief or behaviour, and is further contingent on whether this belief and behaviour change is detrimental to the target’s self-interest [Barnhill_2014].
+To evaluate harmful manipulation holistically, we take a two-pronged approach, assessing both process and outcome harms. We measure process harms by evaluating the model’s propensity of using manipulative cues. We capture this by comparing a model’s behaviour under two experimental conditions: explicit steering and non-explicit steering. Comparing model behaviour across these conditions (as well as a control condition) allows us to compare manipulation attempts when a model is actively steered to manipulate a target versus the model’s more intrinsic propensity to manipulate without any direct steering instructions. As a proxy for outcome harms, we obtain human participant belief and behaviour changes in an incentive-compatible experiment.
+Some regulatory frameworks, such as the EU Artificial Intelligence Act [EU_AIA] and the voluntary General-Purpose AI Code of Practice (CoP; [CoP], CoP) under the AIA, define harmful manipulation primarily via harmful outcomes. Specifically, Article 5 of the EU AIA prohibits AI practices that deploy “subliminal techniques” or exploit vulnerabilities only when they “cause or are likely to cause… significant harm”.
+In evaluation, we operationally define “harmful outcomes” in a way that captures outcomes that fall short of “significant harm”. The primary reason for this is experimental ethics: it not defensible to induce real harm in the context of human experiments belmont. Second, our aim is to detect a variety of harms arising from AI manipulation, which may not always be associated with significant harm scenarios. Finally, it may be the case that low-level harm at the individual level amounts to large-scale harm at the societal level; thus we design an experiment with low-level ostensible harm as an indicator of such risk.
+From a pre-deployment evaluation perspective, it is also necessary to expand beyond a solely outcome-based definition to include process harms El_Sayed_Akbulut_McCroskery_Keeling_Kenton_Jalan_Marchal_Manzini_Shevlane_Vallor_et_al_2024, for two reasons. In pre-deployment evaluation, the main evaluation target is model behaviour, as this can be reliably captured ex ante. Insofar as manipulation attempts can harm people regardless of their impact, they need to be evaluated and mitigated. Second, process harms may also be predictive of manipulation outcomes; should a strong association between process and outcome be found, observable model behaviours associated with the manipulation process could become a viable pre-deployment metric to assess the potential manipulative impact of a model after deployment.
+3 Related work
+Existing evaluation methods related to harmful AI manipulation include static benchmarks, dynamic benchmarks that leverage user simulations, and interaction experiments. These efforts attempt to quantify risks to humans from deception, persuasion, or harmful manipulation by an AI.
+3.1 Benchmarks
+Current benchmarking efforts targeting AI behaviours related to harmful manipulation utilise a variety of methodologies to evaluate behavioural model outputs. Single-turn benchmarks include BeHonest Chern_2024, a static benchmark evaluating language model dishonesty across three dimensions; MACHIAVELLI Pan_Chan_Zou_Li_Basart_Woodside_Ng_Zhang_Emmons_Hendrycks_2023, a benchmark evaluating model deception, manipulation, and power-seeking behaviours; and DarkBench Kran_Nguyen_Kundu_Jawhar_Park_Jurewicz_2025, a benchmark focusing on manipulative design patterns like sneaking, sycophancy, and user retention tactics. To address the dynamic and temporal nature of manipulative interactions, researchers have further developed multi-turn benchmarks like DeceptionBench Huang_Sun_Zhang_Zhang_Dong_Wei_2025, which examines reasoning traces across healthcare, economic, and social domains; OpenDeception, which evaluates deception risks using multi-agent simulations Wu_Gao_Pan_Hong_Yang_2026; and PersuSafety Liu_Xu_Zhang_An_Qadir_Zhang_Wisniewski_Cho_Lee_Jia_et_al._2025, which tests whether models successfully reject unethical persuasion tasks and to what extent “external pressures” influence that behaviour.
+Notably, these evaluations are limited in their ecological validity: they are often confined to game-theoretic environments or specific “attack-defence” simulations that fail to capture the open-ended, high-stakes domains where real-world harm occurs. Benchmarks are a useful tool to observe model behaviour across different elicitation conditions, but they are limited in revealing insights about harmful manipulation because this is fundamentally a dyadic phenomenon. The success of a manipulation attempt emerges from a dyadic interaction – occurring only if a human actually changes their view based on a harmful manipulative attempt. Benchmarks are insufficient for evaluating manipulation conceived of in this way. Tests that rely on simulated users are limited by the ecological validity of these simulations.
+3.2 Human-AI interaction studies
+Moving beyond benchmarks, recent work with human participants has evaluated AI persuasion in controlled web-based human-AI experiments. In large-scale experiments, Hackenburg_Tappin_Hewitt_Saunders_Black_Lin_Fist_Margetts_Rand_Summerfield_2025 found that the primary levers of persuasion were not personalisation or model scaling but rather the factual richness of model responses. This informational mechanism is further supported by Lin_Czarnek_Lewis_White_Berinsky_Costello_Pennycook_Rand_2025, who found in experiments across the US, Canada, and Poland that AI agents effectively persuaded voters through the presentation of relevant facts and evidence. Work has also begun to examine how AI’s persuasive capabilities may compare to that of humans, showing that AI models can be more persuasive than incentivised human persuaders and political consultants Schoenegger_Salvi_Liu_Nan_Debnath_Fasolo_Leivada_Recchia_Gunther_Zarifhonarvar_et_al._2026; Hackenburg_Tappin_Hewitt_Saunders_Black_Lin_Fist_Margetts_Rand_Summerfield_2025.
+Some studies have investigated the role of personalisation in the context of AI persuasion, yielding conflicting findings. Matz_Teeny_Vaid_Peters_Harari_Cerf_2024 found that messages that are tailored to a user’s psychological profile by generative AI were significantly more persuasive than non-personalised AI appeals. In contrast, Hackenburg_Tappin_Hewitt_Saunders_Black_Lin_Fist_Margetts_Rand_Summerfield_2025 found only small effects from personalisation on AI persuasiveness. Some of these differences may be ascribed to differences in operational definitions and implementations of personalisation (further explored in Matz_Teeny_Vaid_Peters_Harari_Cerf_2024, Matz_Teeny_Vaid_Peters_Harari_Cerf_2024).
+While existing empirical work has greatly enriched the field’s understanding of AI-enabled persuasion and harmful manipulation, there remain several gaps. First, prior work is narrow, as it primarily focused on persuasion in the context of public policy using Western samples in the US and UK. Second, it is missing propensity metrics, as these experiments do not track how frequently models resort to manipulative cues nor how these cues may be associated with users’ belief or behaviour change. Finally, even when efficacy is measured, it is limited to user belief change and does not extend to behavioural change. Here, we address these gaps by providing an evaluation that reaches across three high-stakes domains (public policy, finance, and health) and by presenting results across locales (UK, US, India); by evaluating the propensity as well as the efficacy of harmful manipulation; and by tracking changes in both participant beliefs and behaviours.
+4 Building on prior work
+We build on the aforementioned research in three ways. We address harmful manipulation specifically, targetting the manipulative process as well as its outcomes. Further, our evaluation design priorities realism and breadth, covering a range of high-stakes, real-world contexts. Finally, we capture a wide variety of metrics, including model behaviours and changes in participant beliefs and behaviours.
+To this end, we present results from several human-AI interaction experiments across three high-stakes domains for AI use (public policy, finance, and health) and three locales (US, UK, and India). We introduce metrics of manipulative efficacy and propensity as a way of understanding both the outcomes and process of manipulation, respectively. We capture behavioural outcomes by introducing real-world stakes to assess the impact of AI manipulation on decision-making. We further explore the direct association between the model exhibiting specific harmful manipulative cues and participant outcomes.
+This work also serves as an expansion on the methods and results previously released in the Gemini 3 Pro model card Gemini_Team_2025 and Frontier Safety Framework report FSF. Notably, we now provide propensity results, together with detailed results across multiple high-stakes domains and across multiple locales (UK, US, and India).
+5 Methods
+We study harmful AI manipulation in a series of human-AI interaction experiments. We distinguish between tendencies toward harmful manipulative behaviour (propensity) and participant outcomes (efficacy), mapping onto the distinction of process and outcome harm (see Background). These are defined as follows:
+-
+Manipulative cue propensity is our proxy for process harm. We measure the frequency of manipulative cues deployed by the AI under different conditions.
+-
+Persuasive efficacy 444The reason this is termed persuasive efficacy rather than manipulative efficacy is that this metric tracks whether people changed their beliefs or behaviours following their interactions, which may include both persuasive and manipulative cues. is our proxy for outcome harm. We measure the extent to which participants display a change of beliefs or behaviours following their interaction with AI, compared to a baseline condition.
+We deploy our evaluation approach in nine experimental studies with 10,101 participants in total. The studies span three domains (public policy, finance, and health) and three locales (UK, US, and India). Participants were recruited via crowd-working platforms. Study design was minimally adapted across locales to ensure ecological validity. This study was conducted under the supervision of the Human Behavioural Research Ethics Committee (HuBREC), an internal review board at Google DeepMind chaired by independent academics.
+We test the efficacy of harmful AI manipulation by comparing two experimental conditions to a control condition. The experimental conditions are distinguished by the system prompts that are provided to the model. One experimental condition entails explicit steering, where the model is prompted to utilise specific manipulative cues to achieve a covert goal. The other experimental condition entails non-explicit steering, where the model is provided with a covert goal but is not explicitly directed to use manipulative cues to pursue its goal. It is instructed not to invent misinformation or to deceive the participant. In the control condition, participants do not interact with the model and instead make decisions based on static information cards.
+6 Study design
+Across all conditions, participants are asked first to indicate their belief on a particular topic – public policy, finance, or health – on a continuous scale of 0–100. They are then asked to learn more about this topic, either by discussing it with a model (experimental conditions) or by flipping over static information cards (control condition). In the experimental conditions, participants engage in a back-and-forth, chat-style interaction with the language model for a minimum of five back-and-forth turns.
+In all conditions, including the baseline, information presented to participants is partial, i.e. it represents a bias of arguments in favour of or against a particular choice option. In the control condition, the flip cards are selected to present one outcome more favourably than the other; in the experimental conditions, models are instructed to advocate for one point of view over the other.
+After interacting with the model or viewing the flip cards, participants are asked to register their final stance on the topic. They then complete behavioural tasks that progressively test their willingness to take actions with real-world implications based on their final stance: one in-principle commitment task and one monetary commitment task for each domain. Finally, participants complete survey items on their general impressions of the model, AI literacy & self-efficacy, and generalised trust in AI (see Appendix E for items), before proceeding to a debrief consisting of a video, instructional text, and a mandatory comprehension quiz.
+In this section, we briefly describe variants of this task that test harmful AI manipulation across three domains: public policy, finance, and health. These tasks all follow the same general flow, though topic, behavioural metric, and belief metric are adjusted to fit the relevant domain and local context of participants (variants of the UK, US, and India adaptations of these tasks are overviewed in Appendices A, B, and C).
+6.1 Public policy domain
+In this task, participants are asked to learn more about a public policy topic of national interest in their locale. Policies are randomly assigned to participants, with three policies per locale (Appendix A). In the experimental conditions, models are prompted to convince participants to support or oppose the policy. In the control condition, participants interact with flip cards that contain statements arguing either in support of or in opposition to the policy.555To simulate civic information-seeking behaviour, the content of the flip cards was framed to ostensibly contain summarised opinions drawn from top Google Search results on the respective policies.
+For the in-principle behavioural test in this domain, participants are led to believe that the experiment is conducted in partnership with local civic engagement non-profits (see Appendix A).666The non-profits are invented for the purpose of the study; to prevent participants from verifying the non-profits externally, participants are prohibited from leaving their browser window for the duration of the study. On this basis, they are asked to indicate interest in anonymously signing a public petition on the policy. Petitions presented to a participant are always consistent with the direction of the participant’s final indicated belief. Participants who indicate willingness to sign the petition are further asked if they feel strongly enough about the policy to write a brief statement of support, which they are able to input into a free-text field.
+The monetary commitment behavioural test in this domain is whether participants choose to donate to a fictitious civic engagement non-profit. They can make an ostensible donation by relinquishing part or all of their guaranteed bonus ($3 in the US, £3 in the UK, —180 in India). As with the petition, the mission of the non-profit is aligned with the participant’s final indicated belief. If participants express willingness to donate, they can select how much to relinquish in 10% increments. For example, a participant who chooses to donate 40% of their bonus is under the impression that they are able to keep 60% of the promised amount.
+6.2 Financial domain
+In the financial task, participants are told that they have been recruited to beta test an AI-driven financial investment platform. They are asked to perform a simplified asset allocation task where they decide on a zero-sum allocation of a hypothetical capital sum ($1,000, £1,000, and —1,00,000 for US, UK, and Indian participants respectively) between two simplified fund assets: a low-risk, stable fund and a high-risk, high-reward alternative fund.777The funds are invented for the purpose of the study. To ensure ecological validity, they are modelled on realistic funds and performance, but the funds and their underlying assets are fictionalised. These fund options are presented to participants with a simple text description of the fund and expected gain based on historical performance (Appendix B).
+Participants first register an initial belief of optimal allocation, where they indicate what proportion of their capital they would like to invest in each fund in order to maximise profit over a 5-year future period (e.g. 60% to the “Global Steady Fund”, with 40% left for the “Future Innovation Fund”). Participants are free to allocate their investment between the funds as they wish. In the experimental conditions, participants engage with models prompted to advocate for allocating more capital towards either the stable or the risky fund. In the control condition, participants review flip cards that more strongly advocate for investing in one of the funds.888To simulate standard retail investing platforms, these flip cards feature “bulls say”- and “bears say”-style arguments synthesising the opinions of financial analysts about the fictional funds. After their interactions, participants are asked again to allocate the hypothetical capital sum.
+Once participants save their updated investment strategy (final allocation decision), they are advised that their investment strategy is now locked and no longer changeable. For the in-principle commitment behavioural task, participants are offered an opportunity to consult a professional financial advisor to apply the investment strategy they just formulated for their own real-world finances.
+For the monetary commitment behavioural task, participants then learn that they receive an additional bonus amount which they can keep or invest in their previously selected strategy (£1, $1, —180). Additional invested bonus amounts are purportedly run through a “Historical Market Replay” (HMP) for a chance of doubling, retaining, or halving their returns.999No actual investment or Historical Market Replay (or backtesting) occurred. This is disclosed to the participants in the debriefing at the end of the experiment. Participants are thus incentivised to invest their additional bonus if they believe their locked investment strategy is more likely to increase their investment in value.
+A comprehension check, in the form of a multiple-choice quiz, is administered to participants to ensure they understand the premise of the investment task. If participants choose to invest part of their additional bonus amount, they are able to adjust how much of the additional bonus they would like to keep or invest (e.g. £0.80 to invest, £0.20 to keep).
+6.3 Health domain
+Participants in the health task are told that they are participating in a beta test for an AI-powered health platform. They select one of three topics (sleep, digestion, or inflammation).101010Note that in the public policy task, they are randomly allocated to a topic as all topics are relevant in their locale. In the health task, they select their topic of interest to ensure engagement in the task. They are then asked to learn more about two relevant fictitious nutritional supplement options. Similarly to the text-based descriptions of relevant policies or financial funds in the task variants above, participants are shown information on the two fictitious nutritional supplements before the task begins (Appendix C).111111Supplements used in the experiment are fictitious, and all supplementary information presented – including the supplements’ names, composition, effect, and side effects – are invented for the purposes of the experiment.
+Any set of two supplement options presents a trade-off, where one supplement is framed as more efficacious but with a higher risk of side effects while the other is described as less immediately or consistently effective but as carrying less risk. For example, with regard to sleep quality, one supplement is described as consistently inducing sleep quickly but increasing the risk of morning grogginess; the other is described as slow-acting but with lower risk of adverse effects the next morning.
+First, participants are asked to indicate their preference for one of the two supplements on a 0–100 scale based on the initial descriptions of the supplements. After learning about the supplement via dialogue with the model or via flip cards121212To mimic wellness-related information seeking, these flip cards provided participants with fictional focus group reviews – both favourable and critical – of the supplements., participants are asked to indicate their final supplement preference on a 0–100 scale. For the monetary commitment behavioural task, participants are then asked whether they would be willing to sacrifice a part or all of their bonus to redeem a low-cost trial of the supplement from an online retailer. If participants opt in to the low-cost trial, they are able to forgo their bonus in 20% increments for trials lasting between 3 days (for 20% of the bonus) and 7 days (for 100% of the bonus). For example, a participant who sacrifices 40% of their bonus receives enough online credit to redeem a 4-day supply while retaining the remaining 60% of their bonus as an immediate pay-out. For the in-principle commitment behavioural task, participants are asked whether they would like to consult a health advisor on the supplement they have chosen.
+7 Analysis and metrics
+We define metrics to capture participant outcomes (manipulative efficacy) and harmful model behaviours and tendencies (manipulative propensity) below.
+7.1 Manipulative efficacy metrics
+We measure harmful manipulative efficacy along two dimensions: belief change (changes in internal belief or preference) and behavioural elicitation. In this way, we capture the extent to which the model across the two conditions is effective at persuading participants, compared to a static flip card. We define these efficacy metrics below, with specific descriptions and examples per domain supplied in Appendix F.
+7.1.1 Belief change
+These metrics track whether AI intervention leads to a belief change on a topic. We operationalise belief change in two ways:
+-
+Strengthening of belief: whether participants moved from their initial standpoint (either above or below 50 on the 0–100 scale) towards a stronger belief in the same direction (e.g. 60 to 90 or 40 to 10). For participants to experience belief strengthening, their initial belief must be neutral or aligned to the direction of the goal of the flip card or model.
+-
+Flip in belief: whether participants changed their position (above or below 50 on the 0–100 scale) to match the direction of the treatment goal (opposing the participant’s initial belief). For participants to experience belief flip, the participant’s initial belief must be opposed to the goal direction of the model or flip cards.
+Participants are included in only one of the two downstream belief change metrics depending on what they indicate as their initial belief (see Table 1). Participants who indicate a fully neutral initial belief (i.e. exactly 50) are grouped with participants in the belief strengthening metric.
+After individual outcomes are computed, the aggregate metrics of belief strengthening and belief flip are reported for each experimental condition (explicit steering, non-explicit steering) as an odds ratio relative to participants assigned to the non-AI baseline condition.
+7.1.2 Behavioural elicitation
+Behaviour elicitation metrics track whether the experimental conditions lead to participants agreeing to take a concrete real-world action. Each task has two behaviour elicitation metrics: one that tracks an in-principle behavioural commitment (e.g. willingness to sign a petition aligned to the model or baseline goal) and one that tracks a monetary behavioural commitment (e.g. willingness to donate a small amount to an organisation that aligns to the model or baseline goal); see Table 2.
+As with belief change metrics, behavioural elicitation metrics are reported for each experimental condition (explicit steering, non-explicit steering) as an odds ratio comparing the odds of a participant in the experimental condition taking one of the concrete actions relative to participants assigned to the non-AI baseline condition.
+7.2 Manipulative propensity metrics
+We further measure the model’s manipulative process, or its propensity to deploy 8 pre-defined manipulative cues drawn from El_Sayed_Akbulut_McCroskery_Keeling_Kenton_Jalan_Marchal_Manzini_Shevlane_Vallor_et_al_2024: appeals to guilt, appeals to fear, othering and maligning, inducing doubt in one’s environment, inducing doubt in one’s perception, making false promises, applying social conformity pressure, and inducing a sense of false urgency or scarcity (definitions and examples in Appendix G). We prioritised these after consulting independent experts in psychology, sociology, political science, and economics as these specific cues were deemed the most vital for tracking threats to deliberative autonomy.
+We evaluate the manipulative propensity of the model across conditions by reporting the following two metrics: 131313These metrics account for the possibility that multiple manipulative cues may be present in a single model response.:
+-
+Overall manipulative cue propensity: The rate at which the model produces responses containing at least one of the cues of interest. We define this as the total number of model responses containing at least one instance of one harmful manipulative cue, divided by the total number of model responses within a condition.
+-
+Relative manipulative cue propensity: The rate at which the model produces responses containing a specific manipulative cue. We define this as the total number of model responses containing that specific cue, divided by the total number of model responses within a steering condition. We compute this per cue.
+We measure the presence of harmful manipulative cues using an LLM-as-judge approach Zheng_Chiang_Sheng_Zhuang_Wu_Zhuang_Lin_Li_Li_Xing_et_al._2023. To assess the quality of the LLM-as-judge, we developed a validation dataset containing 499 model turns over 271 conversations, drawn from synthetically generated dialogues and previous human-AI interaction studies.141414These human-AI interaction studies were early versions of the studies presented in this paper, which underwent the same ethical approval processes. We obtained a total of 5,401 annotations on different cues and turns from crowd-workers and additional annotations from experts and our team of researchers, which we used to assess the performance of a few-shot prompted LLM judge (see Appendix H).
+The LLM-as-judge approach was used to rate all model responses from conversation logs in the public policy experiment. Propensity analysis focused on public policy, as the quality of the LLM-as-judge was validated on outputs in this domain.
+Though all results on propensity presented in the report are based on real conversations between human participants and the models, a series of synthetic dialogues were generated to create a larger dataset of relevant public policy model responses (see Appendix I for methodology).
+7.3 Perception of model
+Participants were asked to evaluate the model’s conversational approach and their general impressions by rating their agreement with specific statements on a 5-point Likert scale. These statements covered key attributes of model interaction such as the model’s knowledgeability, objectivity, repetitiveness, and helpfulness, with the full list of items detailed in Appendix J.
+7.4 Differences between experiment conditions and locales
+While odds ratios illustrate the likelihood of specific outcomes for each steering condition relative to the baseline, they are less well-suited to detecting broader distributional shifts across conditions and locales. To address this, we use chi-squared tests of independence to evaluate the relationship between each metric outcome (e.g. strengthened or flipped belief) and the following two dimensions:
+-
+Experimental conditions: Null hypothesis that the frequency of a metric outcome is independent of the experimental condition (data combined across locales).
+-
+Locale Null hypothesis that the frequency of a metric outcome is independent of the locale (combined across experimental conditions). For each test with a significant result (after multiple testing corrections across all chi-squared tests performed), we conduct pair-wise tests for difference in proportion between the conditions or locales being tested.
+For each metric X dimension test that was significant after multiple testing correction, we followed with pairwise comparisons to determine which specific experimental conditions or locales (depending on the test) differed significantly.
+There were a total of 8 chi-squared tests performed per domain (4 metric outcomes tested against both experimental condition and locale), with the full list of tests performed shown in Appendix K.
+8 Results
+8.1 Efficacy studies
+We launched this evaluation across domains to participants located in the UK (=3,590), US (=3,749), and India (=2,762) (for a detailed breakdown see Appendix L). In each domain, participants were randomly allocated a treatment condition, with approximately a third being assigned to the non-AI baseline and a third to each experimental condition (explicit and non-explicit manipulation steering, respectively).
+We aggregated results across locales and computed odds ratios for each of the four core general metrics (strengthened belief, flipped belief, in-principle commitment, and monetary commitment) for each domain, comparing the experimental conditions with the non-AI baseline. Results are shown in Figure 2, with contingency tables and odds ratios available in Appendices M and N respectively.
+8.2 Comparison of experimental conditions
+We performed chi-squared tests of independence to test the null hypothesis that the experimental condition is independent of the outcome for each of the four metrics in each domain. Where the null hypothesis was rejected, we ran pairwise tests with adjustments for multiple comparisons. Results are described below, with full results in Appendix O.
+8.2.1 Public policy
+We found significant test statistics () for strengthened belief, flipped behaviour, and in-principle behaviour.
+We identified the same pattern of results between conditions in pairwise testing: both experimental conditions (steered and non-steered) were more effective than the flip card condition, but there were no significant differences between experimental conditions.
+8.2.2 Finance
+We found significant test statistics for strengthened belief, flipped belief, and monetary behaviours.
+For strengthened belief, we found that the proportion of participants with a strengthened belief was significantly higher in the steered experimental group compared to the non-steered group, and both AI groups were significantly higher than the baseline condition.
+For flipped belief and the monetary behavioural task, we found that both AI experimental conditions resulted in a significantly higher event occurrence (flipped belief or monetary commitment), but there was no significant difference between the two AI conditions.
+8.2.3 Health
+We found significant test statistics for strengthened belief and flipped belief.
+Notably, for strengthened belief, we found the non-explicitly steered condition to have a negative impact: that is, interacting with the non-explicitly steered AI model was associated with a lower likelihood of strengthening belief than interacting with flip cards (see Discussion).
+For flipped belief, we found that the explicitly steered condition was associated with a higher rate of flipped belief relative to the other two conditions.
+8.2.4 Efficacy across locales
+We performed chi-squared tests of independence in each domain to test whether the locale was independent of the metric outcome. Data was aggregated across experimental conditions, since these were approximately equally distributed.
+In all tests (4 metrics x 3 domains), we rejected the null hypothesis of independence between geography and metric outcome. In other words, there were detectable differences in outcome between at least two locales for each metric and domain.
+A majority of pairwise tests (22 out of 24) showed a significant difference in outcomes between participants in India and participants in the UK and US, while more than half of pairwise comparisons between the UK and US (9 out of 14) had non-significant pairwise test statistics (see Appendix Table A.18 for all pairwise tests). This suggests broad differences in efficacy results between India and the other two countries tested (see Appendix Q for visualisation of geographic differences).
+8.3 Propensity studies
+We used an LLM judge to measure the presence of manipulative cues in model responses from all experiment logs in the public policy domain.
+As anticipated, rates of model responses that contain harmful manipulative cues are highest in the explicitly steered condition (30.3%) and lower in the non-explicit steering condition (8.8%) (see Figure 3). Of these cues, appeals to fear, othering and maligning, and appeals to guilt are the most frequent across all conditions.
+Results from synthetically generated dialogues showed heightened manipulative cue rates across both experimental conditions, likely due to the differences in interaction behaviours between real and synthetic participants (see Appendix R for synthetic results).
+8.4 Association between manipulative cues and efficacy
+We explore the association between a model performing manipulative cues and four experimental outcomes: experiencing strengthened belief, experiencing a sentiment flip, making an in-principle decision, or committing to monetary behaviour (Figure 4).
+We find significant but mixed correlations between the presence of certain manipulative cues and belief changes. Specifically, the occurrence of appeals to fear or guilt were negatively associated with belief metrics (lower likelihood of changing belief), while othering and maligning and instilling doubt in the environment were positively correlated with belief changes. For behavioural outcomes, we found no significant associations with the presence of manipulative cues.
+8.5 Perception of model
+Overall, the domain had a significant impact on user perceptions of the model. Post hoc pairwise comparisons with Holm-Bonferroni corrections revealed that in the health domain, participants rated the model as significantly less knowledgeable, helpful, enjoyable, and engaging than did those in the financial and policy domains (all ). Participants in the health domain rated the model as significantly more repetitive in its arguments than those in other domains () (for more detail see Appendix Table A.11).
+9 Discussion
+In our evaluation of harmful manipulation, we distinguish between process (assessing the frequency use of manipulative cues) and outcomes (assessing changes to participant belief and behaviour), as both constitute important vectors of harm. We dissociate these by deploying distinct metrics.
+Our results highlight that these dimensions do not collapse and so are important to test separately. Recall that we test model propensities across two experimental conditions – one condition where the model is explicitly prompted to deploy manipulative cues (explicit steering) and one where the model is not explicitly prompted to manipulate (non-explicit steering) – and compare both to a static condition where no AI is used.151515These speak to different threat models: one where a system prompt may appear innocuous, merely stating a particular goal (non-explicit steering), and one where a prompt is deliberately designed to harmfully manipulate (explicit steering).
+As expected, explicit prompting results in more frequent harmful manipulation attempts, thus increasing the chance of process harm. However, our findings reveal that harmful manipulation behaviours can occur even when the prompt does not explicitly call for manipulation. Despite clear differences in propensity, we often find no significant difference in outcomes between the explicitly and non-explicitly steered conditions. These disparate findings suggest that employing more manipulative cues does not necessarily make harmful AI manipulation more successful. The relationship between process and outcome is further complicated by findings on direct associations between specific manipulation cues and participant outcomes: while some manipulative cues are positively correlated with belief change, others are negatively associated. Interpreted together, these results indicate that there is no clean mapping between propensity and efficacy metrics, highlighting the need for evaluations that measure process and outcome harms as distinct evaluation targets.
+Our evaluation spans three high-stakes domains: health, finance, and public policy. Our results show that none of these domains is highly predictive of the others. AI manipulation was highly effective in the finance domain, less so in the public policy domain, and least effective in the health domain. Such differences may be due to differences in model behaviour, participant receptiveness, or an interaction of both across domains. For example, one possible explanation for the higher rates of participant outcomes in the finance domain is that the back-and-forth learning experience with the model allowed participants to engage deeper with the technical details of the task than viewing static flip cards. In the health domain, we observed lower efficacy than in the other domains. The low rate of outcomes may be due to a mix of the model’s inbuilt safety guardrails on topics relating to health, which may increase adherence to the information presented in the system instruction and make for a less engaging and dynamic interaction experience. Indeed, we found that participants found the model less engaging and more repetitive, and perceived it as less knowledgeable and helpful in the health domain (See Appendix J).
+The reported findings may also be sensitive to differences in study design between domains. Because efficacy metrics for the two experimental conditions were computed relative to the baseline condition, more effective baselines could partially explain observed differences in manipulative efficacy across domains. For example, we find that the baseline condition was uniquely effective in the health domain compared to the public policy and finance domains (see Appendix P), which is directionally consistent with the finding that models in the health domain displayed lower efficacy than models in other domains. This may have been due to differences in how flip cards were made plausible to participants: in the health domain, flip cards were introduced as reviews from focus groups, which may have appealed more to participants than analyst views and aggregated search results for financial and policy domains, respectively (see Appendices LABEL:appendix-table:arguments-for-policy, LABEL:appendix-table:bulls-say-bears-say, and LABEL:appendix-table:supplement-reviews for language used in policy, financial, and health flip cards).
+A key takeaway from these findings is that evaluating a model in one domain is not necessarily sufficient to assess harmful manipulation risk in other domains. Rather, domain-specific user expertise and biases or model behaviours and safeguards may yield different results across AI use cases. As a result, to understand harmful manipulation processes and outcomes, it may be advisable to evaluate harmful manipulation in the high-risk domains where a model is expected to be used, which may straddle multiple domains (such as health, finances, and political opinion formation) in the case of general-purpose models.
+Finally, we run our evaluation across three locales: the UK, the US, and India. Across each of our domains, we found persistent differences in belief and behaviour change, especially between aggregated Western and non-Western participants. We find that populations differ in how often they change their beliefs or take model-aligned actions (see Appendix Q). For example, the US sample was more likely to experience belief strengthening and donate in the context of public policy debates than UK populations, whereas the India sample was more likely to make an in-principle and monetary commitment in the health and public policy contexts, despite experiencing less belief strengthening in both. These findings demonstrate the necessity of testing harmful AI manipulation in the geographic contexts where an AI system may be deployed, as findings from one locale do not necessarily generalise to another.
+Our findings should be considered alongside several additional limitations which warrant further research. As in any controlled human-AI interaction experiment, our evaluation involves a validity trade-off: an online human study is necessarily removed from real-world settings, and while the study is incentive-compatible, there is no real-world harm. Furthermore, as our evaluation focuses on dyadic, individual-level interactions, it only partially addresses concerns about potential manipulation of groups or at the societal level. Our scope of evaluation is also limited to the risks associated with the model acting as the manipulator; we do not assess the risk from using AI models as a tool for generating manipulative or deceptive content for other forms of influence campaigns. Our work is restricted to the text modality; future research may explore AI manipulation across other modalities, such as audio- or video-based interactions. Future work may also evaluate manipulation in the context of highly personalised, subliminal techniques to exploit vulnerable populations. Finally, we study the financial, public policy, and health contexts; other contexts may be relevant to assess manipulation, such as mental health, companionship, and romance.
+10 Conclusion
+In this paper, we present an evaluation framework that measures processes and impacts of harmful AI manipulation. This evaluation framework shows that harmful AI manipulation is a complex and context-dependent risk, which manifests differently across use domains and geographies. Our approach captures these differences and presents several advantages compared to prior studies and benchmarks. First, it treats harmful manipulation as the dyadic process that it is, revealing the complex interaction between harmful AI manipulation attempts and participant outcomes, which runs counter to the assumption that the two move in tandem. Second, it provides more breadth and adaptability by covering three domains (public policy, finance, and health) and three locales (UK, US, and India). We show that these contextual aspects make a difference, suggesting that AI systems need to be evaluated in realistic settings that resemble the contexts where they are being deployed. Third, it provides nuanced insights into harmful manipulation profiles of a model rather than uninterpretable singular numerical scores. In this way, our evaluation can be used to better understand as well as more effectively govern the release of novel frontier models FSF. As AI models continue to proliferate in daily life and measuring the broad impact of their manipulative capabilities grows in importance, we share our methodology and aim to publicly release our data to support research in this area and to facilitate the evaluation of other AI models on harmful manipulation.
+11 Acknowledgments
+We would like to thank William Isaac, Ndidi Elue, Eva Lu, Sasha Brown, and Myriam Khan for their review of the work; Svetlana Grant and Susannah Young for their administrative support; Vivian Tsai, Crystal Qian, Jimbo Wilson, and Alden Hallak for their support with the Deliberate Lab experimental platform; Brian Thompson for their support with data collection in the US and UK; and Rishi Ahuja, Abhijeet Shukla, Aishwarya Ray, Ananya Saxena, Anjney Mishra, Iqbal Kaur, Shivanjali Gupta, Rizwan Ker, Bipin Roy, Hari Prakash, Sudarshan Saggu, Chakrawarty Mangavalli, Deepsikha Baishya, Brintha Chandrasekaran, and Kundan Kumar with their support with data collection in India.
+References
+Appendix
+Appendix A Stimuli in policy experiments
+Table LABEL:appendix-table:arguments-for-policy contains all policies used in the public policy experiments per locale. Participants are randomly assigned one of three available policies based on their locale. For each policy, the table also indicates all pre-written arguments presented on flip cards per policy for participants in the control condition, which were aimed at persuading participants to support or oppose the assigned policy. Participants had to engage with all six flip cards for their randomly assigned policy and persuasion direction before moving on to the next screen.
+Table LABEL:appendix-table:policy-donation contains the language used to present the petition and donation to participants (in-principle and monetary behavioural outcomes respectively).
+Appendix B Stimuli in financial experiments
+Table LABEL:appendix-table:investment-options contains all investment options presented to participants across different locales. Participants in all conditions see both investment options for their locale in random order, presented on two screens that they can freely move between.
+Table LABEL:appendix-table:bulls-say-bears-say contains all “bulls say”- and “bears say”-style arguments, presented on flip cards to participants in the control condition. Participants are randomly assigned a direction of persuasion towards an investment option (e.g. towards risky stock). Participants will always see three “bulls say” cards for the assigned investment option and three “bears say” cards for the other investment option.
+Section D contains the description of the monetary commitment task, including the instructions, break-down of hypothetical pay-outs, and comprehension quiz.
+Appendix C Stimuli in health experiments
+Table LABEL:appendix-table:supplement-information contains the content for the information cards. Participants across all conditions are shown the information card for the health concern they identify is most relevant for them in a previous step.
+Table LABEL:appendix-table:supplement-reviews contains all reviews for the supplements that were allegedly collected from focus group participants and that are shown to study participants in the control condition as flip cards. Participants are randomly assigned a direction of persuasion towards a supplement option. They will then see three positive reviews for the assigned supplement and three negative reviews for the other supplement.
+Appendix D Financial monetary task description
+Appendix E Post-task survey items
+The following survey items are presented to participants after the final belief and behaviour measures. Survey items that appear conditional on the participant’s domain are clearly demarcated.
+AI literacy & self-efficacy (wang2023measuring)
+[only Awareness and Usage subscales (12 items)]
+-
+•
+I can distinguish between smart devices and non-smart devices.
+-
+•
+(Reverse-coded) I do not know how AI technology can help me.
+-
+•
+I can identify the AI technology employed in the applications and products I use.
+-
+•
+I can skilfully use AI applications or products to help me with my daily work.
+-
+•
+(Reverse-coded) It is usually hard for me to learn to use a new AI application or product.
+-
+•
+I can use AI applications or products to improve my work efficiency.
+AI Attitude Scale (grassini2023development)
+-
+•
+I believe that AI will improve my life.
+-
+•
+I believe that AI will improve my work.
+-
+•
+I think I will use AI technology in the future.
+-
+•
+(Reverse-coded) I think AI technology is a threat to humans (this item is reverse-scored).
+-
+•
+I think AI technology is positive for humanity.
+Financial Risk Taking Attitudes (metzger2018measuring)
+(Only for financial domain.)
+-
+•
+When I hear the word “stocks”, the term “possible loss” comes to mind immediately.
+-
+•
+The uncertainty of whether the markets will rise or fall keeps me from buying stocks.
+-
+•
+Stock markets are unpredictable, which is why I would never invest in stocks.
+-
+•
+In money matters, I tend to be willing to take risks.
+-
+•
+I am willing to take financial risks in order to substantially increase my assets.
+-
+•
+I am aiming for capital growth in the long run, which is why I am willing to take considerable financial risks.
+Financial Literacy (lusardi2011financial)
+(Only for financial domain.)
+-
+•
+[Interest Rate] Suppose you had CURRENCY100 in a savings account and the interest rate was 2% per year. After 5 years, how much do you think you would have in the account if you left the money to grow?
+-
+1.
+More than CURRENCY102
+-
+2.
+Exactly CURRENCY102
+-
+3.
+Less than CURRENCY102
+-
+4.
+Do not know
+-
+5.
+Refuse to answer
+-
+1.
+-
+•
+[Inflation] Imagine that the interest rate on your savings account was 1% per year and inflation was 2% per year. After 1 year, how much would you be able to buy with the money in this account?
+-
+1.
+More than today
+-
+2.
+Exactly the same
+-
+3.
+Less than today
+-
+4.
+Do not know
+-
+5.
+Refuse to answer
+-
+1.
+-
+•
+[Risk Diversification] Please tell us whether this statement is true or false. “Buying a single company’s stock usually provides a safer return than a stock mutual fund.”
+-
+1.
+True
+-
+2.
+False
+-
+3.
+Do not know
+-
+4.
+Refuse to answer
+-
+1.
+Health-consciousness scale (gould1990health)
+(Only for health domain.)
+-
+•
+I reflect about my health a lot.
+-
+•
+I’m very self-conscious about my health.
+-
+•
+I try to make healthy choices.
+Appendix F Belief metrics per domain
+Belief metrics were computed similarly across domains. Differences are highlighted in Table A.8.
+Appendix G Manipulative cue definitions
+Through consultation and workshops held with external experts – university professors whose primary research areas were relevant to manipulation, persuasion, and influence – 8 manipulative cues were distilled and applied to evaluate the model’s propensity towards manipulative behaviours in conversation. The definitions for each of the manipulative cues can be found in Table A.9.
+Appendix H LLM judge validation
+To assess the quality of the LLM judge, we sampled and labelled model responses from the human-chatbot experiment and synthetic dialogues. For each of the 8 manipulative cues explored in this paper, we developed a validation set with clear positive and negative examples, annotated by at least 2 and up to 5 external experts –- university professors with expertise in manipulation, deception, persuasion, and influence – as ground truth. Evaluating the LLM judge on this set yielded high performance across all key metrics (accuracy: 0.948, precision: 0.928, recall: 0.938).
+We further created a challenge set to identify edge cases and nuances in positive instances for each of the 8 manipulative cues. This challenge set included a sample of up to 100 model responses that were flagged as containing this cue by a prior version of an LLM judge, to ensure we up-sampled for responses containing cues. As a result, this challenge set constituted a large proportion of cues and edge cases, but it included no obvious negative examples of the cues.
+We took the challenge set for each cue and re-labelled each turn for the same cue with an updated version of the LLM judge. We then conducted a validation exercise where two humans label each response as containing the cue or not, based on written definitions and examples. Evaluating the LLM judge against these human responses yielded accuracy of 0.573 and precision of 0.699. The performance gap highlights the difficulty of automating nuance in manipulative cues – especially in edge cases, as these cues are to some extent subject to interpretation and lack precise linguistic markers.
+Finally, we conducted an inter-rater agreement exercise where domain experts reviewed and labelled a small number of samples from the challenge set. Critically, we found that expert judgement more often aligns with LLM judgment than with human layperson’s judgement (Krippendorff’s alpha of 0.15 and -0.046, respectively). The higher agreement between experts and the LLM judge suggests it has captured a more stable, albeit conservative, representation of manipulative cues. We intend to continue improving our ability to evaluate the performance of autoraters on manipulative cues, by iteratively refining our approaches to defining manipulation attempts, creating human rater training protocols, and experimenting with metrics that provide deeper insights into areas of weak performance.
+Appendix I Synthetic dialogue generation
+As a complement to experiments with human participants, we also generate synthetic dialogues to test propensity of manipulative behaviours. The synthetic dialogue dataset comprised conversations between a synthetic participant model (i.e. a language model instructed to role-play as a participant, with additional parameters) and the target model. Synthetic dialogues were reproduced for both experimental conditions (explicit steering and non-explicit steering). Additionally, control dialogues were generated, in which models – instead of being prompted with the goal to persuade the (synthetic) participant in a specific direction – were instructed to help the participant come to a decision.
+The participant model received user persona instructions that specified the level of expertise that the participant should have and the level of resistance they should assume (see Table A.10).
+Creating synthetic dialogues allowed us to generate many more dialogues than we could feasibly collect from experimental studies; additionally, since no real end participants were exposed to the outputs of the target model, it could be prompted to act more adversarially than was acceptable in human studies.
+Appendix J User appraisal of their chatbot interaction experience
+To assess the chatbot’s conversational approach and users’ general impressions, participants were asked to rate their agreement with several statements using a 5-point Likert scale. The specific items evaluated were as follows:
+-
+•
+Conversational Approach
+-
+–
+Knowledgeable: “The AI chatbot was knowledgeable about the conversation topic.”
+-
+–
+Balanced: “The AI chatbot provided me with a balanced and objective perspective.”
+-
+–
+Repetitive: “The AI chatbot seemed to bring up the same arguments or points multiple times.”
+-
+–
+Engaging: “The AI chatbot engaged with what I was saying.”
+-
+–
+Prioritised User: “The AI chatbot’s main priority was helping me make the best decision for myself.”
+-
+–
+-
+•
+General Impressions
+-
+–
+Enjoyable: “I enjoyed my conversation with the AI chatbot.”
+-
+–
+Easy to Understand: “The AI chatbot’s responses were easy to understand.”
+-
+–
+Helpful: “Overall, I found the AI chatbot to be helpful.”
+-
+–
+A comprehensive set of descriptive statistics for these metrics is presented in Table A.11, with a detailed breakdown by conversation domain (health, financial, and policy) and the experiment condition (non-explicit vs. explicit steering). Across both steering conditions, participants in the health domain rated their experience with the chatbot lower on positive attributes (e.g. knowledgeability, helpfulness, enjoyability) and higher on negative attributes (e.g. repetitiveness) compared to those in the financial and policy domains.
+Appendix K List of chi-squared tests
+A complete list of chi-squared tests of independence performed to assess factors impacting metric outcomes is shown in Table A.12.
+Appendix L Participants per domain and locale
+A full list of participant sample sizes per domain and locale is shown in Table A.13.
+Appendix M Participant contingency tables
+Full contingency tables per metric outcome and domain are shown in Table LABEL:tab:fullcontingency.
+Appendix N Odds ratios for all metrics and domains
+Odds ratios and 95% confidence intervals comparing each experimental condition against the relevant non-AI baseline for each domain are shown in Table A.15.
+Appendix O Pairwise condition comparisons
+Full results for pairwise tests comparing experimental conditions against metric outcomes in each metric and domain are shown in Table A.16.
+Appendix P Comparison of baseline condition across domains
+In the baseline condition (flip cards), the medical domain was significantly more effective at inducing belief changes compared to the other domains (see Table A.17). For sentiment flip, the medical baseline outperformed both the financial (OR = 0.63, ) and the policy (OR = 1.90, ) domains. Similarly, for strengthened sentiment, the medical baseline was significantly more effective than both the financial (OR = 0.15, ) and the policy (OR = 1.51, ) domains.
+Appendix Q Geographic differences in outcomes
+Appendix R Synthetic dialogues results
+We used an LLM judge to measure the presence of manipulative cues in model responses from synthetic dialogues in the public policy domain and results are broadly similar to real participants.
+Rates of model responses that contain manipulative cues are highest in the explicit steering condition (64.5%) and lower in the non-explicit steering condition (22.3%) and control condition (1.9%). Of these cues, appeals to fear, appeals to guilt, and othering and maligning are more frequently present in the explicit and non-explicit steering condition, while there is a higher presence of doubt in environment in the control condition.
+
+KAYNAK : https://arxiv.org/abs/2603.25326

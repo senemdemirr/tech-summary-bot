@@ -1,4 +1,3 @@
---- claude | Elevated error rates on Opus 4.6 | score=90.06 ---
 Subscribe to updates for Elevated error rates on Opus 4.6 via email and/or text message. You'll receive email notifications when incidents are updated, and text message notifications whenever Claude creates or resolves an incident.
 VIA SMS:
 Afghanistan (+93)
@@ -197,47 +196,3 @@ Enter the OTP sent
 To receive SMS updates, please verify your number. To proceed with just email click ‘Subscribe’
 
 KAYNAK : https://status.claude.com/incidents/b9802k1zb5l2
-
---- claude | Elevated errors on Claude Opus 4.6 and Sonnet 4.6 | score=57.67 ---
-Mar
-27
-,
-00:49
-UTC
-Resolved
-- This incident has been resolved.
-Mar
-26
-,
-23:06
-UTC
-Identified
-- We have identified an issue resulting in a low rate of errors on requests to Claude Opus 4.6 and Sonnet 4.6, we are continuing to work to fully resolve this issue and will provide additional updates.
-Mar
-26
-,
-21:56
-UTC
-Investigating
-- We are currently investigating an issue resulting in elevated errors on requests to Claude Opus 4.6 and Sonnet 4.6. We will provide an update as soon as possible.
-
-KAYNAK : https://status.claude.com/incidents/vcp3jwhttwrg
-
---- claude | Elevated errors for MCP calls | score=51.23 ---
-Mar
-26
-,
-22:41
-UTC
-Resolved
-- This incident has been resolved.
-Mar
-26
-,
-22:25
-UTC
-Investigating
-- We are currently investigating an issue resulting in elevated errors for some MCP calls. We will provide an update as soon as possible.
-
-KAYNAK : https://status.claude.com/incidents/zq248kgmyyyk
-

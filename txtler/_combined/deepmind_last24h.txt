@@ -1,5 +1,5 @@
---- deepmind | Lyria 3 Pro: Create longer tracks in more | score=38.40 ---
-Introducing Lyria 3 Pro, which unlocks longer tracks with structural awareness. We’re also bringing Lyria to more Google products and surfaces.
+--- deepmind | Gemini 3.1 Flash Live: Making audio AI more natural and reliable | score=43.33 ---
+Our latest voice model has improved precision and lower latency to make voice interactions more fluid, natural and precise.
 
-KAYNAK : https://deepmind.google/blog/lyria-3-pro-create-longer-tracks-in-more/
+KAYNAK : https://deepmind.google/blog/gemini-3-1-flash-live-making-audio-ai-more-natural-and-reliable/
 

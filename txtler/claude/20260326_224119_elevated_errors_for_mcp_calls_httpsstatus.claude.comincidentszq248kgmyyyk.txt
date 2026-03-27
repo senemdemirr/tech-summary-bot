@@ -1,0 +1,16 @@
+Mar
+26
+,
+22:41
+UTC
+Resolved
+- This incident has been resolved.
+Mar
+26
+,
+22:25
+UTC
+Investigating
+- We are currently investigating an issue resulting in elevated errors for some MCP calls. We will provide an update as soon as possible.
+
+KAYNAK : https://status.claude.com/incidents/zq248kgmyyyk

@@ -1,3 +1,0 @@
-Learn how OpenAI’s Model Spec serves as a public framework for model behavior, balancing safety, user freedom, and accountability as AI systems advance.
-
-KAYNAK : https://openai.com/index/our-approach-to-the-model-spec
