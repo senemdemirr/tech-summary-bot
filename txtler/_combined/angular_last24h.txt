@@ -1,0 +1,62 @@
+--- angular | Local AI, Reactive Routing, and the Vitest Migration! ⚡ | score=63.23 ---
+The Angular ecosystem is expanding beyond the browser’s traditional limits! From running AI models locally to migrating your entire test suite to
+Vitest
+, our community experts are leading the charge into a more performant future.
+Check out these latest deep dives:
+Why the Frontend Should Run AI Models Locally with ONNX
+Sonu Kapoor
+@SonuKapoor1978
+explores a fascinating shift in architecture: bringing AI directly to the client. Learn how to run
+AI models locally
+using ONNX and Angular for better privacy and lower latency.
+Read the article:
+https://thenewstack.io/why-the-frontend-should-run-ai-models-locally-with-onnx/
+Signal Forms: Smarter Inputs and Reactive Routing
+In this real-world guide, Sonu Kapoor
+@SonuKapoor1978
+breaks down how to use
+Angular Signals
+to create highly responsive inputs and manage complex routing states with ease.
+Check out the deep dive:
+https://www.codemag.com/Article/2511041/Angular-Signals-in-the-Real-World-Smarter-Inputs-and-Reactive-Routing
+Angular Signals: A Recap of the Framework’s Evolution
+Fanis Prodromou
+@prodromouf
+provides a comprehensive retrospective and look-ahead. See how far
+Signals
+have come and how they continue to redefine the core DNA of Angular development.
+Watch the video:
+https://youtu.be/MSGYnc83UJY
+Signal Forms: Custom Controls (French)
+Kevin Davila
+@kevindaviladev
+continues his expert series on the newest version of Angular. This installment focuses on building
+Custom Form Controls
+specifically designed for the Signal Forms API.
+Read the blog (French):
+https://www.codeabien.com/blog/angular-signals-recap
+Vitest in Angular 21: What’s New and How to Migrate? (German & English)
+Johannes Hoppe
+@JohannesHoppe
+provides the ultimate guide to switching your testing environment. Whether you are reading in German or English, learn why
+Vitest
+is the new standard and how to migrate your code samples.
+Read the German guide:
+https://angular-buch.com/blog/2025-11-zu-vitest-migrieren
+Read the English guide:
+https://angular.schule/blog/2025-11-migrate-to-vitest
+Are you planning a migration to Vitest or experimenting with local AI?
+Your insights could help a fellow developer make the leap.
+Keep the momentum going!
+Use
+#AngularSparkles
+and
+#Vitest
+to share your migration tips and project wins 👇
+Local AI, Reactive Routing, and the Vitest Migration! ⚡
+was originally published in
+Angular Blog
+on Medium, where people are continuing the conversation by highlighting and responding to this story.
+
+KAYNAK : https://blog.angular.dev/local-ai-reactive-routing-and-the-vitest-migration-bdddad0cfa96?source=rss----447683c3d9a3---4
+

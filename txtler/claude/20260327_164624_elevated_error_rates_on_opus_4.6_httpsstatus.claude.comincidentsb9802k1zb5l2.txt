@@ -1,4 +1,3 @@
---- claude | Elevated error rates on Opus 4.6 | score=56.20 ---
 Mar
 27
 ,
@@ -50,29 +49,3 @@ Investigating
 - We are currently investigating this issue.
 
 KAYNAK : https://status.claude.com/incidents/b9802k1zb5l2
-
---- claude | Elevated connection reset errors in Cowork | score=43.02 ---
-Mar
-27
-,
-15:05
-UTC
-Resolved
-- This incident has been resolved.
-Mar
-25
-,
-16:56
-UTC
-Update
-- We are continuing to investigate connection errors which occur during Claude Cowork sessions. This issue can be resolved by restarting the Claude Desktop application.
-Mar
-25
-,
-14:33
-UTC
-Investigating
-- We are currently investigating this issue.
-
-KAYNAK : https://status.claude.com/incidents/d8r794mwjg8d
-
