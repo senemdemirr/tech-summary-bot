@@ -1,177 +1,79 @@
---- angular | Local AI, Reactive Routing, and the Vitest Migration! ⚡ | score=63.23 ---
-The Angular ecosystem is expanding beyond the browser’s traditional limits! From running AI models locally to migrating your entire test suite to
-Vitest
-, our community experts are leading the charge into a more performant future.
-Check out these latest deep dives:
-Why the Frontend Should Run AI Models Locally with ONNX
-Sonu Kapoor
-@SonuKapoor1978
-explores a fascinating shift in architecture: bringing AI directly to the client. Learn how to run
-AI models locally
-using ONNX and Angular for better privacy and lower latency.
-Read the article:
-https://thenewstack.io/why-the-frontend-should-run-ai-models-locally-with-onnx/
-Signal Forms: Smarter Inputs and Reactive Routing
-In this real-world guide, Sonu Kapoor
-@SonuKapoor1978
-breaks down how to use
-Angular Signals
-to create highly responsive inputs and manage complex routing states with ease.
-Check out the deep dive:
-https://www.codemag.com/Article/2511041/Angular-Signals-in-the-Real-World-Smarter-Inputs-and-Reactive-Routing
-Angular Signals: A Recap of the Framework’s Evolution
-Fanis Prodromou
-@prodromouf
-provides a comprehensive retrospective and look-ahead. See how far
-Signals
-have come and how they continue to redefine the core DNA of Angular development.
-Watch the video:
-https://youtu.be/MSGYnc83UJY
-Signal Forms: Custom Controls (French)
-Kevin Davila
-@kevindaviladev
-continues his expert series on the newest version of Angular. This installment focuses on building
-Custom Form Controls
-specifically designed for the Signal Forms API.
-Read the blog (French):
-https://www.codeabien.com/blog/angular-signals-recap
-Vitest in Angular 21: What’s New and How to Migrate? (German & English)
-Johannes Hoppe
-@JohannesHoppe
-provides the ultimate guide to switching your testing environment. Whether you are reading in German or English, learn why
-Vitest
-is the new standard and how to migrate your code samples.
-Read the German guide:
-https://angular-buch.com/blog/2025-11-zu-vitest-migrieren
-Read the English guide:
-https://angular.schule/blog/2025-11-migrate-to-vitest
-Are you planning a migration to Vitest or experimenting with local AI?
-Your insights could help a fellow developer make the leap.
-Keep the momentum going!
-Use
-#AngularSparkles
-and
-#Vitest
-to share your migration tips and project wins 👇
-Local AI, Reactive Routing, and the Vitest Migration! ⚡
-was originally published in
-Angular Blog
-on Medium, where people are continuing the conversation by highlighting and responding to this story.
-
-KAYNAK : https://blog.angular.dev/local-ai-reactive-routing-and-the-vitest-migration-bdddad0cfa96?source=rss----447683c3d9a3---4
-
---- claude | Elevated error rates on Opus 4.6 | score=56.20 ---
+--- claude | Dispatch sessions not responding in Claude Desktop | score=68.33 ---
 Mar
-27
+29
 ,
-16:46
+04:44
 UTC
 Resolved
-- This incident has been mitigated as of 9:30 PT / 16:30 UTC.
+- The issue affecting Dispatch has been resolved. We fixed an underlying issue that prevent the agent from sending responses to user messages. Please update to Claude desktop app 1.1.9493. We apologize for any inconvenience caused.
 Mar
-27
+29
 ,
-13:46
-UTC
-Monitoring
-- As of 6:40 PT / 13:40 UTC our error rate has returned to the baseline. We are still monitoring the current situation.
-Mar
-27
-,
-13:34
+00:53
 UTC
 Identified
-- We have mitigated the main issue and the error rate for Opus 4.6 is hovering around 0.4% which is still high, but much better than the performance during the previous hours. We are waiting for a more permanent fix to land in the near future.
-Mar
-27
-,
-12:09
-UTC
-Update
-- As of 5:00 PT / 12:00 UTC Sonnet 4.6 is now healthy. We are still working to fix Opus 4.6.
-Mar
-27
-,
-11:21
-UTC
-Update
-- Sonnet 4.6 is also showing elevated errors.
-Mar
-27
-,
-11:04
-UTC
-Update
-- We are continuing to investigate the ongoing incident.
-Mar
-27
-,
-06:59
-UTC
-Investigating
-- We are currently investigating this issue.
+- We've identified an issue in the latest Claude Desktop release (Claude 1.1.9310) where Dispatch sessions stop responding. Messages sent to Dispatch are received and processed, but replies do not appear in the conversation. We have identified the cause and are working on a fix. As a workaround, you can continue using standard Cowork sessions, which are unaffected.
 
-KAYNAK : https://status.claude.com/incidents/b9802k1zb5l2
+KAYNAK : https://status.claude.com/incidents/q5qk1234v205
 
---- openai | STADLER reshapes knowledge work at a 230-year-old company | score=53.65 ---
-Learn how STADLER uses ChatGPT to transform knowledge work, saving time and accelerating productivity across 650 employees.
-
-KAYNAK : https://openai.com/index/stadler
-
---- nextjs | v16.2.1-canary.11 | score=46.84 ---
+--- nextjs | v16.2.1-canary.12 | score=54.17 ---
 Core Changes
-[devtools] Show
-AggregateError.errors
-in the error overlay:
-#91835
 Upgrade React from
-8b2e903a-20260320
-to
 3cb2c420-20260324
+to
+9627b5a1-20260327
 :
-#91905
+#92015
+[experiment] Add useOffline flag with offline retry behavior:
+#92011
+adapters: remove unused suffix code:
+#91997
+[experiment] Add useOffline hook to expose offline state to userland:
+#92012
+[turbopack] Don't use turborepo to build the docker image:
+#92029
 Misc Changes
-[cna] Upgrade to Biome 2.4 with Tailwind support:
-#86065
-Rewrite agent rules to match bundled doc wording:
-#91995
-Narrow the opengraph-image function return type:
-#91893
+Use RcStr directly in napi(object) structs instead of converting to String:
+#92014
+Rename SingleModuleReference::asset to SingleModuleReference::module:
+#92028
 Credits
 Huge thanks to
-@bgub
+@acdlite
 ,
-@eps1lon
+@ztanner
 ,
-@gaojude
+@mmastrac
+,
+@sokra
 , and
-@remcohaszing
+@bgw
 for helping!
 
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.11
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.12
 
---- claude | Elevated connection reset errors in Cowork | score=43.02 ---
+--- claude | Elevated errors on Opus 4.6 Fast Mode | score=35.13 ---
 Mar
-27
+28
 ,
-15:05
+14:53
 UTC
 Resolved
 - This incident has been resolved.
 Mar
-25
+28
 ,
-16:56
+13:55
 UTC
-Update
-- We are continuing to investigate connection errors which occur during Claude Cowork sessions. This issue can be resolved by restarting the Claude Desktop application.
+Monitoring
+- A fix has been implemented and we are monitoring the results.
 Mar
-25
+28
 ,
-14:33
+13:01
 UTC
 Investigating
 - We are currently investigating this issue.
 
-KAYNAK : https://status.claude.com/incidents/d8r794mwjg8d
+KAYNAK : https://status.claude.com/incidents/pgxwhv06t0y8
 

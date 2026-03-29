@@ -1,4 +1,3 @@
---- claude | Dispatch sessions not responding in Claude Desktop | score=68.33 ---
 Mar
 29
 ,
@@ -15,29 +14,3 @@ Identified
 - We've identified an issue in the latest Claude Desktop release (Claude 1.1.9310) where Dispatch sessions stop responding. Messages sent to Dispatch are received and processed, but replies do not appear in the conversation. We have identified the cause and are working on a fix. As a workaround, you can continue using standard Cowork sessions, which are unaffected.
 
 KAYNAK : https://status.claude.com/incidents/q5qk1234v205
-
---- claude | Elevated errors on Opus 4.6 Fast Mode | score=35.13 ---
-Mar
-28
-,
-14:53
-UTC
-Resolved
-- This incident has been resolved.
-Mar
-28
-,
-13:55
-UTC
-Monitoring
-- A fix has been implemented and we are monitoring the results.
-Mar
-28
-,
-13:01
-UTC
-Investigating
-- We are currently investigating this issue.
-
-KAYNAK : https://status.claude.com/incidents/pgxwhv06t0y8
-
