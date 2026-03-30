@@ -1,79 +1,840 @@
---- claude | Dispatch sessions not responding in Claude Desktop | score=68.33 ---
-Mar
-29
-,
-04:44
-UTC
-Resolved
-- The issue affecting Dispatch has been resolved. We fixed an underlying issue that prevent the agent from sending responses to user messages. Please update to Claude desktop app 1.1.9493. We apologize for any inconvenience caused.
-Mar
-29
-,
-00:53
-UTC
-Identified
-- We've identified an issue in the latest Claude Desktop release (Claude 1.1.9310) where Dispatch sessions stop responding. Messages sent to Dispatch are received and processed, but replies do not appear in the conversation. We have identified the cause and are working on a fix. As a workaround, you can continue using standard Cowork sessions, which are unaffected.
+--- arxiv_ai | Spectral Coherence Index: A Model-Free Metric for Protein Structural Ensemble Quality Assessment | score=103.41 ---
+Spectral Coherence Index: A Model-Free Metric for Protein Structural Ensemble Quality Assessment
+Abstract
+Protein structural ensembles from NMR spectroscopy capture biologically important conformational heterogeneity, but it remains difficult to determine whether observed variation reflects coordinated motion or noise-like artifacts. We evaluate the Spectral Coherence Index (SCI), a model-free, rotation-invariant summary derived from the participation-ratio effective rank of the inter-model pairwise distance-variance matrix. Under grouped primary analysis of a Main110 cohort of 110 NMR ensembles (30–403 residues; 10–30 models per entry), SCI separated experimental ensembles from matched synthetic incoherent controls with AUC-ROC and Cliff’s . Relative to an internal 27-protein pilot, discrimination softened modestly, showing that pilot-era thresholds do not transfer perfectly to a larger, more heterogeneous cohort: the primary operating point yielded 95.5% sensitivity and 89.1% specificity. PDB-level sensitivity remained nearly unchanged (AUC ), and an independent 11-protein holdout reached AUC . Across 5-fold grouped stratified cross-validation and leave-one-function-class-out testing, SCI remained strong (AUC and ), although was the stronger single-feature discriminator and a QC-augmented multifeature model generalized best (AUC and ). Residue-level validation linked SCI-derived contributions to experimental RMSF across 110 proteins and showed broad concordance with GNM-based flexibility patterns. Rescue analyses showed that Main110 softening arose mainly from size and ensemble normalization rather than from loss of spectral signal. Together, these results establish SCI as an interpretable, bounded coherence summary that is most useful when embedded in a multimetric QC workflow for heterogeneous protein ensembles.
+I Introduction
+Proteins are not static entities. Their biological function—including catalysis, signal transduction, and molecular recognition—depends critically on conformational dynamics spanning timescales from picoseconds to seconds [1, 2]. Nuclear magnetic resonance (NMR) spectroscopy remains a primary experimental technique for characterizing this heterogeneity at atomic resolution, producing multi-model structural ensembles that represent conformations accessible to a protein in solution [3, 4, 5]. In parallel, modern deep-learning predictors achieve remarkable accuracy for single-structure modeling, and recent efforts extend these models toward sampling multiple conformations [6, 7, 8, 47, 9, 10]. Despite this progress, a fundamental gap persists: there is no widely adopted, model-free metric that quantifies how coherently an ensemble’s structural variation is organized—i.e., whether inter-residue distance changes are concentrated into a few coordinated modes or instead appear as diffuse, noise-like fluctuations.
+Several metrics characterize ensemble diversity, each with notable limitations. Pairwise RMSD requires structural superposition and yields a distribution rather than a single ensemble-level summary [11, 12]. Global measures such as the radius-of-gyration standard deviation () miss local rearrangements or hinge-like motions that preserve overall size [13]. PCA-based variance ratios depend on coordinate alignment and can be sensitive to the chosen reference [14, 15], while contact- or clustering-based summaries introduce arbitrary cutoffs or thresholds that can yield discontinuous behavior [16, 17]. These limitations motivate a metric that (i) operates directly on inter-residue distances to avoid superposition artifacts; (ii) summarizes the spectral organization of distance variation rather than relying on a single dominant component; and (iii) produces a single interpretable value on .
+Spectral methods have a long history in structural biology. Elastic network models such as the Gaussian Network Model (GNM) [18, 19] and the Anisotropic Network Model (ANM) [20] use the eigenspectrum of a connectivity Laplacian or Hessian to predict collective motions from a single structure. The concept of effective rank—quantifying the effective dimensionality of a spectrum via the participation ratio [22] or spectral entropy [21, 23]—is widely used in signal processing and random matrix theory to summarize spectral concentration versus dispersion. Scheurer et al. [23] applied spectral entropy to coordinate-covariance eigenspectra to assess sampling completeness in molecular dynamics trajectories. In molecular dynamics more broadly, quasi-harmonic analysis and principal component analysis of trajectories [24, 14, 25] decompose conformational fluctuations into modes, but they operate on superposed Cartesian coordinates and therefore depend on alignment and reference choices. To our knowledge, no effective-rank measure has previously been applied to the pairwise distance-variance matrix of a structural ensemble as a coherence diagnostic. Because the distance-variance matrix captures inter-residue coordination rather than coordinate-space spread, such a measure is complementary to—not a surrogate for—coordinate-covariance spectral entropy.
+In this work, we evaluate the Spectral Coherence Index (SCI), a model-free, rotation-invariant metric derived from the participation ratio effective rank of the inter-model pairwise distance-variance matrix, in an expanded Main110 validation setting designed not to redefine the metric, but to test whether its coherence signal survives broader biological heterogeneity and stricter validation regimes than our earlier internal 27-protein pilot could support. The main contributions are:
+-
+1.
+Expanded validation beyond the internal pilot. We scale from an internal 27-protein pilot to a canonical Main110 cohort of 110 NMR ensembles plus a fixed 11-protein holdout, showing that the SCI signal survives broader cohort heterogeneity while also revealing softer specificity and threshold non-transferability that were not visible at pilot scale.
+-
+2.
+Canonical metric and grouped inference layer. We retain the canonical definition , where is the participation ratio of the positive eigenvalue spectrum of the distance-variance matrix and normalizes degrees of freedom (: number of residues; : number of models). We establish grouped UniProt or analysis-group inference as the primary paper layer, with PDB-level analysis reported as a sensitivity check.
+-
+3.
+Benchmarking, generalization, and normalization analysis. We compare SCI with , SCI+, PCA variance ratio, contact density, and a QC-augmented multifeature model under 5-fold grouped cross-validation, leave-one-function-class-out validation, and independent holdout testing. We further show that raw spectral quantities (, top-1 energy fraction, top-3 energy fraction) and calibrated SCI models augmented with residue count and model count nearly recover the lost discrimination, explaining why Main110 is harder than the pilot.
+-
+4.
+Residue-level biological validation. We validate SCI-derived residue contributions against experimental RMSF and Gaussian network model predictions across 110 proteins, including paired statistical comparison and outlier analysis, and we treat allosteric, apo/holo, and intrinsically disordered examples as contextual case studies.
+-
+5.
+Practical multimetric QC guidance. We show that coherence (SCI), amplitude (), and eigenvector smoothness are complementary diagnostics. Function-class breakdowns, threshold error analyses, ensemble-size sensitivity, and synthetic failure-mode stress tests support their combined use, while making clear that fixed QC thresholds should be interpreted as screening heuristics rather than universal pass/fail rules.
+The remainder of this paper is organized as follows. Section II reviews related work on protein ensemble analysis and spectral methods. Section III describes the dataset, the SCI formulation, baseline metrics, and statistical procedures. Section IV presents the main experimental results. Section V discusses methodological implications, limitations, and practical guidance. Section VI concludes.
+II Related Work
+II-A Protein Ensembles: Experiment, Prediction, and Quality
+The energy landscape theory established that proteins exist as statistical ensembles of conformational states [2, 33], with allosteric regulation, catalysis, and molecular recognition depending on coordinated structural fluctuations [1, 34, 35]. NMR spectroscopy provides direct experimental access to these ensembles through multi-model PDB depositions [3, 4, 5], capturing coherent motions such as hinge bending and domain closure [36, 37]. On the computational side, AlphaFold2 [6], RoseTTAFold [7], ESMFold [8], and protein language models [26] have achieved high single-structure accuracy, spurring ensemble extensions via sequence subsampling [47], stochastic sampling [9], diffusion models [10], and trainable reimplementations [27]. Molecular dynamics remains the physics-based gold standard for conformational sampling [28, 29] but is computationally expensive. This proliferation of ensemble sources creates an urgent need for quality metrics that assess whether the resulting variation is structurally coherent or merely noise-like. Existing geometric metrics—pairwise RMSD [11, 12], radius of gyration statistics [13], and contact map variability [16]—each have well-known limitations (Section I). Statistical approaches such as structure clustering [17], backbone entropy [30], TM-score [31], and ensemble validation tools (PSVS [32], wwPDB-NMR [5]) focus on restraint satisfaction or single-structure quality rather than spectral organization of conformational variation.
+II-B Spectral Methods and Effective Rank
+Spectral decomposition has a rich history in structural biology. The Gaussian Network Model [18, 19] and the Anisotropic Network Model [20] decompose connectivity matrices into normal modes, predicting B-factors [38], identifying functional sites [39], and revealing allosteric pathways [40]. Quasi-harmonic analysis [24] and essential dynamics [14, 15, 25] apply PCA to Cartesian trajectories but require structural superposition, introducing rotation-frame artifacts. Distance-based representations such as multidimensional scaling [41] avoid this limitation. Scheurer et al. [23] applied spectral entropy—the Shannon-entropy effective rank of coordinate-covariance eigenspectra—to assess sampling completeness in molecular dynamics trajectories. The participation ratio, originally introduced to characterize eigenstate localization [42], quantifies how many components of a distribution contribute meaningfully: for a normalized spectrum , equals 1 when all weight is on a single component and equals the number of components when weight is uniform. Roy and Vetterli [21] formalized effective rank using Shannon entropy of singular values; the participation ratio is a mathematically related alternative [22], and in practice the two formulas produce near-identical rankings (Section IV-C, ). The key distinction between SCI and prior spectral-entropy approaches therefore lies not in the effective-rank formula but in the input representation: the pairwise distance-variance matrix. This makes SCI rotation-invariant and diagnostic of inter-residue coordination, whereas coordinate-covariance spectral entropy measures sampling breadth.
+II-C Ensemble Quality in Biomedical Informatics
+Structural ensemble quality has direct implications for downstream health informatics tasks. Ensemble docking methods for binding-site prediction [43] can propagate artifacts from incoherent ensembles. Epitope mapping leveraging conformational diversity [44] and variant effect prediction tools incorporating structural dynamics [45] both depend on ensemble quality as a prerequisite for reliable inference. More broadly, automated quality gates for structural data—analogous to QC metrics in genomics pipelines [46]—are essential for maintaining reproducibility in computational analyses that inform clinical decision-making.
+III Methods
+III-A Dataset Construction
+III-A1 Expanded Main110 Cohort
+We promoted an expanded cohort of NMR multi-model protein structures from a 125-candidate screen of PDB NMR entries, requiring usable C coordinates, successful preprocessing, and resolved metadata after UniProt-mapping quality control. Four non-holdout candidates were excluded because of unresolved mapping or hard QC failures, and one mapped unresolved case (6LF5) was retained as a PDB-level fallback analysis group. The final main cohort spans proteins of 30–403 residues with 10–30 models per entry (median ) across 11 broad function classes. C coordinates were extracted from mmCIF files using Biotite.
+III-A2 Independent Holdout
+An additional 11 NMR proteins were reserved as a fixed independent holdout and were not used to define the canonical main-cohort summary statistics or grouped cross-validation models. The holdout spans 27–75 residues with 10–25 models per entry (median ) and is used as an external NMR-vs-synthetic-incoherent-control validation set.
+III-A3 Synthetic Incoherent Controls
+As a negative control representing ensembles with incoherent structural variation, we generated synthetic incoherent controls by perturbing the first NMR conformer along randomly sampled global deformation modes. Specifically, for each protein with reference coordinates , the -th synthetic model is
+where are orthonormal vectors in obtained by Gram–Schmidt orthogonalization of standard Gaussian random vectors, and with Å (chosen to match the order of magnitude of NMR C coordinate variation; see Section III-D6 for a discussion of perturbation magnitudes). modes ensure that the control is low-rank yet minimally coherent in distance-variance space; higher would produce a more diffuse control (tested as a separate failure mode with ). Each synthetic ensemble has the same number of models as the corresponding NMR ensemble in both the main and holdout splits. Although the perturbation is low-rank in coordinate space (), the resulting patterns in distance variance space are typically more diffuse due to the nonlinear distance mapping (see Section IV).
+III-A4 AlphaFold Single-Structure Reference
+As a reference-only third group, we obtained AlphaFold2-predicted structures for 40 proteins in the main cohort with resolved mappings and usable AlphaFold coverage from the AlphaFold Protein Structure Database [6]. Each prediction provides a single model (), precluding ensemble-based SCI computation. We therefore employ a single-structure spectral proxy (Section III-B5). Per-residue confidence scores (pLDDT) were extracted from B-factor fields. Sequence matching required a protein-level metadata mapping and compatible chain coverage; these AlphaFold results are reported only as a reference analysis and are not directly comparable to the ensemble-based SCI values.
+Figure 1 summarizes the SCI workflow from ensemble input through spectral compression to multimetric QC interpretation.
+III-B Spectral Coherence Index (SCI)
+Throughout this study, we define the positive class as NMR ensembles and use SCI directly as the classification score: higher SCI indicates more coherent variation, corresponding to the NMR ensemble class.
+III-B1 Distance Variance Matrix
+Consider a structural ensemble with residues per model and conformers. For the -th model, define the pairwise C–C distance matrix
+where is the coordinate of the -th C atom in model . The distance-variance matrix is defined entry-wise as
+where is the mean distance. We use the population variance (); using the sample variance () would yield an identical SCI, since the constant factor cancels in the normalized spectrum . Each entry is the scalar variance of the pairwise distance across models.
+Several properties of are important:
+-
+•
+is symmetric with non-negative entries, but is not guaranteed positive semi-definite (PSD). It is an entry-wise variance map, not a covariance matrix in the sense of .
+-
+•
+The diagonal entries satisfy for all , since self-distances are identically zero. Therefore , which implies : the positive and negative eigenvalue masses are exactly equal. The retained positive-spectrum fraction is thus for every ensemble—a structural identity, not a numerical artifact.
+-
+•
+Because depends only on inter-atomic distances, is rotation-invariant: no structural superposition or reference frame is required.
+-
+•
+Although is not PSD, its positive eigenspectrum provides a compact summary of coordinated variance patterns across residue pairs. We define SCI on the positive part of the spectrum only; negative eigenvalues are discarded. The fraction of retained spectral mass is reported in the project outputs as a transparency diagnostic.
+III-B2 Eigendecomposition and Normalized Spectrum
+Let be the eigenvalues of . Since is not PSD, some may be negative. We retain only the positive eigenvalues exceeding a numerical threshold :
+Denote the filtered eigenvalues as . The normalized spectrum is
+satisfying and , forming a discrete probability distribution over variance modes.
+III-B3 Effective Rank via Participation Ratio
+The participation ratio effective rank [21, 22] of the normalized spectrum is
+This quantity has the following extremal behavior:
+-
+•
+when all variance is concentrated in a single mode ();
+-
+•
+when variance is uniformly distributed ( for all ).
+Thus can be interpreted as the effective number of independent variation modes.
+III-B4 SCI Definition
+The Spectral Coherence Index is defined as
+The normalization constant serves as an effective degrees-of-freedom scale. The term reflects the fact that ensemble members yield independent deviations from the mean, analogous to the degrees-of-freedom correction in sample variance. We note that is not a sample covariance matrix sensu stricto, so is not a strict rank upper bound: empirically, (mean for , ) exceeds because the entry-wise variance map is not generated by a rank- process. However, empirically yields for all ensembles in our dataset and scales appropriately with both protein size and ensemble size; the bound is not a mathematical guarantee, since a perfectly uniform positive spectrum could in principle produce . Empirical validation in the project outputs confirms that all values fall well below .
+SCI has the following interpretation:
+-
+•
+: the spectrum is highly concentrated; distance variation across models is dominated by few coherent modes, consistent with coordinated structural deformations (e.g., hinge bending, domain closure).
+-
+•
+: the spectrum is diffuse; distance variation is spread across many modes, indicating incoherent, noise-like fluctuations.
+Crucially, SCI measures the coherence of variation—the degree to which pairwise distance changes are coordinated across residue pairs—not its magnitude.
+SCI belongs to the broader family of effective-rank measures, which includes the Shannon-entropy variant used by Scheurer et al. [23] to assess conformational sampling completeness from coordinate-covariance eigenspectra. The choice of participation ratio versus Shannon entropy is a minor technical detail: both yield near-identical SCI values (Section IV-C, ). The substantive distinction is the input representation: SCI summarizes the eigenspectrum of the distance-variance matrix , making it rotation-invariant and diagnostic of inter-residue coordination, whereas spectral entropy of coordinate covariance quantifies how broadly conformational space has been explored. The two measures answer complementary questions about ensemble quality.
+We additionally define the spectral dispersion index , which increases with spectral diffuseness. Higher DI does not imply greater conformational diversity; it indicates that distance changes across models lack coordinated structure.
+III-B5 Single-Structure Spectral Proxy
+For AlphaFold single structures (), the distance-variance matrix is identically zero. As an alternative, we compute a spectral proxy from the double-centered Gram matrix of the pairwise distance matrix [41]:
+where denotes the element-wise squared distance matrix and is the centering matrix. The SCI formula (6)–(7) is then applied to with . This proxy measures intrinsic fold geometry spectral concentration rather than cross-model variation coherence, and is not directly comparable to the ensemble-based SCI (). All cross-group comparisons involving AlphaFold are therefore interpretive.
+III-C Baseline Metrics
+To contextualize SCI, we compare it against three baseline metrics computable from the same C ensembles:
+-
+1.
+Radius of gyration standard deviation (): the standard deviation of the radius of gyration across ensemble members, where and is the centroid of model . This captures global size fluctuations but is insensitive to local conformational changes.
+-
+2.
+PCA variance ratio (): the fraction of total variance explained by the first principal component, computed from the -dimensional superposed coordinate vectors. This requires structural alignment and is sensitive to reference frame choice.
+-
+3.
+Contact density: the mean number of C–C contacts per residue (threshold 8 Å), averaged across models. This metric is not expected to discriminate NMR from synthetic controls and serves as a negative baseline.
+III-D Statistical Analysis
+All primary discrimination analyses treat experimental NMR ensembles as the positive class and matched synthetic incoherent controls as the negative class.
+III-D1 Primary and Sensitivity Analyses
+The canonical manuscript endpoint is a grouped main-cohort comparison in which NMR and matched synthetic incoherent controls are paired by UniProt-derived analysis group. The main cohort contains 110 analysis groups: 109 resolved UniProt groups and one retained PDB-level fallback (6LF5). We report AUC-ROC, Cliff’s delta, paired permutation tests, and bootstrap confidence intervals for the mean paired SCI difference. A PDB-level analysis on the same 110 proteins is reported as a sensitivity check, and the fixed 11-protein holdout is evaluated independently as an external NMR-vs-synthetic-incoherent-control test set. Legacy27 results are retained only as historical context and not as a separate inferential cohort.
+III-D2 Reference Comparison and Thresholding
+For the reference-only AlphaFold analysis, a Kruskal–Wallis test assesses differences across three groups (NMR, synthetic incoherent controls, and AlphaFold proxy), followed by pairwise Mann–Whitney tests with multiple-comparison correction. Because the AlphaFold proxy uses the single-structure Gram-matrix formulation of Section III-B5, these comparisons are interpretive rather than directly comparable to the ensemble-based SCI results. We estimate operating thresholds with Youden’s and summarize threshold uncertainty by bootstrap confidence intervals.
+III-D3 Generalization Analyses
+Generalization is evaluated at three levels. First, all manuscript results use 5-fold grouped cross-validation with StratifiedGroupKFold(n_splits=5, shuffle=True, random_state=42), grouping by analysis_group_id and stratifying by the binary NMR/control label. The code retains GroupKFold as a backward-compatible fallback for older environments, but it was not used in the reported results. This preserves paired NMR/control samples within analysis-group splits on the main cohort. Second, leave-one-function-class-out validation tests transfer across the 11 annotated protein function classes. Third, the independent holdout is scored using models fitted on the main cohort only. These analyses are reported for SCI, , SCI+, and a QC-full model that combines SCI, , PCA variance ratio, and top-eigenvector smoothness. To investigate why SCI softens on Main110, we repeat the same grouped-CV, leave-one-function-class-out, and holdout regimes for raw spectral quantities (, top-1 energy fraction, top-3 energy fraction) and for calibrated SCI models that add residue count and/or model count as covariates.
+III-D4 Biological Validation
+We summarize three biological validation layers. At the residue level, Spearman correlations compare SCI-derived residue contributions with experimental RMSF and with GNM-predicted RMSF, and paired Wilcoxon tests compare these two per-protein correlation distributions. We additionally report negative and weak-correlation outliers. At the protein level, we evaluate curated allosteric and apo/holo pairs to determine whether SCI tracks coherence differently from amplitude-sensitive metrics, but we interpret these small-sample analyses as contextual case studies rather than formal validation. Finally, available intrinsically disordered proteins are summarized separately as high-flexibility examples.
+III-D5 Eigenvector Smoothness Score
+Let denote the top eigenvector of the distance-variance matrix . To assess whether this dominant mode respects the protein’s chain topology, we define a smoothness score via the Rayleigh quotient on the sequential residue graph Laplacian . The graph is the path graph on residues (adjacency ), and is the combinatorial Laplacian. We compute and define smoothness , where values near 1 indicate that the dominant mode varies slowly along the chain (spatially coherent), and lower values indicate rapid residue-to-residue sign changes (spatially incoherent).
+III-D6 Robustness and Failure-Mode Diagnostics
+To stress-test the multimetric QC framework, we generate four synthetic failure types from the reference NMR ensembles used by the QC stress-test pipeline:
+-
+1.
+i.i.d. Gaussian noise. Per-atom i.i.d. perturbations Å are added independently to each coordinate of each model.
+-
+2.
+Generator mode collapse. Three conformations are drawn uniformly at random from the NMR ensemble and replicated to fill models, with per-atom jitter Å added to each copy.
+-
+3.
+Residue shuffle. Each residue in each model receives an independent random displacement of magnitude Å in a uniformly random direction, destroying spatial correlation between neighboring residues.
+-
+4.
+High-rank perturbation (). Ten randomly sampled global deformation modes with Å are applied (using Eq. (1) with ), producing spectrally diffuse variation.
+The perturbation magnitudes ( Å for i.i.d. and shuffle, Å for high-rank) are chosen to match the order of magnitude of coordinate-level NMR ensemble variation (typical C RMSD – Å) while keeping the artifacts subtle enough that naive metrics may miss them. The baseline control (Section III-A) uses the same low-rank perturbation scheme but with fewer modes, producing a clear coherence deficit.
+IV Results
+IV-A SCI Distinguishes NMR Ensembles from Synthetic Incoherent Controls
+The grouped primary Main110 analysis shows a clear separation between experimental NMR ensembles and matched synthetic incoherent controls. Mean SCI was for NMR versus for the matched synthetic incoherent controls, with a mean paired difference of (95% bootstrap CI: ) and paired permutation . The effect size remained very large (Cliff’s ), indicating that higher SCI is strongly associated with the experimental ensemble class. Using SCI directly as the score yielded grouped AUC-ROC (Fig. 2c). The Youden- operating point was , corresponding to 95.5% sensitivity and 89.1% specificity; the bootstrap confidence interval for the threshold was .
+The grouped result is the manuscript’s primary inferential layer because the expanded cohort is analyzed at the resolved UniProt or analysis-group level rather than by counting every archival entry as an independent biological target. In the canonical Main110 set, 109 groups map cleanly to UniProt identifiers and one group is retained through the fallback identifier PDB:6LF5; this bookkeeping avoids pseudo-replication without discarding a structurally valid ensemble.
+The same conclusion persisted in the two confirmatory layers used in this manuscript. A PDB-level sensitivity analysis remained nearly unchanged (AUC , Cliff’s , ), showing that the coherence signal is not created by the grouping rule. The fixed 11-protein holdout also preserved strong separation, with mean SCI for NMR versus for matched synthetic incoherent controls, AUC , and a descriptive holdout threshold achieving 100% sensitivity and 90.9% specificity. The holdout controls are therefore more challenging than the main synthetic incoherent controls in absolute SCI, yet the ranking signal remains robust.
+Relative to the internal 27-protein pilot rerun, however, the expanded benchmark is modestly but meaningfully harder. The pilot achieved AUC , Cliff’s , and a Youden threshold with 100% sensitivity and 92.6% specificity. Main110 therefore reduces AUC by 0.0151 and specificity by 3.5 percentage points while retaining strong sensitivity. This softening is informative rather than discouraging: the broader cohort spans 11 function classes and a wider range of residue counts and model counts, exposing heterogeneity that the pilot could not resolve.
+Error analysis makes the failure pattern explicit. At the grouped threshold, 12 of 110 NMR groups fall below and 6 of 110 synthetic incoherent controls rise above it. These cases are not evenly distributed. Low-model ensembles () represent only 11 of 110 groups (10.0%) but account for 10 of the 12 NMR misses (83.3%), an approximately 8.3-fold enrichment. Short proteins () represent 13 of 110 groups (11.8%) but account for 5 of the 6 control overcalls (83.3%), an approximately 7.1-fold enrichment. Thus Main110 reveals two distinct SCI stress points: NMR misses are disproportionately concentrated among low-model ensembles, whereas control overcalls are enriched among very short proteins.
+Function-class summaries reinforce the same interpretation (Table III). By mean SCI, chaperone, other, toxin, enzyme, and transport proteins are the weakest classes, and the viral split is the hardest leave-one-function-class-out transfer setting for SCI (AUC ). In contrast, remains at or above 0.938 AUC on every held-out function class. Representative low-margin and threshold-failed groups are listed in Table IV.
+IV-B Reference Analysis: AlphaFold Single-Structure Proxy
+The AlphaFold comparison remains methodologically separate from the main ensemble analysis. Because each AlphaFold prediction comprises a single model, SCI is computed via the Gram-matrix proxy of Section III-B5, which summarizes intrinsic fold-geometry concentration rather than cross-model coherence. The proxy therefore serves as a reference analysis, not as a directly comparable third arm of the primary discrimination task. The AlphaFold proxy values were high ( for 40 matched structures), a Kruskal–Wallis test across NMR, synthetic incoherent controls, and AlphaFold proxies remained highly significant (, ), and all pairwise comparisons survived correction. However, the proxy showed only a weak, non-significant association with mean pLDDT (Spearman , ). We therefore retain AlphaFold only as a sanity check on the spectral machinery and not as mechanistic evidence about prediction confidence.
+IV-C Effective Rank and Eigenvalue Diagnostics
+Table V and Fig. 3 show that the expanded cohort preserves the same spectral signature seen in the pilot study: experimental ensembles have much lower effective rank and much more concentrated eigenspectra than synthetic incoherent controls. Main110 NMR ensembles had mean versus for controls, with mean top-1 energy fractions of 0.695 and 0.340 and mean top-3 fractions of 0.850 and 0.481, respectively. In other words, coherent NMR variability continues to be driven by a few dominant distance-space modes, whereas synthetic incoherent controls distribute variance across many more directions.
+The figure also shows that the effective-rank result is not tied to a single formula. Participation-ratio SCI and entropy-based SCI retain near-identical orderings, so the discriminative power of the metric is coming primarily from the distance-variance representation rather than from one specific spectrum summary.
+These results also explain why SCI softens on Main110 without implying that the spectral signal itself is weak. When we benchmark raw spectral quantities directly, , the top-1 energy fraction, and the top-3 energy fraction all reach grouped and leave-one-function-class-out AUCs near 0.99, with perfect holdout discrimination (Table VI). Likewise, augmenting SCI with residue count and model count lifts grouped CV AUC from 0.968 to 0.996. We treat these rescue models as explanatory rather than as replacements for SCI: they show that the main performance loss on Main110 is driven by the bounded normalization across heterogeneous and , not by disappearance of the underlying spectral separation. We do not recommend or top-energy fractions as primary practical QC scores because, unlike SCI, they do not provide a shared -bounded scale and require recalibration across proteins with different residue counts and ensemble sizes. SCI therefore trades some discrimination for a portable, interpretable coherence summary that can be compared across heterogeneous cohorts on a common scale.
+IV-D Comparison with Baseline Metrics
+The expanded cohort changes the comparative ranking of metrics. At the single-metric raw-discrimination level, SCI remained strong (AUC ), was higher (AUC ), PCA variance ratio remained competitive (AUC ), and contact density stayed near chance (AUC ). However, Main110 makes the relative positioning more explicit than the pilot: across every reported regime, is the stronger single-feature discriminator, and the multifeature QC-full model is strongest overall. We therefore do not claim that SCI is the empirically best scalar on this benchmark.
+Table VII therefore summarizes the current predictive comparison. SCI remained robust under grouped stratified cross-validation and leave-one-function-class-out testing (AUC and ), confirming that the coherence signal generalizes beyond individual proteins. Yet the best-performing predictive model on the expanded cohort was QC-full, which combines SCI, , PCA variance ratio, and smoothness (AUC grouped CV; leave-one-function-class-out). This shift in ranking is informative. It shows that SCI should be interpreted as the most transparent coherence axis, not as a claim to dominate amplitude-sensitive baselines on every discrimination task. Amplitude and plausibility features carry additional information once the benchmark is scaled to Main110. Figure 4 visualizes the same ranking at the level of the manuscript’s three transfer-oriented validation regimes.
+IV-E Robustness Analysis
+IV-E1 Noise Sweep
+SCI classification performance remained nearly invariant across all tested noise levels used in synthetic incoherent control generation (– Å): AUC-ROC ranged from 0.9716 to 0.9728, and Cliff’s from to (Table VIII; Fig. 5). The 95% bootstrap CI for the mean paired difference narrowed only slightly across the sweep, consistent with a very modest reduction in the NMR–control gap as the synthetic incoherent controls gain variance. The headline SCI separation therefore does not rest on a narrow perturbation setting.
+IV-E2 Youden’s Threshold and Contact-Threshold Sensitivity
+Youden’s- thresholding identifies a practical operating point for the grouped primary analysis, but the expanded cohort shows that thresholds should be interpreted as screening heuristics rather than universal pass/fail rules. The grouped Main110 optimum was with 95.5% sensitivity and 89.1% specificity, while the PDB-level sensitivity analysis yielded a closely matching optimum (). The contact-based SCI variant retained qualitative separation between NMR and synthetic incoherent ensembles across multiple contact cutoffs, but its exact values shifted with threshold choice, reinforcing why the manuscript anchors its claims on the continuous distance-based formulation.
+IV-E3 Ensemble-Size Sensitivity
+Subsampling analysis shows that SCI stability depends strongly on the number of available conformers. The mean absolute deviation from the full-ensemble SCI estimate shrank from 0.548 at five models to 0.154 at ten, 0.050 at fifteen, and 0.005 at twenty (Table IX). This directly explains why low-model ensembles are overrepresented among the Main110 NMR threshold failures and suggests that practical SCI deployment is most stable once roughly 15–20 conformers are available.
+IV-F Exploratory: Biological Validation and Contextual Flexibility
+SCI remained biologically grounded after the cohort expansion. Across 110 proteins with residue-level analyses, the median Spearman correlation between SCI-derived residue contributions and experimental RMSF was , while the median correlation between GNM-predicted and experimental RMSF was . In 108 of the 110 proteins, residue contributions were positively associated with RMSF. A paired Wilcoxon comparison rejected equality in the direction GNM contribution (one-sided ; two-sided ), indicating that the SCI-derived contribution map is biologically meaningful but does not replace a structure-based elasticity model.
+The residue-level outliers are informative (Table X). Only two proteins showed negative contribution-versus-RMSF associations (1ARK and 1YS5), and three additional proteins remained weak (): 1OQY, 2JQF, and 6U1O. None of these five overlap the grouped SCI threshold-failed set. The threshold-failed protein 2LM3, by contrast, still showed a positive residue-level correlation (), indicating that ensemble-level screening errors and residue-level biological outliers are not the same phenomenon. The two negative cases point to different failure modes. For 1ARK, both SCI contribution and GNM are weak, suggesting a flexibility pattern that is not well captured by either a low-rank SCI contribution map or a simple elastic-network description. For 1YS5, GNM remains moderately aligned with RMSF whereas SCI contribution is nearly flat, indicating that the residue-level SCI map and GNM are emphasizing different aspects of the underlying motion.
+The pair-based analyses are therefore best interpreted as contextual case studies rather than as formal validation layers. Across 14 allosteric pairs, the median absolute change in SCI-derived summary was only 0.00356, whereas the corresponding median absolute changes were 0.208 for contact density and 4.276 Å for radius of gyration. Across 3 apo/holo pairs, the same pattern persisted (median absolute changes 0.000319, 0.0582, and 0.831 Å, respectively), but the sample is too small to support formal inference. The 4 available intrinsically disordered proteins remained highly flexible (median mean RMSF 1.878 Å) while still showing high single-structure proxy SCI (median 0.974), reinforcing that coherence and flexibility are not the same biological dimension.
+IV-G Eigenvector Smoothness as a Complementary Diagnostic
+Having established that coherence and amplitude form the two primary QC axes, we asked whether a complementary spatial-plausibility attribute adds information not captured by either. The mean top-eigenvector smoothness score was for NMR versus for synthetic incoherent controls, with a moderate-to-large effect size (Cliff’s ) and paired permutation . AlphaFold proxy values were highest (), consistent with single structures producing very smooth dominant geometric modes.
+Among the Main110 NMR ensembles, smoothness was positively correlated with SCI (Spearman , ) but even more strongly with (, ), suggesting that it captures partially independent information while remaining closer to a plausibility check than to a primary discrimination axis. The SCI map and the smoothness overlays therefore provide a useful multimetric QC representation, but not a single universal decision rule.
+IV-H Failure Mode Analysis
+The four synthetic stress tests occupy distinct regions of the SCI plane and therefore remain useful for interpreting which metric is carrying each detection decision. Gaussian and residue-shuffle artifacts tend to preserve deceptively high SCI while collapsing amplitude, whereas mode-collapse and high-rank perturbation reduce SCI more strongly. This pattern is why and SCI remain complementary even after the expanded cohort analysis shows that amplitude-aware models can outperform SCI on some generalization benchmarks. Table XI and Fig. 7 summarize these failure-type-specific detection patterns.
+V Discussion
+V-A Methodological Advantages of SCI
+The central contribution of this manuscript is not a new mathematical definition relative to the internal 27-protein pilot, but a more demanding validation setting. Main110 shows that the pilot signal survives broader heterogeneity, while also revealing softer specificity, function-class variation, and threshold non-transferability that were invisible at pilot scale. Those findings are scientifically useful because they clarify where SCI is robust on its own and where complementary QC axes become necessary.
+Within that broader setting, SCI still offers several methodological advantages over existing ensemble-diversity measures. First, it is rotation-invariant: because SCI operates on pairwise distances rather than Cartesian coordinates, no structural superposition or reference frame is required. This eliminates a well-known source of bias in PCA-based metrics and RMSD calculations [11, 12]. Second, SCI is model-free: it requires no force field, energy function, or normal-mode computation. Third, SCI produces a single number on with a direct spectral interpretation, providing a bounded, portable comparison scale across heterogeneous ensembles even though that normalization can cost some discrimination in broader cohorts. Fourth, SCI is sensitive to local coordinated motions in principle: unlike , which captures only global size fluctuations, SCI can detect coordinated loop rearrangements, domain twists, and hinge motions that leave overall size weakly changed.
+V-B Physical Interpretation of SCI Direction
+A key insight from the Main110 results is the relationship between coordinate-space and distance-space complexity. Low-rank deformations in coordinate space do not automatically produce low-rank structure in distance-variance space, because the nonlinear distance function introduces cross-terms that disperse variance across many eigenvalues. Conversely, coordinated conformational motions such as hinge bending and domain closure produce highly correlated distance changes across many residue pairs, concentrating the distance-variance spectrum into a few dominant modes. High SCI should therefore be interpreted as high motion coherence, not simply as low dimensionality or low structural variability. The rescue analyses summarized in Table VI sharpen this interpretation. Raw spectral summaries such as and the top-energy fractions remain near 0.99 AUC on Main110, whereas normalized SCI softens to 0.973. Likewise, adding and to SCI nearly restores perfect discrimination. The most parsimonious explanation is that Main110 heterogeneity enters mainly through the bounded normalization : as protein length and model count vary more widely, the same underlying spectral concentration is compressed unevenly. We therefore view the current SCI as an interpretable normalized score: a bounded, portable coherence summary whose shared scale facilitates cross-protein comparison, even though that portability carries a measurable discrimination tradeoff on heterogeneous cohorts. The rescue models indicate that the underlying spectral signal remains stronger than the headline SCI alone suggests.
+V-C Limitations
+Several limitations should be noted. First, although Main110 is substantially larger than the pilot cohort, it is still modest relative to the full diversity of NMR structures in the PDB, and the fixed holdout contains only 11 proteins. Moreover, the holdout spans only 27–75 residues, which samples the small-protein end of the main-cohort size range and therefore does not directly test external transfer for large proteins (). Second, the AlphaFold analysis uses a single-structure proxy that measures fold-geometry concentration rather than cross-conformer coherence; the weak pLDDT association reinforces that this result should be interpreted only as a reference comparison. Third, the synthetic incoherent controls and failure-mode generators do not span all real-world failure cases. In particular, the expanded cohort shows that fixed thresholds calibrated on synthetic artifacts produce a non-negligible NMR false-positive rate (10.1%), so they should be treated as screening heuristics rather than universal accept/reject rules. Fourth, the pair-based allosteric and apo/holo analyses are descriptive rather than inferential because the available sample sizes are small. Fifth, this manuscript deliberately leaves molecular-dynamics benchmarking out of scope; future work should test SCI on MD trajectories, AlphaFold-derived ensembles, and poorly converged experimental refinements.
+V-D Practical Guidance: When SCI Is and Is Not Informative
+SCI measures spectral concentration of the distance-variance matrix. It is most informative when comparing ensembles generated by the same or closely related procedures, where a substantially lower SCI flags incoherent or insufficiently converged variation. The Main110 results also make clear, however, that SCI should not be treated as a complete one-number surrogate for ensemble quality. is the empirically stronger single-feature discriminator on this benchmark, and QC-full is strongest overall. Synthetic artifacts such as i.i.d. Gaussian noise can also retain moderately high SCI despite lacking physically meaningful structural coordination.
+We therefore recommend reporting three complementary quantities:
+-
+1.
+SCI as the core coherence axis and the most interpretable summary of whether variation is organized into a few coordinated modes.
+-
+2.
+as an amplitude axis that catches low-variation artifacts and, on Main110, provides the strongest standalone discrimination.
+-
+3.
+Smoothness score as a spatial plausibility check on the dominant mode.
+Table IX shows that the mean absolute SCI deviation from the full-ensemble estimate shrank from 0.548 at five models to 0.154 at ten, 0.050 at fifteen, and 0.005 at twenty, suggesting that SCI is most stable once roughly 15–20 conformers are available. Fig. 8 summarizes the recommended practical workflow.
+V-E Informatics Relevance
+SCI is not intended to explain dynamical mechanisms but to serve as an automated informatics QC metric for large-scale structural resources and ensemble-generation pipelines. When ensemble quality is unchecked, downstream biomedical inferences such as binding-site prediction, epitope mapping, and variant interpretation may silently propagate artifacts from incoherent ensembles. The Main110 results suggest that SCI is most useful when reported with grouped inference, a PDB-level sensitivity check, and complementary amplitude and smoothness diagnostics.
+V-F Future Directions
+Several extensions are natural. SCI could be applied to molecular dynamics trajectories by treating snapshots as ensemble members, enabling coherence-aware quality assessment of conformational sampling. The same framework could be used to compare experimentally derived NMR ensembles with ensemble-generating predictors such as AF-Cluster or Boltzmann-style models [47, 48]. At the residue level, the current biological validation motivates closer integration of SCI-derived contribution maps with allostery analysis, disorder characterization, and function-specific classifiers.
+VI Conclusion
+We have proposed the Spectral Coherence Index (SCI), a model-free, rotation-invariant metric for quantifying how coherently conformational variation is organized in protein structural ensembles. On the expanded Main110 cohort, SCI robustly separates experimental NMR ensembles from matched synthetic incoherent controls at the grouped primary level (AUC , Cliff’s ), remains stable at the PDB level (AUC ), and transfers to an independent 11-protein holdout (AUC ).
+The expanded benchmark clarifies the role of SCI in a modern ensemble-QC stack. is the stronger empirical single-feature discriminator on Main110, while SCI remains the most interpretable single coherence signal, with strong grouped and leave-one-function-class-out generalization. Rescue analyses show that the underlying spectral separation remains very strong and that much of the observed softening comes from normalization across heterogeneous residue counts and model counts rather than from loss of the spectral signal itself. A QC-augmented model achieves the best predictive performance by combining SCI with amplitude and plausibility features. Residue-level biological validation links SCI-derived contributions to experimental RMSF and GNM predictions, and the AlphaFold reference analysis supports the spectral formalism while emphasizing that single-structure proxies are not substitutes for ensemble coherence.
+Overall, SCI should be viewed as a principled coherence axis for protein-ensemble informatics: not the empirically strongest standalone discriminator on Main110, but the most transparent bounded summary of coherent distance-space organization. Its practical value lies in providing a portable comparison scale across heterogeneous ensembles, even when that portability entails a measurable discrimination tradeoff, and it is therefore most useful when embedded in grouped evaluation and a multi-metric QC workflow.
+References
+- [1] K. A. Henzler-Wildman and D. Kern, “Dynamic personalities of proteins,” Nature, vol. 450, no. 7172, pp. 964–972, Dec. 2007.
+- [2] H. Frauenfelder, S. G. Sligar, and P. G. Wolynes, “The energy landscapes and motions of proteins,” Science, vol. 254, no. 5038, pp. 1598–1603, Dec. 1991.
+- [3] A. M. J. J. Bonvin, R. Boelens, and R. Kaptein, “NMR analysis of protein interactions,” Curr. Opin. Chem. Biol., vol. 9, no. 5, pp. 501–508, 2005.
+- [4] G. M. Clore and C. D. Schwieters, “How much backbone motion in ubiquitin is required to account for dipolar coupling data measured in multiple alignment media as assessed by independent cross-validation?” J. Am. Chem. Soc., vol. 126, no. 9, pp. 2923–2938, 2004.
+- [5] G. T. Montelione et al., “Recommendations of the wwPDB NMR validation task force,” Structure, vol. 21, no. 9, pp. 1563–1570, Sep. 2013.
+- [6] J. Jumper et al., “Highly accurate protein structure prediction with AlphaFold,” Nature, vol. 596, no. 7873, pp. 583–589, Aug. 2021.
+- [7] M. Baek et al., “Accurate prediction of protein structures and interactions using a three-track neural network,” Science, vol. 373, no. 6557, pp. 871–876, Aug. 2021.
+- [8] Z. Lin et al., “Evolutionary-scale prediction of atomic-level protein structure with a language model,” Science, vol. 379, no. 6637, pp. 1123–1130, Mar. 2023.
+- [9] D. del Alamo, D. Sala, H. S. Bhatt, T. Lehmann, and J. Meiler, “Sampling alternative conformational states of transporters and receptors with AlphaFold2,” eLife, vol. 11, Art. no. e75751, Mar. 2022.
+- [10] B. Jing et al., “AlphaFold meets flow matching for generating protein ensembles,” in Proc. Int. Conf. Mach. Learn. (ICML), 2024, pp. 22031–22043.
+- [11] R. Diamond, “On the use of normal modes in thermal parameter refinement: Theory and application to the bovine pancreatic trypsin inhibitor,” Acta Crystallogr. D, vol. 46, no. 5, pp. 425–435, 1990.
+- [12] I. Kufareva and R. Abagyan, “Methods of protein structure comparison,” in Homology Modeling: Methods and Protocols. New York, NY, USA: Humana Press, 2012, pp. 231–257.
+- [13] M. Y. Lobanov, N. S. Bogatyreva, and O. V. Galzitskaya, “Radius of gyration as an indicator of protein structure compactness,” Mol. Biol., vol. 42, no. 4, pp. 623–628, 2008.
+- [14] A. Amadei, A. B. M. Linssen, and H. J. C. Berendsen, “Essential dynamics of proteins,” Proteins, vol. 17, no. 4, pp. 412–425, Dec. 1993.
+- [15] C. C. David and D. J. Jacobs, “Principal component analysis: A method for determining the essential dynamics of proteins,” in Protein Dynamics: Methods and Protocols. New York, NY, USA: Humana Press, 2014, pp. 193–226.
+- [16] M. Vendruscolo, E. Paci, C. M. Dobson, and M. Karplus, “Three key residues form a critical contact network in a protein folding transition state,” Nature, vol. 409, no. 6820, pp. 641–645, 2001.
+- [17] W. Li and A. Godzik, “Cd-hit: A fast program for clustering and comparing large sets of protein or nucleotide sequences,” Bioinformatics, vol. 22, no. 13, pp. 1658–1659, Jul. 2006.
+- [18] I. Bahar, A. R. Atilgan, and B. Erman, “Direct evaluation of thermal fluctuations in proteins using a single-parameter harmonic potential,” Fold. Des., vol. 2, no. 3, pp. 173–181, 1997.
+- [19] T. Haliloglu, I. Bahar, and B. Erman, “Gaussian dynamics of folded proteins,” Phys. Rev. Lett., vol. 79, no. 16, pp. 3090–3093, Oct. 1997.
+- [20] A. R. Atilgan, S. R. Durell, R. L. Jernigan, M. C. Demirel, O. Keskin, and I. Bahar, “Anisotropy of fluctuation dynamics of proteins with an elastic network model,” Biophys. J., vol. 80, no. 1, pp. 505–515, Jan. 2001.
+- [21] O. Roy and M. Vetterli, “The effective rank: A measure of effective dimensionality,” in Proc. 15th Eur. Signal Process. Conf. (EUSIPCO), Poznan, Poland, 2007, pp. 606–610.
+- [22] R. Vershynin, High-Dimensional Probability: An Introduction with Applications in Data Science. Cambridge, U.K.: Cambridge Univ. Press, 2018.
+- [23] M. Scheurer, A. Dreuw, E. Schwab, and M. Bhatt, “Exploration of conformational landscapes using spectral entropy,” J. Chem. Theory Comput., vol. 11, no. 12, pp. 5543–5553, 2015.
+- [24] A. E. Garcia, “Large-amplitude nonlinear motions in proteins,” Phys. Rev. Lett., vol. 68, no. 17, pp. 2696–2699, Apr. 1992.
+- [25] M. A. Balsera, W. Wriggers, Y. Oono, and K. Schulten, “Principal component analysis and long time protein dynamics,” J. Phys. Chem., vol. 100, no. 7, pp. 2567–2572, 1996.
+- [26] A. Rives et al., “Biological structure and function emerge from scaling unsupervised learning to 250 million protein sequences,” Proc. Natl. Acad. Sci. U.S.A., vol. 118, no. 15, Art. no. e2016239118, Apr. 2021.
+- [27] G. Ahdritz et al., “OpenFold: Retraining AlphaFold2 yields new insights into its learning mechanisms and capacity for generalization,” Nature Methods, vol. 21, no. 8, pp. 1514–1524, Aug. 2024.
+- [28] D. E. Shaw et al., “Atomic-level characterization of the structural dynamics of proteins,” Science, vol. 330, no. 6002, pp. 341–346, Oct. 2010.
+- [29] S. A. Hollingsworth and R. O. Dror, “Molecular dynamics simulation for all,” Neuron, vol. 99, no. 6, pp. 1129–1143, Sep. 2018.
+- [30] R. B. Best, K. Lindorff-Larsen, M. A. DePristo, and M. Vendruscolo, “Relation between native ensembles and experimental structures of proteins,” Proc. Natl. Acad. Sci. U.S.A., vol. 103, no. 29, pp. 10901–10906, Jul. 2006.
+- [31] Y. Zhang and J. Skolnick, “Scoring function for automated assessment of protein structure template quality,” Proteins, vol. 57, no. 4, pp. 702–710, Dec. 2004.
+- [32] A. Bhattacharya, R. Tejero, and G. T. Montelione, “Evaluating protein structures determined by structural genomics consortia,” Proteins, vol. 66, no. 4, pp. 778–795, Mar. 2007.
+- [33] K. A. Dill and J. L. MacCallum, “The protein-folding problem, 50 years on,” Science, vol. 338, no. 6110, pp. 1042–1046, Nov. 2012.
+- [34] D. D. Boehr, R. Nussinov, and P. E. Wright, “The role of dynamic conformational ensembles in biomolecular recognition,” Nature Chem. Biol., vol. 5, no. 11, pp. 789–796, Nov. 2009.
+- [35] R. G. Smock and L. M. Gierasch, “Sending signals dynamically,” Science, vol. 324, no. 5924, pp. 198–203, Apr. 2009.
+- [36] M. Gerstein, A. M. Lesk, and C. Chothia, “Structural mechanisms for domain movements in proteins,” Biochemistry, vol. 33, no. 22, pp. 6739–6749, 1994.
+- [37] S. Hayward and H. J. C. Berendsen, “Systematic analysis of domain motions in proteins from conformational change: New results on citrate synthase and T4 lysozyme,” Proteins, vol. 30, no. 2, pp. 144–154, 1998.
+- [38] L.-W. Yang, A. J. Rader, X. Liu, C. J. Jursa, S. C. Chen, H. A. Karimi, and I. Bahar, “oGNM: Online computation of structural dynamics using the Gaussian network model,” Nucleic Acids Res., vol. 34, Suppl. 2, pp. W24–W31, Jul. 2006.
+- [39] L.-W. Yang and I. Bahar, “Coupling between catalytic site and collective dynamics: A requirement for mechanochemical activity of enzymes,” Structure, vol. 13, no. 6, pp. 893–904, Jun. 2005.
+- [40] C. Chennubhotla and I. Bahar, “Signal propagation in proteins and relation to equilibrium fluctuations,” PLoS Comput. Biol., vol. 3, no. 9, Art. no. e172, Sep. 2007.
+- [41] I. Borg and P. J. F. Groenen, Modern Multidimensional Scaling: Theory and Applications, 2nd ed. New York, NY, USA: Springer, 2005.
+- [42] R. J. Bell and P. Dean, “Atomic vibrations in vitreous silica,” Discuss. Faraday Soc., vol. 50, pp. 55–61, 1970.
+- [43] R. E. Amaro, J. Baudry, J. Chodera, O. Demir, J. A. McCammon, Y. Miao, and J. C. Smith, “Ensemble docking in drug discovery,” Biophys. J., vol. 114, no. 10, pp. 2271–2278, May 2018.
+- [44] J. M. Thornton, M. S. Edwards, W. R. Taylor, and D. J. Barlow, “Location of ‘continuous’ antigenic determinants in the protruding regions of proteins,” EMBO J., vol. 5, no. 2, pp. 409–413, Feb. 1986.
+- [45] L. Ponzoni and I. Bahar, “Structural dynamics is a determinant of the functional significance of missense variants,” Proc. Natl. Acad. Sci. U.S.A., vol. 115, no. 16, pp. 4164–4169, Apr. 2018.
+- [46] P. Ewels, M. Magnusson, S. Lundin, and M. Käller, “MultiQC: Summarize analysis results for multiple tools and samples in a single report,” Bioinformatics, vol. 32, no. 19, pp. 3047–3048, Oct. 2016.
+- [47] R. J. L. Wayment-Steele et al., “Predicting multiple conformations via sequence clustering and AlphaFold2,” Nature, vol. 625, pp. 832–839, Jan. 2024.
+- [48] F. Noé, S. Olsson, J. Köhler, and H. Wu, “Boltzmann generators: Sampling equilibrium states of many-body systems with deep learning,” Science, vol. 365, no. 6457, eaaw1147, Sep. 2019.
 
-KAYNAK : https://status.claude.com/incidents/q5qk1234v205
+KAYNAK : https://arxiv.org/abs/2603.25880
 
---- nextjs | v16.2.1-canary.12 | score=54.17 ---
-Core Changes
-Upgrade React from
-3cb2c420-20260324
-to
-9627b5a1-20260327
-:
-#92015
-[experiment] Add useOffline flag with offline retry behavior:
-#92011
-adapters: remove unused suffix code:
-#91997
-[experiment] Add useOffline hook to expose offline state to userland:
-#92012
-[turbopack] Don't use turborepo to build the docker image:
-#92029
+--- arxiv_ai | Dynamic LIBRAS Gesture Recognition via CNN over Spatiotemporal Matrix Representation | score=103.18 ---
+Dynamic LIBRAS Gesture Recognition via CNN over Spatiotemporal Matrix Representation
+Abstract
+This paper proposes a method for dynamic hand gesture recognition based on the composition of two models: the MediaPipe Hand Landmarker, responsible for extracting 21 skeletal keypoints of the hand, and a convolutional neural network (CNN) trained to classify gestures from a spatiotemporal matrix representation of dimensions 90 by 21 of those keypoints. The method is applied to the recognition of LIBRAS (Brazilian Sign Language) gestures for device control in a home automation system, covering 11 classes of static and dynamic gestures. For real-time inference, a sliding window with temporal frame triplication is used, enabling continuous recognition without recurrent networks. Tests achieved 95% accuracy under low-light conditions and 92% under normal lighting. The results indicate that the approach is effective, although systematic experiments with greater user diversity are needed for a more thorough evaluation of generalization.
+I Introduction
+Automatic hand gesture recognition is a fundamental component of vision-based human-machine interfaces, with applications ranging from device control to sign language interpretation. Despite recent advances in deep learning, the precise recognition of dynamic gestures — those involving movement over time — remains a challenge. Hand anatomy is particularly complex, with joints, tendons, and proportions that vary across individuals, making it difficult to build models that generalize well to multiple users.
+Representing this variability requires capturing both the spatial configuration of the hand at each instant and the evolution of that configuration over time. Approaches based on raw image pixels impose high dimensionality and are sensitive to factors such as lighting and skin color. A more robust alternative is the use of skeletal keypoints extracted by specialized models, which abstract the visual appearance and retain only the geometric structure relevant to gesture recognition.
+Several individual and collective initiatives address this problem. Many of them rely on well-established computer vision libraries such as OpenCV111https://opencv.org and YOLO222https://docs.ultralytics.com. One of the most productive initiatives is the Hand Landmarker333http://developers.google.com/mediapipe/solutions/vision/hand_landmarker, from the MediaPipe group, associated with Google.
+Through this tool, it is possible to identify static hand positions in an image. This allows different strategies to be used for dynamic gesture recognition, captured in videos or image sequences. Among the most common strategies are comparisons with predefined poses, performed through mathematical, statistical, or neural network operations.
+However, the recognition task becomes more difficult when dealing with dynamic gestures, whose execution involves hand movements of different forms and at different time intervals. One example is the letter J in the LIBRAS alphabet, which involves a specific finger position associated with hand rotation.
+This paper proposes a dynamic gesture recognition technique aimed at tolerating variations in expression rhythm and finger and hand positioning, with application to home automation device control through LIBRAS gestures. The main contributions of this work are: (1) a spatiotemporal matrix representation (9021) of skeletal keypoints extracted by MediaPipe, organized by axis and frame, treated as an image for classification by a 2D CNN; (2) a sliding window strategy with temporal frame triplication for continuous real-time inference, without recurrent networks; and (3) validation of the system in a home automation scenario with static and dynamic LIBRAS gestures covering 11 classes.
+II Related Work
+Dynamic hand gesture recognition has been widely investigated in the literature, with approaches ranging from recurrent networks to three-dimensional convolutional networks. This section contextualizes the present work in relation to the most relevant recent studies.
+In the context of LIBRAS recognition with deep learning, Rezende et al. [3] introduced the MINDS-Libras dataset, comprising 1,200 videos of 20 signs performed by 12 users, achieving 93.3% accuracy with the best evaluated classifier. Amaral et al. [4] evaluated deep models for dynamic LIBRAS recognition from depth data, with LRCN and 3D CNN networks achieving above 99% under controlled conditions. More recently, Alves et al. [5] proposed an approach based on skeletal image representation, encoding MediaPipe-extracted keypoints as spatiotemporal images classified by CNN, obtaining 93% on MINDS-Libras and 82% on LIBRAS-UFOP with multiple users. This approach is conceptually close to the one proposed in this paper, differing mainly in the organization of the keypoint matrix and in the use of a sliding window with temporal frame triplication.
+Regarding MediaPipe-based pipelines for dynamic recognition, Yaseen et al. [6] combined MediaPipe keypoint extraction with Inception-v3 and LSTM, achieving 89.7% on the 20BN-Jester dataset. Ridwang et al. [7] used MediaPipe with a modified LSTM for dynamic sign language recognition, reporting 99.4% training accuracy and 85% per-word accuracy in real time, highlighting the gap between training accuracy and production performance. Hakim et al. [8] proposed a combination of 3D CNN with LSTM and a finite state machine for context control in continuous gesture recognition, achieving 97.6% on isolated tests and 93% on real-time sequences.
+In the area of gesture-based home automation, Alabdullah et al. [9] proposed a domestic control system with feature fusion and RNN, achieving 92.57% on the HaGRI dataset. Compared to these works, the approach proposed in this paper adopts a lightweight 2D CNN architecture (25,000 parameters) over the (9021) skeletal keypoint matrix, dispensing with recurrent networks. The temporal triplication of frames in the inference buffer and the 98% confidence threshold contribute to real-time robustness on general-purpose hardware.
+III Methodology
+The method for dynamic gesture detection proposed in this paper is based on a composition of two models. The first is the MediaPipe Hand Landmarker [2], a pre-trained model responsible for detecting and localizing hand joint keypoints in each video frame. The second is a CNN trained by the author, responsible for identifying static and dynamic gestures from a matrix of keypoints organized over time, as explained below.
+III-A Gesture Detection
+This project uses gestures from the LIBRAS alphabet (Língua Brasileira de Sinais — Brazilian Sign Language), the official language of the deaf community in Brazil. It is a visual-gestural language in which communication takes place through signs made with the hands, the body, and facial expressions (Figure 1).
+Some letters were associated with devices in a home automation system: ”A” for air conditioning, ”C” for curtains, ”J” for windows, and ”L” for lights. The letter J is a dynamic gesture, as is the toggle command (on/off), represented by opening and closing the fingers with the hand in a pear shape pointing toward the camera.
+The MediaPipe Hand Landmarker library [2] is a tool specialized in detecting and localizing hand landmarks in images and videos. It uses a machine learning model trained to identify keypoints such as fingertips, the base of the thumb, and the center of the palm. These landmarks are represented in image coordinates (relative) and, optionally, in world coordinates (absolute).
+The library also offers configurations to adjust the maximum number of detected hands and the confidence thresholds for detection and tracking. The results include information about the handedness (left/right) and the detected landmarks, enabling developers to create interactive applications based on hand movements.
+Figure 2 shows the keypoint scheme used by the library. For each joint keypoint, a set of coordinates (x, y, z) is provided, allowing its spatial localization, relative or absolute depending on the configuration. In summary, the output includes: hand orientation (left or right), coordinates of the 21 hand keypoints, and the confidence level of keypoint detection.
+The HandLandmarker full model was adopted, capable of processing images of or pixels. For this model variant, the average latency for recognizing a hand position is 17.12 ms for CPU processing and 12.27 ms for GPU processing [2]. This means that several images can be processed in a short time interval, an essential characteristic for gesture detection.
+III-B Gesture Capture
+The more frames used to capture a movement, the more detail can be extracted. Subtle intermediate movements that help describe the gesture can be easily observed. However, there are limits imposed by the hardware (cameras in particular) and by the processor, CPU or GPU, of the computer.
+To this end, experiments were conducted with different gesture expression speeds, varying the number of frames and the capture interval. There is considerable subjectivity in this definition, since LIBRAS-fluent people express gestures more quickly than beginners, who take longer to form a gesture.
+In general, the goal was to accommodate gestures within an interval of approximately 1,000 ms. This interval provides some comfort for adjusting and sustaining the hand position, particularly for dynamic gestures. A rate of 30 frames per second (fps) was achieved. The extra latency relative to the Hand Landmarker model is due to secondary processing required for image treatment and handling of the recognition output.
+For training the second neural model, 1,254 gestures were captured along with 220 additional samples, captured separately, for validation. Each capture comprises a set of 30 frames. The gestures were divided into 11 classes, covering the following devices and actions: air conditioning, curtains, windows, lights, toggle (on/off), increase intensity, decrease intensity, change light color to blue, change light color to red, change light color to white, and neutral gestures. Figure 3 illustrates the capture of a static gesture corresponding to the letter A of the LIBRAS alphabet.
+The neutral gesture class is important because it allows hands to be present in the scene without causing false detections and the consequent undesired triggering of devices. This class has approximately twice as many captures as the others, since there are various relaxed hand positions that carry no meaning in the context of this study.
+To increase model robustness, gestures were expressed at different speeds and with small variations in finger positioning.
+III-C Motion Matrix
+The keypoints recognized in a set of 30 frames, corresponding to a gesture, were organized into a matrix of dimensions (9021). The 90 rows correspond to the vertical concatenation of the 30 frames for each of the three coordinate axes: rows 1–30 contain x values, rows 31–60 contain y values, and rows 61–90 contain z values. The 21 columns correspond to the hand joint keypoints. Before inference, each matrix is individually normalized using min-max scaling to the range [0, 255] and converted to a grayscale image, making the model invariant to hand scale and distance from the camera. This organization enables the visualization of static or dynamic gestures through visual patterns.
+Figure 4 shows two motion matrices from the dataset. On the left, a static pattern corresponding to the letter A is shown — no variation in coordinate values produces uniform vertical lines across all coordinate sectors. On the right, a dynamic pattern for the toggle (on/off) gesture shows a more complex image, resulting from the variation of joint positions frame by frame.
+To facilitate data organization and inspection, the generated matrices were converted into images, as shown in Figure 4. Captures with evident recording errors, whose patterns were highly discrepant relative to others, were discarded, ensuring a cleaner training set.
+III-D Model Training
+For the identification of dynamic and static gestures in a motion matrix, a convolutional network was trained. The goal was for the model to recognize gestures with different fluencies and hand position variations. In this regard, convolutional networks offer greater tolerance to translation and scaling of patterns in the image [1], which correspond precisely to the time (y) and position (x) dimensions.
+Figure 5 shows the network architecture, composed of three convolutional layers and two dense layers. The first convolutional layer has 33 filters with a (33) kernel, followed by a MaxPooling (22) layer. The second and third convolutional layers have 64 filters each, also with a (33) kernel. The intermediate dense layer has 64 neurons. The activation function was set to relu for all layers except the last, which uses softmax. To improve training stability, L1 regularizers (=0.0001) were applied to the second and third convolutional layers and to the intermediate dense layer. The chosen optimizer was Adam, with a learning rate of 0.000001, batch size of 8, and categorical cross-entropy loss [1].
+Experiments were conducted with different numbers of filters and neurons, with the total parameter count ranging from 2,000 to 253,000. In the smallest configuration, recognition was impaired, with excessive classification uncertainty and consequent performance loss. In the largest configuration, classification was highly precise but computationally expensive — negligible for a modern personal computer processor, but significant for embedded systems with limited memory and processing resources.
+The best trade-off between performance and model size was found at around 25,000 parameters. In this configuration, gesture identification was very fast.
+Figure 6 shows the evolution of model accuracy over 150 training epochs. The effect of the regularizers can be observed in the small oscillation present in the graph. In experiments without regularizers, convergence was less smooth and did not stabilize at the end. An important observation is the proximity between training and validation accuracy — both converging to values close to 100%. This behavior is expected given that both sets were generated by the same person: anatomical and expressive homogeneity eliminates part of the variability that normally causes divergence between training and validation. Although this result indicates good convergence for the available data, it should not be interpreted as a guarantee of generalization to other users. Collecting gestures from a larger group of people would be necessary to evaluate model robustness under more diverse conditions.
+Similarly, the training loss shown in Figure 7 also exhibits fast convergence and low oscillation, which can be attributed to the same factors described above.
+In general, the model training yielded good results: both training and validation accuracy reached 100% on several occasions across the different tested architectures. In the adopted configuration, training accuracy reached 100% and validation accuracy reached 99.55%.
+III-E Dynamic Gesture Detection
+Once the model is trained, an inference heuristic must be established. The initial idea would be to capture a set of 30 images per second and attempt to identify gestures within those intervals. However, this approach has a drawback: a gesture may be partially captured, with part of it in one block and the remainder in the next. Dynamic gestures would thus be easily missed.
+One way to address this issue is through a sliding window for frame capture, as illustrated in Figure 8. In this method, each new frame captured by the camera is inserted times into the buffer — where is a configurable speed parameter. In the adopted implementation, : each real frame is triplicated in the buffer, so a window of 30 entries corresponds to approximately 10 real frames. Each time the buffer reaches 30 entries, the matrix is assembled and submitted to the model. Only predictions with confidence above 98% are considered valid. With each new inserted frame, the 3 oldest entries are removed from the front of the buffer, ensuring continuous overlap between consecutive windows. When a gesture is recognized and executed, the buffer is fully cleared to prevent repeated detections of the same gesture. If hands leave the scene, the buffer is also cleared immediately.
+This technique offers some advantages: by triplicating frames in the buffer, gestures can be expressed more quickly and fluently, at the cost of a slight reduction in the temporal granularity of the analysis.
+On the other hand, the technique also has limitations. Gestures whose movements are a subset of the movements of other gestures tend to be recognized prematurely. One example is the letter I, whose movement is contained within the letter J: when performing J, the system may recognize I before the gesture is completed. For such cases, it is recommended to assume a neutral position or remove the hands from the scene between gestures, while also observing the appropriate cadence.
+From a practical standpoint, this cadence adjustment is similar to learning any human-machine interface. For most home automation sequences tested — such as changing context, activating a device, increasing intensity, and changing color — it was not necessary to assume neutral postures or remove the hand from the scene, as the gestures involved do not present movement overlap.
+IV Simulations and Results
+To support the simulation process, a simple operating interface was created. It is capable of capturing gestures and presenting visual feedback of the actions requested by the user. Tests were conducted at different capture speeds, under two lighting conditions — low and normal —, with variations in gesture expression, and across different action sequences. Tests were carried out on a personal computer equipped with an Intel Core i7 processor, 16 GB of RAM, and a Logitech Brio camera, without a dedicated GPU for inference.
+Figure 9 shows the execution of the command to change the light color to white. The text color was also changed to white, indicating that the action was executed. A test sequence was conducted in a low-light environment and achieved high accuracy. However, the results are directly related to the quality of the camera used, whose sensor is capable of capturing images even in low-light conditions.
+Table I summarizes the results obtained under the two tested lighting conditions. For each condition, 100 consecutive recognitions of isolated gestures were performed, with buffer reset between each attempt. Gestures were expressed with variations, aiming to reach recognition limits without excessive distortion.
+The full sequence used in the normal-light test included context switching, device activation, intensity increase, color change to white, intensity decrease, and deactivation. In both conditions, the letter C was the gesture with the highest error rate, being confused with relaxed hand positions.
+Although the test set is limited, it highlights the need to increase the diversity of movements and anatomical features during gesture capture. More captures with rightward and leftward tilt and variations in finger positioning — such as the thumb pointing up, down, or at an angle, as illustrated in Figure 10 — would help ensure good accuracy across different users.
+The results obtained are comparable to those reported in the literature for similar scenarios: Alabdullah et al. [9] achieved 92.57% in gesture-based home control, while Alves et al. [5], using a conceptually similar approach with skeletal images and CNN, obtained 93% on the MINDS-Libras dataset with 12 distinct users. It is worth noting that the tests presented here were conducted with a single user under low and normal lighting conditions, which favors accuracy but limits the evaluation of model generalization.
+The need for systematic tests to evaluate the system more rigorously should be emphasized. Ideally, a formal test set independent from the validation set should be employed, properly separating development and evaluation phases. Additionally, experiments with multiple users would be needed, analyzing the influence of personal characteristics — such as expression style, rhythm, and anatomical variations — on the accuracy of isolated or sequential gesture detection.
+V Conclusion
+This paper presented a method for dynamic LIBRAS gesture recognition applied to device control in a home automation system. The three proposed contributions were demonstrated throughout the work: (1) the spatiotemporal matrix representation (9021) of skeletal keypoints extracted by MediaPipe proved effective for capturing visual patterns of static and dynamic gestures, enabling visual inspection and filtering of training data; (2) the sliding window strategy with temporal frame triplication () enabled continuous real-time inference without recurrent networks, keeping the architecture simple (25,000 parameters) and compatible with general-purpose hardware; and (3) validation in a home automation scenario with 11 LIBRAS gesture classes achieved 95% accuracy under low-light conditions and 92% under normal lighting, results comparable to those reported in the literature for similar systems [9][5].
+Compared to approaches that use finite state machines [8] or recurrent models [7] to model temporal sequences, the proposed architecture dispenses with additional context control components, reducing implementation complexity and computational cost.
+For more rigorous evaluation, it is necessary to expand the training dataset with gestures captured from multiple users with different anatomical characteristics. Generalization assessment should be conducted with a formal, independent test set under varied lighting and hardware conditions.
+As future work, we intend to expand the dataset with gestures from multiple users, incorporate variable lighting as an explicit training variable, and evaluate the portability of the system on low-cost embedded hardware. Extending the gesture vocabulary beyond the current LIBRAS subset also represents a relevant direction to increase the practical applicability of the system.
+References
+- [1] F. Chollet, Deep Learning with Python Shelter Island, NY, USA: Manning Publications Co., 2018.
+- [2] F. Zhang, V. Bazarevsky, A. Vakunov, A. Tkachenka, G. S. Chuo-Ling, and M. Grundmann, “MediaPipe Hands: On-device Real-time Hand Tracking,” Google Research, Mountain View, CA, USA, 2020.
+- [3] T. M. Rezende, S. G. M. Almeida, and F. G. Guimarães, “Development and validation of a Brazilian sign language database for human gesture recognition,” Neural Comput. Appl., vol. 33, no. 16, pp. 10449–10467, 2021, doi: 10.1007/s00521-021-05802-4.
+- [4] L. Amaral, G. L. N. Júnior, T. Vieira, and T. Vieira, “Evaluating deep models for dynamic Brazilian sign language recognition,” in Proc. CIARP 2018, Lect. Notes Comput. Sci., vol. 11401, Springer, Cham, 2019, doi: 10.1007/978-3-030-13469-3_107.
+- [5] C. E. G. R. Alves, F. A. Boldt, and T. M. Paixão, “Enhancing Brazilian sign language recognition through skeleton image representation,” arXiv:2404.19148, 2024, doi: 10.48550/arXiv.2404.19148.
+- [6] O. J. Yaseen, J. Kim, S. Jamil, J. Lee, and F. Ullah, “Next-gen dynamic hand gesture recognition: MediaPipe, Inception-v3 and LSTM-based enhanced deep learning model,” Electronics, vol. 13, no. 16, Art. 3233, 2024, doi: 10.3390/electronics13163233.
+- [7] Ridwang, A. A. Ilham, I. Nurtanio, and Syafaruddin, “Dynamic sign language recognition using MediaPipe library and modified LSTM method,” Int. J. Adv. Sci. Eng. Inf. Technol., vol. 13, no. 6, 2023, doi: 10.18517/ijaseit.13.6.19401.
+- [8] N. L. Hakim et al., “Dynamic hand gesture recognition using 3DCNN and LSTM with FSM context-aware model,” Sensors, vol. 19, no. 24, Art. 5429, 2019, doi: 10.3390/s19245429.
+- [9] B. I. Alabdullah et al., “Smart home automation-based hand gesture recognition using feature fusion and recurrent neural network,” Sensors, vol. 23, no. 17, Art. 7523, 2023, doi: 10.3390/s23177523.
+
+KAYNAK : https://arxiv.org/abs/2603.25863
+
+--- arxiv_ai | Good Scores, Bad Data: A Metric for Multimodal Coherence | score=103.18 ---
+Good Scores, Bad Data: A Metric for Multimodal Coherence
+Abstract
+Multimodal AI systems fuse images, text, and structured annotations into unified representations, then evaluate the result by downstream task accuracy. However, high accuracy on research benchmarks does not translate to high confidence in production workflows. Accuracy conflates two independent properties: how well the model performs and how coherent the underlying data is. A model can achieve strong Visual Question Answering (VQA) scores on internally contradictory inputs simply by exploiting answer distributions.
+We introduce the Multimodal Coherence Score (MCS), a metric that evaluates fusion quality independent of any downstream model. MCS decomposes coherence into four dimensions (identity, spatial, semantic, and decision) with learned weights optimized via Nelder-Mead to maximize Spearman correlation with downstream performance. We evaluate MCS on 1,000 Visual Genome images using DETR for object detection, CLIP for semantic alignment, and ViLT for VQA, then validate transfer on 150 COCO 2017 images with no retraining. Across three fusion architectures (naive concatenation, contract-enforced filtering, and CLIP-based re-ranking), MCS discriminates fusion quality with higher sensitivity than task accuracy alone (Spearman vs. ). Controlled perturbation experiments on 200 images at three corruption rates confirm that each dimension responds independently to its failure mode. Zero cross-talk.
+MCS is lightweight, requires no human annotation, and runs end-to-end in a single Colab session. It does not stop at something broke. It tells you what broke.
+1 Introduction
+Consider Figure 1. Visual Genome image #2320169 shows a herd of zebras crossing a dirt road. A DETR object detector identifies thirteen zebras. But the dataset annotations label most of them “animal.” One is labeled “bunch.” Individual stripes are listed as separate objects. The region descriptions repeat “zebra is next to zebra” ten times and “animal with black and white stripes” ten more. A Visual Question Answering (VQA) system is asked “What kind of animal?” and responds “zebra.” The answer is correct. The data behind it is not.
+This matters beyond research benchmarks. The same class of incoherence, where structured annotations contradict each other within a single record, propagates directly into production systems that depend on multimodal fusion. A radiology pipeline where a scan’s metadata disagrees with the accompanying report. An autonomous vehicle where LiDAR annotations and camera labels place the same object at different locations. An enterprise document processing workflow where extracted tables contradict the surrounding text. In each case, a downstream model may still produce a plausible output, but the underlying fusion is unreliable, and no existing metric flags it.
+This is not an isolated quality issue. Visual Genome, the densest public multimodal dataset and the backbone of scene graph research, contains thousands of images where annotations disagree with each other Krishna et al. (2017). The field currently lacks a systematic tool for detecting this. Downstream metrics such as VQA accuracy, Recall@K, and BLEU Vedantam et al. (2015) evaluate model performance, not data quality. Pairwise alignment methods such as CLIP similarity Radford et al. (2021) assess two modalities at a time. When a fusion event spans five modalities, pairwise checks do not capture the full picture. To date, no metric evaluates the coherence of the fusion itself.
+We introduce the Multimodal Coherence Score (MCS), which decomposes fusion quality into four dimensions: identity coherence (do records refer to the same entities?), spatial coherence (do spatial relationships agree across modalities?), semantic coherence (is the content mutually consistent?), and decision coherence (does the fused representation support correct downstream answers?). A learned weighted composite produces a single score that is more predictive of downstream performance than any individual dimension. Perturbation experiments across three datasets confirm that each dimension responds independently to its targeted failure mode: swapping object annotations degrades identity coherence while all other dimensions hold steady.
+The result is a metric that is efficient to compute, requires no human annotation, and provides actionable diagnostics. It does not stop at something broke. It tells you what broke, and which part of the pipeline to address first.
+2 Background
+Multimodal evaluation. CLIP alignment Radford et al. (2021), VQA accuracy, and captioning scores Vedantam et al. (2015); Banerjee and Lavie (2005) measure how well a model handles multimodal input. They do not assess whether the data itself is coherent.
+Data quality. Wang and Strong Wang and Strong (1996) defined quality dimensions for structured databases. These frameworks assume a single-table setting and do not extend to cross-modal relationships.
+Scene graph evaluation. SGDet, SGCls, and Recall@K Krishna et al. (2017) evaluate predicted graphs against ground truth assumed to be clean. In Visual Genome, this assumption does not hold.
+The gap. No existing framework measures cross-modal coherence as an intrinsic property of the fused representation, independent of downstream task performance. This paper addresses that gap.
+3 The Multimodal Coherence Framework
+3.1 Setup
+Let be a multimodal event: a set of records from modalities describing the same scene. In Visual Genome, one event per image contains: image pixels (), object annotations (), relationship triplets (), region descriptions (), and QA pairs ().
+Coherence means these records agree with each other. When they do not, the fusion is unreliable, even if a downstream model produces a correct output. Four dimensions capture the distinct ways fusion can fail.
+3.2 The Four Dimensions
+Identity Coherence (IC). Do all records refer to the same entities?
+In image #2320169, a detector identifies thirteen zebras. If the annotations also list “zebra” thirteen times, IC is high. Instead, they list “animal,” “bunch,” “stripe.” IC is low.
+IC is the Jaccard similarity between detected and annotated entity sets:
+We use DETR-ResNet-50 Carion et al. (2020) with a confidence threshold of 0.7 to define the detected entity set. A label normalization map aligns Visual Genome vocabulary to COCO categories (e.g., “man,” “woman,” “boy” “person”).
+Spatial Coherence (SpC). Do spatial relationships match across modalities?
+A region description places “a zebra eating grass” at bounding box coordinates . A detector localizes the same zebra nearby. SpC is high. But ten descriptions say “zebra is next to zebra” with overlapping boxes that fail to isolate individual animals. SpC is low.
+SpC is the mean IoU between annotated and detected bounding boxes:
+Semantic Coherence (SC). Is the content across modalities mutually consistent?
+If descriptions said “a boat at a marina” for the zebra image, SC would be low. Even the actual annotations (“animal with black and white stripes” repeated ten times, with no mention of the road or trees) produce lower SC than a single well-written caption.
+SC uses CLIP ViT-B/32 embeddings Radford et al. (2021), defined as the minimum pairwise cosine similarity between the image and all text records:
+Coherence is only as strong as the weakest pair.
+Decision Coherence (DC). Does the fused representation support correct downstream answers? A reference model answers a VQA question. DC is 1 if correct, 0 otherwise:
+We compute DC using ViLT-B/32 Kim et al. (2021) fine-tuned on VQAv2. For each image, the model answers up to three QA pairs from the Visual Genome annotations.
+3.3 The Composite
+Weights are learned via Nelder-Mead optimization, maximizing Spearman correlation between MCS (computed from IC, SpC, and SC, excluding DC) and DC across the dataset. They quantify how much each coherence dimension contributes to downstream task success.
+DC alone tells you the system failed. MCS tells you why. High IC and SpC paired with low SC indicates that the text does not match the image: fix the captions. Low IC with high scores elsewhere points to entity resolution failures. This is the difference between a failed test and an actionable diagnosis.
+3.4 Overview
+Figure 2 illustrates the full pipeline. One image. Four failure modes. Each independently measurable and independently actionable.
+4 Datasets
+Visual Genome Krishna et al. (2017) is the densest public multimodal dataset. It is also imperfect. Each image carries five modalities that should cohere, and in practice they often do not. This natural variation is precisely the signal a coherence metric requires.
+COCO Lin et al. (2014) provides instance segmentation and dense captions. Open Images Kuznetsova et al. (2020) provides hierarchical labels and visual relationships. Both serve as transfer benchmarks: if weights learned on Visual Genome produce meaningful MCS scores on structurally different datasets, the framework generalizes.
+Ground truth construction. No human annotation is required. IC: Jaccard overlap between DETR-ResNet-50 detections (threshold 0.7) and annotated objects, with label normalization. SpC: Mean best-IoU between annotated bounding boxes and detected boxes. SC: CLIP ViT-B/32 cosine similarity between image and region description embeddings. DC: ViLT-B/32 VQA accuracy on up to three QA pairs per image.
+5 Experiments
+5.1 Fusion Architectures
+Naive Concatenation. Compute MCS dimensions directly from raw Visual Genome annotations and DETR/CLIP outputs. No alignment or filtering is applied.
+Contract-Enforced Fusion. Apply validation rules prior to fusion: reject objects whose bounding boxes have IoU 0.1 with any detector prediction, reject region descriptions with CLIP cosine similarity 0.3 to the image embedding, and enforce that relationship triplets reference only validated objects.
+Foundation-Model Fusion. Use CLIP embeddings to re-rank and filter annotations. Reject region descriptions below cosine similarity 0.5 to the image. Filter objects by whether they appear in the surviving descriptions. QA pairs are filtered to retain only those whose question words (length 3) overlap with validated description text.
+5.2 Perturbation Experiments
+A metric that claims to decompose fusion quality must demonstrate that the dimensions are genuinely independent. We select a perturbation subset of 200 images and corrupt each dimension individually at three rates (10%, 20%, 50%), verifying that only the targeted dimension degrades.
+Object swap replaces a fraction of annotations with objects drawn from a random donor image. Bbox shuffle offsets bounding box coordinates by 100–200% of the box dimension in a random direction, ensuring minimal overlap with the original position. Caption swap substitutes region descriptions from other images. Compound applies all three simultaneously.
+5.3 Evaluation Protocol
+We evaluate along four axes: discriminative power (Kruskal-Wallis H-test on architecture rankings), downstream correlation (Spearman between MCS and VQA accuracy), decomposability (targeted dimension degrades 20%, non-targets within 5%), and transfer (VG-learned weights applied to COCO and Open Images without retraining).
+Hypotheses. H1: Contract-enforced fusion scores highest on IC and SpC. H2: Foundation-model fusion scores highest on SC. H3: The composite outpredicts any single dimension: . H4: Perturbations degrade targets 20% with 5% cross-talk. H5: Weights transfer without retraining.
+6 Results
+6.1 Architecture Comparison
+Contract-enforced fusion doubles IC and SpC over naive concatenation (Figure 3). The central finding: DC is nearly identical across all three architectures (0.423 to 0.460). Downstream task accuracy cannot distinguish these fusion approaches. MCS can.
+6.2 Perturbation Decomposition
+This experiment validates the core claim (Figure 4). Object swap reduces IC by 35.6% while SpC and SC remain flat. Bbox shuffle reduces SpC by 38.3% with no effect on IC or SC. Caption swap reduces SC by 26.7% with no effect on the others. The dimensions are genuinely independent.
+6.3 Learned Weights and Transfer
+Learned weights (Figure 5): , , . Semantic coherence carries 72% of the weight. Identity coherence contributes almost nothing. Object detection is reliable enough that entity mismatches have minimal impact on this dataset. The semantic gap between text and image is where fusion quality breaks down.
+The composite MCS score (Figure 6) achieves Spearman () with Decision Coherence, exceeding the best single dimension (). H3 confirmed.
+Contract-enforced fusion leads on structural coherence, doubling IC and SpC over naive concatenation (H1). Each perturbation degrades only its target (H4). VG-learned weights produce meaningful scores on COCO (MCS = 0.571) and Open Images (MCS = 0.272) with no retraining (H5).
+7 Discussion
+The learned weights are the most informative result. Semantic coherence dominates at 72.2%, while identity coherence contributes less than 1%. This indicates that on Visual Genome, the primary coherence failure is not entity mismatches or spatial misalignment. It is text that does not faithfully represent what the image contains. For practitioners, this suggests that auditing text-image alignment should be the first priority.
+Importantly, these weights are not universal constants. They are a diagnostic fingerprint of the dataset and domain. In medical imaging, where automated detection is less reliable, identity coherence would likely dominate. In autonomous driving, where spatial precision is safety-critical, spatial coherence would carry greater weight. The framework adapts: the weights reveal where your data’s coherence breaks down.
+Contract-enforced fusion presents an interesting finding. Explicit validation rules (IoU thresholds, CLIP similarity filters) double IC and SpC over naive concatenation, outperforming foundation-model filtering on the dimensions those rules specifically target. In settings where the failure modes are well-characterized, simple filters can be more effective than general-purpose models.
+Deployment. MCS requires one forward pass per dimension and no human annotation. Engineering teams can integrate it as a recurring data quality check. The per-dimension breakdown provides specific guidance: high IC and SpC paired with low SC flags caption quality issues; low IC points to entity linking failures. The metric does not just produce a score. It produces a diagnosis.
+Limitations. DC depends on the reference model, which biases learned weights toward that model’s failure modes. Jaccard-based IC assumes a reliable object detector. Learned weights may overfit to VQA-style tasks. Cross-task validation (training weights on VQA, evaluating on retrieval) would strengthen the generalization claims.
+8 Conclusion
+The standard approach to evaluating multimodal systems asks one question: did the model produce the correct output? This is insufficient. A model can produce correct outputs from incoherent data, and in practice, it frequently does.
+MCS asks a more useful question: is the fusion itself coherent? The answer decomposes into four independent, measurable dimensions. The composite predicts downstream performance more reliably than any single dimension. And when coherence fails, the decomposition identifies which signal is degraded.
+The multimodal AI community has invested heavily in building more capable models. Equally important is building reliable measures of the data those models consume.
+References
+- Banerjee and Lavie (2005) Satanjeev Banerjee and Alon Lavie. Meteor: An automatic metric for mt evaluation with improved correlation with human judgments. arXiv preprint cs/0510100, 2005.
+- Carion et al. (2020) Nicolas Carion, Francisco Massa, Gabriel Synnaeve, Nicolas Usunier, Alexander Kirillov, and Sergey Zagoruyko. End-to-end object detection with transformers. In European Conference on Computer Vision (ECCV), pages 213–229. Springer, 2020.
+- Kim et al. (2021) Wonjae Kim, Bokyung Son, and Ildoo Kim. Vilt: Vision-and-language transformer without convolution or region supervision. In International Conference on Machine Learning, pages 5583–5594. PMLR, 2021.
+- Krishna et al. (2017) Ranjay Krishna, Yuke Zhu, Oliver Groth, Justin Johnson, Kenji Hata, Joshua Kravitz, Stephanie Chen, Yannis Kalantidis, Li-Jia Li, David A Shamma, et al. Visual genome: Connecting language and vision using crowdsourced dense image annotations. International Journal of Computer Vision, 123(1):32–73, 2017.
+- Kuznetsova et al. (2020) Alina Kuznetsova, Hassan Rom, Neil Alldrin, Jasper Uijlings, Ivan Krasin, Jordi Pont-Tuset, Shahab Kamali, Stefan Popov, Matteo Malloci, Alexander Kolesnikov, et al. The open images dataset V4: Unified image classification, object detection, and visual relationship detection at scale. International Journal of Computer Vision, 128(7):1956–1981, 2020.
+- Lin et al. (2014) Tsung-Yi Lin, Michael Maire, Serge Belongie, James Hays, Pietro Perona, Deva Ramanan, Piotr Dollár, and C Lawrence Zitnick. Microsoft COCO: Common objects in context. In European Conference on Computer Vision, pages 740–755. Springer, 2014.
+- Radford et al. (2021) Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, et al. Learning transferable visual models from natural language supervision. arXiv preprint arXiv:2103.00020, 2021.
+- Vedantam et al. (2015) Ramakrishna Vedantam, C Lawrence Zitnick, and Devi Parikh. Cider: Consensus-based image description evaluation. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), pages 4566–4575, 2015.
+- Wang and Strong (1996) Richard Y Wang and Diane M Strong. Beyond accuracy: What data quality means to data consumers. Journal of Management Information Systems, 12(4):5–33, 1996.
+
+KAYNAK : https://arxiv.org/abs/2603.25924
+
+--- arxiv_ai | Do Neurons Dream of Primitive Operators? Wake-Sleep Compression Rediscovers Schank's Event Semantics | score=103.18 ---
+Do Neurons Dream of Primitive Operators?
+Wake-Sleep Compression Rediscovers Schank’s Event Semantics
+Abstract
+We show that they do. Roger Schank’s conceptual dependency theory proposed that all human events can be decomposed into a small set of primitive operations—ATRANS (transfer of possession), PTRANS (physical movement), MTRANS (information transfer), and others. These primitives were hand-coded based on linguistic intuition. We ask: can the same primitives be discovered automatically from data through compression pressure alone?
+We adapt DreamCoder’s wake-sleep library learning algorithm to the domain of event state transformations. Given events represented as before/after world state pairs, our system searches for operator compositions that explain each event (wake), then extracts recurring patterns as new library entries optimized under Minimum Description Length (sleep). Starting from four generic state-change primitives, the system discovers specialized operators that map directly to Schank’s core primitives: MOVE_PROP_has ATRANS, CHANGE_location PTRANS, SET_knows MTRANS, and SET_consumed INGEST. It also discovers compound operators corresponding to verb compositions (e.g., “mail” = ATRANS PTRANS) and novel operators for emotional state changes not present in Schank’s original taxonomy.
+We validate on both synthetic events and real-world commonsense data from the ATOMIC knowledge graph (Sap et al., 2019). On synthetic data, the discovered library achieves Bayesian MDL within 4% of Schank’s hand-coded primitives while explaining 100% of events vs. Schank’s 81%. On ATOMIC data, the results are more dramatic: Schank’s primitives explain only 10% of naturalistic commonsense events, while the discovered library explains 100%. The dominant operators in real-world data are not Schank’s physical-action primitives but mental and emotional state changes—CHANGE_wants (20%), CHANGE_feels (18%), CHANGE_is (18%)—none of which appear in Schank’s original taxonomy.
+These results provide the first empirical evidence that event primitives can be derived from compression pressure, that Schank’s core physical-action primitives (ATRANS, PTRANS, MTRANS) are information-theoretically justified, and that the complete inventory of event primitives is substantially richer than Schank proposed—with mental/emotional operators dominating over physical ones in naturalistic data.
+1 Introduction
+In 1972, Roger Schank proposed conceptual dependency theory (Schank, 1972), arguing that the meaning of any natural language sentence describing an event could be decomposed into a small set of primitive actions. These primitives—ATRANS (abstract transfer of possession), PTRANS (physical transfer of location), MTRANS (mental transfer of information), MBUILD (mental construction), INGEST (taking into the body), and several others—were designed to capture the fundamental building blocks of human event understanding.
+Schank’s primitives were influential but controversial. Critics argued they were arbitrary, incomplete, and reflected the intuitions of their creator rather than any deep structure of events (Wilensky, 1983; Dreyfus, 1992). The framework fell out of favor as statistical methods came to dominate NLP, and the question of whether semantic primitives exist was largely abandoned.
+We revisit this question with a new tool: library learning. DreamCoder (Ellis et al., 2021) demonstrated that wake-sleep learning can discover reusable programming primitives from examples through compression pressure—the Minimum Description Length (MDL) principle automatically identifies abstractions that minimize the total cost of describing both the library and the programs that use it. If Schank’s primitives are genuinely fundamental, they should emerge from the same kind of compression pressure applied to event data.
+We evaluate in two complementary settings. Synthetic events generated from controlled templates validate that the algorithm’s mechanics work correctly—it recovers known ground-truth categories. Real-world events drawn from the ATOMIC commonsense knowledge graph (Sap et al., 2019) test whether the primitives generalize to naturalistic data that was not designed around Schank’s theory. The second evaluation is the critical one.
+Our contributions are:
+-
+1.
+A novel domain-specific language (DSL) for representing events as state transformations over world-state triples, with operators as typed, composable templates.
+-
+2.
+An adaptation of wake-sleep library learning to this domain, including a composition discovery mechanism that identifies compound operators (e.g., “mail” = ATRANS PTRANS).
+-
+3.
+Empirical evidence that four of Schank’s core primitives (ATRANS, PTRANS, MTRANS, INGEST) emerge from pure MDL pressure on event data, along with novel primitives for emotional, goal, and attribute state changes.
+-
+4.
+Validation on real-world commonsense data from ATOMIC (Sap et al., 2019), showing that the complete primitive inventory is richer than Schank proposed, with mental/emotional operators dominating.
+-
+5.
+A Bayesian MDL framework with proper probabilistic costs that enables rigorous model comparison via Bayes factors.
+2 Background
+2.1 Schank’s Conceptual Dependency Theory
+Schank’s framework (Schank, 1972; Schank and Abelson, 1977) proposed approximately 11 primitive actions:
+-
+•
+ATRANS: Abstract transfer of possession or ownership (give, buy, steal)
+-
+•
+PTRANS: Physical transfer of location (go, move, fly)
+-
+•
+MTRANS: Mental transfer of information (tell, teach, read)
+-
+•
+MBUILD: Mental construction of new information (think, decide, realize)
+-
+•
+INGEST: Taking a substance into the body (eat, drink, breathe)
+-
+•
+EXPEL: Expelling from the body
+-
+•
+PROPEL: Applying physical force
+-
+•
+MOVE: Moving a body part
+-
+•
+GRASP: Grasping an object
+-
+•
+SPEAK: Producing sound
+-
+•
+ATTEND: Directing a sense organ
+Each event in natural language was analyzed as an instantiation of one or more of these primitives with specific role fillers (agent, object, source, destination, etc.). Complex events were decomposed into compositions of primitives: “John mailed Mary the book” = ATRANS(John Mary, book) PTRANS(book, John’s house Mary’s house).
+2.2 DreamCoder and Library Learning
+DreamCoder (Ellis et al., 2021) introduced a wake-sleep algorithm for bootstrapping program synthesis with learned libraries. The key insight is that the right set of primitives is the one that minimizes total description length:
+The algorithm alternates between:
+-
+•
+Wake phase: Search for programs that solve tasks using the current library.
+-
+•
+Sleep phase: Extract common sub-expressions from successful programs and propose them as new library entries if they reduce total MDL.
+DreamCoder was applied to list manipulation, text editing, and graphics domains—all formulated in lambda calculus. We adapt the same principle to event state transformations.
+2.3 Related Work
+Several lines of work relate to ours. Wierzbicka (1996) proposed Natural Semantic Metalanguage (NSM), a set of approximately 65 semantic primes claimed to be universal across languages. Dowty (1991) developed proto-role theory, decomposing thematic roles into contributing properties. More recently, Sap et al. (2019) created ATOMIC, a large-scale knowledge graph of if-then commonsense knowledge about events, and Mostafazadeh et al. (2020) developed GLUCOSE with structured causal explanations. FrameNet (Baker et al., 1998) and VerbNet (Schuler, 2005) provide frame-based decompositions of verb semantics.
+In a different tradition, LeCun’s Joint Embedding Predictive Architecture (JEPA) (LeCun, 2022; Assran et al., 2023) proposes that intelligent systems should learn world models that predict in abstract representation space rather than pixel or token space. JEPA’s predictor module learns latent-space transformations conditioned on actions—essentially learning operators that map between abstract states. Our work shares JEPA’s conviction that the right level of abstraction is neither raw observations nor hand-coded symbols, but learned representations that capture the structure of state transitions. Where JEPA learns continuous predictors in embedding space, we discover discrete, composable, interpretable operators via compression. The two approaches are complementary: JEPA provides the perceptual grounding (learning what the abstract states are), while our method provides the symbolic structure (learning how states transform into each other via typed operators). A natural synthesis would use JEPA-style latent states as the world-state representation and our wake-sleep loop to discover the discrete operator vocabulary over those states.
+More recently, Cambria and others (2024) proposed PrimeNet, a framework for commonsense knowledge representation using conceptual primitives inspired by Schank. Unlike our approach, PrimeNet’s primitives are hand-designed rather than discovered from data. Piantadosi et al. (2016) frame cognitive development as hierarchical Bayesian program induction, arguing that the “logical primitives of thought” emerge from learning pressures. Our work applies this insight to event semantics and provides an explicit discovery algorithm.
+The connection between our abstraction discovery and data compression is not merely analogical (Figure 1). BPE (Sennrich et al., 2016), now standard in language model tokenization, discovers subword units through the same iterative merge-the-most-frequent-pair procedure that our composition step uses. Huffman coding assigns shorter codewords to frequent symbols, mirroring our specialization step. Our contribution is applying these compression principles to typed, composable state transformations rather than character sequences.
+Our approach differs from all of the above in that we discover primitives from data rather than defining them by linguistic analysis, and we evaluate them by compression efficiency rather than linguistic coverage.
+3 Method
+3.1 World State Representation
+We represent world states as sets of triples where is a subject entity, is a relation, and is an object or value. For example:
+Before: {(John, has, book), (John, location, home)} After: {(Mary, has, book), (John, location, home)}
+An event is a pair of world states (before, after) plus a natural language description. The state diff is the set of triples added and removed:
+3.2 Operator DSL
+An operator template is defined by:
+-
+•
+A name (e.g., MOVE_PROP)
+-
+•
+Typed slots: where each slot has a name and type (entity, location, property, value)
+-
+•
+Remove patterns: triple templates with $-variables bound to slots
+-
+•
+Add patterns: triple templates with $-variables bound to slots
+An operator instance binds concrete entities to slots, producing a concrete state diff. A program is a sequence of operator instances whose composed diff explains an event’s state change.
+Seed library. We initialize with four maximally generic operators. In the definitions below, denotes an entity, a property (relation name), a value, a source entity, and a destination entity:
+-
+•
+SET(, , ): Add triple . Models the appearance of a new fact.
+-
+•
+UNSET(, , ): Remove triple . Models the disappearance of a fact.
+-
+•
+MOVE_PROP(, , , ): Remove , add . Models transfer—the source loses what the destination gains.
+-
+•
+CHANGE(, , , ): Remove , add . Models value replacement.
+These are deliberately minimal—they can express any state change but carry no semantic commitment. The goal is to discover which specializations of these generic operators recur across events.
+3.3 Wake Phase: Program Search
+Given an event with target diff and a library , we search for a program such that the composed diff of matches . We use beam search with width , maximum depth 3, and operators sorted by ascending arity (preferring specialized operators).
+For each operator, we enumerate bindings by constraining slot values to entities and relations appearing in the target diff, with early pruning of bindings that produce no overlap with the remaining unexplained diff.
+3.4 Sleep Phase: Abstraction Discovery
+After the wake phase produces programs for all events, the sleep phase identifies two kinds of new operators:
+Specializations. For each generic operator, we group instances by the relation they operate on. If MOVE_PROP is instantiated with property=“has” in events (where is a frequency threshold), we propose MOVE_PROP_has as a specialized operator with the property slot hardcoded. This reduces the arity by 1, saving 1 bit per use at the cost of adding the operator to the library.
+Compositions. We identify pairs of operators that frequently appear in sequence across programs. If appears in programs, we propose a compound operator whose patterns combine those of and (with shared entity bindings unified). This replaces a 2-step program with a single step.
+Both specializations and compositions are evaluated by MDL savings:
+where is the frequency, is the per-use cost with the existing library, is the per-use cost with the new operator, and is the description length of the new operator template.
+3.5 Pruning Phase
+After convergence, we prune operators whose actual usage in programs does not justify their library cost. An operator is removed if:
+This eliminates operators that were proposed based on pattern frequency but are not actually preferred by the search procedure.
+3.6 Full Algorithm
+Algorithm 1 presents the complete wake-sleep loop.
+3.7 Connection to Compression Algorithms
+The sleep phase has a direct analogy to well-known compression techniques. Specialization corresponds to Huffman coding: frequently-used operator+relation combinations receive shorter codes (lower arity fewer bits per use), exactly as Huffman assigns shorter codewords to frequent symbols. Composition corresponds to byte-pair encoding (BPE) (Sennrich et al., 2016): the most frequent operator pair is merged into a single new token, reducing sequence length at the cost of a larger vocabulary. This process iterates, building a hierarchy of increasingly abstract operators—just as BPE builds a hierarchy of increasingly long subword units.
+The analogy is not merely metaphorical. In all three cases (Huffman, BPE, our algorithm), the objective is identical: minimize the total description length of the data given a codebook, where codebook complexity is penalized. The key difference is that our “symbols” are typed, composable state transformations rather than characters or bytes, and our “merging” must respect the algebraic structure of operator composition (shared bindings must be unified, add/remove patterns must be combined consistently).
+This perspective suggests that Schank’s primitives are the Huffman code of event semantics: the variable-length encoding that assigns the shortest descriptions to the most common state transformations. The fact that ATRANS, PTRANS, and MTRANS are the first operators discovered (iteration 1) mirrors how Huffman coding assigns the shortest codes first—these are the highest-frequency “symbols” in the event alphabet.
+3.8 Description Length Computation
+We use two MDL measures for distinct purposes. The simplified MDL serves as the algorithm’s internal search heuristic—fast to compute and sufficient to guide operator discovery. It counts structural units:
+-
+•
+Operator template: number of slots + number of patterns
+-
+•
+Operator instance: 1 (operator selection) + number of bindings
+-
+•
+Program: sum of instance description lengths
+-
+•
+Unexplained event: complexity of the target diff (penalty)
+Total MDL = library cost + program costs + unexplained penalties.
+Worked example. Consider the event “John gave Mary the book,” with state diff:
+With the seed library (MOVE_PROP, 4 slots): the program is:
+-
+•
+Library cost of MOVE_PROP: slots patterns . Here, “patterns” are the operator’s add and remove templates—the rules defining what the operator does. MOVE_PROP has one remove pattern and one add pattern , totaling 2.
+-
+•
+Program cost: (select MOVE_PROP from 4 ops) (bind 4 slots) .
+With the discovered library (ATRANS, i.e. MOVE_PROP_has, 3 slots):
+The “has” relation is hardcoded into the operator definition, so it need not be specified at each use.
+-
+•
+Library cost of ATRANS: slots patterns . ATRANS still has 2 patterns:
+but only 3 free slots, because “has” is baked in.
+-
+•
+Program cost: (select ATRANS from 14 ops) (bind 3 slots) .
+The per-use saving is bit. Over 110 ATRANS-type events in the dataset, this saves 110 bits, far exceeding the 5-bit library cost of adding ATRANS. This is the MDL pressure that drives specialization: a frequently-used operator with one fewer slot pays for itself after just 5 uses.
+Now consider the compound event “John mailed Mary the book,” which requires both possession transfer and physical movement. With the seed library, this takes two steps:
+Total: 10 bits. The compound operator MAIL = ATRANS PTRANS encodes both in one step with 5 shared bindings: bits. The savings ( bits per use) quickly exceed the library cost of MAIL.
+The Bayesian MDL (Section 6.6) serves as the evaluation metric for final model comparison. It replaces unit counts with proper probabilistic costs— for operator selection, for each binding—enabling rigorous comparison via Bayes factors. This separation mirrors standard practice: DreamCoder similarly uses a proxy objective for search and a full generative model for evaluation (Ellis et al., 2021).
+4 Data
+We generate synthetic event datasets with controlled ground-truth operator categories. Events are generated from 14 templates spanning 7 categories:
+We generate datasets of 100 (small), 500 (medium), and 2000 (large) events. The synthetic approach allows us to verify that discovered operators correspond to known ground-truth categories.
+4.1 Real-World Data: ATOMIC
+To test whether the same primitives emerge from naturalistic data not generated by a Schank-like process, we adapt the ATOMIC knowledge graph (Sap et al., 2019) as a second evaluation corpus. ATOMIC contains 877K textual descriptions of inferential knowledge about everyday events, crowdsourced via Amazon Mechanical Turk. Each event (e.g., “PersonX pays PersonY a compliment”) is annotated with nine typed if-then relations capturing the consequences of the event for both participants. The prefix x refers to the agent (PersonX) and o refers to others affected:
+-
+•
+xEffect / oEffect: What happens to X / others as a result (“X feels good,” “Y smiles”)
+-
+•
+xReact / oReact: How X / others feel emotionally (“happy,” “grateful”)
+-
+•
+xWant / oWant: What X / others want to do next (“to be friends,” “to reciprocate”)
+-
+•
+xIntent: Why X did it (“to be nice,” “to make Y feel better”)
+-
+•
+xNeed: What X needed beforehand (“to think of something nice to say”)
+-
+•
+xAttr: How X would be described (“kind,” “thoughtful”)
+We convert ATOMIC tuples into Event objects via an adapter that parses each target text into structured state changes using pattern matching. For example, “PersonX goes to the store” location_change, “PersonX gets a promotion” possession_change, “PersonX feels happy” emotional state change. The adapter maps ATOMIC’s nine relation types to our triple representation:
+We sample 2,000 events from ATOMIC’s training set (202K entries total). The resulting change-type distribution is: generic (76.9%), possession change (8.5%), emotion (8.3%), state change (4.3%), knowledge change (1.1%), location change (0.8%). This is strikingly different from our synthetic data: mental/emotional/goal states dominate, with physical actions as a small minority.
+5 Results
+5.1 Discovered Operators
+Table 3 shows the operators discovered from the medium dataset (500 events, 14 templates). The system converges in 5 iterations plus a pruning phase, taking 165 seconds on CPU.
+Key finding: four of Schank’s core primitives emerge from compression alone. MOVE_PROP_has is functionally identical to ATRANS (transfers a “has” relation from source to destination). CHANGE_location is PTRANS (changes an entity’s “location” value). SET_knows is MTRANS (adds a “knows” triple—notably additive, not a transfer, correctly reflecting that information sharing does not deplete the sender). SET_consumed corresponds to INGEST.
+Novel operators. The system discovers CHANGE_feels (emotional state transitions) which has no direct equivalent in Schank’s original taxonomy. This suggests Schank’s focus on physical and informational actions left emotional state changes under-represented.
+Structural insight: MTRANS is not ATRANS. The system correctly identifies that information transfer is structurally different from possession transfer. ATRANS is implemented as MOVE_PROP (source loses, destination gains). MTRANS is implemented as SET (destination gains, source retains). This distinction emerges purely from the state-change patterns, without any linguistic knowledge.
+5.2 Composition Discovery
+The most striking compositional discovery is MOVE_PROP_has_THEN_CHANGE_location, which corresponds exactly to the compound verb “mail/ship/deliver”: possession transfers (ATRANS) and the object physically moves (PTRANS). This validates Schank’s original analysis of compound events as operator compositions, but discovers the decomposition automatically.
+Other discovered compositions include:
+-
+•
+MOVE_PROP MOVE_PROP_has “trade” (two ATRANSes)
+-
+•
+CHANGE_location SET_knows “visit to learn” (PTRANS MTRANS)
+-
+•
+SET UNSET “consume/transform” (gain new property, lose old)
+5.3 MDL Comparison with Schank
+The discovered library achieves MDL within 4% of Schank’s hand-coded primitives (ratio = 1.04) while explaining 100% of events vs. Schank’s 81%. The compression improvement from seed to discovered library is 25% (3099 2334).
+5.4 Scaling Behavior
+The same core operators (ATRANS, PTRANS, MTRANS analogues) emerge at all dataset sizes, demonstrating robustness. The system converges in 3–5 iterations regardless of scale.
+5.5 Learning Curve
+Figure 3 shows the MDL trajectory across wake-sleep iterations. The system converges in 5 iterations, with MDL decreasing from 3,099 (seed) to 2,408 (converged), followed by pruning to 2,334 (14 operators). Notably, the three highest-frequency operators (ATRANS, PTRANS, MTRANS analogues) are discovered in the first iteration, suggesting they are the most information-theoretically salient primitives in the domain. Lower-frequency operators (INGEST, compounds, emotional states) require additional iterations to accumulate sufficient evidence.
+5.6 Ablation Studies
+We test the sensitivity of the discovery algorithm to four hyperparameters (Table 6). The key finding is robustness: the same operators emerge across a wide range of settings.
+Seed library. The minimal seed (SET, UNSET) produces a better library than the full seed (26.4 vs. 27.4 bits/event), suggesting that generic operators like MOVE_PROP can actually interfere—they get specialized but not all specializations pay for themselves. This is encouraging: even with minimal prior knowledge, compression discovers the same primitives.
+Frequency threshold . Results are identical for . Only at =50 does one operator fail to meet the threshold, slightly worsening MDL (28.9 bits/event). The algorithm is not sensitive to this parameter in a wide range.
+Beam width. affects only runtime (52s at =5 vs. 278s at =50) with no effect on the discovered library. For our operator arity (4 slots), even greedy search finds the optimal decompositions.
+Dataset size. The most striking result: all three Schankian primitives emerge even from just 50 events. Compression efficiency improves with scale (31.9 27.4 bits/event) as rarer operators accumulate enough evidence, but the core vocabulary is robust from the start.
+6 Discussion
+6.1 Why Compression Recovers Schank
+Our results suggest that Schank’s primitives are not arbitrary but reflect genuine structure in event semantics. The MDL principle favors operators that:
+-
+1.
+Appear frequently across diverse events (high reuse)
+-
+2.
+Have low arity (few parameters = low per-use cost)
+-
+3.
+Cannot be further decomposed (atomic = incompressible)
+ATRANS, PTRANS, and MTRANS satisfy all three criteria. They appear in hundreds of events, have arity 2–3, and correspond to irreducible state transformations (you cannot decompose “transfer of possession” into simpler state changes without losing the bundled add+remove semantics).
+6.2 What Schank Missed
+The system discovers CHANGE_feels (emotional state transitions) as a frequently-used operator with no equivalent in Schank’s original taxonomy. One might object that specializing CHANGE by relation name is merely a “GROUP BY” operation that could produce any number of spurious operators. But the MDL framework provides a principled filter: a specialization is retained only if the bits saved by reducing arity across all uses exceed the bits spent adding the operator to the library. Most candidate specializations fail this test and are pruned. The operators that survive—CHANGE_wants, CHANGE_feels, CHANGE_is—do so because they represent genuinely high-frequency, low-entropy state transformations in the data.
+Schank’s primitives were designed primarily for physical and informational actions (Schank and Abelson, 1977). The prevalence of emotional state changes in naturalistic event descriptions suggests this is a genuine gap in the original framework.
+6.3 The MTRANS Insight
+Perhaps the most interesting finding is the system’s correct identification of information transfer as structurally distinct from possession transfer. ATRANS is a move (source loses, destination gains). MTRANS is an add (destination gains, source retains). This distinction, which Schank noted but which is often treated as merely terminological, turns out to have concrete information-theoretic consequences: it requires a different base operator (SET vs. MOVE_PROP) and cannot be unified under a single abstraction without increasing description length.
+6.4 Compositionality
+The discovery of compound operators like “mail” = ATRANS PTRANS validates Schank’s compositional analysis of complex events. More importantly, it demonstrates that the right decomposition emerges from compression rather than linguistic analysis. The system does not know that “mail” involves both transfer and movement—it discovers this from the co-occurrence of has-change and location-change in the state diffs.
+6.5 Limitations
+While we validate on both synthetic and real-world (ATOMIC) data, several limitations remain.
+State representation. Our entity-relation-value triples are necessarily simplified. Real events involve temporal ordering, intensities, graded properties, conditions, and nested structures. Richer state representations might discover additional primitives corresponding to Schank’s PROPEL, GRASP, SPEAK, and ATTEND.
+ATOMIC adapter coverage. Our pattern-matching adapter classifies 77% of ATOMIC targets as “generic” state changes. A more sophisticated NL-to-state-diff conversion (e.g., LLM-based) would likely reveal finer-grained operator distinctions within this generic category.
+Additional data sources. Extending to GLUCOSE (Mostafazadeh et al., 2020) for causal explanations, VerbNet for verb-class decompositions, and PropBank for predicate-argument structures would strengthen the generality claim.
+Operator granularity. The discovered operators are named by construction (e.g., CHANGE_wants) rather than by semantic analysis. Whether CHANGE_wants is a single primitive or should be decomposed further (goal-adoption vs. goal-completion) is an open question requiring linguistic validation.
+6.6 Bayesian Model Comparison
+To move beyond simplified bit-counting, we implement a full Bayesian MDL analysis with proper probabilistic costs. The library prior assigns bits based on the universal prior over integers for structural elements (number of slots, patterns) and bits for each type specification. Program likelihood uses frequency-weighted operator selection costs ( bits, with add-one smoothing) and bits per binding.
+Under proper Bayesian scoring, the discovered library is not merely comparable to Schank but decisively superior: in favor of the discovered library over Schank (Jeffreys’ scale: “decisive evidence”). This is driven by two factors: (1) the discovered library explains 100% of events vs. Schank’s 81%, eliminating costly literal-description penalties; and (2) frequency-weighted operator costs reward the heavy concentration of usage on the top three operators (ATRANS-analogue at 20%, PTRANS at 22%, MTRANS at 23%), which are cheaper to select per use than Schank’s more uniform distribution.
+Notably, the four seed operators receive zero usage after discovery—the specialized operators completely replace their generic parents. This is the information-theoretic signature of genuine abstraction: once MOVE_PROP_has exists, generic MOVE_PROP is never worth its binding cost.
+6.7 Real-World Validation: ATOMIC Results
+Table 8 presents results on 2,000 events from ATOMIC—the critical test of whether Schank-like primitives emerge from naturalistic commonsense data not generated by a Schank-like process.
+The most striking finding: Schank’s hand-coded primitives explain only 9.9% of real-world commonsense events. Our implementation covers 7 of Schank’s 11 primitives (ATRANS, PTRANS, MTRANS, MBUILD, PROPEL, INGEST, and PTRANS_FULL); the remaining four (EXPEL, MOVE, GRASP, SPEAK) would increase coverage somewhat, but since none of Schank’s 11 primitives address goals, emotions, or attributes, the mental/emotional gap would remain. ATOMIC is dominated by precisely these aspects of event semantics that Schank’s physical-action-focused taxonomy leaves unaddressed.
+Table 9 shows the operators discovered from ATOMIC data, with their usage frequencies and semantic profiles.
+Three findings emerge from the ATOMIC experiment (Figure 4):
+1. Schank’s physical-action primitives do emerge, but are minor. SET_has (ATRANS, 8%), SET_knows (MTRANS, 1%), and CHANGE_location (PTRANS, 1%) are all discovered. This confirms that these primitives reflect genuine structure in event semantics. However, they collectively account for less than 10% of operator usage in naturalistic data.
+2. Mental/emotional operators dominate. The top operator by usage is CHANGE_wants (goal/desire state changes, 20%), followed by CHANGE_feels (emotional transitions, 19%) and CHANGE_is (attribute changes, 17%). None of these appear in Schank’s original taxonomy. This suggests that Schank’s framework was designed for a specific genre of events—physical action descriptions (“John gave Mary a book”)—and does not generalize to the broader landscape of commonsense reasoning (“After eating dinner, PersonX feels satisfied”).
+3. The compression-optimal inventory is richer than Schank proposed. The discovered library contains 11 active operators (15 total, 4 unused seed operators), compared to Schank’s 7. The additional primitives are not arbitrary—each pays for its library cost through compression savings, as verified by the Bayesian MDL framework.
+6.8 Generalization: Train/Test Split
+To verify that the discovered operators generalize beyond their training data, we split the ATOMIC sample 80/20 (1,600 train, 400 test) and learn operators on the training set only.
+The discovered library explains all 400 held-out events with zero coverage loss. The operator usage distribution is stable across the split: CHANGE_feels (19% test vs. 18% train), CHANGE_is (17% vs. 18%), CHANGE_wants (16% vs. 21%). The same 11 active operators emerge from the training set alone and transfer perfectly to unseen data.
+6.9 Synthetic vs. Real-World Comparison
+Comparing the two evaluation domains reveals a striking complementarity:
+The synthetic data, designed around physical-action templates, naturally favors Schank’s primitives. The ATOMIC data, drawn from crowd-sourced commonsense reasoning, reveals that the mental/emotional dimension is far more prominent in everyday event understanding. This explains both why Schank’s primitives felt so compelling (they perfectly capture physical-action events) and why they were critiqued as incomplete (they miss the majority of commonsense reasoning).
+6.10 Connection to Bayesian Program Theory
+Our work can be seen as bridging Schankian semantics with the Bayesian Program Theory of cognition (Tenenbaum et al., 2011; Goodman et al., 2014). If cognition involves writing and executing probabilistic programs over structured representations, then Schank’s primitives are the vocabulary of the programming language for event understanding. Our wake-sleep loop is a mechanism for discovering this vocabulary—and the fact that it converges to the same vocabulary Schank proposed suggests that the “mental programming language” for events has an information-theoretically determined structure.
+This raises an intriguing question about background cognition: if the brain discovers new operators during idle processing (analogous to DreamCoder’s sleep phase), then “thinking” is not just data manipulation but language evolution—the continuous refinement of the mental programming language itself.
+6.11 Connection to JEPA and World Models
+LeCun’s JEPA framework (LeCun, 2022) proposes that autonomous intelligence requires world models that predict outcomes in abstract representation spaces. JEPA’s predictor module is, in essence, a learned operator—a function that maps one latent state to another, conditioned on an action. Our work complements JEPA in a fundamental way: while JEPA learns continuous predictors in embedding space, our system discovers the discrete, compositional structure of those transformations.
+The synthesis is natural: use JEPA to learn what the abstract states are (grounding perception in latent representations), then use wake-sleep library learning to discover how those states transform (extracting discrete, typed, composable operators). The resulting system would have both the perceptual fluency of learned embeddings and the compositional reasoning of symbolic operators—with neither component hand-coded.
+This also connects to the hierarchical aspect of JEPA. LeCun’s blueprint envisions multiple levels of abstraction, from millisecond motor predictions to long-term planning. Our operator hierarchy—atomic operators (ATRANS, PTRANS) composing into compound operators (“mail” = ATRANS PTRANS)—provides a concrete mechanism for building such hierarchies from data.
+6.12 Future Work
+Several extensions suggest themselves, spanning theory, tooling, and neural integration.
+Richer data and cross-corpus convergence. Our ATOMIC results reveal the dominance of mental/emotional operators, but with 77% of targets classified as “generic” by our pattern-matching adapter, finer-grained distinctions are likely hidden. An LLM-based adapter could parse ATOMIC targets into structured state changes with higher fidelity. Running on GLUCOSE (Mostafazadeh et al., 2020), PropBank, and VerbNet would test whether the same primitive inventory emerges across independent corpora—convergence would strongly support the universality claim.
+Probabilistic programming formalization. Our wake-sleep loop is, in essence, inference in a probabilistic program (Goodman et al., 2014; Piantadosi et al., 2016): the library defines a generative model over events (choose an operator, sample bindings, execute), and library learning is hierarchical Bayesian inference over the prior itself. Implementing the system in a probabilistic programming language like WebPPL would enable proper posterior distributions over libraries, counterfactual queries (“what if ATRANS did not exist?”), and principled handling of uncertainty about operator boundaries.
+Neural operator execution via Hebbian plasticity. The BDH (Baby Dragon Hatchling) architecture (Kosowski et al., 2025) demonstrates that Hebbian synaptic plasticity can serve as working memory during LLM inference, with specific synapses strengthening when the model processes related concepts. Our discovered operators predict which synaptic co-activation patterns should emerge: ATRANS predicts co-activation between possession-related neurons for agent, patient, and object whenever “give/buy/steal” events are processed. Testing this prediction in BDH would connect our information-theoretic framework to a biologically plausible neural substrate.
+Grammar–semantics decoupling in SSMs. Our operators decompose what happens in an event (the semantic content); grammar handles how it is expressed (syntactic realization). This factorization aligns with recent work on training state-space models (SSMs) on grammar-interleaved text, where structural tags are interleaved with content words. The operators discovered here could serve as the semantic level of such an architecture: a “meaning module” operating in operator space, coupled to a “syntax module” handling linearization. The PPL framework provides a principled training objective for this factorization: approximate the posterior .
+Interactive operator discovery tool. The wake-sleep loop, Bayesian MDL scoring, and ATOMIC adapter together form the nucleus of a general-purpose tool for discovering domain-specific primitives from any corpus of state-change data. Extending this to interactive use—where a researcher can inspect discovered operators, adjust frequency thresholds, and compare alternative decompositions in real time—would make the method accessible beyond the NLP community, with potential applications in program synthesis, game AI, and cognitive modeling.
+7 Conclusion
+We have shown that DreamCoder-style wake-sleep library learning, applied to event state transformations, rediscovers Schank’s core semantic primitives from pure compression pressure and—when applied to real-world commonsense data—reveals a substantially richer primitive inventory than Schank proposed.
+On synthetic data, the discovered operators achieve Bayesian MDL within 4% of hand-coded primitives while providing complete event coverage. On ATOMIC data, the results are more dramatic: Schank’s primitives cover only 10% of naturalistic events, while the discovered library covers 100%. The dominant operators in real-world data are not Schank’s physical-action primitives but mental and emotional state changes—CHANGE_wants, CHANGE_feels, CHANGE_is—which collectively account for 56% of all operator usage.
+Three conclusions emerge:
+1. Schank was right about the mechanism. Event semantics does decompose into a small set of reusable primitives, and these primitives can be derived from compression pressure. This vindicates the core insight of conceptual dependency theory.
+2. Schank was incomplete about the inventory. The compression-optimal set contains approximately 11 operators, not 7. The missing primitives govern mental states (goals, emotions, attributes, intentions) that are more prevalent in everyday reasoning than the physical actions Schank focused on.
+3. The right approach is discovery, not enumeration. Rather than debating which primitives belong in the inventory—a question that has occupied linguistics for decades—we can derive the answer from data via compression. Different data distributions yield different operator inventories (physical-action-heavy data recovers Schank; commonsense data reveals the mental/emotional primitives), but the method is domain-agnostic.
+These results suggest that the structure of event cognition is not a matter of linguistic convention but of information-theoretic optimality—and that the “mental programming language” for events is richer, more psychologically oriented, and more discoverable than previously assumed.
+References
+- Self-supervised learning from images with a joint-embedding predictive architecture. CVPR. Cited by: §2.3.
+- The berkeley framenet project. In Proceedings of ACL, Cited by: §2.3.
+- PrimeNet: a framework for commonsense knowledge representation and reasoning based on conceptual primitives. Cognitive Computation. Cited by: §2.3.
+- Thematic proto-roles and argument selection. Language 67 (3), pp. 547–619. Cited by: §2.3.
+- What computers still can’t do. MIT Press. Cited by: §1.
+- DreamCoder: bootstrapping inductive program synthesis with wake-sleep library learning. Proceedings of the ACM SIGPLAN Conference on Programming Language Design and Implementation. Cited by: §1, §2.2, §3.8.
+- Concepts in a probabilistic language of thought. Cited by: §6.10, §6.12.
+- The dragon hatchling: the missing link between the transformer and models of the brain. arXiv preprint arXiv:2509.26507. Cited by: §6.12.
+- A path towards autonomous machine intelligence. Open Review. Cited by: §2.3, §6.11.
+- GLUCOSE: generalized and contextualized story explanations. In Proceedings of EMNLP, Cited by: §2.3, §6.12, §6.5.
+- The logical primitives of thought: empirical foundations for compositional cognitive models. Psychological Review 123 (4), pp. 392. Cited by: §2.3, §6.12.
+- ATOMIC: an atlas of machine commonsense for if-then reasoning. In Proceedings of AAAI, Cited by: item 4, §1, §2.3, §4.1.
+- Scripts, plans, goals, and understanding. Lawrence Erlbaum Associates. Cited by: §2.1, §6.2.
+- Conceptual dependency: a theory of natural language understanding. Cognitive Psychology 3 (4), pp. 552–631. Cited by: §1, §2.1.
+- VerbNet: a broad-coverage, comprehensive verb lexicon. Cited by: §2.3.
+- Neural machine translation of rare words with subword units. In Proceedings of ACL, Cited by: §2.3, §3.7.
+- How to grow a mind: statistics, structure, and abstraction. Science 331, pp. 1279–1285. Cited by: §6.10.
+- Semantics: primes and universals. Cited by: §2.3.
+- Planning and understanding. Addison-Wesley. Cited by: §1.
+
+KAYNAK : https://arxiv.org/abs/2603.25975
+
+--- arxiv_ai | ARTA: Adaptive Mixed-Resolution Token Allocation for Efficient Dense Feature Extraction | score=103.18 ---
+http://www.chalmers.se/
+ARTA: Adaptive Mixed-Resolution Token Allocation for Efficient Dense Feature Extraction
+Abstract
+We present ARTA, a mixed-resolution coarse-to-fine vision transformer for efficient dense feature extraction. Unlike models that begin with dense high-resolution (fine) tokens, ARTA starts with low-resolution (coarse) tokens and uses a lightweight allocator to predict which regions require more fine tokens. The allocator iteratively predicts a semantic (class) boundary score and allocates additional tokens to patches above a low threshold, concentrating token density near boundaries while maintaining high sensitivity to weak boundary evidence. This targeted allocation encourages tokens to represent a single semantic class rather than a mixture of classes. Mixed-resolution attention enables interaction between coarse and fine tokens, focusing computation on semantically complex areas while avoiding redundant processing in homogeneous regions. Experiments demonstrate that ARTA achieves state-of-the-art results on ADE20K and COCO-Stuff with substantially fewer FLOPs, and delivers competitive performance on Cityscapes at markedly lower compute. For example, ARTA-Base attains 54.6 mIoU on ADE20K in the 100M-parameter class while using fewer FLOPs and less memory than comparable backbones.
+1 Introduction
+In semantic segmentation tasks, not all pixels are equally important. In a typical scene, large regions are often homogeneous (e.g., sky, road, or walls) and exhibit little spatial or semantic variation, making dense per-pixel computation unnecessary. In contrast, regions with high object density or class boundaries require higher spatial resolution for accurate predictions. This uneven distribution of semantic content motivates architectures that adaptively allocate higher spatial resolution to more informative regions of the image.
+Most computer vision architectures process images using a uniform grid of square patches, assigning equal computational cost to each patch regardless of its semantic content. For example, in Vision Transformers [dosovitskiy_image_2020], it is common to divide the input image into fixed-size patches (e.g., 16×16), each of which is embedded into a token, applying the same representation capacity to both simple and complex patches. Convolutional neural networks such as ConvNext [woo_convnext_2023] similarly apply filters over regularly spaced patches, implicitly treating all areas of the image with equal importance. While some recent models [ziwen_autofocusformer_2023, lu_content-aware_2023, tang_dynamic_2023] introduce mechanisms for content-aware processing or adaptive computation, the majority of widely used architectures still rely on uniform spatial partitioning, which does not align with the uneven distribution of information in real-world images.
+While uniform spatial partitioning is inefficient, most non-uniform approaches still follow a high-to-low resolution processing pipeline. In these architectures, the input image is initially represented at high resolution, and information is gradually compressed through pooling, striding, or token merging. As a result, all image patches, regardless of their semantic importance, are initially processed at the finest spatial granularity. This leads to unnecessary computation in homogeneous or uninformative patches and limits the potential efficiency gains of token pruning or merging in later stages. An ideal approach would avoid assigning high-resolution capacity to patches that do not require it in the first place, allocating computational resources only where semantic complexity demands it.
+Beyond where computation is spent, there is also the question of how representational capacity is used within each token. When a token aggregates pixels from multiple semantic classes, its feature vector must encode the class mixture (which classes are present and in what proportions), the spatial layout and extent of each class within the patch, and the patch’s overall position. By contrast, if a token predominantly corresponds to a single class, its representation can devote more dimensions to modeling intra-class variation and higher-order semantics rather than resolving class boundaries. Constraining tokens to be largely class-specific improves the efficiency of the representation, allowing models with modest width to rival the semantic expressiveness of wider baselines.
+To address these computational and representational inefficiencies, we propose ARTA (Adaptive Mixed-Resolution Token Allocation), a two-stage encoder. In Stage 1, a lightweight allocator adaptively assigns token density across the image through three hierarchical allocation rounds. Starting from coarse tokens, it predicts a semantic class-boundary score for each token and allocates additional finer-grained tokens to patches whose scores exceed a low threshold, increasing resolution only where boundary evidence is present. In subsequent rounds, scoring is re-applied only to the newly allocated finest-resolution tokens, reducing allocator compute by avoiding repeated dense evaluation over the full token set. Repeating this process yields a mixed-resolution token set that concentrates spatial detail near class boundaries and avoids unnecessary allocation in uniform regions, ensuring that no patch is processed at higher resolution than needed. In Stage 2, we refine the resulting mixed-resolution tokens with a deeper hierarchical encoder to capture higher-level semantics. To summarize, our main contributions are:
+-
+•
+A lightweight, class-boundary scoring allocator for adaptive mixed resolution token allocation. Starting from coarse tokens, it iteratively re-scores and allocates finer-grained tokens to patches containing class-boundaries, increasing token density in semantically rich regions while leaving uniform areas at coarse granularity.
+-
+•
+ARTA: A two-stage encoder that couples the proposed mixed-resolution token allocation with a deeper hierarchical refinement network. Mixed resolution attention enables interaction between coarse and fine tokens, concentrating computation on semantically complex patches.
+-
+•
+We validate ARTA on ADE20K, COCO-Stuff, and Cityscapes, achieving state-of-the-art results on ADE20K and COCO-Stuff with substantially fewer FLOPs, and competitive performance on Cityscapes at lower compute.
+2 Related Work
+2.1 Token dropping and merging
+Many methods improve transformer efficiency by removing tokens deemed uninformative or by aggregating nearby/similar tokens [rao_dynamicvit_2021, pan_scalable_2021, bolya_token_2022, marin_token_2023, long_beyond_2023, wei_joint_2023, kim_token_2024, chang_making_2023]. These fine-to-coarse strategies typically start from a dense high-resolution grid of tokens and progressively reduce the number of tokens by pruning or merging similar tokens to gain efficiency. This yields a content-adaptive token density, but only through token reduction. The spatial resolution never exceeds that of the initial grid, and training still processes an initially dense token set. In contrast, ARTA follows a coarse-to-fine strategy that starts from coarse tokens and allocates additional tokens only where finer detail is needed, increasing resolution on demand rather than uniformly.
+2.2 Adaptive downsampling
+A complementary direction makes tokenization or routing content-aware, for example via saliency-driven multi-resolution grids, attention-guided sampling, or per-input policy decisions [ronen_vision_2023, fayyaz_adaptive_2022, meng_adavit_2022]. For dense prediction, AutoFocusFormer (AFF) [ziwen_autofocusformer_2023] proposes point-based local attention with balanced clustering and a learnable neighborhood-merging module to support segmentation heads. Other works merge/share or prune tokens based on semantics or difficulty [lu_content-aware_2023, tang_dynamic_2023]. While these approaches introduce adaptivity, most still start from a dense tokenization and then select, share, or prune tokens thereafter. As a result, they generally do not increase spatial token density on demand, and training compute remains dominated by the initial high-resolution token set.
+2.3 Learned upsampling operators
+Another line of work studies learned upsampling operators that incorporate local context. Dynamic upsampling operators such as DySample [liu_learning_2023] and frequency-aware fusion modules such as FreqFusion [chen_frequency-aware_2024] operate on dense feature maps. DySample learns sampling locations for each output position, while FreqFusion applies adaptive low-/high-pass filtering and offsets to boundary sharpness during upsampling. These approaches focus on how to upsample by improving the upsampling operator itself, and they typically upsample densely across spatial locations. In contrast, ARTA addresses what to upsample by starting from a coarse tokenization and allocating additional tokens only when required, producing a mixed-resolution representation that keeps homogeneous patches compact. Therefore, learned upsampling operators are orthogonal to ARTA.
+2.4 Coarse-to-fine architectures
+Several coarse-to-fine architectures follow an overview-to-detail schedule, redistributing capacity toward coarse scales [zhu_parameter-inverted_2024, lou_overlock_2025]. OverLoCK [lou_overlock_2025] begins with a coarse global context derived from low-resolution features, and later refines the representation using fine-grained attention. These architectures alter how capacity is distributed across scales but generally keep resolution schedules fixed and input-agnostic rather than content-driven within an image.
+Beyond encoder design, boundary-refinement post-processing methods such as SegFix [yuan_segfix_2020] improve boundary quality by redirecting boundary pixels toward more reliable interior predictions using learned offsets. In contrast, ARTA incorporates boundary awareness directly into the encoder through class-boundary scoring and hierarchical token allocation. SegFix operates as a post-processing step on model outputs, whereas ARTA controls where spatial resolution is allocated during feature extraction.
+Overall, most prior work either reduces token count after a dense beginning, improves upsampling or fusion on dense feature maps, or redistributes capacity with fixed multi-scale plans. A gap remains for architectures that start from coarse tokens and adaptively allocate higher token density only where semantic complexity warrants it, while maintaining mixed-resolution representations that interact across scales during dense feature extraction.
+3 Method
+We present ARTA, a two-stage hierarchical encoder that constructs mixed-resolution feature representations by adaptively allocating token density to semantically complex image patches. ARTA is designed to encourage tokens to correspond to a single semantic class, rather than mixing multiple classes within the same token. This is achieved by identifying tokens likely to overlap semantic (class) boundaries and selectively allocating additional tokens to only those patches, while keeping homogeneous patches compact.
+ARTA differs from token-pruning or token-merging approaches that begin with a dense high-resolution grid and later reduce token count. Instead, ARTA starts from coarse tokens and increases spatial resolution only where needed. This avoids ever allocating high-resolution tokens to semantically simple patches and enables a principled and efficient use of computation.
+3.1 Overview
+ARTA follows a two-stage design. In Stage 1, an adaptive mixed-resolution token allocator iteratively predicts a class-boundary score for tokens and hierarchically allocates additional high-resolution tokens to the image patches containing class-boundaries over multiple allocation rounds, producing a mixed-resolution token set. In Stage 2, a deeper hierarchical encoder refines token features over multiple refinement rounds to capture higher-level semantics using mixed-resolution attention, allowing coarse and fine tokens to interact while concentrating compute on semantically rich patches. The overall architecture is illustrated in Figure 1 and configurations details can be found in Table 1.
+3.2 Adaptive Mixed-Resolution Token Allocation
+3.2.1 Coarse initialization.
+Given an input image, ARTA begins with a coarse patch embedding using a kernel to form an initial low-resolution token grid. During a pre-allocation round, these tokens are processed by a lightweight Vision Transformer to produce boundary-aware coarse features, enabling reliable class-boundary scoring during the allocation rounds.
+3.2.2 Hierarchical allocation rounds.
+Stage 1 allocates tokens through allocation rounds (we use ). At allocation round , the allocator predicts a class-boundary score for the candidate patch represented by token at the current finest resolution under consideration. Patches with scores above a low threshold are selected for finer allocation, and additional tokens are introduced by partitioning each selected region into finer sub-patches (in our implementation, a partition yielding four tokens per selected patch).
+The resulting mixed-resolution token set is then processed by a cluster attention block from AFF [ziwen_autofocusformer_2023], which computes attention over localized clusters that are recomputed each forward pass under the current allocation. While AFF adaptively downsamples by merging less important tokens into important ones, yielding non-overlapping tokens, ARTA can contain overlapping tokens at multiple resolutions covering the same region. We use the same clustering mechanism to enable efficient cross-resolution interaction, so that fine tokens can attend to nearby coarse tokens for high-level context, while coarse tokens absorb local detail carried by fine tokens that inject newly extracted sub-patch features.
+At the next round, the allocator is re-applied only to the finest-resolution tokens produced by the previous allocation round, rather than re-scoring the entire token set, reducing allocation overhead by avoiding repeated dense evaluation.
+3.2.3 Mixed-resolution token set.
+After rounds, Stage 1 produces a mixed-resolution representation consisting of coarse tokens for homogeneous regions and finer tokens concentrated around predicted semantic boundaries. This ensures that no region is represented at a higher resolution than necessary.
+3.3 Token Allocation Block
+The token allocation block assigns a scalar class-boundary score to each token at the finest resolution in allocation round . For an input token , the allocator outputs a score estimating the amount of semantic (class) boundary content within the token patch.
+3.3.1 Class-boundary score.
+The allocator is trained to predict a class-boundary score for each token, indicating how important it is to allocate additional tokens to the corresponding image patch. Ground-truth scores are derived from the segmentation labels by first computing a binary map of class-boundary pixels, where a pixel is marked as a boundary (1) if any of its neighboring pixels has a different class label, and as non-boundary (0) otherwise. For each token patch, we sum the boundary pixels within the patch and normalize the result to obtain the target score. The allocator MLP is trained to regress this target using mean squared error (MSE).
+This scoring choice encourages each token to represent a single semantic class, simplifying downstream reasoning. A token that spans multiple classes must encode both class identities and their spatial arrangement, increasing representational burden. In contrast, single-class tokens allow the encoder to focus on semantic meaning rather than intra-token class composition.
+3.3.2 Threshold-based allocation.
+We allocate additional tokens only for regions whose predicted scores exceed a round-specific threshold . This induces a variable token budget per sample. Let denote the number of candidate tokens for a given sample at round , and let
+denote the number of selected tokens. The threshold is set slightly above zero to tolerate small prediction noise and to ensure that only regions with sufficient predicted boundary complexity are selected for further allocation.
+Because varies across samples, token counts differ within a mini-batch. During training, we pad each sample’s token set (per allocation round) to the maximum token count in the batch and mask the padded tokens so they do not participate in attention or loss computation. This enables mini-batch training while ensuring each sample uses only the number of tokens required by its content.
+3.3.3 Token allocation.
+For each selected token, the corresponding image patch is partitioned into sub-patches, and allocate four finer-grained tokens, one per sub-patch. To initialize a new token, we extract the raw pixel values of its sub-patch, flatten them into a vector, and project this vector to the token embedding dimension using a learned linear layer. The projected vector is then passed through an MLP to produce an image feature. To reuse the selected token’s boundary-aware coarse representation, we add it as a residual to each new token. Each token further receives (i) a learned scale embedding and (ii) a learned sub-patch position embedding to disambiguate within-patch spatial identity.
+3.4 Mixed-Resolution Token Refinement
+Stage 2 takes the mixed-resolution token set produced by the final allocation round in Stage 1 and refines token features in a top-down manner to capture higher-level semantics. Stage 2 is organized into multiple refinement rounds. In each round, we apply cluster attention [ziwen_autofocusformer_2023] over localized token clusters, which is computationally efficient for sparse mixed-resolution token sets and enables cross-resolution interactions. Fine tokens gain broader semantic context by attending to nearby coarse tokens, while coarse tokens are enriched with local structure information carried by fine tokens.
+Across refinement rounds, Stage 2 progressively outputs the finest-resolution tokens to form multi-scale features for dense prediction. Starting from mixed-resolution tokens at all four scales, each refinement round outputs the current finest scale (e.g., , then , then , then ), while the remaining coarser tokens are passed to the next round. The final refinement round uses a ViT block to strengthen high-level semantic representations at the coarsest scale.
+3.4.1 Cross-stage residual connections.
+To preserve low-level and boundary-aware information from the allocation stage, Stage 2 incorporates lateral connections from Stage 1. Before the attention block in each refinement round, we fuse the current Stage 2 tokens with a Stage 1 lateral output at the same resolution via concatenation followed by linear projection. Concretely, refinement rounds 2–4 use lateral outputs from allocation round 2, allocation round 1, and the pre-allocation round, respectively. This pre-attention fusion injects Stage 1 features into Stage 2 refinement while maintaining the mixed-resolution structure. The output finest-scale tokens from each refinement round are forwarded to the decoder as multi-scale features.
+3.5 Decoder strategy
+We use the point-based Mask2Former decoder [cheng_masked-attention_2022] as in AFF [ziwen_autofocusformer_2023]. A pixel decoder first processes and aligns features across scales, followed by masked cross-attention that iteratively refines a set of class queries using multi-scale token features.
+Before masked cross-attention, we densify only the highest-resolution feature map. At each spatial location, we select the finest token available, replicate its feature over the corresponding region, and add learned positional embeddings for spatial differentiation. Lower-resolution feature maps remain sparse. This preserves sparse computation in early decoding while enabling dense, fine-grained updates in the final masked attention stage.
+4 Experiments
+4.1 Datasets
+We evaluate our method on three publicly available semantic segmentation benchmarks: ADE20K [zhou_semantic_2019], Cityscapes [cordts_cityscapes_2016], and COCO-Stuff [lin_microsoft_2014, caesar_coco-stuff_2018]. ADE20K is a scene parsing dataset containing 20,210 images annotated with 150 fine-grained semantic classes, covering a diverse range of indoor and outdoor environments. Cityscapes is a street-level driving dataset consisting of 5,000 high-resolution images with fine annotations for 19 semantic categories. COCO-Stuff extends the COCO dataset with dense pixel-level annotations, providing 172 semantic labels across 164,000 images.
+4.2 Experimental Setup
+We build on Detectron2 with components from AFF and Mask2Former, and train on NVIDIA A100 GPUs. For complete details of the experimental protocol and additional settings, see the supplementary material.
+For pre-training, we use ImageNet classification. During this stage the token allocation blocks are disabled and tokens are allocated at random according to a fixed ratio schedule (no content-based selection). ImageNet classification results can be found in the supplement.
+For fine-tuning, we follow AutoFocusFormer and Mask2Former for data augmentation and general hyperparameters. Models were optimized using AdamW with a learning rate of . Crop sizes are fixed for all reported methods: 512512 for ADE20K and COCO-Stuff, and 10241024 for Cityscapes. Training was conducted for 80k iterations with a batch-size of 32 on ADE20K and COCO-Stuff, and for 90k iterations on Cityscapes with a batch-size of 16. The threshold is set to [0.005, 0.01, 0.02] for the three allocation rounds.
+For evaluation on ADE20K and COCO-Stuff, we resize the short side to 512 with preserved aspect ratio; for Cityscapes, we use overlapping 10241024 sliding-window inference. Performance is reported using mean Intersection over Union (mIoU)
+FLOPs are measured for the full network at fixed input sizes: 512512 (ADE20K/COCO-Stuff) and 10242048 (Cityscapes), reported as mean std per image over the validation set. We compute FLOPs for ARTA using this protocol, while FLOPs for other methods are taken from their respective papers. For fairness, we report FLOPs only for methods evaluated at the same input resolution.
+4.2.1 ADE20K.
+We compare ARTA at three model scales against state-of-the-art baselines on ADE20K val (Table 2). At the smallest scale, SegMAN-B attains higher single-scale mIoU than ARTA-Tiny, but ARTA-Tiny is more compute-efficient. As model capacity increases, ARTA scales more favorably and at the large scale ARTA-Base surpasses SegMAN-L while using fewer FLOPs. When comparing to other encoders using a Mask2Former decoder such as Mask2Former [cheng_masked-attention_2022] with Swin backbones and AFF [ziwen_autofocusformer_2023], we can observe that ARTA has higher mIoU and lower FLOPs over all model sizes. Across all ARTA variants, multi-scale testing further boosts performance, with ARTA-Base reaching 54.6 mIoU.
+4.2.2 COCO-Stuff.
+Table 3 mirrors the trend observed on ADE20K: SegMAN is strongest at the smallest scale, whereas ARTA improves more with capacity. In the 50M-parameter regime, SegMAN-B achieves higher single-scale mIoU than ARTA-Tiny, but ARTA-Tiny is notably more compute-efficient. As model size increases, ARTA gains substantially more mIoU from Tiny to Base than SegMAN does from B to L. At the large scale, ARTA-Base surpasses SegMAN-L in single-scale mIoU while using fewer FLOPs on average, and further improves with multi-scale testing (Table 3).
+4.2.3 Cityscapes.
+On Cityscapes, ARTA delivers competitive accuracy while using a fraction of the compute of comparable baselines (Table 3). Across model scales, ARTA attains mIoU close to state of the art, but with substantially lower FLOPs (e.g., ARTA-Tiny at 286 GFLOPs vs. 479–963 GFLOPs for similar-size baselines), providing a favorable accuracy–efficiency trade-off.
+4.2.4 Speed Analysis.
+We benchmark inference speed and memory usage on Cityscapes with a single NVIDIA A100 GPU. Following SegMAN [fu_segman_2025], we report FPS averaged over 128 inference steps with batch size 2, using full-resolution inputs (10242048) in FP32. We report peak allocated GPU memory over the same run using PyTorch’s CUDA memory statistics. As shown in Table 4, ARTA’s reduced FLOPs translate to higher throughput and lower memory usage across model scales.
+4.2.5 Qualitative Examples.
+Figure 3 shows qualitative results and the tokens selected for refinement at each scale. The model keeps homogeneous regions (e.g., sky, road, walls) coarse while allocating finer tokens near boundaries and small/fine structures, aligning with the goal of spending resolution where semantic complexity is high.
+4.3 Ablation Studies
+4.3.1 Without adaptive token allocation
+We ablate adaptive token allocation by forcing dense tokenization: during ImageNet pre-training, every selected coarse token is always allocated finer tokens, producing dense token grids at all scales. We then fine-tune this ARTA-Tiny variant on ADE20K and compare it to the adaptive baseline under the same training setup. Removing adaptive allocation reduces accuracy and increases compute, achieving 50.4 mIoU at 74G FLOPs versus 51.5 mIoU at 447G for the baseline.
+4.3.2 Choice of encoder blocks.
+We ablate the block type used at different locations in ARTA-Tiny, trained from scratch on ADE20K. The pre-allocation and final refinement rounds operate on coarse and dense token grids, where standard dense backbones are applicable. In contrast, all other rounds process sparse mixed-resolution token sets with substantially higher token counts, requiring layers that can handle multi-scale sparse inputs while keeping compute low. A vanilla ViT supports sparse inputs in principle, but becomes infeasible in the intermediate rounds due to its quadratic attention cost. We therefore consider two compatible alternatives that support sparse mixed-resolution processing with compute constraints: cluster attention and (point-based) multi-scale deformable attention (MSDeformAttn) [ziwen_autofocusformer_2023]. Table 5 shows that ViT is best for the coarse dense initial/final rounds, while cluster attention performs best for intermediate mixed-resolution rounds.
+4.3.3 Ablation: Oracle Token Allocation Scores.
+We test whether injecting ground-truth class-boundary scores during training improves segmentation. Models are fine-tuned on ADE20K; the allocation blocks are always trained and, at inference, allocation uses predicted scores. An oracle rate of means we randomly use oracle scores for of training batches (and predicted scores otherwise). Results on validation set are shown in Table 7.
+Oracle scores do not improve validation mIoU and higher oracle rates degrade performance. While training losses (Dice/mask) decrease when using oracle scores, we hypothesize this reflects a train–test mismatch: oracle scores may act as a privileged boundary cue during training, encouraging the model to rely on boundary information that is not available at test time. When allocation reverts to predicted scores at inference, this reliance may not transfer and performance drops.
+4.3.4 Ablation: Stage design and token initialization.
+We ablate Stage 2 mixed-resolution token refinement and two token initialization choices in Stage 1 allocation, training all variants from scratch on ADE20K for 80k iterations. The baseline uses Stage 1 allocation followed by Stage 2 refinement. Stage 1 only removes Stage 2, reallocates depth to Stage 1 to match parameters, and adds a final cluster-attention layer (as in Stage 2) to refine newly allocated high-resolution tokens. No aux image data disables adding sub-patch image features when initializing newly allocated tokens. No feature residual removes the residual copy of the selected token feature, initializing new tokens solely from sub-patch image features (plus embeddings/MLP). As shown in Table 7, removing Stage 2 or either initialization component reduces mIoU.
+5 Conclusion
+We presented ARTA, a coarse-to-fine segmentation backbone that predicts semantic boundary density early and allocates additional tokens to regions needing higher spatial detail. Starting from coarse tokens and allocating finer tokens adaptively, ARTA preserves compute by avoiding fine processing in homogeneous areas while maintaining interacting mixed-resolution features across scales. ARTA achieves state-of-the-art accuracy on ADE20K and COCO-Stuff with substantially fewer FLOPs, and remains competitive on Cityscapes at a fraction of the compute of comparable baselines. These results show that content-adaptive resolution is a strong approach for accurate, efficient dense prediction. Scalability to much larger backbones and longer pre-training remains untested. Future work includes extending ARTA to 3D segmentation.
+
+KAYNAK : https://arxiv.org/abs/2603.26258
+
+--- openai | Helping disaster response teams turn AI into action across Asia | score=50.27 ---
+AI for Disaster Response in Asia: OpenAI Workshop with Gates Foundation
+
+KAYNAK : https://openai.com/index/helping-disaster-response-teams-asia
+
+--- nextjs | v16.2.1-canary.13 | score=47.49 ---
 Misc Changes
-Use RcStr directly in napi(object) structs instead of converting to String:
-#92014
-Rename SingleModuleReference::asset to SingleModuleReference::module:
-#92028
+docs: opengraph-image papercuts:
+#92018
+Update revalidateTag examples to use the new two-argument signature:
+#92065
 Credits
 Huge thanks to
-@acdlite
-,
-@ztanner
-,
-@mmastrac
-,
-@sokra
-, and
-@bgw
+@icyJoseph
+and
+@aurorascharff
 for helping!
 
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.12
-
---- claude | Elevated errors on Opus 4.6 Fast Mode | score=35.13 ---
-Mar
-28
-,
-14:53
-UTC
-Resolved
-- This incident has been resolved.
-Mar
-28
-,
-13:55
-UTC
-Monitoring
-- A fix has been implemented and we are monitoring the results.
-Mar
-28
-,
-13:01
-UTC
-Investigating
-- We are currently investigating this issue.
-
-KAYNAK : https://status.claude.com/incidents/pgxwhv06t0y8
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.13
 

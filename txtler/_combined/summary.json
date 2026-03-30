@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-03-29T07:58:02.062480+00:00",
-  "cutoff_utc": "2026-03-28T07:58:02.062480+00:00",
+  "generated_at_utc": "2026-03-30T08:47:43.803608+00:00",
+  "cutoff_utc": "2026-03-29T08:47:43.803608+00:00",
   "max_keep_per_site": 5,
   "all_combined": "txtler/_combined/all_last24h.txt",
   "sites": {
@@ -46,16 +46,16 @@
     },
     "claude": {
       "feed": "https://status.claude.com/history.rss",
-      "saved_initial_count": 2,
-      "kept_after_top5": 2,
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/claude",
       "site_combined": "txtler/_combined/claude_last24h.txt"
     },
     "openai": {
       "feed": "https://openai.com/news/rss.xml",
-      "saved_initial_count": 0,
-      "kept_after_top5": 0,
+      "saved_initial_count": 1,
+      "kept_after_top5": 1,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/openai",
       "site_combined": "txtler/_combined/openai_last24h.txt"
@@ -78,9 +78,9 @@
     },
     "arxiv_ai": {
       "feed": "https://rss.arxiv.org/rss/cs.AI",
-      "saved_initial_count": 0,
-      "kept_after_top5": 0,
-      "removed_due_to_top5": 0,
+      "saved_initial_count": 209,
+      "kept_after_top5": 5,
+      "removed_due_to_top5": 204,
       "site_folder": "txtler/arxiv_ai",
       "site_combined": "txtler/_combined/arxiv_ai_last24h.txt"
     },
