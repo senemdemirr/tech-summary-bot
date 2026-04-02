@@ -1,0 +1,876 @@
+Procela: Epistemic Governance in Mechanistic Simulations Under Structural Uncertainty
+Abstract
+Mechanistic simulations typically assume fixed ontologies: variables, causal relationships, and resolution policies are static. This assumption fails when the true causal structure is contested or unidentifiable–as in antimicrobial resistance (AMR) spread, where contact, environmental, and selection ontologies compete. We introduce Procela, a Python framework where variables act as epistemic authorities that maintain complete hypothesis memory, mechanisms encode competing ontologies as causal units, and governance invariants observe epistemic signals and mutate system topology at runtime. This is the first framework where simulations test their own assumptions. We instantiate Procela for AMR in a hospital network with three competing families. Governance detects coverage decay, policy fragility, and run structural probes. Results show 20.4% error reduction and 69% cumulative regret improvement over baseline. All experiments are reproducible with full auditability. Procela establishes a new paradigm: simulations that model not only the world but their own modeling process, enabling adaptation under structural uncertainty.
+This is a preprint of an article currently under review at Advanced Theory and Simulations. The final published version will be available at [future DOI].
+1 Introduction
+1.1 The problem with fixed-ontology simulation
+Mechanistic simulation has become indispensable for understanding complex systems, from infectious disease spread to climate dynamics and economic forecasting. The standard paradigm assumes fixed ontologies: variables, causal relationships, and resolution mechanisms are specified before execution and remain static throughout (Epstein, 2008; North et al., 2013).
+This assumption fails when the true causal structure of the system is contested, unidentifiable, or subject to change. As Box (1976) famously observed, “all models are wrong”—but when multiple causal explanations compete, the challenge is not merely approximation but fundamental uncertainty about which model is even appropriate. In antimicrobial resistance (AMR) spread, for example, multiple explanations compete: transmission via patient contact, environmental reservoirs, or antibiotic selection pressure (Lipsitch and Samore, 2002; Austin et al., 1999). Each implies different interventions, yet observational data may not distinguish them (Pearl, 2009). Forcing a choice among these ontologies discards epistemic uncertainty at the moment of model specification.
+1.2 Current approaches and their limits
+Existing methods for handling model uncertainty operate within the fixed-ontology paradigm:
+-
+•
+Model averaging (Hoeting et al., 1999) combines predictions from multiple fixed models but does not question the models themselves.
+-
+•
+Robust control (Hansen and Day, 2019) optimizes for worst-case outcomes across a fixed set of scenarios.
+-
+•
+Adaptive management (Walters, 1986) treats interventions as experiments but leaves the underlying model structure unchanged.
+-
+•
+Bayesian structural learning (Heckerman et al., 1995) discovers causal graphs from data but requires the true structure to be identifiable.
+1.3 Procela: A new paradigm
+We introduce Procela, a Python 3.10+ simulation architecture that elevates epistemic uncertainty from a pre-simulation concern to a runtime process. Procela is built on four core abstractions:
+-
+•
+Variables as memory-bearing epistemic authorities. Unlike traditional variables that merely hold values, Procela variables maintain a complete history of competing hypotheses, each with associated confidence and source. They resolve conflicts via defined policies (weighted voting, highest confidence, etc.), making arbitration explicit and auditable.
+-
+•
+Mechanisms as scientific theories. Each mechanism encodes a causal hypothesis: it reads variables, applies a transformation, and writes hypotheses to variables. Multiple mechanisms can compete to explain the same phenomenon, encoding different scientific perspectives.
+-
+•
+Governance as first-class citizen. Invariants and hooks observe the system’s epistemic state–disagreement among mechanisms, coverage decay, prediction conflicts, etc.–and can trigger actions on invariant violations: adding or removing, enabling or disabling mechanisms, switching resolution policies, adding or removing invariants, etc. This turns simulation into an ongoing scientific process.
+-
+•
+Executive. It orchestrates the entire simulation: executes mechanisms, resolves variables, evaluates invariants at PRE/RUNTIME/POST phases, calls pre/post hooks. It maintains random state, step counter, and logging system history.
+1.4 Contributions
+This paper makes four contributions:
+-
+1.
+Conceptual architecture. We formalize the notion of epistemic governance in simulation, defining variables as memory-bearing epistemic authorities that arbitrate competing hypotheses and governance as system mutation based on epistemic signals.
+-
+2.
+Procela implementation. We present an open-source Python framework implementing these abstractions, with full auditability and runtime governance.
+-
+3.
+AMR case study. We instantiate Procela for antimicrobial resistance spread in a hospital networks, with three competing ontology families (contact, environmental, selection) and three levels of governance (policy fragility, coverage decay, structural probe).
+-
+4.
+Empirical demonstration. We show that governance reduces prediction error by 20.4% with experiments succeeding 54–71% of the time, intervening effectively during high errors and reverting when experiments fail.
+1.5 Paper roadmap
+Section 2 presents Procela’s core abstractions formally. Section 3 describes governance as a first-class capability. Section 4 introduces the AMR case study design. Section 5 defines the epistemic signals used in our AMR instantiation. Section 6 details the three levels of governance used in our AMR study. Section 7 reports results. Section 8 discusses implications and limitations. Section 9 concludes. Appendices provide mathematical foundations, and implementation details.
+1.6 Reproducibility
+Procela is open-source under the Apache 2.0 license at https://procela.org. All code for the AMR case study, including governance and visualization scripts, is available at https://procela.org/amr. A browser-based demonstration allowing readers to run experiments interactively is available at https://procela.org/runner.
+2 Procela core abstractions
+Procela is built on four fundamental abstractions: variables as memory-bearing epistemic authorities, mechanisms as causal units, governance via invariants and hooks as first-class citizen allowing dynamic mutation of the system during execution based on epistemic signals, and executive that orchestrates simulation execution while maintaining full auditability. We present each formally.
+2.1 Variables as memory-bearing epistemic authorities
+In traditional simulation, a variable is a container for a value. In Procela, a variable is an epistemic authority that memorizes the full history of competing hypotheses and resolves them according to a policy.
+Definition 1 (Variable).
+A variable is a tuple where:
+-
+•
+is the domain of possible values. Domains may be continuous intervals or discrete sets .
+-
+•
+is a memory: an ordered sequence of hypotheses, resolved conclusion and reasoning result where each tuple corresponds to simulation step .
+-
+•
+is a resolution policy: a function that arbitrates among the competing hypotheses and gives a single resolved conclusion at step .
+-
+•
+is a unique cryptographic key identifying this variable
+Each hypothesis is itself a structured object.
+Definition 2 (Hypothesis).
+A hypothesis is an immutable tuple where:
+-
+•
+is the proposed value
+-
+•
+is the confidence associated with this hypothesis
+-
+•
+is a source identifier (typically the cryptographic key of the mechanism that generated it)
+-
+•
+is the timestamp (simulation step) when the hypothesis was generated
+-
+•
+is a unique cryptographic key identifying this hypothesis
+The memory grows monotonically; hypotheses are never deleted, ensuring full auditability. At any step, one can query to retrieve all hypotheses generated for that step, or for a range.
+2.1.1 Resolution policies
+A resolution policy arbitrates among competing hypotheses. Common policies include:
+-
+•
+Highest confidence: , breaking ties arbitrarily.
+-
+•
+Confidence voting: (for continuous domains).
+-
+•
+Median: .
+-
+•
+Source priority: selects based on a predefined hierarchy of sources.
+Policies can be changed at runtime via governance (Section 2.3), enabling dynamic adaptation of resolution strategies.
+2.2 Mechanisms as causal units
+A mechanism encodes a causal hypothesis: given current variable states, it proposes new values for variables.
+Definition 3 (Mechanism).
+A mechanism is a tuple where:
+-
+•
+is a set of variables read
+-
+•
+is a set of variables written
+-
+•
+is a transformation function, where represents any internal parameters (including random state)
+-
+•
+is a unique cryptographic key identifying this mechanism
+-
+•
+indicates whether the mechanism is currently enabled
+At each simulation step, every active mechanism is executed. The function reads the variables in , applies a transformation (which may be deterministic, stochastic, or stateful), and generates one hypothesis for each variable in . Each hypothesis is tagged with the mechanism’s key and the current confidence (which may be a function of internal state).
+Mechanisms may be stateful, maintaining internal parameters that evolve over time. This allows, for example, adaptive mechanisms that learn from prediction errors.
+2.2.1 Auditability and source tracking
+Every hypothesis in every variable’s memory is permanently recorded with its source key. This creates a complete audit trail:
+-
+•
+Which mechanism proposed what value, when, and with what confidence
+-
+•
+How each variable resolved competing hypotheses at each step
+-
+•
+Which governance actions occurred and when
+Source keys are cryptographic, enabling verification that a hypothesis genuinely came from a claimed mechanism. This is essential for trust in distributed or collaborative simulation settings.
+The full history is queryable. One can, for example, retrieve all hypotheses generated by mechanism for variable between steps and , or compute the accuracy of each mechanism’s predictions over time.
+2.3 Governance as a first-class citizen
+Traditional simulation frameworks treat the model as fixed once specified. Procela inverts this: the model itself is a dynamic entity that can be observed, interrogated, and mutated during execution. This capability is epistemic governance: the modification of system (structure, policy, etc.) during simulation based on epistemic signals.
+Procela provides two types of governance:
+-
+1.
+invariants: second-class objects that observe system state and trigger actions ;
+-
+2.
+hook events: first-class objects that are designed to trigger structural changes.
+2.3.1 Invariants
+Definition 4 (Invariant).
+An invariant is a tuple where:
+-
+•
+is a condition function that evaluates the current history
+-
+•
+is a function that triggers an action (raise violation errors, switch policy, etc.). is the set of invariant violations in Procela.
+-
+•
+is the phase when the invariant is evaluated
+-
+•
+is the scope of variables and invariants this invariant can observe
+The condition returns False when the invariant is violated–that is, when the system is in a state that requires attention. When violation occurs, the action is executed.
+Unlike hooks, invariants are restricted to operating on variable views rather than directly manipulating the system structure. They are designed to access the current snapshot, providing sufficient information to detect trends, accelerations, and regime changes within a timestep. While invariants can influence the system’s structure, they do so under restricted conditions, requiring users to carefully adhere to the governance rules they define.
+Phases of evaluation
+The three phases correspond to different moments in the simulation step (Algorithm 1):
+-
+•
+PRE: Evaluated before any mechanisms execute. Used for invariants that must prevent certain states from occurring (e.g., “never allow more than 100 colonized patients”).
+-
+•
+RUNTIME: Evaluated after mechanisms generate hypotheses but before variables resolve. Used for invariants that react to emerging patterns in hypotheses (e.g., “if mechanisms disagree strongly, switch resolution policy”).
+-
+•
+POST: Evaluated after variables resolve and the step completes. Used for invariants that analyze completed steps, compute metrics, or prepare for future governance (e.g., check mass conservation or update coverage statistics).
+Multiple invariants may coexist within the same phase. In the current implementation, their execution order is determined by the sequence in which they are added.
+2.3.2 Hooks
+Procela provides two hook events (pre_step, post_step) to govern a system at the highest level of governance. They are the first-class objects designed to observe the system state and can trigger structural changes.
+Definition 5 (Hooks).
+A hook is a function that evaluates the current system state and produces a new state of the system.
+Crucially, hooks have access to the complete system structure, not just the current snapshot. This enables complete mutation of the system before and after each timestep.
+2.3.3 Mutation operations
+A governance can perform any of the following mutations on the system state:
+-
+•
+Mechanism: enable, disable, add, remove, or update parameters
+-
+•
+Variable: set a policy , modify a variable domain (rare, but possible)
+-
+•
+Invariant: add, remove, or update internal parameters
+-
+•
+Executive: set random number generator, reset the world state (this represents the creation of a new world instance over the same structure, use with caution but useful for Monte Carlo study)
+All mutations are recorded in the system history, creating an audit trail of governance actions.
+2.3.4 The governance lifecycle
+A typical governance intervention follows a structured pattern:
+-
+1.
+Detection: A condition indicates that the system requires attention.
+-
+2.
+Action: An action is executed or the system state is mutated.
+-
+3.
+Observation: The system continues executing under the new state.
+-
+4.
+Evaluation: The system assesses whether the governance improved outcomes.
+-
+5.
+Conclusion: Based on evaluation, the mutation may be kept, reverted, or modified.
+This lifecycle mirrors the scientific method: observe a phenomenon, formulate a hypothesis, run an experiment, evaluate evidence, update beliefs.
+2.3.5 Epistemic observability
+Notably, Procela defines no built-in epistemic metrics. The architecture provides the mechanisms for governance (invariants, hooks, mutations, phases) but not the content of what to observe. Epistemic signals such as coverage, fragility, and conflict emerge from user-defined variables and mechanisms that compute them.
+This design choice ensures that Procela remains domain-agnostic. What counts as an epistemic signal in epidemiology (coverage of transmission models) may differ from climate science (ensemble spread) or economics (forecast variance). Users define what to observe; Procela provides the tools to observe, decide, and act. Futur versions may introduce some domain metrics.
+2.4 Executive
+The executive orchestrates the entire simulation.
+Definition 6 (Executive).
+The executive maintains:
+-
+•
+: the set of all variables in the system
+-
+•
+: the set of all mechanisms, with their active/inactive status
+-
+•
+: the set of all governances
+-
+•
+: the current simulation step (non-negative integer)
+-
+•
+: a random number generator state for reproducibility
+-
+•
+: a logging module for audit in different formats (JSON, file or console).
+The executive operates in discrete steps. The simulation step is abstract, allowing discrete and continuous time simulation. Algorithm 1 shows the execution loop.
+The three invariant phases and the hooks allow governance before, during, and after state updates. This enables governance that prevent undesirable states, react to emerging patterns or perform cleanup and analysis after the step completes.
+2.5 Discussion
+These four abstractions–variables as memory-bearing epistemic authorities, mechanisms as causal units, governance as first-class citizen, and executive that orchestrates the simulation–form a minimal but powerful foundation. The architecture imposes no particular scientific theory; it can be seen as a meta-framework within which competing theories can coexist, compete, and be governed.
+Procela defines no built-in epistemic metrics (coverage, fragility, etc.). These emerge from the instantiation: users define variables to track such quantities and mechanisms to compute them. This design keeps the core framework domain-agnostic while enabling rich epistemic monitoring in applications.
+Epistemic governance as a first-class citizen transforms simulation from static ontologies into an adaptive, self-questioning process. Procela enables:
+-
+•
+Structural learning: The system can test whether disabling certain mechanisms improves outcomes.
+-
+•
+Epistemic risk management: Governance can intervene when uncertainty threatens decision quality.
+-
+•
+Auditable science: Every governance action is recorded, creating a complete history of model evolution.
+-
+•
+Transferable patterns: Governance strategies (e.g., “probe by temporary disablement”) can be reused across domains.
+The next section instantiates these abstractions for the AMR case study, showing how domain-specific signals and epistemic governance emerge from the core framework.
+3 Case study: antimicrobial resistance spread in hospital networks
+We instantiate Procela for a canonical problem in infectious disease epidemiology: the spread of antimicrobial-resistant organisms in a hospital network. This domain is characterized by fundamental uncertainty about transmission mechanisms, making it an ideal testbed for epistemic governance.
+3.1 Domain context
+Antimicrobial resistance (AMR) is a global health crisis. In hospital settings, resistant organisms spread through multiple potential pathways:
+-
+•
+Patient-to-patient contact: Direct transmission via healthcare workers, shared equipment, or patient proximity.
+-
+•
+Environmental reservoir: Contamination of surfaces, water, or air that persists and colonizes new patients.
+-
+•
+Antibiotic selection pressure: Antimicrobial use kills susceptible strains, allowing resistant strains to proliferate.
+Each pathway implies different interventions: isolation for contact transmission, enhanced cleaning for environmental reservoirs, and antibiotic stewardship for selection pressure. Yet observational data often cannot distinguish which pathway dominates at a given time (Lipsitch and Samore, 2002). A simulation that must choose a single ontology discards this uncertainty.
+3.2 System scope
+We model a simplified hospital network with three interconnected units (). Patients transfer between units, antibiotics are administered, and environmental contamination accumulates and decays. The time horizon is 160 discrete steps, sufficient to observe multiple regime shifts.
+3.3 Variables
+We define five core variables, each an instance of a Procela variable as defined in Section 2. All are observable measurements, not interpretations–they represent what can be directly measured in a hospital.
+-
+•
+Colonized patients : Number of patients colonized with a resistant organism. This is the primary outcome of interest.
+-
+•
+Antibiotic usage : Defined daily doses (DDD) of antibiotics administered per time step. Represents selection pressure.
+-
+•
+Environmental load : Composite index of environmental contamination, aggregating surface samples, air counts, and water tests.
+-
+•
+Intervention code : Current infection control policy:
+-
+–
+: Baseline (standard precautions)
+-
+–
+: Isolation (contact precautions for colonized patients)
+-
+–
+: Enhanced cleaning (environmental decontamination)
+-
+–
+: Antibiotic stewardship (restrict usage)
+-
+–
+-
+•
+Predicted colonization : One-step-ahead prediction of colonized patients.
+The first three variables are set by a hidden ground truth (section 3.5). Competing ontologies propose hypotheses to the last two variables which use the WeightedConfidencePolicy as default resolution, unless changed by governance.
+3.4 Mechanism families
+Three mechanism families encode competing ontologies. Each family consists of multiple mechanism variants (e.g., noisy, biased, lagged) that share the same core equation but differ in parameters. This intra-family diversity creates realistic variation in predictions and recommendations.
+3.4.1 Contact family
+The contact family embodies the hypothesis that transmission is primarily driven by patient contacts.
+Core equation:
+where:
+-
+•
+is the contact transmission rate
+-
+•
+is the effectiveness of isolation (intervention code 1)
+-
+•
+is process noise
+-
+•
+is an indicator for isolation being active
+Policy recommendation: isolation () with confidence proportional to the mechanism’s current belief in its own accuracy.
+3.4.2 Environmental family
+The environmental family posits that environmental contamination drives colonization.
+Core equation:
+where:
+-
+•
+scales environmental contribution
+-
+•
+is cleaning effectiveness (intervention code 2)
+-
+•
+Policy recommendation: enhanced cleaning ().
+3.4.3 Selection family
+The selection family attributes spread to antibiotic pressure selecting for resistant strains.
+Core equation:
+where:
+-
+•
+scales antibiotic contribution
+-
+•
+is stewardship effectiveness (intervention code 3)
+-
+•
+Policy recommendation: antibiotic stewardship ().
+The figure 1 shows the mechanism contributions (governance combined) for the AMR case study.
+3.5 Ground truth regime shifts
+The simulated world (unknown to mechanisms) undergoes three regime shifts:
+-
+•
+Steps 0–60: Selection regime. Antibiotic pressure dominates. is high; and are low.
+-
+•
+Steps 61–110: Environmental regime. An environmental contamination event occurs (e.g., plumbing failure). becomes high; and return to baseline.
+-
+•
+Steps 111–160: Contact regime. A patient transfer outbreak begins. becomes high; returns to baseline.
+These shifts are implemented by varying the true parameters in the data-generating process as illustrated in figure 2. Mechanisms do not observe these parameters; they must infer the current regime from data.
+3.6 Resolution policies
+Two resolution policies are used in this case study:
+-
+•
+WeightedConfidencePolicy (default): . The resolved value is a confidence-weighted average of all hypotheses at each timestep.
+-
+•
+HighestConfidencePolicy (used in experiments): where . The hypothesis with highest confidence determines the value.
+The choice of policy affects how competing ontologies are arbitrated. Weighted voting averages across perspectives; highest confidence selects a single winner.
+3.7 Discussion
+This design instantiates Procela’s core abstractions for the AMR domain:
+-
+•
+The variables are Procela variables with domains and policies.
+-
+•
+Three mechanism families encode competing scientific theories as Procela mechanisms.
+-
+•
+The data-generating process (regime shifts) is external to the simulation–mechanisms only observe its outputs.
+Notably, we have not yet defined epistemic signals (coverage, fragility) or governance. These emerge in the next two sections.
+The design is minimal but sufficient: five variables, three mechanism families, two policies, and a non-stationary ground truth. This simplicity ensures that any observed benefits of governance can be attributed to the framework, not domain complexity.
+4 Epistemic signals for AMR governance
+Governance requires observability. To decide when and how to intervene, invariants and hooks must detect when the system’s epistemic state is deteriorating–when mechanisms are failing, disagreeing, or becoming unreliable. This section defines the epistemic signals we use in the AMR case study and shows how they are implemented in Procela.
+4.1 The need for epistemic observability
+In the AMR domain, the ground truth (which transmission regime is active) is hidden. Governance cannot observe regime shifts directly. It must infer them from patterns in the data and in mechanism behavior. Epistemic signals are computable quantities that correlate with regime shifts and indicate when governance intervention may be beneficial.
+Crucially, these signals are not built into Procela’s core. They emerge from user-defined variables and mechanisms that observe the system’s behavior. This design ensures that what counts as an “epistemic signal” is domain-specific and customizable.
+4.2 Coverage: prediction accuracy per mechanism
+Coverage measures how accurately a mechanism predicts the observed value of . For a single mechanism at step , we define:
+where:
+-
+•
+is the hypothesis generated by mechanism at step for variable
+-
+•
+is the observed value of colonized patients at step
+-
+•
+is a scaling parameter that determines how quickly coverage decays with error
+Coverage ranges from near 0 (large prediction error) to 1 (perfect prediction). The exponential transformation ensures that coverage decays smoothly as error increases.
+For a mechanism family (e.g., all contact mechanisms), we define family-level coverage as the average across its members:
+Coverage decay–a sustained decrease in –suggests that the ontology encoded by family no longer matches the current regime.
+4.3 Policy fragility: disagreement on intervention
+Policy fragility measures how much mechanisms disagree about the appropriate intervention . At step , let be the set of hypotheses for variable . Each hypothesis proposes an intervention code with confidence .
+We define fragility as the normalized range of proposed interventions:
+The denominator 3 normalizes by the maximum possible range (from 0 to 3). Fragility ranges from 0 (all mechanisms recommend the same intervention) to 1 (mechanisms span the full range from no intervention to stewardship).
+High fragility indicates that the system’s epistemic state is not consolidated: different ontologies imply different actions. This is a precursor to policy oscillation and decision regret.
+4.4 Recent error: current prediction accuracy
+Recent error is a simple moving average of absolute prediction error:
+where is a window size. This signal captures the current performance of the resolved prediction , aggregating across all active mechanisms.
+Recent error serves two purposes:
+-
+•
+As a **trigger condition**: Governance should intervene when recent error is high, indicating systemic failure.
+-
+•
+As an **evaluation metric**: After an experiment, comparing recent error before and after determines whether the intervention succeeded.
+4.5 Implementing epistemic signals
+These signals are not magic–they are implemented as ordinary Procela variables.
+4.5.1 Coverage variables
+For each mechanism family, we create a variable to track its coverage:
+family.coverage = Variable( name="family_name_coverage", domain=RangeDomain(0.0, 1.0), policy=None # observational, not resolved )
+4.5.2 Policy fragility
+Similarly, a policy fragility variable tracks the disagreement signal:
+policy_fragility = Variable( name="policy_fragility", domain=RangeDomain(0.0, 1.0), policy=None )
+4.5.3 Prediction error on colonization
+error_colonized = Variable( name="error_colonized", domain=RealDomain(), policy=None )
+This variable holds the prediction error on colonization after each step, allowing full auditability. During governance, a rolling window of is used from this variable memory.
+These epistemic variables are updated in the POST phase, after variables are resolved conflicts. They serve as governance inputs. Because these are ordinary Procela variables, they maintain full memories. Invariants and hooks can detect trends (e.g., “coverage has declined for 10 consecutive steps”) not just instantaneous values.
+4.6 Discussion
+This design illustrates a key principle of Procela: **the framework provides the tools for epistemic observability**. Users define what signals matter in their domain and implement observers to compute them. This ensures:
+-
+•
+**Domain relevance**: Signals are tailored to the specific scientific questions.
+-
+•
+**Extensibility**: New signals can be added without modifying the framework.
+-
+•
+**Auditability**: Every signal’s computation is traceable.
+In the next section, we show how governance uses these signals to detect epistemic crises and runs structural experiments.
+5 AMR governance
+We implement three levels of governance for the AMR case study, each encoding a different hypothesis about how to improve system performance. All governances follow the scientific method pattern: detect a potential crisis, formulate a hypothesis, run an experiment, evaluate evidence, and conclude.
+5.1 Common patterns
+In the AMR study, all governance levels share several design elements:
+-
+•
+State machine: Each maintains internal state (monitoring, experimenting, evaluating) to track experiment lifecycle.
+-
+•
+Temporary experiments: Mutations are applied for a fixed duration, then evaluated. Failed experiments are reverted from the next timestep.
+-
+•
+Evidence-based decisions: Experiments succeed only if they reduce mean absolute prediction error.
+-
+•
+Audit trail: All experiments are logged with pre/post error, hypothesis, and outcome.
+5.2 Policy fragility governance
+The policy fragility governance addresses situations where mechanisms disagree strongly about which intervention to apply.
+5.2.1 Detection
+The governance triggers when:
+-
+•
+Policy fragility exceeds threshold :
+-
+•
+Recent error exceeds threshold :
+The fragility threshold is set to , which corresponds to mechanisms spanning almost the full range of interventions (from 0 to 3, normalized). The error threshold is , indicating moderate prediction error.
+5.2.2 Hypothesis
+“Switching from weighted confidence to highest confidence resolution will reduce prediction error during periods of high disagreement.”
+5.2.3 Experiment
+-
+1.
+Record current policy of variable (default: WeightedConfidencePolicy).
+-
+2.
+Switch ’s policy to HighestConfidencePolicy.
+-
+3.
+Run for steps.
+-
+4.
+Collect prediction errors during this period.
+5.2.4 Evaluation
+After the experiment period, compute:
+-
+•
+: mean absolute error in the steps before the experiment
+-
+•
+: mean absolute error during the experiment
+If , the experiment succeeds and the new policy is retained. Otherwise, the original policy is restored.
+5.3 Coverage decay
+The coverage decay detects when an entire ontology family is consistently failing to predict accurately.
+5.3.1 Detection
+For each family , this governance monitors coverage . A family is considered “decaying” if:
+We use and in our experiments.
+5.3.2 Hypothesis
+“Family is no longer valid in the current regime. Temporarily disabling it will improve overall predictions.”
+5.3.3 Experiment
+-
+1.
+Identify the decaying family .
+-
+2.
+Disable all mechanisms in .
+-
+3.
+Run for steps.
+-
+4.
+Monitor prediction error during this period.
+5.3.4 Evaluation
+Compare mean absolute error in the steps before disablement versus during disablement. If error decreases, the family remains disabled; otherwise, it is re-enabled.
+5.4 Structural probe
+The structural probe takes a more systematic approach: it periodically isolates each family to measure its standalone predictive performance.
+5.4.1 Detection
+Unlike the previous governance, this one does not wait for a crisis. It runs on a fixed schedule: every steps, it initiates a probe of one family, cycling through families in round-robin order.
+5.4.2 Hypothesis
+“Measuring a family’s isolated performance will reveal if its ontology currently best matches the regime, informing future governance decisions.”
+5.4.3 Experiment
+For the chosen family :
+-
+1.
+Record current system state (all families active).
+-
+2.
+Disable all families except .
+-
+3.
+Run for steps.
+-
+4.
+Record mean absolute error during this isolated period.
+-
+5.
+Restore original topology for the next schedule.
+5.4.4 Evaluation
+The probe does not permanently change the system; it merely collects data. The resulting isolated error for each family can be stored in a dedicated variable:
+This information can be used by other invariants or by human analysts to understand which ontology is performing best in the current regime.
+5.5 Governance composition
+These three governance levels can operate simultaneously. The policy fragility and coverage decay are reactive, triggering only when epistemic signals indicate a problem. The structural probe is proactive, running on a schedule regardless of system state.
+Their potential conflicts can be managed through:
+-
+•
+Phase separation: Structural probe runs in PRE, policy fragility runs in RUNTIME, and coverage decay runs in POST phase.
+-
+•
+State awareness: Governance checks whether an experiment is already active before triggering.
+In the AMR case study, we run each governance separately to isolate their effects, as reported in Section 6. We also show how adding all the three governances would react. If conflicts disable all mechanisms, an emergency governance is triggered to enable all of them.
+5.6 Discussion
+These three levels of governance illustrate the range of governance strategies possible in Procela:
+-
+•
+Policy fragility changes how conflicts are resolved.
+-
+•
+Coverage decay removes hypothesized causes.
+-
+•
+Structural probe gathers evidence about competing theories.
+All follow the same scientific pattern: detect, hypothesize, experiment, evaluate, conclude. All are implemented using only the Procela abstractions–variables, mechanisms, policies, invariants, hooks–plus the epistemic signals defined in Section 4.
+The next section reports the results of running these governances in the AMR case study.
+6 Results
+We evaluate the three governances on the AMR case study described in section 3. Each simulation runs for 160 steps with three regime shifts (selection, environmental, contact). Results are averaged over 50 independent runs with different random seeds. All code and data are available at https://procela.org/amr.
+6.1 Baseline: no governance
+As a baseline, we run the simulation with all three mechanism families active and the default WeightedConfidencePolicy for all variables. No governance is active. This represents the traditional approach: multiple models compete, but the simulation structure is static. Table 1 shows prediction error.
+All the family ontologies show lower prediction error during selection regime than during environmental and contact regimes. Contact family shows higher errors in environmental and contact regimes as depicted in figure 3.
+6.2 Policy fragility governance
+The policy fragility governance (Section 5) triggers when intervention disagreement and recent prediction error exceed thresholds (, ). It experiments by switching ’s policy to HighestConfidencePolicy for 10 steps, then evaluates. The table 2 presents the performance of fragility metrics compared to the baseline.
+The policy fragility governance fails to improve prediction error because it intentionally substitutes a higher-resolution policy with a lower-resolution alternative. Under an i.i.d. assumption, the weighted-confidence resolution is optimal (Theorem 1). Therefore, switching to highest confidence policy results in degraded predictive accuracy.
+The figure 4 shows a representative run with five successful experiments (high error) and two failed experiments during stable periods. Despite the success rate (71.4%) of experiments, this governance fails because when experiments fail, the prediction errors are much higher than when they succeed.
+6.3 Coverage decay governance
+The coverage decay monitors each family’s prediction accuracy. When a family’s coverage falls below for consecutive steps, it temporarily disables that family for 10 steps.
+The table 3 shows that coverage decay achieves lower mean error than the baseline with lower variance. This achievement for 54% success rate means when experiments are successful, it works well; when it fails, no catastrophic failures.
+By comparison to the results with no governance, coverage shows that contact family is continuously disabled from the selection regime. It means that after each experiment, this family’s coverage remains below the given threshold allowing governance to keep it disabled as illustrated in figure 5. As a consequence, disabling the contact family keeps the selection family above the threshold ().
+The figure 6 shows absolute error trajectories for the coverage decay governance with six successful experiments over 11 triggered. Successful experiments occur during high errors and fail during stable periods.
+6.4 Structural probe governance
+The structural probe governance runs on a fixed schedule (every 25 steps), isolating each family in turn for 20 steps to measure its standalone performance.
+The table 4 shows that structural probe yields a modest reduction in error relative to coverage decay. However, its main contribution extends beyond predictive performance: it provides structural information. Separately, we later demonstrate that it also improves decision-making outcomes, as measured by cumulative difference (Section 11).
+Isolation is chosen to avoid total coincidence to regime as illustrated in figure 7. During selection regime, contact family is isolated to estimate its performance. During environmental regime, environmental family is isolated. During contact regime, selection family is isolated. Figure 8 shows structural probe trajectories with 2 successful experiments over 3 triggered. Successful experiments occur in regimes where family errors are high (environmental and contact) and fail in regimes where families are stable (selection).
+6.5 Combined governance
+Combining all the governances we define in the AMR study shows that the mean error is still improving (8.18%) and the standard deviation is slightly below the baseline. Combining governances adds instability in comparison to the other governances isolated as depicted in table 5.
+The figure 9 shows the combined governances in action. In comparison to the results for structural probe, the coverage shows that a family might be not completely isolated indicating that either policy fragility governance is enabling or coverage governance is still acting. Despite including an ineffective governance component, the combined governance tries to reconstruct the intervention code.
+The figure 10 shows successful and failed experiments when combining all the governances in the AMR study. Almost all experiments failed during the selection regime where family coverages are high. When family coverages are low (environmental and contact), experiments are likely to be succeeded. This result demonstrates that different governances can coexist in Procela to dynamically govern the system during the simulation.
+6.6 Cumulative difference
+We assess decision-making performance through cumulative difference relative to the optimal intervention (intervention code = 0). Formally, cumulative difference is defined as the aggregated difference between the realized outcomes under the proposed strategy and those obtained under the optimal intervention applied at each timestep. For convenience of visualization, we use the following formula for cumulative difference:
+The cumulative difference performance for each governance in comparison to the baseline (no governance) is shown in table 6. Structural probe yields the highest performance (69%) while coverage decay yields only 35.5%.
+The cumulative difference over time is illustrated in figure 11. The case study has revealed a fundamental trade-off between epistemic and decision-theoretic optimization:
+-
+•
+Prediction-optimal decision-optimal
+-
+•
+Coverage decay makes better predictions but makes modest decisions (+20.42%, C.R=+35.5%)
+-
+•
+Structural probe makes better decisions but only modestly improves predictions (+9.31%, C.E=+69.0%)
+Although the coverage decay governance reduces the average error, it initially makes poor intervention choices compared to optimal intervention. The cumulative difference metric penalizes these. Probe governance wins on cumulative difference because it almost always makes better decisions than the optimal intervention. This means:
+-
+•
+Probe rarely makes bad intervention choices
+-
+•
+But its average error improvement is modest
+-
+•
+It’s conservative and avoids disasters
+This result suggests to consider hybrid strategy – probe governance for information, coverage for prediction.
+6.7 Topology dynamics in the AMR study
+Procela ensures complete auditability. The memories of variables can be used to visualize the topology dynamics. As illustrated in figure 12 the topology evolution for each governance in the AMR study is depicted. The contact family has three mechanisms, while the environmental and selection families have four each. In total, the AMR case study has eleven competing mechanisms that governance restructures over time.
+6.8 Comparative analysis
+A comparative performance of governance strategies for our AMR case study is shown in table 7.
+Several patterns emerge:
+-
+•
+All governance strategies, except policy fragility, improve mean error and variance, confirming that epistemic governance provides value.
+-
+•
+Coverage decay achieves the largest improvement in prediction (20.42%) and with lowest variance–a good exploration-exploitation strategy.
+-
+•
+Structural probe achieves the largest improvement in decision (69.0%). It offers balanced improvement (9.31%) in prediction with modest variance improvement compared to coverage decay.
+-
+•
+Policy fragility provides no improvement but generates valuable diagnostic information about optimal resolution policies.
+-
+•
+Combined governance strategy achieves good improvements (8.18%) and a slight decrease in variance relative to no governance baseline, despite including an ineffective governance component. This outcome is intuitive, as the combination of governance mechanisms may introduce instability when not optimally designed.
+6.9 Summary of key findings
+-
+1.
+Epistemic governance improves outcomes: Procela epistemic governance reduce prediction error, with coverage decay achieving 20.42% improvement.
+-
+2.
+Experiments succeed when needed most: Success rate exceeds 71% when pre-experiment error .
+-
+3.
+Failures are contained: Failed experiments can be correctly reverted, preventing long-term degradation.
+-
+4.
+Regime shifts are detectable: Epistemic signals (coverage, fragility) reliably indicate when the ground truth has changed.
+-
+5.
+Combining governance can decrease performance: Combining governance can add instability if not robustly designed.
+-
+6.
+Success probability of our experiments depends on pre-experiment error: This confirms that governance is correctly targeting crisis periods and avoiding unnecessary interventions during stable times.
+These results demonstrate that Procela’s governance abstractions and variables with memories enable simulations to detect epistemic crises, test structural hypotheses, and adapt–improving outcomes under ontological uncertainty.
+7 Discussion
+The results in section 6 demonstrate that epistemic governance–implemented through Procela’s core abstractions–can improve simulation performance under ontological uncertainty. We now interpret these findings, discuss their implications, acknowledge limitations, and argue for the framework’s generalizability.
+7.1 Interpretation of key findings
+7.1.1 Why governance improves outcomes
+The reduction in prediction error across governance strategies is not merely incremental. It reflects a fundamental shift: the simulation is no longer a fixed model but an adaptive system that tests its own assumptions.
+The pattern in our results is particularly telling. Experiments succeed when baseline error is high () and fail when error is moderate (). This indicates that governance is correctly identifying epistemic crises–moments when the current model configuration is demonstrably failing–and intervening appropriately. During stable periods, it largely refrains from experimentation, avoiding unnecessary disruption.
+7.1.2 The trade-off combining governance without robust care
+Coverage decay achieves the largest error reduction (20.42%) and with lowest variance w.r.t the simulation without governance. Combined governance offers less improvement (8.18%) with stable variance. This trade-off is inherent in the design of epistemic governance when combining strategies that are not robust.
+The optimal balance depends on domain characteristics: how quickly regimes shift, how severe the consequences of error are, and how costly failed experiments are. Procela’s design allows users to tune this balance through invariant parameters.
+7.1.3 The value of information
+Policy fragility is an ineffective governance strategy (-1.63%) in our AMR study but provides crucial diagnostic information. It indicates if current policy is optimal.
+The information provides by Procela epistemic governance has value beyond error reduction:
+-
+•
+It provides interpretable diagnostics for human analysts (“the environmental model is currently performing best” or “the intervention should be switched to a better institutional policy”).
+-
+•
+It can inform higher-level governance (e.g., an invariant that permanently adopts the best-performing family).
+-
+•
+It builds trust by making the system’s reasoning transparent.
+7.2 Implications for simulation practice
+7.2.1 Beyond model averaging
+Traditional approaches to model uncertainty–Bayesian model averaging, ensemble methods, robust control–all assume a fixed set of models. They combine or select among pre-specified alternatives but never question whether those alternatives remain valid as the system evolves.
+Procela enables a strict superset of these approaches. One could implement model averaging as a resolution policy (weighted voting) and model selection as an invariant (switch to highest-confidence mechanism). But Procela goes further: it allows the set of models itself to change through structural mutations.
+This is analogous to the difference between parameter estimation and structure learning in statistics. Just as structure learning discovers causal graphs rather than fixing them a priori, Procela discovers model adequacy through runtime experimentation.
+7.2.2 Simulation as scientific method
+The governance in section 5 all follow the same pattern: detect anomaly, formulate hypothesis, run experiment, evaluate evidence, update beliefs. This is not accidental–it reflects a deliberate design choice to align simulation governance with scientific practice.
+In traditional simulation, the scientist is external, formulating hypotheses, running experiments, and updating models offline. In Procela, this process is internalized. The simulation becomes an autonomous scientist, continuously testing its own assumptions against incoming data.
+This has profound implications for:
+-
+•
+Reproducibility: Every experiment is recorded, creating an auditable trail of model evolution.
+-
+•
+Scalability: Governance operates at runtime, enabling adaptation in settings where human oversight is infeasible.
+-
+•
+Transparency: The scientific method pattern makes governance decisions interpretable.
+7.3 Limitations
+7.3.1 Simplified domain dynamics
+The AMR case study, while capturing essential features of competing ontologies, simplifies many real-world complexities. We model three hospitals with homogeneous dynamics, ignore patient-level heterogeneity, and assume perfect observation of colonization status. Real AMR spread involves individual patient trajectories, imperfect diagnostic tests, and complex behavioral factors.
+This simplification was intentional: it isolates the effects of governance from domain noise. The 20.42% improvement observed here suggests that governance would provide value in more realistic settings, but the exact magnitude remains to be tested.
+7.3.2 Parameter sensitivity
+The governances use manually tuned thresholds (, , , ). While these values were chosen based on domain reasoning and pilot experiments, they are not guaranteed optimal. Different thresholds would change experiment frequency and success rate.
+Procela does not prescribe how thresholds should be set. In practice, they would be calibrated using historical data or domain expertise. Future work could explore adaptive threshold tuning as a meta-governance layer.
+7.3.3 Experiment duration
+Coverage decay experiments last 10 steps with 10-step evaluation windows. In a 160-step simulation, this allows at most 7–8 experiments. The optimal duration depends on regime shift frequency: too short and experiments may not capture full effects; too long and the system may miss multiple regimes.
+Our choices were constrained by simulation length. In longer-running simulations, experiment durations could be extended proportionally.
+7.3.4 Computational overhead
+Governance adds computational cost: invariants and hooks must be evaluated, memories queried, and mutations applied. In our experiments, this overhead was negligible ( runtime increase). However, in larger-scale simulations with many mechanisms and variables, governance could become a bottleneck. Optimizations such as sampling-based memory queries and parallel invariant evaluation remain future work.
+7.4 Generalizability
+7.4.1 Domain independence
+Procela’s core abstractions–variables as memory-bearing epistemic authorities, mechanisms as causal units, governance via invariants and hooks–make no reference to AMR or epidemiology. The framework is domain-agnostic by design.
+The same patterns could be applied to:
+-
+•
+Climate modeling: Competing atmospheric circulation models, governance that disables failing parameterizations, structural probes to identify which model best matches recent observations.
+-
+•
+Economics: Multiple theories of investor behavior, governance that switches between them during market regime shifts, probes to test which theory explains current volatility.
+-
+•
+Social science: Competing models of opinion dynamics, governance that experiments with different influence mechanisms based on prediction accuracy.
+-
+•
+Robotics: Multiple control policies for navigation, governance that switches based on terrain type inferred from sensor error patterns.
+In each case, the pattern is identical: encode competing theories as mechanisms, define epistemic signals that indicate when theories are failing, and implement governances that test structural hypotheses.
+7.4.2 Scalability to more ontologies
+Our case study uses three families with 3–4 mechanisms each. The framework scales naturally to larger numbers: variables, mechanisms, and governances are all first-class objects that can be added arbitrarily. The computational cost grows linearly with mechanism count; governance cost grows with the number of invariants and the complexity of their queries.
+7.4.3 Hybrid human-AI governance
+Procela’s audit trail and interpretable experiment logs enable hybrid governance: governances can propose experiments, but human analysts can review, approve, or override them. This is particularly valuable in high-stakes domains like healthcare or climate policy, where autonomous structural changes may require oversight.
+The cryptographic source tracking ensures that all governance actions are attributable, supporting accountability in hybrid settings.
+7.5 Open questions and future work
+Several directions emerge from this work:
+-
+•
+Meta-governance: Can invariants that govern themselves improve results? For example, an invariant that tunes its own thresholds based on experiment success rates.
+-
+•
+Multi-objective governance: Our invariants in the AMR study optimize prediction error. Real systems must balance multiple objectives (error, cost, interpretability).
+-
+•
+Theoretical guarantees: Under what conditions does governance converge to the true ontology? Can we bound regret relative to an oracle that knows regime shifts in advance?
+-
+•
+Real-world validation: Deploying Procela in an operational setting (e.g., hospital infection control) would test whether laboratory improvements translate to practice.
+-
+•
+Standardized benchmarks: Developing a suite of benchmark problems with competing ontologies would enable systematic comparison of governance strategies.
+7.6 Summary
+Procela introduces a new paradigm: simulations that not only model the world but model their own modeling process. The AMR case study demonstrates that this paradigm delivers measurable improvements under ontological uncertainty. The framework’s domain-agnostic design suggests broad applicability, while its auditability and interpretability support both autonomous and human-in-the-loop deployment.
+The 20.42% error reduction achieved by coverage decay governance is not presented as an optimal result–it is a proof that the paradigm works. Future work can refine the specifics; the core contribution is the paradigm itself.
+8 Conclusion
+We have introduced Procela, a framework for epistemic governance in mechanistic simulations that treats models not as fixed artifacts but as evolving hypotheses. Built on four core abstractions–variables as memory-bearing epistemic authorities, mechanisms as causal units, governance via invariants and hooks, and executive to orchestrate the simulation–Procela enables simulations to observe their own epistemic state, formulate hypotheses about model adequacy, run structural experiments, and adapt based on evidence.
+8.1 Broader implications
+The significance of these results extends beyond the specific case study. Procela demonstrates that:
+-
+•
+Simulations can be scientists. By internalizing the scientific method (detect anomaly, hypothesize, experiment, evaluate, conclude) simulations can adapt to regime shifts and structural uncertainty without human intervention.
+-
+•
+Epistemic signals are computable. Coverage, fragility, and other indicators of model adequacy can be derived from ordinary simulation variables and used as governance triggers.
+-
+•
+Structural mutation is tractable. Enabling, disabling, and reconfiguring mechanisms at runtime is feasible and delivers measurable benefits.
+-
+•
+Auditability scales. Complete hypothesis histories with cryptographic source tracking make governance actions transparent and attributable, supporting both autonomous operation and human oversight.
+8.2 Limitations and future work
+As discussed in Section 7, this work has limitations. The AMR case study simplifies real-world complexity; thresholds are manually tuned; experiment durations are constrained by simulation length; and computational overhead in larger systems remains unexplored.
+These limitations open several research directions:
+-
+•
+Meta-governance: Invariants that tune their own parameters based on experiment outcomes.
+-
+•
+Multi-objective optimization: Balancing prediction error against intervention cost, interpretability, or other domain objectives.
+-
+•
+Theoretical foundations: Convergence guarantees and regret bounds for epistemic governance.
+-
+•
+Real-world deployment: Applying Procela in operational settings such as hospital infection control or climate policy.
+-
+•
+Standardized benchmarks: Developing a suite of problems with competing ontologies to enable systematic comparison of governance strategies.
+8.3 Final remarks
+Procela occupies a new category: simulations that model not only the world but their own modeling process. By making epistemic uncertainty a runtime concern rather than a pre-simulation assumption, it enables adaptive, self-questioning models that can operate in domains where the true causal structure is contested, unidentifiable, or subject to change.
+The framework is open-source, domain-agnostic, and ready for extension. We invite the community to adopt it, adapt it, and push it toward new domains and new forms of governance. The code, documentation, and interactive code runner are available at https://procela.org.
+8.4 Acknowledgments
+We thank the anonymous reviewers for their constructive feedback. We are grateful to the Procela community for discussions that helped refine the framework’s design. Special thanks to the contributors who provided critical feedback on the evaluation methodology, identified issues with temporal alignment in the governance invariants, and assisted with result interpretation and visualization design. The authors also acknowledge the use of AI-assisted tools for exploratory technical discussions during development.
+Appendix A Mathematical foundations
+This appendix provides formal definitions and theoretical results underpinning Procela’s abstractions and governance mechanisms.
+A.1 Variable resolution as social choice
+The problem of resolving competing hypotheses into a single value is formally a social choice problem: given agents (mechanisms) each proposing a value with associated confidence, choose a collective outcome.
+Definition 7 (Resolution function).
+Let be a set of hypotheses for variable , where with and . A resolution function maps a set of hypotheses to a single value.
+Theorem 1 (Weighted voting optimality).
+Under the assumption that hypothesis errors are independent and normally distributed with variance inversely proportional to confidence, the weighted voting policy minimizes expected squared error.
+Proof.
+Let be the unknown true value. Assume each hypothesis with for some constant . The likelihood of observing given is:
+Taking logs and maximizing yields , which is the weighted voting estimator. ∎
+Corollary 1.
+Highest confidence policy where is a special case of weighted voting when one mechanism dominates.
+A.2 Convergence of epistemic signals
+Epistemic signals such as coverage and fragility are designed to converge to stable values under stationary regimes.
+Definition 8 (Coverage process).
+For a mechanism , let be the coverage at step . This defines a stochastic process on .
+Theorem 2 (Coverage convergence).
+If the true data-generating process follows mechanism ’s ontology with stationary parameters, then converges to a constant as .
+Proof.
+Under stationarity, the prediction errors form a stationary process. By the law of large numbers, the empirical distribution of converges to its stationary distribution. Since coverage is a continuous bounded function of , its expectation converges. ∎
+Corollary 2.
+Coverage decay–a sustained decrease in –implies non-stationarity in the data-generating process, i.e., a regime shift.
+A.3 Policy fragility as entropy
+Fragility measures disagreement among mechanisms about intervention choice. This can be formalized using information theory.
+Definition 9 (Policy distribution).
+For variable with domain , let be the normalized confidence mass on intervention . This defines a probability distribution over interventions.
+Definition 10 (Fragility as normalized entropy).
+where is the maximum entropy for four categories.
+This information-theoretic definition has advantages over the range-based definition used in the main text:
+-
+•
+It accounts for the entire distribution, not just extremes.
+-
+•
+It is invariant to intervention coding (e.g., relabeling categories).
+-
+•
+It naturally handles cases where multiple mechanisms propose the same intervention.
+In our experiments, the range-based and entropy-based definitions are highly correlated () due to the small number of mechanisms.
+A.4 Experiment regret bounds
+When governance runs experiments, it temporarily deviates from the current policy. This incurs regret relative to an oracle that always chooses the optimal policy.
+Definition 11 (Cumulative regret).
+Let be the prediction error under governance at step , and be the error under the optimal policy (had the true regime been known). Cumulative regret is:
+Theorem 3 (Bounded regret).
+For a governance strategy that runs experiments of duration with evaluation window , and reverts failed experiments, the expected cumulative regret after steps is bounded by:
+where is the maximum possible per-step error increase during a failed experiment.
+Sketch.
+Each failed experiment incurs at most excess error during the experiment period, plus at most during the evaluation period before reversion. Successful experiments may also incur regret during the experiment period but reduce error thereafter. The term accounts for the fact that after sufficient time, the governance strategy converges to the optimal policy (if identifiable) or oscillates among near-optimal policies. ∎
+A.5 Identifiability and governance limits
+Not all ontological uncertainty is resolvable. If two ontologies produce identical predictions for all observable variables, no governance strategy can distinguish them.
+Definition 12 (Observational equivalence).
+Two mechanism families and are observationally equivalent if for all possible regimes and all , the joint distribution of observable variables is identical under and .
+Theorem 4 (Impossibility of ontology selection).
+If and are observationally equivalent, no governance strategy based solely on observable variables can consistently select between them.
+Proof.
+By definition, any governance strategy that conditions on observables receives the same inputs under and . Therefore its outputs (including which family to prefer) must be identical in distribution under both families, preventing consistent discrimination. ∎
+This theorem establishes fundamental limits on governance. It cannot discover “ground truth” when ontologies are observationally equivalent. However, it can still improve outcomes by selecting among observationally distinct policies, even if the underlying causal mechanisms remain uncertain. This aligns with our framing: governance manages epistemic risk, not ontological truth.
+A.6 Summary
+The mathematical foundations established here:
+-
+•
+Justify weighted voting as optimal under normality assumptions.
+-
+•
+Show that coverage decay reliably indicates non-stationarity.
+-
+•
+Connect fragility to information-theoretic entropy.
+-
+•
+Provide regret bounds for governance experiments.
+-
+•
+Acknowledge fundamental limits on ontology selection.
+These results support the empirical findings in Section 6 and clarify what governance can and cannot achieve.
+References
+- The relationship between the volume of antimicrobial consumption in human communities and the frequency of resistance. Proceedings of the National Academy of Sciences 96 (3), pp. 1152–1156. Cited by: §1.1.
+- Science and statistics. Journal of the American Statistical Association 71 (356), pp. 791–799. Cited by: §1.1, §1.2.
+- Why model?. Journal of Artificial Societies and Social Simulation 11 (4), pp. 12. Cited by: §1.1.
+- Robust control in epidemiology: an introduction. Theoretical population biology 128, pp. 57–69. Cited by: 2nd item.
+- Learning bayesian networks: the combination of knowledge and statistical data. Machine learning 20 (3), pp. 197–243. Cited by: 4th item.
+- Bayesian model averaging: a tutorial. Statistical science, pp. 382–401. Cited by: 1st item.
+- Antimicrobial use and antimicrobial resistance: a population perspective. Emerging infectious diseases 8 (4), pp. 347. Cited by: §1.1, §3.1.
+- Complex adaptive systems modeling with repast simphony. Complex adaptive systems modeling 1 (1), pp. 1–26. Cited by: §1.1.
+- Causality. 2nd edition, Cambridge University Press, Cambridge, UK. Cited by: §1.1, §1.2.
+- Adaptive management of renewable resources. Macmillan Publishers Limited. Cited by: 3rd item.
+
+KAYNAK : https://arxiv.org/abs/2604.00675

@@ -1,0 +1,36 @@
+--- claude | Errors on the Claude.ai desktop application | score=44.37 ---
+Apr
+1
+,
+22:16
+UTC
+Resolved
+- This incident has been resolved.
+Apr
+1
+,
+22:15
+UTC
+Identified
+- We have identified an issue which results in the Claude.ai desktop application returning an error when attempting to connect. We are working to resolve this issue as quickly as possible, and the Claude.ai website is unaffected.
+
+KAYNAK : https://status.claude.com/incidents/z22j49ktx41d
+
+--- claude | Elevated errors on requests to Claude Opus 4.6 | score=33.01 ---
+Apr
+1
+,
+10:40
+UTC
+Resolved
+- This incident has been resolved.
+Apr
+1
+,
+09:06
+UTC
+Identified
+- We have identified an issue resulting in elevated errors on requests to Claude Opus 4.6, and are working to resolve this. We will provide an update as soon as possible.
+
+KAYNAK : https://status.claude.com/incidents/3bg93cy9bk1v
+

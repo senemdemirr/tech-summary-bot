@@ -1,5 +1,0 @@
---- openai | Helping disaster response teams turn AI into action across Asia | score=50.27 ---
-AI for Disaster Response in Asia: OpenAI Workshop with Gates Foundation
-
-KAYNAK : https://openai.com/index/helping-disaster-response-teams-asia
-

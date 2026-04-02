@@ -1,4 +1,3 @@
---- huggingface | Holo3: Breaking the Computer Use Frontier | score=90.50 ---
 Holo3: Breaking the Computer Use Frontier
 We are proud to unveil Holo3, the latest evolution of our vision for the Autonomous Enterprise. With a score of 78.85% on the OSWorld-Verified benchmark, Holo3 establishes a new state of the art for the industry on the leading desktop computer use benchmark.
 Holo3 is more than a benchmark leader; it is engineered for production. Built using our agentic flywheel, it has been trained to execute real-world workflows within synthetic enterprise environments. This not only ensures that Holo3 excels in today's business scenarios, but establishes the foundation for a future where our agents can autonomously navigate virtually any digital landscape.
@@ -21,4 +20,3 @@ Holo3 is a milestone, but it is not the destination. By building a system that c
 As our "Synthetic Environment Factory" continues to evolve, our agents are learning to handle increasingly more intricate tasks. While Holo3 today masters the interface, we are already at work on the next frontier: Adaptive Agency, where our models will not only use the tools they know but autonomously learn to navigate entirely new, bespoke enterprise software in real-time.
 
 KAYNAK : https://huggingface.co/blog/Hcompany/holo3
-

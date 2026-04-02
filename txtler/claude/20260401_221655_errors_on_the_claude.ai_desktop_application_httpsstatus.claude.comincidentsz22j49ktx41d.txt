@@ -1,0 +1,16 @@
+Apr
+1
+,
+22:16
+UTC
+Resolved
+- This incident has been resolved.
+Apr
+1
+,
+22:15
+UTC
+Identified
+- We have identified an issue which results in the Claude.ai desktop application returning an error when attempting to connect. We are working to resolve this issue as quickly as possible, and the Claude.ai website is unaffected.
+
+KAYNAK : https://status.claude.com/incidents/z22j49ktx41d
