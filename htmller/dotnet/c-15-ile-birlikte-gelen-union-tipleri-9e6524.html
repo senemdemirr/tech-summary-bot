@@ -1,0 +1,31 @@
+<div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
+  <h1>C# 15 ile Birlikte Gelen Union Tipleri</h1>
+  <p>C# dilinde uzun süredir beklenen union tipleri, .NET 11 Preview 2 ile birlikte C# 15'te tanıtıldı. Union anahtar kelimesi, bir değerin belirli bir tür kümesinden biri olduğunu ve derleyici tarafından zorunlu kılınan kapsamlı desen eşleştirme ile tanımlandığını ifade eder. F# dilindeki ayrık birlikler veya diğer dillerdeki benzer özellikleri kullandıysanız, bu özelliğe aşina olacaksınız. Ancak C# birlikleri, C#'a özgü bir deneyim sunmak için tasarlandı; mevcut türleri birleştirir, bildiğiniz desen eşleştirme ile entegre olur ve dilin geri kalanıyla sorunsuz çalışır.</p>
+  <p>Union tipleri, bir metodun birden fazla olası türden birini döndürmesi gerektiğinde karşılaşılan sorunları çözer. Önceki yaklaşımlar, nesne türü kullanmak gibi, saklanan türler üzerinde herhangi bir kısıtlama getirmezdi ve beklenmeyen değerler için savunma mantığı yazmak gerekirdi. Union tipleri, birbirleriyle ilişkili olmalarına gerek kalmadan kapalı bir vaka türleri kümesi ilan eder ve başka türler eklenemez. Derleyici, union'ı ele alan switch ifadelerinin her vaka türünü kapsadığını garanti eder.</p>
+  
+  <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
+  <p>C# 15 ile tanıtılan union tipleri, dilin esnekliğini artırarak geliştiricilere daha fazla kontrol ve güvenlik sağlar. Union tipleri, birden fazla türün birleşimini tek bir derleyici tarafından doğrulanan sözleşme içinde birleştirir. Bu, geleneksel hiyerarşilerin ifade edemediği tasarımları mümkün kılar. Union tipleri, C# dilinin desen eşleştirme yeteneklerini genişleterek, daha güvenli ve okunabilir kod yazmayı mümkün kılar.</p>
+  
+  <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
+  <p>Union tipleri, birden fazla türün birleşimini ifade eder ve derleyici, her bir türün kapsamlı olarak ele alındığını garanti eder. Örneğin, bir Pet union'ı, Cat, Dog veya Bird türlerinden birini içerebilir. Derleyici, her bir vaka türü için örtük dönüşümler sağlar ve uygun olmayan tür atamaları için hata verir. Union tipleri ayrıca, null kontrolü gerektiren durumlar için de kapsamlı desen eşleştirme sunar.</p>
+  
+  <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
+  <p>Bu yeni özellik, C# geliştiricilerine daha fazla esneklik ve güvenlik sunar. Union tipleri, farklı türlerin birleşimini gerektiren API tasarımlarında kullanılabilir. Ayrıca, mevcut kütüphanelerle uyumlu çalışarak, performans hassasiyeti olan senaryolar için de optimize edilebilir. Geliştiricilere, kodun derleme zamanında eksiksiz ve hatasız olmasını sağlama imkanı tanır.</p>
+  
+  <h2>Kısa Özet</h2>
+  <ul>
+    <li>C# 15, union tiplerini tanıtarak dilin esnekliğini artırıyor.</li>
+    <li>Union tipleri, birden fazla türün birleşimini ifade eder ve kapsamlı desen eşleştirme sunar.</li>
+    <li>Derleyici, union tipleri için kapsamlı vaka kontrolü sağlar.</li>
+    <li>Mevcut kütüphanelerle uyumlu çalışarak, performans optimizasyonu sunar.</li>
+    <li>Geliştiricilere daha güvenli ve okunabilir kod yazma imkanı tanır.</li>
+  </ul>
+  
+  <p>Metin, şu konularda detay vermiyor: eğitmenler ve bakış açısı, sınırlamalar ve belirsizlikler.</p>
+  
+  <h2>Kapanış</h2>
+  <p>C# 15 ile tanıtılan union tipleri, dilin esnekliğini ve güvenliğini artırarak geliştiricilere daha fazla kontrol sağlar. Bu yeni özellik, C# dilinin gelecekteki gelişimi için önemli bir adım olup, geliştiricilere daha güvenli ve okunabilir kod yazma imkanı tanır.</p>
+  
+  <h2>Kaynak</h2>
+  <p>Detaylı okumak için: <a href="https://devblogs.microsoft.com/dotnet/csharp-15-union-types/" target="_blank" rel="noopener noreferrer">https://devblogs.microsoft.com/dotnet/csharp-15-union-types/</a></p>
+</div>

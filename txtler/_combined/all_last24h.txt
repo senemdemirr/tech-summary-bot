@@ -1,4 +1,4 @@
---- arxiv_ai | Procela: Epistemic Governance in Mechanistic Simulations Under Structural Uncertainty | score=104.19 ---
+--- arxiv_ai | Procela: Epistemic Governance in Mechanistic Simulations Under Structural Uncertainty | score=104.32 ---
 Procela: Epistemic Governance in Mechanistic Simulations Under Structural Uncertainty
 Abstract
 Mechanistic simulations typically assume fixed ontologies: variables, causal relationships, and resolution policies are static. This assumption fails when the true causal structure is contested or unidentifiable–as in antimicrobial resistance (AMR) spread, where contact, environmental, and selection ontologies compete. We introduce Procela, a Python framework where variables act as epistemic authorities that maintain complete hypothesis memory, mechanisms encode competing ontologies as causal units, and governance invariants observe epistemic signals and mutate system topology at runtime. This is the first framework where simulations test their own assumptions. We instantiate Procela for AMR in a hospital network with three competing families. Governance detects coverage decay, policy fragility, and run structural probes. Results show 20.4% error reduction and 69% cumulative regret improvement over baseline. All experiments are reproducible with full auditability. Procela establishes a new paradigm: simulations that model not only the world but their own modeling process, enabling adaptation under structural uncertainty.
@@ -876,7 +876,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2604.00675
 
---- arxiv_ai | A CEFR-Inspired Classification Framework with Fuzzy C-Means To Automate Assessment of Programming Skills in Scratch | score=104.19 ---
+--- arxiv_ai | A CEFR-Inspired Classification Framework with Fuzzy C-Means To Automate Assessment of Programming Skills in Scratch | score=104.32 ---
 A CEFR-Inspired Classification Framework with Fuzzy C-Means To Automate Assessment of Programming Skills in Scratch
 Abstract
 Context: Schools, training platforms, and technology firms increasingly need to assess programming proficiency at scale with transparent, reproducible methods that support personalized learning pathways. Objective: This study introduces a pedagogical framework for Scratch project assessment, aligned with the Common European Framework of Reference (CEFR), providing universal competency levels for students and teachers alongside actionable insights for curriculum design. Method: We apply Fuzzy C-Means clustering to 2,008,246 Scratch projects evaluated via Dr.Scratch, implementing an ordinal criterion to map clusters to CEFR levels (A1–C2), and introducing enhanced classification metrics that identify transitional learners, enable continuous progress tracking, and quantify classification certainty to balance automated feedback with instructor review. Impact: The framework enables diagnosis of systemic curriculum gaps—notably a “B2 bottleneck” where only 13.3% of learners reside due to the cognitive load of integrating Logic, Synchronization, and Data Representation—while providing certainty—based triggers for human intervention.
@@ -1036,7 +1036,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2604.00730
 
---- arxiv_ai | Proactive Agent Research Environment: Simulating Active Users to Evaluate Proactive Assistants | score=103.96 ---
+--- arxiv_ai | Proactive Agent Research Environment: Simulating Active Users to Evaluate Proactive Assistants | score=104.09 ---
 Proactive Agent Research Environment
 Simulating Active Users to Evaluate Proactive Assistants
 Abstract
@@ -1224,7 +1224,7 @@ H.2 Proactive Agent
 
 KAYNAK : https://arxiv.org/abs/2604.00842
 
---- arxiv_ai | Criterion Validity of LLM-as-Judge for Business Outcomes in Conversational Commerce | score=103.96 ---
+--- arxiv_ai | Criterion Validity of LLM-as-Judge for Business Outcomes in Conversational Commerce | score=104.09 ---
 Criterion Validity of LLM-as-Judge
 for Business Outcomes in Conversational Commerce
 Abstract
@@ -1513,7 +1513,7 @@ Table 17 presents the full v2.0 and v2.1 Judge scores for all 15 conversations.
 
 KAYNAK : https://arxiv.org/abs/2604.00022
 
---- arxiv_ai | WHBench: Evaluating Frontier LLMs with Expert-in-the-Loop Validation on Women's Health Topics | score=103.96 ---
+--- arxiv_ai | WHBench: Evaluating Frontier LLMs with Expert-in-the-Loop Validation on Women's Health Topics | score=104.09 ---
 WHBench: A Women’s Health Benchmark for Evaluating Frontier LLMs with Expert-in-the-Loop Validation
 Abstract
 Large language models are increasingly consulted for medical information, yet to our knowledge no widely adopted benchmark evaluates their performance on women’s health, a domain where clinical guidelines shift frequently, treatment decisions hinge on individual patient factors, and the medical literature itself reflects a well-documented gender data gap. We introduce the Women’s Health Benchmark (WHBench): 47 expert-crafted clinical scenarios across 10 women’s health topics, each targeting a specific LLM failure mode such as outdated guidelines, dosage errors, or missed health disparities. Reference answers were authored by board-certified clinicians including OB/GYN specialists, a gynecologic oncologist, general medicine physicians, and fertility nursing specialists. We evaluated 22 models that span frontier, reasoning, and open-source categories using a 23-criterion rubric across 8 clinical dimensions, with asymmetric penalties that weigh safety failures more heavily. Across 3,100 scored responses, no model’s mean score exceeded 75% overall; the top model reached 72.1%, and the frontier tier remained tightly clustered, suggesting a capability ceiling not visible in saturated benchmarks. Performance was also uneven: even the best model achieved only 35.5% fully correct responses meeting the 80% correctness threshold, and harm rates varied substantially across otherwise strong systems. Inter-rater reliability was modest at the final label level () but much stronger for model ranking (), indicating that while single-response judgments remain noisy and require expert oversight, the benchmark is stable for comparing systems overall. We release WHBench as a public resource for evaluating clinical AI in women’s health.
@@ -1798,230 +1798,328 @@ Q47 (Diff 4, Contraindication): Safe contraception options for breast cancer sur
 
 KAYNAK : https://arxiv.org/abs/2604.00024
 
---- google_ai | The latest AI news we announced in March 2026 | score=90.92 ---
-The latest AI news we announced in March 2026
-For more than 20 years, we’ve invested in machine learning and AI research, tools and infrastructure to build products that make everyday life better for more people. Teams across Google are working on ways to unlock AI’s benefits in fields as wide-ranging as healthcare, crisis response and education. To keep you posted on our progress, we're doing a regular roundup of Google's most recent AI news.
-Here’s a look back at some of our AI announcements from March.
-This March, we focused on making AI feel even more helpful to your day-to-day world. We introduced updates to help Gemini understand your specific context — from your travel plans and work projects to your shopping preferences — giving you the option to turn your devices into proactive helpers.
-Whether you’re vibe coding an app, getting help on the go with Search Live or consulting a personalized health coach on your wrist, our March breakthroughs were all designed to help you work, create and live just a bit more intuitively.
-We expanded Search Live globally to everywhere AI Mode is available. Search Live rolled out in more than 200 countries and territories where AI Mode is available. Tap the "Live" icon in the Google app to engage in back-and-forth dialogue using your voice or camera feed — perfect for hands-free troubleshooting, real-time travel tips or identifying objects on the go. We also made Canvas in AI Mode available throughout the U.S. in English, providing a dedicated, dynamic workspace for organizing long-term plans and projects. The tool is more capable than ever with newly added support for creative writing and coding tasks directly within Search.
-We made it easier to create with Gemini in Docs, Sheets, Slides and Drive. AI Ultra and Pro subscribers can now access enhanced AI tools and productivity across Docs, Sheets, Slides and Drive. Gemini can securely synthesize information across your files, emails and the web to uncover useful insights and connect the dots for you while keeping your data safeguarded. Notably, Gemini in Sheets has achieved state-of-the-art performance, making it a more powerful partner for complex data analysis and collaborative tasks.
-We gave Google Maps a major upgrade with Gemini. This update introduced Ask Maps, a conversational experience that answers complex questions like, "Where can I charge my phone without a long wait for coffee?" It can even book reservations while you’re on the go. Drivers are also getting a redesigned experience with Immersive Navigation, which uses real-world imagery and natural directions to simplify routing and reduce on-road stress.
-We expanded Personal Intelligence to more people. We brought Personal Intelligence to AI Mode in Search, Gemini in Chrome and the Gemini app across the U.S. Whether you need shopping recommendations that actually fit your style or a travel itinerary built from your own plans, Personal Intelligence securely connects with your Google apps — like Gmail and Photos — to provide more personalized results. You’re always in charge: You choose what to connect, and you can change this in your settings whenever you want.
-We introduced tools to help people switch to Gemini. Switching to a more helpful AI assistant shouldn't mean losing your history, and our new memory and chat history import features allow you to instantly migrate your chats and context from other AI apps directly into Gemini. They make it easy to ensure your personal preferences come with you to Gemini so you never have to start from scratch.
-We released new AI features for your devices in the March Pixel Drop. The latest drop is all about making your devices feel more intuitive. Circle to Search can now break down an entire look from a pic, helping you find every piece of an outfit from the coat to the shoes; and Gemini uses Magic Cue to surface restaurant recommendations directly in your chats. The drop also adds daily conveniences like Now Playing music history and new Pixel Watch features, including Express Pay and phone locking.
-We expanded live translation for headphones on iOS, and to more countries. Google Translate’s Live translate with headphones has arrived on iOS, and we've expanded the capability for both iOS and Android users in even more places. Live translate helps you instantly understand and connect with the world around you right through any pair of headphones in over 70 languages.
-We announced new tools and partnerships to support your health at The Check Up 2026. At our annual health event, we shared how AI can help spark medical breakthroughs and bring quality healthcare to everyone, everywhere. We’re providing $10 million in funding to help organizations reimagine clinician education in the AI era, and exploring new partnerships with rural health leaders focused on education, care delivery and research. Plus,
-Fitbit is making its health tracking even better with expansions to the personal health coach in Public Preview that will give you more personalized advice about your sleep and overall health, the ability to connect your medical records to the Fitbit app, plus new features for cycle health, mental wellbeing and nutrition and water logging.
-We introduced Lyria 3 Pro for enhanced music generation. This update brings our most advanced music model to more products, enabling you to generate tracks up to three minutes long with granular control over specific elements like intros, verses, and bridges. Additionally, Lyria and Lyria 3 are now available in public preview for developers through the Gemini API and Google AI Studio, expanding the tools available for creative AI expression.
-We released Gemini 3.1 Flash-Lite and Gemini 3.1 Flash Live. Flash-Lite is our fastest, most budget friendly model yet. It’s built to quickly handle heavy workloads without compromising quality. Its low latency makes it an ideal solution for building responsive, real-time experiences while maintaining significant cost efficiency for large-scale deployments.
-Plus, we released Gemini 3.1 Flash Live, our best audio model to date. It’s fast and sharp enough to feel like a real conversation, and it’s already live in more than 200 countries via Search Live and Gemini Live. By cutting down the lag and boosting precision, we’re helping developers and businesses build reliable tools for their customers.
-We launched an upgraded vibe coding experience in Google AI Studio. Building an app should feel as easy as talking about one. Google AI Studio now lets you turn prompts into production-ready apps, by using the new Google Antigravity coding agent. You can use Build mode to build multiplayer experiences, add databases, connect to real-world services, and more.
-The new AI agent has a much deeper understanding of your entire project, which means faster iterations and more precise code edits, and it securely stores your API keys and lets you pick up exactly where you left off. Go to Google AI Studio to start building.
-We looked back at 10 years of AlphaGo’s impact. A decade after its historic win over a world champion of an incredibly complex game, we looked back at how AlphaGo proved AI could navigate the world’s most complex challenges and better understand the vast complexities of the physical world.
-This milestone served as the foundational spark for AlphaFold solving the 50-year-old “protein folding” problem. By finally mapping these 3D structures, AlphaFold opened the door to better understanding diseases and a new age of AI-driven scientific breakthroughs.
-
-KAYNAK : https://blog.google/innovation-and-ai/technology/ai/google-ai-updates-march-2026/
-
---- huggingface | Holo3: Breaking the Computer Use Frontier | score=90.50 ---
-Holo3: Breaking the Computer Use Frontier
-We are proud to unveil Holo3, the latest evolution of our vision for the Autonomous Enterprise. With a score of 78.85% on the OSWorld-Verified benchmark, Holo3 establishes a new state of the art for the industry on the leading desktop computer use benchmark.
-Holo3 is more than a benchmark leader; it is engineered for production. Built using our agentic flywheel, it has been trained to execute real-world workflows within synthetic enterprise environments. This not only ensures that Holo3 excels in today's business scenarios, but establishes the foundation for a future where our agents can autonomously navigate virtually any digital landscape.
-Best of all, Holo3 achieves this with only 10B active parameters (122B total), so at a fraction of the cost of large-scale proprietary models, such as GPT 5.4 or Opus 4.6. All models are available through our Inference API. Holo3-35B-A3B weights are openly accessible on Hugging Face under the Apache2 license and freely accessible through our inference API under a free tier.
-The Agentic Learning Flywheel
-What sets Holo3 apart is its specialized training pipeline—a continuous feedback loop designed to sharpen two core agentic pillars: perception and decision-making.
-Our training flywheel is about teaching our model from annotated examples how to execute specific tasks, all while developing generalist skills across a virtually infinite variety of user interfaces. Here is how we build world-class computer use models:
-Synthetic Navigation Data: using human and generated instructions, we generate scenario-specific navigation examples.
-Out-of-Domain Augmentation: we programmatically extend the scenarios and augment the data to ensure Holo3 can handle the unexpected.
-Curated Reinforcement Learning: every data sample is carefully curated and ingested through a pipeline that leverages advanced data filtering and reinforcement learning to maximize performance.
-Beyond the raw scores, the OSWorld results serve as a definitive proof-of-concept for our learning flywheel. To validate its transferability to real-world business applications we created the Synthetic Environment Factory.
-The Synthetic Environment Factory & H Corporate Benchmarks
-This proprietary factory reproduces the reality of enterprise systems and is one of the training gyms Holo3 was forged in. Our environments are automatically built using coding agents that program websites from scratch based on scenario specifications, producing verifiable tasks of varying difficulty that are validated end-to-end with verification scripts.
-To measure real-world readiness, we also designed H Corporate Benchmarks, a dedicated evaluation suite of 486 multi-step realistic tasks spanning 4 categories: E-commerce, Business software, Collaboration, and various Multi-App setups.
-The benchmark spans the full complexity spectrum: from focused, single-application tasks to long-horizon, multi-application workflows that mirror how work actually gets done. At the harder end of the scale (Multi-Apps), tasks require the agent to coordinate information across multiple systems simultaneously—for example, retrieving equipment prices from a PDF, cross-referencing them against each employee's remaining budget, and autonomously sending personalised approval or rejection emails to every individual. This kind of task demands not only accurate calculation and document parsing, but sustained multi-step reasoning across applications without losing state or intent.
-Examples of synthetic environments created for training Holo3
-In our results below, we see Holo3 surpassing its competitors on single application benchmarks. The performance difference between Holo3 and the base Qwen3.5 models reflects the impact of our agentic learning flywheel. By achieving higher success rates than models with significantly larger parameter counts—while maintaining the same localization and grounding standards—Holo3 illustrates the true magnitude of this specialized training.
-Towards Universal Agency
-Holo3 is a milestone, but it is not the destination. By building a system that can see, reason, and act within our clients digital platform, we are making the Autonomous Enterprise a reality.
-As our "Synthetic Environment Factory" continues to evolve, our agents are learning to handle increasingly more intricate tasks. While Holo3 today masters the interface, we are already at work on the next frontier: Adaptive Agency, where our models will not only use the tools they know but autonomously learn to navigate entirely new, bespoke enterprise software in real-time.
-
-KAYNAK : https://huggingface.co/blog/Hcompany/holo3
-
---- mit_ai | The gig workers who are training humanoid robots at home | score=72.01 ---
-When Zeus, a medical student living in a hilltop city in central Nigeria, returns to his studio apartment from a long day at the hospital, he turns on his ring light, straps his iPhone to his forehead, and starts recording himself. He raises his hands in front of him like a sleepwalker and puts a sheet on his bed. He moves slowly and carefully to make sure his hands stay within the camera frame.
-Zeus is a data recorder for Micro1, a US company based in Palo Alto, California that collects real-world data to sell to robotics companies. As companies like Tesla, Figure AI, and Agility Robotics race to build
-humanoids
-—robots designed to resemble and move like humans in factories and homes—videos recorded by gig workers like Zeus are becoming the hottest new way to train them.
-Micro1 has hired thousands of contract workers in more than 50 countries, including India, Nigeria, and Argentina, where swathes of tech-savvy young people are looking for jobs. They’re mounting iPhones on their heads and recording themselves folding laundry, washing dishes, and cooking. The job pays well by local standards and is boosting local economies, but it raises thorny questions around privacy and informed consent. And the work can be challenging at times—and weird.
-Zeus found the job in November, when people started talking about it everywhere on LinkedIn and YouTube. “This would be a real nice opportunity to set a mark and give data that will be used to train robots in the future,” he thought.
-Zeus is paid $15 an hour, which is good income in Nigeria’s strained economy with high unemployment rates. But as a bright-eyed student dreaming of becoming a doctor, he finds ironing his clothes for hours every day boring.
-“I really [do] not like it so much,” he says. “I’m the kind of person that requires … a technical job that requires me to think.”
-Zeus, and all the workers interviewed by
-MIT Technology Review
-, asked to be referred to only by pseudonyms because they were not authorized to talk about their work.
-Humanoid robots are notoriously hard to build because manipulating physical objects is a difficult skill to master. But the rise of large language models underlying chatbots like ChatGPT has inspired a paradigm shift in robotics. Just as large language models learned to generate words by being trained on vast troves of text scraped from the internet, many researchers believe that humanoid robots can learn to interact with the world by being trained on massive amounts of movement data.
-Editor’s note: In a recent poll, MIT Technology Review readers selected humanoid robots as the 11th breakthrough for our 2026 list of
-10 Breakthrough Technologies
+--- dotnet | Explore union types in C# 15 | score=83.86 ---
+Union types have been frequently requested for C#, and they’re here. Starting with .NET 11 Preview 2, C# 15 introduces the
+union
+keyword. The
+union
+keyword declares that a value is exactly one of a fixed set of types with compiler-enforced exhaustive pattern matching. If you’ve used discriminated unions in F# or similar features in other languages, you’ll feel right at home. But C# unions are designed for a C#-native experience: they’re type unions that compose existing types, integrate with the pattern matching you already know, and work seamlessly with the rest of the language.
+What are union types?
+Before C# 15, when a method needs to return one of several possible types, you had imperfect options. Using
+object
+placed no constraints on what types are actually stored — any type could end up there, and the caller had to write defensive logic for unexpected values. Marker interfaces and abstract base classes were better because they restrict the set of types, but they can’t be “closed” — anyone can implement the interface or derive from the base class, so the compiler can never consider the set complete. And both approaches require the types to share a common ancestor, which doesn’t work when you wanted a union of unrelated types like
+string
+and
+Exception
+, or
+int
+and
+IEnumerable<T>
 .
-Robotics requires far more complex data about the physical world, though, and that is much harder to find. Virtual simulations can train robots to
-perform acrobatics
-, but not how to grasp and move objects, because simulations struggle to model physics with perfect accuracy. For robots to work in factories and serve as housekeepers, real-world data, however time-consuming and expensive to collect, may be what we need.
-Investors are pouring money feverishly into solving this challenge, spending over
-$6 billion
-on humanoid robots in 2025. And at-home data recording is becoming a booming gig economy around the world. Data companies like Scale AI and Encord are recruiting their own armies of data recorders, while DoorDash
-pays delivery drivers
-to film themselves doing chores. And in China, workers in dozens of state-owned robot training centers wear virtual-reality headsets and exoskeletons to teach humanoid robots how to open a microwave and wipe down the table.
-“There is a lot of demand, and it’s increasing really fast,” says Ali Ansari, CEO of Micro1. He estimates that robotics companies are now spending more than $100 million each year to buy real-world data from his company and others like it.
-A day in the life
-Workers at Micro1 are vetted by an AI agent named Zara that conducts interviews and reviews samples of chore videos. Every week, they submit videos of themselves doing chores around their homes, following a list of instructions about things like keeping their hands visible and moving at natural speed. The videos are reviewed by both AI and a human and are either accepted or rejected. They’re then annotated by AI and a team of hundreds of humans who label the actions in the footage.
-“There is a lot of demand, and it’s increasing really fast.”
-Ali Ansari, CEO of Micro1
-Because this approach to training robots is in its infancy, it’s not clear yet what makes good training data. Still, “you need to give lots and lots of variations for the robot to generalize well for basic navigation and manipulation of the world,” says Ansari.
-But many workers say that creating a variety of “chore content” in their tiny homes is a challenge. Zeus, a scrappy student living in a humble studio, struggles to record anything beyond ironing his clothes every day. Arjun, a tutor in Delhi, India, takes an hour to make a 15-minute video because he spends so much time brainstorming new chores.
-“How much content [can be made] in the home? How much content?” he says.
-There’s also the sticky question of privacy. Micro1 asks workers not to show their faces to the camera or reveal personal information such as names, phone numbers, and birth dates. Then it uses AI and human reviewers to remove anything that slips through.
-But even without faces, the videos capture an intimate slice of workers’ lives: the interiors of their homes, their possessions, their routines. And understanding what kind of personal information they might be recording while they’re busy doing chores on camera can be tricky. Reviews of such footage might not filter out sensitive information beyond the most obvious identifiers.
-For workers with families, keeping private life off camera is a constant negotiation. Arjun, a father of two daughters, has to wrangle his chaotic two-year-old out of frame. “Sometimes it’s very difficult to work because my daughter is small,” he says.
-Sasha, a banker turned data recorder in Nigeria, tiptoes around when she hangs her laundry outside in a shared residential compound so she won’t record her neighbors, who watch her in bewilderment.
-“It’s going to take longer than people think.”
-Ken Goldberg, UC Berkeley
-While the workers interviewed by
-MIT Technology Review
-understand that their data is being used to train robots, none of them know how exactly their data will be used, stored, and shared with third parties, including the robotics companies that Micro1 is selling the data to. For confidentiality reasons, says Ansari, Micro1 doesn’t name its clients or disclose to workers the specific nature of the projects they are contributing to.
-“It is important that if workers are engaging in this, that they are informed by the companies themselves of the intention … where this kind of technology might go and how that might affect them longer term,” says Yasmine Kotturi, a professor of human-centered computing at the University of Maryland.
-Occasionally, some workers say, they’ve seen other workers asking on the company Slack channel if the company could delete their data. Micro1 declined to comment on whether such data is deleted.
-“People are opting into doing this,” says Ansari. “They could stop the work at any time.”
-Hungry for data
-With thousands of workers doing their chores differently in different homes, some roboticists wonder if the data collected from them is reliable enough to train robots safely.
-“How we conduct our lives in our homes is not always right from a safety point of view,” says Aaron Prather, a roboticist at ASTM International. “If those folks are teaching those bad habits that could lead to an incident, then that’s not good data.” And the sheer volume of data being collected makes reviewing it for quality control challenging. But Ansari says the company rejects videos showing unsafe ways of performing a task, while clumsy movements can be useful to teach robots what not to do.
-Then there’s the question of how much of this data we need. Micro1 says it has tens of thousands of hours of footage, while Scale AI
-announced
-it had gathered more than 100,000 hours.
-“It’s going to take a long time to get there,” says Ken Goldberg, a roboticist at the University of California, Berkeley. Large language models were trained on text and images that would take a human 100,000 years to read, and humanoid robots may need even more data, because controlling robotic joints is even more complicated than generating text. “It’s going to take longer than people think,” he says.
-When Dattu, an engineering student living in a bustling tech hub in India, comes home after a full day of classes at his university, he skips dinner and dashes to his tiny balcony, cramped with potted plants and dumbbells. He straps his iPhone to his forehead and records himself folding the same set of clothes over and over again.
-His family stares at him quizzically. “It’s like some space technology for them,” he says. When he tells his friends about his job, “they just get astounded by the idea that they can get paid by recording chores.”
-Juggling his university studies with data recording, as well as other data annotation gigs, takes a toll on him. Still, “it feels like you’re doing something different than the whole world,” he says.
-
-KAYNAK : https://www.technologyreview.com/2026/04/01/1134863/humanoid-data-training-gig-economy-2026-breakthrough-technology/
-
---- nextjs | v16.2.1-canary.17 | score=70.33 ---
-Core Changes
-Improve revalidateTag JSDoc to include guidance about required second parameter:
-#92176
-partial fallbacks: adapter support for intermediate shells:
-#91902
-docs: clarify id, filePath, and pathname in STATIC_FILE adapter output:
-#92227
-feat: add NEXT_HASH_SALT env var for content-hash filename salting:
-#91871
-Generate a CLI warning if using Rosetta 2 on Apple Silicon:
-#92220
-Misc Changes
-simplify session dependent tasks and add TTL support:
-#91729
-disable bmi2 in qfilter:
-#92177
-fix: pin 19 actions to commit SHA, extract 7 expressions to env vars:
-#92016
-[test] Skip flaky
-cached-navigations
-tests:
-#92199
-[test] Skip flaky
-prefetch-layout-sharing
-suite:
-#92198
-Add internal header security guideline to AGENTS.md:
-#92128
-docs: local images referenced by remote source:
-#92178
-Update Rspack production test manifest:
-#92143
-[test] Deflake
-allowed-dev-origins
+Union types solve these problems. A union declares a closed set of case types — they don’t need to be related to each other, and no other types can be added. The compiler guarantees that
+switch
+expressions handling the union are exhaustive, covering every case type without needing a discard
+_
+or default branch. But it’s more than exhaustiveness: unions enable designs that traditional hierarchies can’t express, composing any combination of existing types into a single, compiler-verified contract.
+Here’s the simplest declaration:
+public record class Cat(string Name);
+public record class Dog(string Name);
+public record class Bird(string Name);
+public union Pet(Cat, Dog, Bird);
+This single line declares
+Pet
+as a new type whose variables can hold a
+Cat
+, a
+Dog
+, or a
+Bird
+. The compiler provides implicit conversions from each case type, so you can assign any of them directly:
+Pet pet = new Dog("Rex");
+Console.WriteLine(pet.Value); // Dog { Name = Rex }
+Pet pet2 = new Cat("Whiskers");
+Console.WriteLine(pet2.Value); // Cat { Name = Whiskers }
+The compiler issues an error if you assign an instance of a type that isn’t one of the case types to a
+Pet
+object.
+The When you use an instance of a
+union
+type known to be not null, the compiler knows the complete set of case types, so a
+switch
+expression that covers all of them is exhaustive— no discard needed:
+string name = pet switch
+{
+Dog d => d.Name,
+Cat c => c.Name,
+Bird b => b.Name,
+};
+The types
+Dog
+,
+Cat
+, and
+Bird
+are all non-nullable types. The
+pet
+variable is known to be non-null, it was set in the earlier snippet. Therefore, this
+switch
+expression isn’t required to check for
+null
+. If any of the types are nullable, for example
+int?
+or
+Bird?
+, all
+switch
+expressions for a
+Pet
+instance would need a
+null
+arm for exhaustiveness. If you later add a fourth case type to
+Pet
+, every
+switch
+expression that doesn’t handle it produces a compiler warning. That’s one core value: the compiler catches missing cases at build time, not at runtime.
+Patterns apply to the union’s
+Value
+property, not the union struct itself. This “unwrapping” is automatic — you write
+Dog d
+and the compiler checks
+Value
+for you. The two exceptions are
+var
+and
+_
+, which apply to the union value itself so you can capture or ignore the whole union.
+For
+union
+types, the
+null
+pattern checks whether
+Value
+is null. The
+default
+value of a union struct has a null
+Value
 :
-#92211
-Reapply "ci: add node-stream test coverage workflow (
-#89861
-)":
-#91664
-Turbopack: trace fs.readdir calls:
-#92148
-Fix DashMap read-write self-deadlock in task_cache causing hangs:
-#92210
-[turbopack] use a single query parameter for cache busting:
-#92214
-Docs/adapters review:
-#92223
+Pet pet = default;
+var description = pet switch
+{
+Dog d => d.Name,
+Cat c => c.Name,
+Bird b => b.Name,
+null => "no pet",
+};
+// description is "no pet"
+The
+Pet
+example illustrates the syntax. Now, let’s explore real world scenarios for union types.
+OneOrMore<T> — single value or collection
+APIs sometimes accept either a single item or a collection. A union with a body lets you add helper members alongside the case types. The
+OneOrMore<T>
+declaration includes an
+AsEnumerable()
+method directly in the union body — just like you’d add methods to any type declaration:
+public union OneOrMore<T>(T, IEnumerable<T>)
+{
+public IEnumerable<T> AsEnumerable() => Value switch
+{
+T single => [single],
+IEnumerable<T> multiple => multiple,
+null => []
+};
+}
+Notice that the
+AsEnumerable
+method must handle the case where
+Value
+is
+null
+. That’s because the default null-state of the
+Value
+property is
+maybe-null
+. This rule is necessary to provide proper warnings for arrays of a union type, or instances of the default value for the
+union
+struct.
+Callers pass whichever form is convenient, and
+AsEnumerable()
+normalizes it:
+OneOrMore<string> tags = "dotnet";
+OneOrMore<string> moreTags = new[] { "csharp", "unions", "preview" };
+foreach (var tag in tags.AsEnumerable())
+Console.Write($"[{tag}] ");
+// [dotnet]
+foreach (var tag in moreTags.AsEnumerable())
+Console.Write($"[{tag}] ");
+// [csharp] [unions] [preview]
+Custom unions for existing libraries
+The
+union
+declaration is an opinionated shorthand. The compiler generates a struct with a constructor for each case type and a
+Value
+property of type
+object?
+that holds the underlying value. The constructors enable implicit conversions from any of the case types to the union type. The union instance always stores its contents as a single
+object?
+reference and boxes value types. That covers the majority of use cases cleanly.
+But several community libraries already provide union-like types with their own storage strategies. Those libraries don’t need to switch to the
+union
+syntax to benefit from C# 15. Any class or struct with a
+[System.Runtime.CompilerServices.Union]
+attribute is recognized as a union type, as long as it follows the basic union pattern: one or more public single-parameter constructors (defining the case types) and a public
+Value
+property.
+For performance-sensitive scenarios where case types include value types, libraries can also implement the non-boxing access pattern by adding a
+HasValue
+property and
+TryGetValue
+methods. This lets the compiler implement pattern matching without boxing.
+For full details on creating custom union types and the non-boxing access pattern, see the
+union types language reference
+.
+Related proposals
+Union types give you a type that contains one of a closed set of types. Two proposed features provide related functionality for type hierarchies and enumerations. You can learn about both proposals and how they relate to unions by reading the feature specifications:
+Closed hierarchies
+: The
+closed
+modifier on a class prevents derived classes from being declared outside the defining assembly.
+Closed enums
+: A
+closed
+enum prevents creation of values other than the declared members.
+Together, these three features give C# a comprehensive exhaustiveness story:
+Union types
+— exhaustive matching over a closed set of types
+Closed hierarchies
+— exhaustive matching over a sealed class hierarchy
+Closed enums
+— exhaustive matching over a fixed set of enum values
+Union types are available now in preview. When evaluating them, keep this broader roadmap in mind. These proposals are active, but aren’t yet committed to a release. Join the discussion as we continue the design and implementation of them.
+Try it yourself
+Union types are available starting with .NET 11 Preview 2. To get started:
+Install the
+.NET 11 Preview SDK
+.
+Create or update a project targeting
+net11.0
+.
+Set
+<LangVersion>preview</LangVersion>
+in your project file.
+IDE support in Visual Studio will be available in the next Visual Studio Insiders build. It is included in the latest C# DevKit Insiders build.
+Early preview: declare runtime types yourself
+In .NET 11 Preview 2, the
+UnionAttribute
+and
+IUnion
+interface aren’t included in the runtime yet. You must declare them in your project. Later preview versions will include these types in the runtime.
+Add the following to your project (or grab
+RuntimePolyfill.cs
+from the docs repo):
+namespace System.Runtime.CompilerServices
+{
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct,
+AllowMultiple = false)]
+public sealed class UnionAttribute : Attribute;
+public interface IUnion
+{
+object? Value { get; }
+}
+}
+Once those are in place, you can declare and use union types:
+public record class Cat(string Name);
+public record class Dog(string Name);
+public union Pet(Cat, Dog);
+Pet pet = new Cat("Whiskers");
+Console.WriteLine(pet switch
+{
+Cat c => $"Cat: {c.Name}",
+Dog d => $"Dog: {d.Name}",
+});
+Some features from the full
+proposal specification
+aren’t yet implemented, including union member providers. Those are coming in future previews.
+Share your feedback
+Union types are in preview, and your feedback directly shapes the final design. Try them in your projects, explore edge cases, and tell us what works and what doesn’t.
+Join the unions discussion on GitHub
+To learn more:
+Union types — language reference
+Unions — feature specification
+What’s new in C# 15
+The post
+Explore union types in C# 15
+appeared first on
+.NET Blog
+.
+
+KAYNAK : https://devblogs.microsoft.com/dotnet/csharp-15-union-types/
+
+--- nextjs | v16.2.1-canary.18 | score=55.46 ---
+Core Changes
+Add telemetry for adapterPath config usage:
+#92228
+Node.js streams: First pass:
+#90500
+fix: preserve HTTP access fallbacks during prerender recovery:
+#92231
+Remove unnecessary ALS re-exports from
+entry-base.ts
+:
+#91527
+Allow multi-level .localhost subdomains in dev origin check:
+#92262
+Misc Changes
+remove the loop from  StaticSortedFile::lookup:
+#91688
+Fix pr-status.js: retry on API errors and report timed-out jobs:
+#92205
+docs: vt demo guide:
+#92249
 Credits
 Huge thanks to
 @lukesandberg
 ,
-@aurorascharff
+@ijjk
 ,
-@dagecko
+@timneutkens
 ,
-@eps1lon
-,
-@gaojude
-,
-@icyJoseph
+@sokra
 ,
 @ztanner
 ,
-@vercel-release-bot
+@icyJoseph
 ,
-@ijjk
-,
-@feedthejim
-,
-@mischnic
-,
-@sokra
+@unstubbable
 , and
-@bgw
+@ctate
 for helping!
 
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.17
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.18
 
---- claude | Errors on the Claude.ai desktop application | score=44.37 ---
-Apr
-1
-,
-22:16
-UTC
-Resolved
-- This incident has been resolved.
-Apr
-1
-,
-22:15
-UTC
-Identified
-- We have identified an issue which results in the Claude.ai desktop application returning an error when attempting to connect. We are working to resolve this issue as quickly as possible, and the Claude.ai website is unaffected.
+--- google_ai | New ways to balance cost and reliability in the Gemini API | score=46.52 ---
+Google is introducing two new inference tiers to the Gemini API, Flex and Priority,
+to balance cost and latency.
 
-KAYNAK : https://status.claude.com/incidents/z22j49ktx41d
+KAYNAK : https://blog.google/innovation-and-ai/technology/developers-tools/introducing-flex-and-priority-inference/
 
---- claude | Elevated errors on requests to Claude Opus 4.6 | score=33.01 ---
-Apr
-1
-,
-10:40
-UTC
-Resolved
-- This incident has been resolved.
-Apr
-1
-,
-09:06
-UTC
-Identified
-- We have identified an issue resulting in elevated errors on requests to Claude Opus 4.6, and are working to resolve this. We will provide an update as soon as possible.
+--- deepmind | Gemma 4: Byte for byte, the most capable open models | score=38.06 ---
+Gemma 4: Our most intelligent open models to date, purpose-built for advanced reasoning and agentic workflows.
 
-KAYNAK : https://status.claude.com/incidents/3bg93cy9bk1v
+KAYNAK : https://deepmind.google/blog/gemma-4-byte-for-byte-the-most-capable-open-models/
 
---- google_ai | We’re creating a new satellite imagery map to help protect Brazil’s forests. | score=31.97 ---
-Google partnered with the Brazilian government on a satellite imagery map to help protect the country’s forests.
+--- openai | Codex now offers more flexible pricing for teams | score=37.88 ---
+Codex now includes pay-as-you-go pricing for ChatGPT Business and Enterprise, providing teams a more flexible option to start and scale adoption.
 
-KAYNAK : https://blog.google/products-and-platforms/products/earth/satellite-imagery-brazilian-deforestation/
+KAYNAK : https://openai.com/index/codex-flexible-pricing-for-teams
+
+--- google_ai | Create, edit and share videos at no cost in Google Vids | score=35.73 ---
+New AI capabilities are coming to Google Vids, powered by Lyria 3 and Veo 3.1, like high-quality video generation at no cost and more.
+
+KAYNAK : https://blog.google/products-and-platforms/products/workspace/google-vids-updates-lyria-veo/
+
+--- openai | OpenAI acquires TBPN | score=30.91 ---
+OpenAI acquires TBPN to accelerate global conversations around AI and support independent media, expanding dialogue with builders, businesses, and the broader tech community.
+
+KAYNAK : https://openai.com/index/openai-acquires-tbpn
 

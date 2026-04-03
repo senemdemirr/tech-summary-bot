@@ -1,4 +1,4 @@
---- arxiv_ai | Procela: Epistemic Governance in Mechanistic Simulations Under Structural Uncertainty | score=104.19 ---
+--- arxiv_ai | Procela: Epistemic Governance in Mechanistic Simulations Under Structural Uncertainty | score=104.32 ---
 Procela: Epistemic Governance in Mechanistic Simulations Under Structural Uncertainty
 Abstract
 Mechanistic simulations typically assume fixed ontologies: variables, causal relationships, and resolution policies are static. This assumption fails when the true causal structure is contested or unidentifiable–as in antimicrobial resistance (AMR) spread, where contact, environmental, and selection ontologies compete. We introduce Procela, a Python framework where variables act as epistemic authorities that maintain complete hypothesis memory, mechanisms encode competing ontologies as causal units, and governance invariants observe epistemic signals and mutate system topology at runtime. This is the first framework where simulations test their own assumptions. We instantiate Procela for AMR in a hospital network with three competing families. Governance detects coverage decay, policy fragility, and run structural probes. Results show 20.4% error reduction and 69% cumulative regret improvement over baseline. All experiments are reproducible with full auditability. Procela establishes a new paradigm: simulations that model not only the world but their own modeling process, enabling adaptation under structural uncertainty.
@@ -876,7 +876,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2604.00675
 
---- arxiv_ai | A CEFR-Inspired Classification Framework with Fuzzy C-Means To Automate Assessment of Programming Skills in Scratch | score=104.19 ---
+--- arxiv_ai | A CEFR-Inspired Classification Framework with Fuzzy C-Means To Automate Assessment of Programming Skills in Scratch | score=104.32 ---
 A CEFR-Inspired Classification Framework with Fuzzy C-Means To Automate Assessment of Programming Skills in Scratch
 Abstract
 Context: Schools, training platforms, and technology firms increasingly need to assess programming proficiency at scale with transparent, reproducible methods that support personalized learning pathways. Objective: This study introduces a pedagogical framework for Scratch project assessment, aligned with the Common European Framework of Reference (CEFR), providing universal competency levels for students and teachers alongside actionable insights for curriculum design. Method: We apply Fuzzy C-Means clustering to 2,008,246 Scratch projects evaluated via Dr.Scratch, implementing an ordinal criterion to map clusters to CEFR levels (A1–C2), and introducing enhanced classification metrics that identify transitional learners, enable continuous progress tracking, and quantify classification certainty to balance automated feedback with instructor review. Impact: The framework enables diagnosis of systemic curriculum gaps—notably a “B2 bottleneck” where only 13.3% of learners reside due to the cognitive load of integrating Logic, Synchronization, and Data Representation—while providing certainty—based triggers for human intervention.
@@ -1036,7 +1036,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2604.00730
 
---- arxiv_ai | Proactive Agent Research Environment: Simulating Active Users to Evaluate Proactive Assistants | score=103.96 ---
+--- arxiv_ai | Proactive Agent Research Environment: Simulating Active Users to Evaluate Proactive Assistants | score=104.09 ---
 Proactive Agent Research Environment
 Simulating Active Users to Evaluate Proactive Assistants
 Abstract
@@ -1224,7 +1224,7 @@ H.2 Proactive Agent
 
 KAYNAK : https://arxiv.org/abs/2604.00842
 
---- arxiv_ai | Criterion Validity of LLM-as-Judge for Business Outcomes in Conversational Commerce | score=103.96 ---
+--- arxiv_ai | Criterion Validity of LLM-as-Judge for Business Outcomes in Conversational Commerce | score=104.09 ---
 Criterion Validity of LLM-as-Judge
 for Business Outcomes in Conversational Commerce
 Abstract
@@ -1513,7 +1513,7 @@ Table 17 presents the full v2.0 and v2.1 Judge scores for all 15 conversations.
 
 KAYNAK : https://arxiv.org/abs/2604.00022
 
---- arxiv_ai | WHBench: Evaluating Frontier LLMs with Expert-in-the-Loop Validation on Women's Health Topics | score=103.96 ---
+--- arxiv_ai | WHBench: Evaluating Frontier LLMs with Expert-in-the-Loop Validation on Women's Health Topics | score=104.09 ---
 WHBench: A Women’s Health Benchmark for Evaluating Frontier LLMs with Expert-in-the-Loop Validation
 Abstract
 Large language models are increasingly consulted for medical information, yet to our knowledge no widely adopted benchmark evaluates their performance on women’s health, a domain where clinical guidelines shift frequently, treatment decisions hinge on individual patient factors, and the medical literature itself reflects a well-documented gender data gap. We introduce the Women’s Health Benchmark (WHBench): 47 expert-crafted clinical scenarios across 10 women’s health topics, each targeting a specific LLM failure mode such as outdated guidelines, dosage errors, or missed health disparities. Reference answers were authored by board-certified clinicians including OB/GYN specialists, a gynecologic oncologist, general medicine physicians, and fertility nursing specialists. We evaluated 22 models that span frontier, reasoning, and open-source categories using a 23-criterion rubric across 8 clinical dimensions, with asymmetric penalties that weigh safety failures more heavily. Across 3,100 scored responses, no model’s mean score exceeded 75% overall; the top model reached 72.1%, and the frontier tier remained tightly clustered, suggesting a capability ceiling not visible in saturated benchmarks. Performance was also uneven: even the best model achieved only 35.5% fully correct responses meeting the 80% correctness threshold, and harm rates varied substantially across otherwise strong systems. Inter-rater reliability was modest at the final label level () but much stronger for model ranking (), indicating that while single-response judgments remain noisy and require expert oversight, the benchmark is stable for comparing systems overall. We release WHBench as a public resource for evaluating clinical AI in women’s health.

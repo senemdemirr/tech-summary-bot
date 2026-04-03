@@ -1,0 +1,5 @@
+--- deepmind | Gemma 4: Byte for byte, the most capable open models | score=38.06 ---
+Gemma 4: Our most intelligent open models to date, purpose-built for advanced reasoning and agentic workflows.
+
+KAYNAK : https://deepmind.google/blog/gemma-4-byte-for-byte-the-most-capable-open-models/
+

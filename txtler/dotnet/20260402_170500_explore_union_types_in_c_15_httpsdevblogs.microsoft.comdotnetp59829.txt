@@ -1,4 +1,3 @@
---- dotnet | Explore union types in C# 15 | score=83.86 ---
 Union types have been frequently requested for C#, and they’re here. Starting with .NET 11 Preview 2, C# 15 introduces the
 union
 keyword. The
@@ -254,4 +253,3 @@ appeared first on
 .
 
 KAYNAK : https://devblogs.microsoft.com/dotnet/csharp-15-union-types/
-

@@ -1,4 +1,3 @@
---- nextjs | v16.2.1-canary.18 | score=55.46 ---
 Core Changes
 Add telemetry for adapterPath config usage:
 #92228
@@ -39,4 +38,3 @@ Huge thanks to
 for helping!
 
 KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.18
-
