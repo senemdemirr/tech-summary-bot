@@ -1,42 +1,44 @@
---- nextjs | v16.2.1-canary.18 | score=55.46 ---
+--- nextjs | v16.2.1-canary.19 | score=60.69 ---
 Core Changes
-Add telemetry for adapterPath config usage:
-#92228
-Node.js streams: First pass:
-#90500
-fix: preserve HTTP access fallbacks during prerender recovery:
-#92231
-Remove unnecessary ALS re-exports from
-entry-base.ts
-:
-#91527
-Allow multi-level .localhost subdomains in dev origin check:
-#92262
+Add MCP
+get_compilation_issues
+tool and NAPI method:
+#92062
+Ensure app-page reports stale ISR revalidation errors via onRequestError:
+#92282
+Move streamToUint8Array back to node-web-streams-helper.ts:
+#92263
+fix: add
+@deprecated
+annotation to experimental.useCache:
+#92316
 Misc Changes
-remove the loop from  StaticSortedFile::lookup:
-#91688
-Fix pr-status.js: retry on API errors and report timed-out jobs:
-#92205
-docs: vt demo guide:
-#92249
+turbo-tasks-backend: stability fixes for task cancellation and error handling:
+#92254
+Add view transitions eval (agent-043):
+#92260
+[turbopack] optimize RcStr parsing:
+#91773
+ci: fix stats action:
+#92325
+Revert "simplify session dependent tasks and add TTL support (
+#91729
+)":
+#92320
+ci: remove deploy examples workflow from build-and-deploy:
+#92324
 Credits
 Huge thanks to
-@lukesandberg
-,
-@ijjk
-,
-@timneutkens
-,
 @sokra
 ,
+@aurorascharff
+,
+@lukesandberg
+,
 @ztanner
-,
-@icyJoseph
-,
-@unstubbable
 , and
-@ctate
+@timneutkens
 for helping!
 
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.18
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.19
 

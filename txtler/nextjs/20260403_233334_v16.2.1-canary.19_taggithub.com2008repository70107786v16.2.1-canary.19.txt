@@ -1,4 +1,3 @@
---- nextjs | v16.2.1-canary.19 | score=60.69 ---
 Core Changes
 Add MCP
 get_compilation_issues
@@ -41,22 +40,3 @@ Huge thanks to
 for helping!
 
 KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.19
-
---- claude | Elevated errors on requests to Claude Sonnet 4.6 | score=49.11 ---
-Apr
-3
-,
-19:21
-UTC
-Resolved
-- This incident has been resolved.
-Apr
-3
-,
-18:12
-UTC
-Investigating
-- We are currently investigating an issue resulting in elevated errors on requests to Claude Sonnet 4.6. We will provide an update as soon as possible.
-
-KAYNAK : https://status.claude.com/incidents/fznql3y9tpn7
-
