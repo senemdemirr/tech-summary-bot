@@ -1,4 +1,3 @@
---- claude | Sonnet 4.6 and Opus 4.6 elevated error rate | score=37.19 ---
 Apr
 4
 ,
@@ -8,4 +7,3 @@ Resolved
 - Between 10:09 and 10:31 PDT, Sonnet 4.6 and Opus 4.6 experienced elevated error rates across most product surfaces.
 
 KAYNAK : https://status.claude.com/incidents/7n7xgqws441v
-

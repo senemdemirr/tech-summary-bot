@@ -1,4 +1,3 @@
---- nextjs | v16.2.1-canary.20 | score=57.14 ---
 Core Changes
 Improve existing dev server error message to suggest using it:
 #92317
@@ -39,4 +38,3 @@ Huge thanks to
 for helping!
 
 KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.20
-
