@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-04-05T08:00:25.542834+00:00",
-  "cutoff_utc": "2026-04-04T08:00:25.542834+00:00",
+  "generated_at_utc": "2026-04-06T08:45:00.203305+00:00",
+  "cutoff_utc": "2026-04-05T08:45:00.203305+00:00",
   "max_keep_per_site": 5,
   "all_combined": "txtler/_combined/all_last24h.txt",
   "sites": {
@@ -46,8 +46,8 @@
     },
     "claude": {
       "feed": "https://status.claude.com/history.rss",
-      "saved_initial_count": 1,
-      "kept_after_top5": 1,
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/claude",
       "site_combined": "txtler/_combined/claude_last24h.txt"
@@ -78,9 +78,9 @@
     },
     "arxiv_ai": {
       "feed": "https://rss.arxiv.org/rss/cs.AI",
-      "saved_initial_count": 0,
-      "kept_after_top5": 0,
-      "removed_due_to_top5": 0,
+      "saved_initial_count": 248,
+      "kept_after_top5": 5,
+      "removed_due_to_top5": 243,
       "site_folder": "txtler/arxiv_ai",
       "site_combined": "txtler/_combined/arxiv_ai_last24h.txt"
     },

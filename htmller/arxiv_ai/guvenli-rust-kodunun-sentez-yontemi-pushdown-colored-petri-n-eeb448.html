@@ -1,0 +1,31 @@
+<div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
+  <h1>Güvenli Rust Kodunun Sentez Yöntemi: Pushdown Colored Petri Nets</h1>
+  <p>Rust, bellek güvenliğini sahiplik, ödünç alma ve ömür kapsamı gibi katı derleme zamanı kısıtlamalarıyla garanti eder. Bu nedenle, doğru ve güvenli Rust kodunu otomatik olarak sentezlemek zordur. Bu çalışma, bu derleme kısıtlamalarını doğrudan modelleyen ve geçerli çağrı dizilerini sentezleyen Pushdown Colored Petri Net (PCPN) tabanlı bir sentez yöntemi önermektedir.</p>
+  <p>PCPN, dinamik kaynak durumlarını ve bir borcun geçerli olduğu ömür bölgesini gösteren bir kapsam seviyesi ile birlikte kodlayan token renkleri kullanır. Pushdown yığını, ömür parametresinin girip çıkmasını izler. Bir geçiş, yalnızca tür eşleştirme ve arayüz yükümlülükleri sağlandığında ve gerekli kaynak durumları mevcut olduğunda etkinleştirilir. PCPN'nin etkinleştirme ve ateşleme kurallarının bu üç kısıtlamanın derleme zamanı kontrolü ile tutarlı olduğunu bisimülasyon teorisi ile kanıtlıyoruz.</p>
+  
+  <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
+  <p>Bu çalışma, Rust'ın güvenli kod yazma paradigmasını, otomatik kod sentezi için daha erişilebilir hale getirmeyi amaçlamaktadır. Rust'ın sahiplik ve ödünç alma gibi özellikleri, bellek güvenliğini sağlarken, kod sentezi sırasında bu kurallara uymak zorlayıcı olabilir. PCPN, bu kısıtlamaları modelleyerek, geliştiricilere güvenli ve doğru Rust kodu üretme konusunda yardımcı olmayı hedefler.</p>
+  
+  <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
+  <p>PCPN, Rust'ın sahiplik ve ödünç alma kurallarını modellemek için kullanılan bir araçtır. Bu model, Rust API imzalarından türetilmiş geçiş kuralları ve yapısal adımlar içerir. Token renkleri, tür ve ömür parametrelerinin anlık durumlarını taşır. PCPN'nin etkinleştirme kuralları, tür eşleştirme ve arayüz yükümlülüklerinin sağlanmasını gerektirir. Bu yöntem, Rust kodunun güvenli ve derlenebilir olmasını garanti eder.</p>
+  
+  <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
+  <p>Bu yöntem, Rust geliştiricilerine ve otomatik kod sentezi araçları geliştirenlere önemli faydalar sağlar. Rust'ın bellek güvenliği kurallarına uygun kod üretmek isteyen geliştiriciler, PCPN sayesinde daha güvenli ve doğru kodlar oluşturabilir. Ayrıca, bu yaklaşım, Rust dilinin karmaşık güvenlik kurallarını daha iyi anlamak isteyen akademisyenler ve araştırmacılar için de değerli bir kaynak olabilir.</p>
+  
+  <h2>Kısa Özet</h2>
+  <ul>
+    <li>PCPN, Rust'ın sahiplik ve ödünç alma kurallarını modelleyen bir araçtır.</li>
+    <li>Token renkleri, dinamik kaynak durumlarını ve ömür bölgelerini kodlar.</li>
+    <li>Geçişler, tür eşleştirme ve arayüz yükümlülükleri sağlandığında etkinleştirilir.</li>
+    <li>PCPN, Rust kodunun güvenli ve derlenebilir olmasını garanti eder.</li>
+    <li>Bu yöntem, Rust geliştiricileri ve araştırmacılar için önemli faydalar sağlar.</li>
+  </ul>
+  
+  <p>Metin, eğitmenler ve bakış açısı gibi konularda detay vermiyor.</p>
+  
+  <h2>Kapanış</h2>
+  <p>Bu çalışma, Rust'ın güvenli kodlama paradigmasını daha erişilebilir hale getirmek için önemli bir adım atmaktadır. PCPN, Rust'ın bellek güvenliği kurallarını modelleyerek, geliştiricilere güvenli ve doğru kod üretme konusunda yardımcı olur. Gelecekte, bu yaklaşımın daha geniş uygulama alanlarına yayılması ve daha fazla geliştirici tarafından benimsenmesi beklenmektedir.</p>
+  
+  <h2>Kaynak</h2>
+  <p>Detaylı okumak için: <a href="https://arxiv.org/abs/2604.02399" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2604.02399</a></p>
+</div>
