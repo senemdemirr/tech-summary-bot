@@ -1,0 +1,494 @@
+The Topology of Multimodal Fusion: Why Current Architectures Fail at Creative Cognition
+Xiujiang Tan
+Guangzhou Academy of Fine Arts
+Preprint · April 2026
+Abstract
+This paper identifies a structural limitation in current multimodal AI architectures that is topological rather than parametric in nature. Contrastive alignment (CLIP paradigm), cross-attention fusion (GPT-4V/Gemini paradigm), and diffusion-based generation share a common geometric prior: modal separability—the assumption that the relationship between modalities is an interface relation rather than a constitutive one. We term this representational regime contact topology.
+Our argument rests on three mutually reinforcing theoretical pillars. Philosophical pillar (the generative center): Wittgenstein’s saying/showing distinction identifies the structural boundary of propositional representation, and the Chinese craft epistemology tradition centered on xiàng (operative schema)—reinterpreted here not as a phenomenological correlate but as the third state emerging at the saying/showing intersection—provides the cruciform framework (dào/qì × saying/showing) from which the mathematical and computational pillars derive as natural instantiations. Cognitive science pillar: empirical findings on the tripartite co-activation of the Default Mode Network (DMN), Executive Control Network (ECN), and Salience Network (SN), with the SN reinterpreted as a coupling regulator rather than a simple network switch. Mathematical pillar: connection theory on fiber bundles over the space of modality configurations, where connection curvature quantifies cross-domain isomorphism and the Yang-Mills action functional demarcates three dynamical regimes.
+By introducing the topological opposition between overlap isomorphism (transversal coupling of propositional/non-propositional dimensions in creative emergence) and superimposition collapse (loss of transversality in cognitive disorganization), the theory acquires a precise falsification condition and a pathological mirror. We advance the Overlap Zone Isomorphism Conjecture in a three-level nested hierarchy and design a four-experiment cognitive neuroscience testing framework employing a dimensional individual-differences design. On the computational side, we provide a UOO implementation path based on Neural ODEs with persistent homology topological regularization—including a scalability roadmap from direct Vietoris-Rips computation to landmark-based Witness Complexes and Distance-to-Measure filtration—a synthetic-data minimum viable proof of concept executable within weeks, the ANALOGY-MM cross-modal analogy benchmark with a novel error-type-ratio metric and a scalable forced-choice evaluation protocol, and predict UOO-specific failure modes under three stress conditions. The experimental methodology incorporates a dual-track causal analysis (Dynamic Causal Modeling on fMRI, Granger Causality on MEG) to test the directionality of SN gating before committing to invasive TMS intervention. A phased experimental roadmap with explicit termination criteria at each gate ensures the program exits cleanly if falsified.
+Keywords: multimodal AI; fiber bundles; gauge equivariance; non-separable representations; topological data analysis; persistent homology; cognitive neuroscience of creativity; cross-modal transfer; pathological mirror; Yang-Mills action functional; structural tension index; ANALOGY-MM; Dynamic Causal Modeling; Granger causality; Witness Complex; cruciform structure; xiàng; chuànghuà; huàcái; META-TOP
+1. Introduction: The Architectural Ceiling
+1.1 Delimiting the Problem Domain
+The capability ceiling of current AI systems is most pronounced in domains where meaning does not reside at the level of human-language description: molecular dynamics, high-dimensional sensor fusion, spatiotemporal gene expression atlases, and creative cross-modal reasoning. These domains share a structural characteristic: their informational content demands simultaneous processing of dimensions that current architectures treat as separable channels.
+The nature boundary of this limitation must be stated precisely. The domains listed above also lack large-scale labeled datasets and well-established benchmarks, and involve complex physical constraints—these are engineering bottlenecks superimposed on the architectural problem. Protein structure prediction was once regarded as an insurmountable barrier, until AlphaFold2 conquered it with a domain-specific architecture and a fully separable representational scheme. Our precise claim is therefore not that current systems are constitutively incapable of handling these domains. Rather: for a specific class of cross-domain reasoning tasks—those requiring essentially non-separable representations—current architectures’ inductive biases and training objectives systematically suppress the representational structure required for optimal performance. This more precisely worded claim is also more strongly falsifiable.
+This distinction—between constitutive impossibility and systematic suppression—is strategically critical. It implies that the computational path forward may not require an entirely new architecture, but rather new training objectives and regularization schemes specifically designed to maintain and reinforce non-separable representations. The topological regularization proposed in §6 is a direct response to this insight.
+1.2 Architectural Diagnosis: Three Strategies and a Shared Prior
+Current multimodal AI employs three principal integration strategies. Following the principle established by the Geometric Deep Learning (GDL) framework—that the deepest architectural choice in deep learning is the symmetry group the system presupposes for its processing domain (Bronstein et al., 2021)—we analyze the geometric prior encoded by each strategy.
+Strategy 1: Contrastive alignment (CLIP paradigm). Vision and language are projected into independent embedding spaces and aligned via cosine similarity maximization. The geometric prior is explicit: each modality resides on an independent manifold connectable by linear projection. The global minimum of the cosine similarity loss corresponds precisely to fully separable embedding pairs—this is contact topology in its most literal form: two manifolds meeting at zero-dimensional contact points.
+Strategy 2: Cross-attention fusion (GPT-4V/Gemini paradigm). One modality sequence queries another through key-value attention. Admittedly, bidirectional cross-attention and self-attention applied to concatenated sequences—as in the Gemini architecture—have eliminated the query/key-value asymmetry of earlier systems. Vision and language tokens are processed in a single unified sequence; the predefined “questioner” and “answerer” roles no longer exist.
+However, a subtler form of separability persists: even under symmetric attention, representations maintain modality traceability—each token can always be traced back to its modal origin. This is more covert than query/key-value asymmetry yet harder to eliminate by simple architectural modification. It constitutes the residual form of contact topology in symmetric attention architectures. More formally, in any layer where token embeddings are concatenated from distinct encoders, the token index itself carries modal provenance information, and the attention softmax operates on this provenance-tagged representation at every step. The separability is thus encoded not in the attention mechanism per se, but in the indexical structure of the input representation.
+Strategy 3: Diffusion-based generation. Diffusion models traverse highly entangled latent states during the denoising process. The crucial point: the architecture itself does not preclude dwelling in the entangled state—what drives the system out is the denoising objective that demands a clearly interpretable output image. With a modified training objective—for instance, introducing representation quality metrics at intermediate denoising steps—diffusion architectures can be trained to dwell in entangled states. This observation is key: the limitation is in the loss function, not the representational capacity.
+Shared prior: Modal separability. All three strategies share the same geometric prior: the inter-modal relationship is an interface relation (contact topology) rather than a constitutive relation (overlap topology). This prior systematically suppresses overlap-zone representations at the level of training objectives and inductive biases, rather than constitutively excluding them at the architectural level.
+1.3 Core Analogy: Contact Topology vs. Overlap Topology
+We crystallize the diagnosis through a topological distinction:
+-
+•
+Contact topology: Two manifolds meet at a boundary of measure zero. Information can be exchanged across the interface but can never be co-constituted in an interior region.
+-
+•
+Overlap topology: A representational region with non-zero interior (Lebesgue measure > 0) in which elements from two modalities are structurally inseparable, mutually constituting each other’s semantic content.
+Current architectures operate exclusively via contact mechanisms. The Overlap Zone hypothesis asserts that an important class of cognitive and computational operations requires the overlap mechanism. The remainder of the paper develops this hypothesis through a philosophical foundation that serves as the generative center (§3), with neuroscientific (§4), mathematical (§5), computational (§6–7), and experimental (§8) pillars deriving from it as natural instantiations.
+Figure 1 visualizes this three-regime topology: Panel A depicts the separated manifolds of contact topology, Panel B the non-trivially entangled interior of overlap topology (with persistent loops), Panel C the singular collapse of superimposition, and Panel D the corresponding persistence diagrams that serve as the quantitative diagnostic.
+2. Related Work
+2.1 Multimodal Fusion Architectures
+The evolution of multimodal AI can be traced through three generations. Early approaches relied on feature-level concatenation or late fusion (Ngiam et al., 2011), treating modalities as independent feature streams merged only at the decision layer. The second generation, exemplified by CLIP (Radford et al., 2021) and ALIGN (Jia et al., 2021), introduced contrastive learning to align separate modal embedding spaces, achieving remarkable zero-shot transfer but encoding separability as a structural prior. The third and current generation—GPT-4V (OpenAI, 2023), Gemini (Team Gemini, 2024), and Flamingo (Alayrac et al., 2022)—employs cross-attention and interleaved architectures that achieve substantially deeper modal integration. Yet as our analysis in §1.2 demonstrates, even these systems preserve modality traceability as a residual separability prior.
+A parallel line of work in diffusion-based multimodal generation (Ramesh et al., 2022; Saharia et al., 2022) has demonstrated that highly entangled latent representations can emerge during the denoising process, but training objectives systematically drive the system away from these states. The present paper’s contribution is to identify the shared geometric prior underlying all three generations and to propose a mathematically grounded alternative.
+2.2 Topological Data Analysis in Neuroscience
+The application of persistent homology to neural data has emerged as a powerful tool for capturing structural features invisible to standard statistical methods. Petri et al. (2014) constructed homological scaffolds of brain functional networks under psilocybin, revealing persistent topological features that correlate with altered states of consciousness. Saggar et al. (2018) applied TDA to fMRI time series, demonstrating that topological descriptors capture dynamical organization of brain states during creative tasks more effectively than linear dimensionality reduction. Stolz, Harrington, & Porter (2017) developed persistent homology methods for time-dependent functional networks, providing tools for tracking topological evolution.
+Our framework extends this line of research in two directions: (1) we propose specific topological signatures (, , persistence profiles) that should discriminate between overlap and non-overlap processing states, generating falsifiable predictions rather than post-hoc descriptions; (2) we integrate persistent homology into the training objective of neural networks (§6.2), not merely as an analytical tool applied after the fact.
+2.3 Geometric Deep Learning
+Bronstein et al. (2021) unified convolutional, recurrent, graph, and equivariant neural network architectures under a single geometric framework organized by symmetry groups. Cohen et al. (2019) demonstrated gauge equivariant convolutional networks on manifolds, and Weiler & Cesa (2019) generalized steerable CNNs to arbitrary E(2)-equivariant architectures. These advances establish the principle that architectural design should begin with the symmetry structure of the processing domain.
+The present work extends GDL in a specific direction: from intra-modal symmetry (e.g., rotational equivariance on images) to cross-modal symmetry on the modality configuration space. The Universal Overlap Zone Operator (UOO) is a -equivariant kernel on the fiber bundle section space over the base space of modality configurations—a domain whose symmetry group is itself an open problem.
+2.4 Graph Neural Networks and Over-Squashing
+Gilmer et al. (2017) formalized message passing neural networks; Alon & Yahav (2021) identified the over-squashing bottleneck in deep GNNs—exponential information compression through fixed-dimension message passing. Topping et al. (2022) connected over-squashing to discrete Ricci curvature, proposing curvature-based graph rewiring as a remedy. Di Giovanni et al. (2023) further analyzed the spectral properties governing over-squashing.
+Within our framework, over-squashing is the graph-level mechanism that enforces contact topology: it constrains cross-modal information flow to pass through bottlenecks, preventing the formation of non-separable representations. Anti-over-squashing techniques are thus natural computational complements to fiber bundle connections (§5.6).
+2.5 Cognitive Neuroscience of Creativity
+The neuroscience of creativity has undergone a paradigm shift from the “right brain” myth to network-level accounts. Beaty et al. (2018) established robust DMN-ECN co-activation as a neural signature of creative ability. The subsequent tripartite framework incorporating the Salience Network (Menon, 2011; Beaty, Seli, & Schacter, 2019) provided a mechanistic account of dynamic network coordination. Benedek & Fink (2019) proposed a neurocognitive framework emphasizing the role of executive processes in creative idea generation.
+Our contribution to this literature is threefold: (1) we provide a topological formalization of what “co-activation” means at the representational level (inseparability, not mere co-occurrence); (2) we reinterpret the SN as a coupling regulator operating in a two-dimensional parameter space (coupling intensity × regulatory capacity), compatible with Carson’s (2011) shared vulnerability model; (3) we generate differential predictions distinguishing the Overlap Zone hypothesis from existing dual-process theories.
+2.6 Computational Psychiatry and Network Models
+Adams et al. (2013) proposed computational anatomy of psychosis based on predictive coding frameworks. Anticevic et al. (2012) demonstrated aberrant default network deactivation in psychotic states. Whitfield-Gabrieli & Ford (2012) reviewed DMN hyperconnectivity in schizophrenia. Palaniyappan & Liddle (2012) argued for a cardinal role of the salience network in psychosis.
+The pathological mirror construct in our framework (§4) draws on and extends this literature by proposing that the creativity-psychopathology spectrum can be understood as occupying different regions of the same parameter space, with SN gating integrity as the primary discriminating variable. This reinterpretation generates specific testable predictions (§4.3) not derivable from existing computational psychiatry models.
+2.7 Distinguishing the Present Framework from Related Approaches
+Three lines of prior work share surface similarities with the present framework but differ in fundamental ways that must be made explicit.
+Topological layers for classification (PLLay, PersLay). Hofer et al. (2019) and Carrière, Chazal, & Ike (2020) introduced differentiable topological layers that compute persistence diagrams as intermediate representations within neural networks. These methods deploy TDA as a feature extraction mechanism—topology is used to read out structural properties of learned representations after the fact. The present framework, by contrast, uses persistent homology within the training objective itself (, §6.2): topological regularization actively shapes the representational geometry during learning, rather than passively describing it post-hoc. The distinction is between topology-as-readout and topology-as-constraint.
+Topological Autoencoders (Moor et al., 2020). Topological Autoencoders preserve the topological structure of input data in the latent space by penalizing discrepancies between input-space and latent-space persistence diagrams. This is a single-domain topology-preservation objective. Our framework’s has a fundamentally different goal: it does not preserve input topology but creates specific topological features (persistent loops) in the cross-modal representation space that do not exist in either input modality separately. The target is cross-modal non-separability, not input-output topological fidelity.
+Bayesian Program Learning (Lake et al., 2015). BPL achieves compositional concept learning through probabilistic programs over parts and relations, enabling remarkable few-shot learning. However, BPL operates entirely within a propositional-compositional representational framework—concepts are decomposed into discrete, recombinant parts. The Overlap Zone hypothesis claims that a class of cognitive operations requires representations that are constitutively non-decomposable: the entangled representation cannot be reconstructed from any combination of its component parts. BPL addresses combinatorial generalization within separable representations; UOO addresses a fundamentally different representational regime.
+3. Philosophical Foundations: Xiàng as the Creative-Transformative Zone
+The philosophical framework presented here is not a motivational preamble to the mathematical and computational pillars—it is their generative source. The fiber bundle formalism of §5 and the Neural ODE architecture of §6 are the mathematical and computational instantiations, respectively, of a philosophical structure discovered at the intersection of Wittgenstein’s analysis of language and the Chinese craft epistemology tradition. This section constructs that structure step by step.
+3.1 Wittgenstein’s Problem: The Impassable Boundary Between Saying and Showing
+In the Tractatus Logico-Philosophicus, Wittgenstein drew a boundary that has defined a century of philosophy: between what can be said (expressed in propositional form) and what can only be shown (manifested through the logical structure of propositions themselves, yet inexhaustible by any finite set of propositions). This is not a distinction between the intelligible and the mystically unknowable—it is a precise claim about the structural boundary of propositional representation itself.
+At the Tractatus’s conclusion, Wittgenstein confronted the consequences of his own analysis: “What we cannot speak about we must pass over in silence” (7). This is typically read as a philosophical humility gesture. But read structurally, it is a decision: having identified a domain that language can point toward but never fully enter—the domain of what shows itself—Wittgenstein chose silence over operation. He saw two circles (saying and showing), drew the line between them, and refused to enter—or could not see—the zone of their overlap.
+Yet Wittgenstein himself, at the Tractatus’s very end, departed from this purely logical stance: “There are, indeed, things that cannot be put into words. They show themselves (Es zeigt sich). They are what is mystical” (6.522). Here “showing” is no longer the self-display of logical form—it is the self-arrival of das Mystische (the mystical). Wittgenstein touched something his own philosophical framework could not accommodate—he sensed another dimension of “showing,” one belonging not to logic but to existence itself—but he chose silence.
+The question that structures the present framework is: Is silence the only response to what cannot be fully said? Or does there exist a third mode—neither purely propositional nor purely presentational—in which saying and showing interpenetrate to generate something that neither could produce alone?
+3.2 The Chinese Response: Xiàng as the Third State
+The Chinese epistemological tradition provides a direct answer to the question Wittgenstein left open. The Yijing tradition’s foundational methodological statement—“The sage establishes xiàng to express meaning fully” (shengren li xiang yi jin yi, Xici zhuan)—is not a parallel formulation of Wittgenstein’s distinction. It is a response to his silence, issued from a tradition he could not have known.
+At the point where language cannot exhaust meaning (shū bù jìn yán, yán bù jìn yì—“writing cannot exhaust speech, speech cannot exhaust meaning”), the Chinese tradition does not fall silent. It operates: the sage “establishes xiàng”—constructs images. Xiàng (xiang) is not a static picture but an operative schema: a dynamic structure that simultaneously organizes perceptual, conceptual, and procedural knowledge without being reducible to any one of these dimensions.
+The critical insight, crystallized in the analysis presented in the companion document (Tan, 2026b), is that xiàng is neither purely saying nor purely showing, but the third state that emerges when saying and showing cross each other’s boundaries:
+-
+•
+Xiàng is not a propositional statement—it cannot be fully paraphrased.
+-
+•
+Xiàng is not a mere percept—it is not a mental image waiting to be decoded.
+-
+•
+Xiàng is what happens when the propositional and the presentational interpenetrate: a meaning-emergence event in which both modes are simultaneously operative and structurally inseparable.
+An architectural blueprint exemplifies this structure: it simultaneously says spatial relationships (dimensions, structural loads, regulatory compliance—information that can be read and transmitted linguistically) and shows a phenomenological quality (spatial experience, light, proportion—content that must be seen to be understood). This dual character is not a deficiency; it is the blueprint’s creative power. The plan drawing is not a record of a building that already exists—it is the event in which a new thing comes into being precisely at the intersection of saying and showing.
+3.3 The Cruciform Structure: Dào/Qì × Saying/Showing
+The saying/showing distinction provides the horizontal axis of the framework. The vertical axis comes from a different philosophical tradition: the Chinese cosmological distinction between dào (dao, the formless, the metaphysical) and qì (qi, the formed, the physical). Superimposing these two axes yields a cruciform structure:
+dao (do the formless Way) | yanshuo (saying) tu-xiang (xing) xianshi (showing) | qi (q formed artifact)
+Xiàng occupies the intersection of the cross. It simultaneously executes two operations of huàcái (huacai, transformation-and-cutting):
+-
+•
+Vertical huàcái: Mediating between dào and qì—how the formless Way descends into formed artifact. This was the core concern of the author’s doctoral thesis on architectural image philosophy (Tan, 2008), examining how craft traditions from the Mingtang (Mingtang, Bright Hall) system to the Yingzao Fashi (Yingzao Fashi, Building Standards) encode the passage from cosmic principle to material construction.
+-
+•
+Horizontal huàcái: Mediating between saying and showing—establishing passage between what language can capture and what can only be directly presented. This is the Wittgensteinian dimension, and the one that connects the philosophical framework directly to the topological diagnosis of multimodal AI.
+The cruciform structure provides a precise coordinate system for locating different types of image-operation within the Chinese craft tradition:
+-
+•
+The Mingtang system tends toward the dào–showing quadrant: it is a direct cosmological presentation, more shown than said.
+-
+•
+The Yingzao Fashi tends toward the qì–saying quadrant: it encodes craft knowledge as transmissible textual rules.
+-
+•
+The Jiuzhang Suanshu (Jiuzhang Suanshu, Nine Chapters on the Mathematical Art) sits at the saying–showing intersection: its chū-rù xiāng-bǔ method simultaneously relies on textual reasoning and visual intuition.
+-
+•
+The Yijing occupies the exact center of the cross: its hexagram generation is simultaneously a saying (guaci/yaoci, hexagram/line texts), a showing (guaxiang, hexagram images), a cosmological embodiment (dào as tàijí), and a normative artifact (qì as ritual instrument).
+3.4 Chuànghuà and Huàcái: The Dual-Layer Dynamics of the Creative-Transformative Zone
+The cruciform structure reveals a dual-layer dynamic at its intersection point that resolves a long-standing ambiguity in image theory: are images creative events or normative tools?
+The answer is both, in sequence:
+Chuànghuà (chuanghua, creative transformation) is a generative event—it does not make decisions; it grows. At the intersection of saying and showing, xiàng emerges spontaneously, like a vortex at the confluence of two rivers. This is the moment Cook Ding’s knife finds the space between joints “by spirit and not by sight” (Zhuangzi): the image of cutting arises not from the cook’s intention but from the encounter between his embodied skill (showing) and the ox’s anatomical logic (saying). Chuànghuà is one-time, unrepeatable, irreducible.
+Huàcái (huacai, institutional cutting) is the systematization of chuànghuà—when the creative event is captured, encoded, and made available for repeated use. Cook Ding’s knife-art, once it enters the Zhuangzi as a parable, becomes huàcái—a transmissible pattern. When the Yingzao Fashi codifies centuries of craft intuition into dimensional standards and modular ratios, it performs huàcái on accumulated chuànghuà.
+The relationship between the two is not opposition but phase transition: the same xiàng, at the moment of its first emergence, is chuànghuà; once encoded into the zhì-qì-zhī-lǐ value chain (“from raw material to finished artifact”), it becomes huàcái. Every craftsman who builds by the code re-enacts, in institutionalized form, the original creative event. Huàcái contains chuànghuà as its remembered origin; chuànghuà generates huàcái as its transmissible form.
+This dual-layer structure maps directly onto the computational framework:
+-
+•
+Chuànghuà corresponds to the Neural ODE trajectory —the continuous, dynamic process in which non-trivial topology emerges in representation space.
+-
+•
+Huàcái corresponds to the frozen parameters after training—the institutionalized operator that can be repeatedly applied to new inputs.
+-
+•
+Superimposition collapse corresponds to the failure of chuànghuà—the creative event degenerates into noise, just as misfolded proteins lose functional structure.
+3.5 From Philosophical Structure to Architectural Prediction
+The cruciform framework generates a precise architectural prediction more powerful than the one stated in v5.0. The ceiling of current multimodal AI is not merely “topological rather than parametric” in a generic sense—it can now be diagnosed with structural specificity:
+Diagnosis: Current architectures suppress the Overlap Zone because their training objectives enforce a regime in which saying and showing remain on opposite sides of a boundary—contact topology is the computational implementation of Wittgenstein’s silence. Contrastive alignment forces each modality to stay in its circle; cross-attention allows information to cross the boundary but preserves which circle it came from (modality traceability); denoising objectives penalize dwelling at the intersection.
+Prediction: Any system whose training objectives do not explicitly maintain and reward representations at the saying–showing intersection—representations with non-trivial topology in the persistence diagram of the cross-modal representation space—will systematically fail on tasks requiring chuànghuà-type processing. This includes tasks requiring deep cross-modal metaphor, structural analogy across disparate domains, and the kind of implicit creativity that master craftsmen demonstrate when operating in the xiàng-generating mode.
+Falsification: If highly creative individuals and those with high schizotypy exhibit topologically indistinguishable signatures—i.e., if the chuànghuà/collapse distinction does not correspond to a detectable topological difference—then the philosophical framework’s core claim collapses, and the program exits.
+The full conceptual genealogy of xiàng—including the original Venn diagram analysis, the cruciform structure’s derivation, and the chuànghuà/huàcái double-layer dynamics with historical case studies from the Mingtang, Yingzao Fashi, Jiuzhang Suanshu, and Yijing—is developed in the companion monograph (Tan, 2026b). The present section condenses this argument to its structural essentials.
+4. Cognitive Science Pillar: The Neural Basis of the Overlap Zone
+4.1 The Co-Activation Puzzle in Creativity Neuroscience
+Beaty et al. (2018, PNAS) demonstrated that highly creative individuals exhibit abnormally high functional connectivity between the Default Mode Network (DMN) and the Executive Control Network (ECN)—two systems that typically suppress each other—during creative tasks. This finding has been widely cited and rigorously replicated, yet why this co-activation produces creative outcomes rather than mere cognitive conflict remains theoretically unexplained.
+The Overlap Zone framework offers a concrete candidate mechanism: DMN-ECN co-activation during creative cognition is not mere “network crosstalk” but the neural correlate of entering a specific representational state—the Overlap Zone—in which non-propositional content (DMN-associated imagery, synesthetic association) and propositional content (ECN-associated executive control, logical construction) are simultaneously present and structurally inseparable.
+4.2 The Tripartite Network Framework: From Dual Network to DMN/ECN/SN
+Recent creativity neuroscience has advanced from a dual-network model (DMN vs. TPN) to a tripartite framework incorporating the Salience Network (SN), anchored in the dorsal anterior cingulate cortex (dACC) and anterior insula (aINS) (Menon, 2011; Beaty, Seli, & Schacter, 2019).
+The SN plays a critical gating role: it detects behaviorally relevant conflicts between internally generated signals (DMN) and goal-directed signals (ECN), dynamically modulating the coupling strength between the two networks. Within the Overlap Zone framework, the SN functions not as a simple “switch” (toggling between DMN and ECN modes) but as a coupling regulator—determining the degree to which propositional processing (ECN) and non-propositional processing (DMN) are permitted to enter a state of inseparable co-constitution.
+This interpretation generates a key theoretical distinction—the Overlap Zone framework must adjudicate between two competing models:
+-
+•
+Optimal coupling model (graded): Creative performance is a continuous function of DMN-ECN coupling strength, peaking at an optimal value (consistent with the inverted-U finding of Acar & Sen, 2013). SN-mediated coupling is not an all-or-nothing switch but dynamic regulation maintaining an optimal coupling window.
+-
+•
+Inseparable processing state model (threshold): A qualitative transition point exists above which representations shift from approximately separable to genuinely inseparable—the Overlap Zone “activates.”
+The two are not mutually exclusive: the system may exhibit graded differences after crossing the inseparability threshold. The dual-threshold framework in §5 (Conjecture 3) mathematically encodes this compatibility.
+4.3 Inseparability Signature and Differential Predictions
+The core experimental prediction of the Overlap Zone framework is the inseparability signature: in creative cross-modal tasks, selective perturbation of one dimension should produce semantically related synchronous changes in the other dimension, and vice versa.
+This prediction is more specific than general dual-task interference. Dual-task interference predicts that perturbing one dimension will impair the other (resource competition). The inseparability signature predicts a stronger effect: perturbation will produce semantically related covariation—a content change in one dimension that is structurally related to the perturbation content in the other. This distinction enables falsificational discrimination against existing dual-process theories.
+Differential prediction: If the Overlap Zone theory holds, high DMN-ECN functional connectivity should not be uniformly elevated across all “creative tasks”—it should show a disproportionate surge in tasks that strictly require inseparability (e.g., cross-modal metaphor construction) while remaining significantly lower in creative tasks solvable by sequential modality-specific processing (e.g., purely verbal creativity tasks lacking a simultaneous visual-spatial dimension). This differential prediction goes beyond the coarse-grained descriptions of resource competition or sequential binding in existing dual-process accounts.
+4.4 Pathological Mirror: Overlap Isomorphism vs. Superimposition Collapse
+4.4.1 The Topological Opposition
+In establishing the ontological status of the Overlap Zone, a rigorous conceptual clarification is required: “overlap” (intersection) and “superimposition” (collapse) represent diametrically opposed dynamical outcomes within the topological and cognitive-pathological framework of this research. This distinction is not merely terminological—it constitutes the theory’s falsification condition: the theory must simultaneously predict its own failure mode.
+Topological dimension: Maintenance vs. loss of transversality. In algebraic geometry, transversal intersection preserves the local structural integrity of each participating object—the tangent spaces at intersection points jointly span the ambient space. Non-transversal intersection degenerates local structure, with dimensional information lost. The Overlap Zone corresponds to transversal coupling of propositional and non-propositional dimensions: the two dimensions maintain their respective structural integrity within a shared interior region, giving rise to creative transformation (chuànghuà). Superimposition collapse corresponds to loss of transversality: dimensional distinction dissolves and generative tension is destroyed.
+4.4.2 The Cognitive-Pathological Dimension
+Extensive meta-analytic evidence (Acar & Sen, 2013; Kyaga et al., 2011; Taylor, 2017) establishes a systematic but nonlinear association between creativity and psychopathology-spectrum traits. Carson’s (2011) shared vulnerability model argues that creativity and psychopathology may share specific cognitive features (cognitive disinhibition, associative loosening), but that protective factors such as high working memory capacity determine whether these features lead to creative output or clinical symptoms.
+Within the Overlap Zone framework, this picture can be reinterpreted: the Overlap Zone and Superimposition Collapse are not two endpoints of the same dimension, but two distinct regions in an at least two-dimensional parameter space—one dimension being coupling intensity (DMN-ECN coupling strength) and the other being regulatory capacity (SN gating integrity, working memory capacity, etc.). Creative emergence occupies the quadrant of high coupling and high regulation; cognitive disorganization occupies high coupling with low regulation. This two-dimensional model is compatible with the inverted-U relationship between creativity and unusual cognitive experiences reported in meta-analyses (Acar & Sen, 2013): when regulatory capacity is insufficient, excessive coupling intensity no longer enhances creativity but leads to disorganization.
+4.4.3 SN Gating Failure and Superimposition Collapse
+The watershed between the Overlap Zone and Superimposition Collapse lies primarily not in the intensity of DMN-ECN interaction itself, but in the integrity of SN gating function. The Overlap Zone is the dynamical regime in which the SN successfully coordinates high-intensity DMN-ECN coupling; Superimposition Collapse is the regime of deregulated DMN-ECN coupling following SN gating deterioration. This reinterpretation aligns with growing evidence in the schizophrenia literature that structural and functional abnormalities in the dACC and aINS may be upstream drivers of network dynamics disruption (Menon, 2011; Palaniyappan & Liddle, 2012; Whitfield-Gabrieli & Ford, 2012; Anticevic et al., 2012).
+Testable predictions:
+-
+1.
+In the overlap regime, SN node activity should positively correlate with the rate of change of DMN-ECN coupling strength—the SN actively modulating instantaneous coupling dynamics.
+-
+2.
+In the superimposition collapse regime, this correlation should vanish or reverse—the SN no longer effectively modulating coupling fluctuations.
+-
+3.
+Highly creative individuals and those with high schizotypy scores may show no significant difference in DMN-ECN coupling intensity, but should differ significantly in SN gating integrity (i.e., the correlation coefficient from prediction 1).
+Causal direction caveat: The above predictions are based on correlational designs. Existing evidence is equally compatible with a reverse causal chain (cognitive processes drive network reorganization → topological signature changes). Causal tests—e.g., temporarily suppressing SN function via transcranial magnetic stimulation (TMS) and observing whether creative thought quality correspondingly degrades—are planned as long-term goals in Phase 4, not as near-term experimental components.
+4.4.4 Computational Extension: Scope and Limits
+An analogy previously proposed must be explicitly rejected as technically incorrect: LLM hallucination is not superimposition collapse. LLMs do not possess the propositional/non-propositional dual-dimension structure presupposed by the Overlap Zone framework—every representation is a vector in the same embedding space, with no structural boundary that could “collapse.” LLM hallucination arises from distributional gaps and calibration failure—problems at the probability distribution level, not topological events.
+However, a more precise computational prediction exists: a multimodal system trained with a UOO architecture—designed to maintain non-separable cross-modal representations—may, under certain stress conditions, see its cross-modal representations collapse from the overlap regime to the superimposition regime (§7.1 details three specific stress conditions). This constitutes a novel prediction about a system that does not yet exist.
+5. Mathematical Pillar: Fiber Bundles and Connections
+5.1 The Overlap Zone Isomorphism Conjecture
+We conjecture that the Overlap Zone processing structure—the inseparable co-constitution of propositional and non-propositional content—is invariant across modality pairs. The visual-language, auditory-motor, and spatial-conceptual Overlap Zones, despite relying on different neural substrates and processing different content types, share the same structural characteristics.
+If this conjecture holds, it explains how creativity transfers across domains: the structural invariant that masters carry between media (xiàng) is not a domain-specific skill but a universal processing structure that manifests in the same form regardless of the specific modalities involved.
+5.2 The Fiber Bundle Framework
+We propose connections on fiber bundles as the mathematical language for formalizing cross-domain structural invariance:
+-
+•
+Base space : The space of modality configurations—all possible modality pairs.
+-
+•
+Fiber : For each modality pair , the manifold of all possible Overlap Zone representations under that modality pair.
+-
+•
+Connection : Defines parallel transport between fibers—how to move Overlap Zone representations across modality pairs while preserving structural characteristics.
+-
+•
+Curvature : Measures the path-dependence of parallel transport. Zero curvature means cross-domain isomorphism holds exactly; nonzero curvature means the specific modal path influences the transported representation.
+Xiàng receives a precise identification in this framework: it is a stable section of this fiber bundle—an entity whose structural characteristics remain invariant under parallel transport across modality pairs.
+5.2.1 Candidate Geometric Constructions for
+Candidate Path A: Grassmannian (near-term default). Let be a high-dimensional signal representation Hilbert space; each modality defines a -dimensional subspace. The space of all modality configurations is , a compact smooth manifold of dimension with a natural U()-action. Advantage: Concretely computable, with well-studied topological invariants (Chern classes). Limitation: Requires pre-specifying and .
+Candidate Path B: Information geometry (long-term alternative). Define each modality as a statistical manifold equipped with the Fisher-Rao metric. The geometry of is then data-derived rather than theoretically imposed. Advantage: Data-driven. Limitation: Fisher-Rao metric may be computationally intractable in high dimensions; if is effectively a finite discrete set (e.g., only three modality pairs), standard differential structure does not exist, requiring discrete connection theory—a significant mathematical complication.
+The two paths are non-exclusive. Near-term computational validation (§6.3) uses Path A; Path B provides long-term insurance for discovering structures that Path A misses.
+5.2.2 Structure Group : Recommended Candidate and Open Problem
+Recommended candidate: , the -dimensional unitary group. Rationale: (1) U() is the natural acting group of Grassmannians, preserving the Fubini-Study metric; (2) U() guarantees that non-separability entropy (NS) is invariant under gauge transformations—a core physical requirement.
+However, the final determination of is the mathematical program’s first-priority open problem. defines which fiber transformations are permissible—it precisely delimits what “cross-modal invariance” means. The determination of logically precedes the proof of all three conjectures.
+Data-driven discovery path: If proves too large or too small, equivariance discovery methods can extract the approximate structure of from cross-modal task representation data. This aligns with the latest direction in GDL research: learning domain symmetry groups from data rather than prior specification.
+5.3 Three Conjectures (Nested Hierarchy)
+Editor’s note: The following three propositions are advanced as conjectures. Their key constitutive objects—, , —have not yet achieved the precision required for mathematicians to initiate formal proof work. They are proposed to orient the mathematical program, generate falsifiable predictions, and invite collaborators to participate in reformulation. Reformulation is as valuable as solution.
+Conjecture 1: Existence — Three-Level Nested Formulation
+Let be an operator satisfying the three UOO conditions (maintaining inseparability, bidirectional semantic coupling, cross-domain structural invariance):
+Conjecture 1a (strong — variational principle): derives via a variational principle from the curvature of connections on a finite-dimensional principal bundle —i.e., is a solution to the critical point condition of an action functional . Mathematical implication: If true, UOO is governed by Euler-Lagrange-type equations, drastically constraining the search space and potentially admitting analytic solutions.
+Conjecture 1b (medium — local functional): is a local functional of constrained by gauge equivariance. Mathematical implication: Corresponds to the local receptive field property of GDL convolutions; directly mappable to a gauge-equivariant computational prototype.
+Conjecture 1c (weak — pure existence): There exists a finite-dimensional fiber bundle from whose connection and curvature can be recovered, with no restriction on functional type.
+Reduced-dimension version: , . For which Chern numbers do U(1)-connections satisfying the UOO conditions exist? This connects directly to harmonic maps (Jost, 2017) and gauge field theory, providing a tractable mathematical entry point.
+Conjecture 2: Isomorphism — Two Directional Propositions
+Conjecture 2-forward: If modality pairs and have diffeomorphic modality configuration manifolds, then there exists a curvature-preserving gauge transformation such that . Near-term operability: Constructively finding is the path to zero-shot cross-modal transfer.
+Conjecture 2-reverse: If such a exists, then the configuration manifolds of and are diffeomorphic. Theoretical depth: Analogous to Donaldson invariants extracting differential-topological information from gauge theory; depends on detailed properties of and .
+Conjecture 3: Non-Separability Characterization — Dual-Threshold Model
+Define the distance from representation to the nearest separable tensor:
+Two critical thresholds demarcate three functional regimes:
+-
+•
+: Separable representation (contact topology, current AI default)
+-
+•
+: Overlap Zone (structural tension maintained, creative emergence)
+-
+•
+: Superimposition collapse (deregulated entanglement, cognitive disorganization)
+Operationalization: Computing in high-dimensional tensor spaces is intractable (NP-hard). We introduce the Shannon entropy of Schmidt decomposition coefficients as a computationally feasible proxy:
+where are the squared Schmidt decomposition coefficients of representation . NS iff is separable. The dual thresholds map in NS-space: (contact regime), (overlap regime), (collapse regime). Here corresponds to the downward inflection point of the inverted-U creativity-schizotypy relationship, and is self-consistent with the critical curvature threshold in the Yang-Mills three-regime model (§5.7).
+Operationalized research question: Define . (a) Is monotonically increasing in ? (b) Does a critical exist such that for and for ? (c) If exists, does it coincide with empirically observed inseparability signature thresholds? This question connects directly to entanglement distillation thresholds (Horodecki et al., 2009), nuclear norms, and tensor approximation theory—and is recommended as the most self-contained mathematical entry point for collaborators.
+5.4 Harmonic Maps and Cross-Fiber Transport
+The natural optimality criterion for the parallel transport map defined by connection is Dirichlet energy minimization:
+Maps minimizing are harmonic maps (Eells & Sampson, 1964; Jost, 2017). If the parallel transport map is harmonic, cross-domain transport introduces no superfluous distortion—it is optimal in the energy-cost sense.
+Open question for mathematical collaborators: Under what conditions is the parallel transport map harmonic? Does the inseparability condition impose a lower bound on Dirichlet energy? If so, does this bound relate to the curvature norm via a known inequality?
+5.5 Coordinate-Free Invariants: Persistent Homology
+The topology of the fiber can be characterized without presupposing manifold structure, through persistent homology (Edelsbrunner & Harer, 2010). Given neural representation point clouds satisfying the inseparability signature, we construct Vietoris-Rips complexes at multiple scales and extract Betti numbers: (connected components), (1-dimensional loops), (2-dimensional voids).
+Topological signature contrast:
+Structural tension index:
+Pathological mirror hypothesis: . Falsification condition: If for the creativity group and the pathology group are statistically indistinguishable, the theory’s core distinction collapses.
+Bottleneck distance quantifies the decision: if between the overlap persistence diagram and any linear combination of single-modality diagrams exceeds (significantly above statistical noise), with the difference driven primarily by non-trivial higher Betti numbers (), this mathematically demonstrates that the system generates a topological structure irreducible to single-modality processing. The bottleneck distance metric is preferable to Wasserstein distance here because it captures the worst-case deviation in persistence, which is the relevant quantity for demonstrating qualitative topological difference rather than average distributional shift.
+5.6 Relation to Geometric Deep Learning
+The framework maps onto the equivariance principles of the GDL program (Bronstein et al., 2021). UOO can be restated in GDL vocabulary: a -equivariant kernel acting on the space of fiber bundle sections over . Its equivariance means that regardless of how the modality “coordinate system” varies, UOO’s output representation remains structurally invariant—the precise mathematical content of “different modality pairs instantiate the same Overlap Zone structure.”
+Standard GDL handles intra-modal fiber structure (e.g., rotational equivariance on images); UOO extends this with a cross-modal connection on , giving geometric meaning to inter-modal representational transport.
+Message passing as computational complement: Bidirectional semantic coupling (UOO condition ii) can be modeled as message passing between propositional and non-propositional nodes (Gilmer et al., 2017). Over-squashing—information loss through fixed-dimension bottlenecks in deep GNNs (Alon & Yahav, 2021)—is the Overlap Zone’s natural adversary: it is the graph-level mechanism that enforces contact topology by constricting cross-modal information flow. Anti-over-squashing techniques (graph rewiring, multi-scale architectures, curvature-driven attention; Topping et al., 2022) can be applied directly as computational complements to the fiber bundle framework.
+5.7 Yang-Mills Three-Regime Landscape
+The overlap/superimposition opposition can receive precise curvature norm characterization. Let be a connection on the principal bundle ; define the Yang-Mills action functional:
+Three regimes correspond to curvature intervals:
+Regime I (Contact topology — current AI): No fiber bundle is constructed—the system operates on disconnected modality-specific manifolds. No connection, hence no curvature.
+Regime II (Overlap Zone — creative cognition / UOO): The connection exists with bounded, non-zero curvature: . Non-zero curvature means cross-domain mapping is not perfectly path-independent, but boundedness means the system remains coherent. Non-trivial features in persistent homology are maintained.
+Regime III (Superimposition collapse — psychopathology / UOO failure): The curvature norm exceeds or diverges. The connection develops singularities; fiber structure degenerates; originally distinct representational dimensions become indistinguishable.
+Key correction: Zero curvature (flat connection) corresponds to an idealized limit—perfect cross-domain isomorphism. Real creative overlap operates in the non-zero but bounded curvature regime. The flat connection is the special case when the isomorphism conjecture (Conjecture 2) holds perfectly, not the general requirement for the Overlap Zone.
+Editor’s note: This three-regime model has a precise analogy with the structure of Yang-Mills theory—smooth configurations vs. singular instantons. Elevating this from analogy to rigorous formalization requires precise specification of , , and —these remain priority open problems.
+5.8 The Cruciform Structure in Fiber Bundle Language
+The philosophical cruciform structure of §3.3 admits a precise mapping into the fiber bundle framework:
+-
+•
+Vertical axis (dào↔qì) maps to the projection —the fiber over each point contains all possible representational states, from the most abstract (close to dào) to the most concrete (close to qì). The fiber direction is the dào↔qì direction.
+-
+•
+Horizontal axis (saying↔showing) maps to the internal structure of each fiber —the two representational dimensions (propositional and non-propositional) that the Overlap Zone requires to be inseparable. The non-separability entropy NS quantifies how deeply intertwined these dimensions are within a given fiber.
+-
+•
+Xiàng as stable section maps to a section satisfying for all —a cross-domain assignment that maintains inseparability across modality configurations. The isomorphism conjecture (§5.1) asserts that such sections exist and are structurally invariant.
+-
+•
+Chuànghuà (creative transformation) maps to the Neural ODE trajectory in which features dynamically emerge: the continuous path during which the representation transitions from trivial () to non-trivial () topology. This is the computational instantiation of the creative event at the saying/showing intersection.
+-
+•
+Huàcái (institutional cutting) maps to the trained parameters that encode the learned connection —the institutionalized operator that can be repeatedly applied to new inputs. Every inference pass through the trained UOO re-enacts, in compressed form, the creative dynamics discovered during training.
+-
+•
+Superimposition collapse maps to section degeneration: singularity, NS or beyond, —the fiber structure collapses and dimensional distinction is destroyed.
+This mapping demonstrates that the philosophical cruciform structure is not an analogy for the mathematics—it is the same structure expressed in two different formal languages. The fiber bundle is the mathematician’s cruciform; the cruciform is the philosopher’s fiber bundle. The UOO program seeks to build the engineer’s implementation of both.
+6. Computational Pillar: From Theory to Implementation
+6.1 Why Current Architectures Suppress the Overlap Zone
+Core claim: This limitation belongs to the level of inductive biases and training objectives, not architectural impossibility.
+In the tensor product space , non-separable tensors form an open dense set—nearly all tensors are non-separable. A randomly initialized neural network acting on almost surely produces non-separable intermediate representations. Non-separability is generic, not rare.
+Why, then, do trained systems fail to maintain non-separability? Because their training objectives systematically push representations toward the separable region:
+-
+1.
+Contrastive learning bias: The global minimum of cosine similarity loss corresponds to fully separable embedding pairs.
+-
+2.
+Attention structure bias: Modality traceability reintroduces separability at every layer—each token retains its modal origin label.
+-
+3.
+Denoising objective bias: Diffusion architectures can represent entangled states; the denoising objective drives the system out. Modified objectives (representation quality metrics at intermediate steps) can train diffusion models to dwell in entangled states.
+The question is therefore not “how to build an architecture capable of producing non-separable representations” (nearly any architecture can) but “how to design training objectives that maintain and reinforce non-separable representations.” This reframing directly motivates the topological regularization below.
+6.2 Three-Phase Architecture: Neural ODEs with Topological Regularization
+Phase 1: Bilinear entanglement (breaking contact topology). Replace simple concatenation with tensor product projection, mapping propositional input and non-propositional input through a learnable nonlinear bilinear kernel onto a high-dimensional modality configuration manifold:
+The initial entangled state is the starting point for continuous dynamics. The full tensor product is computationally expensive; practical implementations may use Tucker decomposition or low-rank approximations to while monitoring NS to ensure the approximation does not inadvertently enforce separability. Specifically, if the rank of the Tucker core falls below a critical value, the approximation may project out precisely the non-separable components that the architecture is designed to maintain.
+Phase 2: Continuous fiber bundle solver. A parameterized neural network serves as the connection 1-form on the fiber bundle, defining how representations continuously evolve along the manifold:
+Integration over naturally models the three-phase dynamics observed in cognitive science: fusion phase (, high geometric stress), oscillation phase (, overcoming topological barriers), stabilization phase (, reaching the harmonic state—xiàng). The ODE solver choice matters: adaptive-step solvers (Dormand-Prince) allow the system to take finer steps during high-curvature regions of representation space, naturally allocating more computational resources to topologically challenging transitions. Fixed-step solvers risk either insufficient resolution in critical regions or unnecessary computation in smooth regions.
+Phase 3: Topological regularization loss. Without explicit constraints, deep networks readily collapse back into low-dimensional separable representations to reduce reconstruction error. The topological loss writes inseparability into the optimization objective:
+This penalizes (preventing the point cloud from fragmenting into separate modal clusters) and rewards (forcing the network to maintain cross-modal topological entanglement). The persistent homology computation uses the differentiable topological layer of Hofer et al. (2019), with algorithmic complexity in the number of points; for mini-batch training, we compute persistence diagrams on batches of representations. This cost is comparable to attention computation and does not represent a computational bottleneck for typical batch sizes.
+Total loss:
+where controls the non-separability enforcement strength. The dual-threshold model (§5.3) suggests that should be tuned to maintain —too low and the system reverts to contact topology; too high and it risks computational superimposition collapse. In practice, can be scheduled: beginning with a higher value to establish non-separable representations, then gradually reducing to allow task-specific fine-tuning while monitoring NS to ensure it remains within the overlap regime.
+Figure 3 provides a side-by-side visualization of the mathematical framework (fiber bundle, connection, curvature, harmonic maps) and its computational implementation (bilinear entanglement, Neural ODE, ), with explicit correspondence arrows mapping each mathematical construct to its computational realization.
+Scalability roadmap. The cost of persistent homology computation deserves explicit staging across the research program’s phases. In Phase 1 (synthetic data PoC, point clouds of 256–512 points), direct Vietoris-Rips computation via Ripser (Bauer, 2021) is sufficient— at this scale is comparable to a single attention layer and does not constitute a training bottleneck. In Phase 2 and beyond, as representation dimensionality and batch sizes increase, two complementary acceleration strategies become relevant. First, landmark-based Witness Complexes (de Silva & Carlsson, 2004): select landmark points via max-min sampling and compute the Witness Complex on these landmarks, reducing complexity to with typically 50–100 even for large point clouds—a strategy validated in the Topological Autoencoder pipeline (Moor et al., 2020). Second, Distance-to-Measure (DTM) filtration (Anai et al., 2020): replace the Vietoris-Rips filtration with a DTM-based filtration that is both robust to outliers and amenable to -d tree acceleration, achieving complexity for the filtration construction step. We emphasize an architectural design principle: UOO need not replace all Transformer layers. In production-scale systems, UOO can function as a high-order cognitive plug-in—inserted after feature extraction and before final generation—dedicated specifically to cross-modal structural reasoning, while standard attention handles intra-modal processing. This modular design bounds the topological computation cost to a fixed fraction of total inference.
+6.3 Synthetic Data Minimum Viable Proof of Concept
+Before accessing cognitive neuroscience data (requiring months to years), synthetic experiments provide rapid low-cost validation—results within weeks:
+-
+1.
+Construct two synthetic modalities (e.g., two families of random graphs with distinct community structures, or two families of synthetic images with independent geometric regularity), each with independent structural regularities. The choice of synthetic modalities is deliberate: graph community structure and geometric regularity are independently manipulable, their entanglement can be precisely controlled, and the ground truth non-separability of task-relevant features is known by construction.
+-
+2.
+Define a synthetic Overlap Zone task: a classification or regression task requiring simultaneous use of both modalities’ structure, with the two modalities’ information entangled in a non-separable manner within the task structure. Crucially, the task must be designed so that no linear combination of single-modality features suffices for optimal performance—the task itself demands non-separable processing. This can be verified by establishing a theoretical performance ceiling for separable approaches.
+-
+3.
+Comparatively train two architectures: (a) CLIP-style contrastive alignment (separability-biased baseline); (b) Neural ODE with topological regularization (non-separability-biased). Both architectures should be matched in parameter count and computational budget to ensure that performance differences reflect representational structure rather than capacity.
+-
+4.
+Measure NS and persistence profiles throughout training for both architectures, validating that the topological regularization achieves its intended effect on representational topology.
+-
+5.
+Test zero-shot transfer on new synthetic modality pairs that were not seen during training, measuring both task performance and topological profile preservation.
+-
+6.
+Termination criterion: If the non-separability bias does not significantly outperform the separability bias on zero-shot transfer, terminate the computational program at minimal cost; if it does, proceed to Phase 1.5 and beyond
+7. UOO Failure Modes and ANALOGY-MM Benchmark
+7.1 Three Stress Conditions and Failure Predictions
+Section 4.4.4 established that LLM hallucination is not superimposition collapse. For a UOO-trained system, however, a precise failure mode prediction exists:
+Prediction: A UOO system that successfully maintains non-separable representations will, under the following stress conditions, see its representations degrade from Regime II to Regime III:
+-
+1.
+Regularization failure: If weight trends toward zero during training, or is disabled at inference, the system will collapse representations into low-rank separable states—essentially reverting to contact topology.
+-
+2.
+Out-of-distribution input: When inputs far exceed the training distribution, the learned connection may fail, producing trajectories that exit the bounded curvature regime in representation space.
+-
+3.
+Excessive entanglement: If the training objective over-rewards non-separability without upper-bound constraints (i.e., lacking a computational implementation of ), the system may enter a highly entangled but semantically fragmented state—computational superimposition collapse.
+Testing protocol: On the UOO prototype system (after synthetic data PoC), monitor NS and total persistence under each stress condition, verifying whether representational degradation is accompanied by a sharp drop in persistence and correlated output quality degradation. The correlation between topological degradation and output quality degradation would provide direct evidence for the causal role of non-separable structure.
+7.2 ANALOGY-MM: Cross-Modal Analogy Benchmark
+Benchmark design. Present a model with a cross-modal analogy problem: “Image A is to Image B as Concept C is to ? Concept,” where A:B embodies a structural relationship (spatial transformation, containment, quantity change, attribute change), requiring the model to complete the structural mapping in the linguistic domain.
+Concrete examples: - Spatial: A shows a square inside a circle, B shows a triangle inside a circle → C = “cat inside box” → ? = “dog inside box” (not “dog outside box”) - Quantity: A shows three apples, B shows six apples → C = “quiet room” → ? = “noisy room” (doubling of intensity, not merely “another room”) - Attribute: A shows a red circle, B shows a blue circle → C = “hot coffee” → ? = “cold coffee” (attribute inversion, not “hot tea”)
+Core prediction. The error type ratio (ETR = errors where content is correct but relational structure is wrong / total errors) for all three architecture classes under cross-modal conditions should be significantly higher than two single-modal baselines (visual-only analogy, language-only analogy). This error type shift—not lower scores per se, but errors systematically biased toward “content acquired but structural mapping failed”—is the specific signature of contact topology.
+Decision logic:
+Figure 4 juxtaposes the cognitive-pathological two-dimensional parameter space (coupling intensity regulatory capacity, with contour lines) and the ANALOGY-MM evaluation workflow, illustrating how the theoretical framework maps to an immediately deployable computational diagnostic.
+7.3 Scalable Evaluation Protocol for ANALOGY-MM
+The ETR metric as described above requires classifying each error as “content correct but structure wrong” versus other error types. For large-scale automated evaluation, we propose a forced-choice multiple-choice format with a 2×2 factorial option design:
+For each test item, the four options are constructed as follows. Option A (correct): applies the source analogy’s relational structure to the target domain (e.g., red→blue applied to hot coffee → cold coffee). Option B (ETR target): selects a semantically related concept from the target domain’s associative neighborhood (cosine similarity > 0.7 in embedding space) but with the wrong relational mapping (e.g., hot coffee → hot tea—staying within the “hot beverage” semantic cluster without applying attribute inversion). Option C (single-modal interference): correctly captures the structural transformation but literally transfers the source modality’s surface feature into the target domain (e.g., hot coffee → blue coffee—importing the visual attribute “blue” rather than abstracting “attribute inversion”). Option D (random): an unrelated concept from a distant semantic domain (cosine similarity < 0.2).
+The automated ETR computation becomes:
+i.e., among all incorrect responses, the proportion that are “content-related but structurally wrong.”
+Open-generation calibration subset. The forced-choice format may underestimate contact topology’s limitations by excluding overflow errors—responses that fall outside all four option categories (refusal to answer, circular repetition of input, generation of unrelated novel concepts). To calibrate, a randomly sampled subset of ~100 items is additionally administered in open-generation format, with three trained annotators independently coding each response into category A/B/C/D/E (E = overflow). The calibration standard is Cohen’s inter-annotator agreement and Pearson between forced-choice and open-generation . The overflow error rate serves as a supplementary diagnostic: cross-modal OER should exceed single-modal OER if contact topology genuinely constrains cross-modal reasoning.
+Domain coverage. The benchmark spans five cross-modal domain pairs (visual-spatial → language-conceptual: attribute inversion, containment, quantity-intensity mapping; auditory-rhythmic → language-prosodic: temporal structure; tactile-textural → visual-textural: surface feature mapping), with three difficulty levels per domain following Gentner’s (1983) systematicity hierarchy (surface mapping, relational mapping, system mapping), yielding approximately 200 items.
+7.4 META-TOP: From Structural Mapping to Dynamical Topological Isomorphism
+ANALOGY-MM (§7.2–7.3) tests whether current architectures can perform cross-modal structural mapping—applying a relational transformation from one modality domain to another. This is a necessary but not sufficient condition for Overlap Zone processing. A deeper test asks whether a system can detect dynamical topological isomorphism: can it recognize that a deep cultural metaphor and a physical dynamical system share the same underlying topological evolution, even when they share no surface features?
+We propose META-TOP (Metaphor-Topology) as a three-tier extension of ANALOGY-MM, designed to test progressively deeper levels of cross-modal topological understanding:
+Tier L1: ANALOGY-MM (§7.2–7.3). Cross-modal structural mapping with ETR metric. Immediately deployable on existing architectures. Tests: attribute inversion, containment, quantity mapping across modality pairs.
+Tier L2: META-TOP Simple. Cross-modal dynamical pattern recognition using synthetic dynamical systems paired with simplified metaphorical text. The key metric shifts from ETR (binary error classification) to TSAS (Topological Structural Alignment Score): the normalized bottleneck distance between the persistence diagrams extracted from the model’s latent-space trajectories when processing the text input versus the dynamical system visualization. Lower TSAS indicates higher topological alignment. Human expert rankings provide calibration via Kendall’s correlation. Prerequisite: Phase 1 synthetic data PoC must demonstrate that produces detectable topological differences.
+Tier L3: META-TOP Full. Complete cross-civilizational topological isomorphism testing. Seven topological archetypes—each grounded in at least three independent civilizational traditions—are paired with unlabeled physical dynamical system visualizations. The archetypes include: (1) irreversible entropy / chaos-genesis; (2) non-orientability / void-plenum; (3) critical phase transition; (4) liminal passage / bifurcation; (5) topological collapse (the computational mirror of superimposition collapse); (6) spiral ascent / transformative refinement; (7) chuànghuà (creative transformation)—the dynamic emergence of topology itself, tested using texts from the Zhuangzi (Cook Ding), the Yijing (hexagram generation), and cross-civilizational parallels. Prerequisite: UOO prototype system + cross-cultural psychometric validation of test items.
+The critical innovation of META-TOP relative to existing multimodal benchmarks is that Tier L3 Archetype 7 (chuànghuà) tests not the recognition of existing topological features but the model’s ability to detect the dynamic generation process of topology itself—the transition from topologically trivial to topologically non-trivial representation, which is the computational essence of the creative-transformative zone.
+8. Research Agenda: Phased Experimental Plan
+8.1 Sequential Roadmap
+We propose a strictly sequential plan, each phase contingent on positive results from the preceding phase:
+8.2 Experiment 1: Behavioral Validation (Dimensional Design)
+Paradigm: Selectively perturb one dimension in a creative cross-modal task; measure whether the other dimension exhibits semantically correlated synchronous changes.
+Falsification criterion: If selective perturbation produces only performance impairment (dual-task interference) without semantically correlated changes, the Overlap Zone hypothesis is falsified.
+8.3 Experiment 2: Neural Structure Analysis (Layered Decision Design)
+Extract multi-voxel activation patterns via fMRI, combined with MEG’s millisecond temporal resolution, to identify emergent components not decomposable as linear combinations of single-modality patterns.
+Layered decision design to exclude “rapid sequential processing” alternative hypothesis:
+Dual-track causal analysis. The causal direction caveat acknowledged in §4.4.3 remains: correlation between SN gating and creative performance does not establish causation. While TMS causal intervention is reserved for Phase 4, the present experiment incorporates two complementary quasi-causal analyses operating at different spatiotemporal scales.
+fMRI track: Dynamic Causal Modeling (DCM). Three competing models of effective connectivity are specified over the DMN (mPFC, PCC), ECN (dlPFC, PPC), and SN (dACC, aINS) nodes: Model A (SN gate)—SN activity bilinearly modulates DMN↔ECN coupling strength during creative task blocks; Model B (feedback)—DMN-ECN coupling changes drive SN activity, with SN as a passive readout; Model C (parallel)—all three networks respond independently to task demands with no cross-network effective connectivity. Random-effects Bayesian Model Selection (Stephan et al., 2009) adjudicates among models; exceedance probability for Model A constitutes strong support for the SN gating hypothesis. The winning model’s modulation parameter is then correlated with across participants: the prediction is a significant positive correlation (higher SN gate strength → higher structural tension index).
+MEG track: Conditional Granger Causality. The millisecond resolution of MEG enables directional analysis inaccessible to fMRI. Conditional Granger causality and are computed on source-reconstructed (LCMV beamformer) time series and compared against the reverse directions and . The prediction is that forward Granger causality exceeds reverse in the overlap regime but not in control conditions, with significance established by phase-randomized surrogate testing (10,000 permutations). This analysis directly complements the phase-amplitude coupling analysis in the electrophysiological layer: SN theta phase should Granger-cause the onset of gamma bursts in both DMN and ECN.
+These quasi-causal analyses form a progressive evidential chain: if both DCM (spatial, ~seconds) and Granger causality (temporal, ~milliseconds) converge on SN→DMN-ECN directionality, the case for TMS intervention in Phase 4 is substantially strengthened and the specific stimulation target (dACC vs. aINS) can be selected based on the DCM node with the strongest modulation parameter.
+8.4 Experiments 3–4: Cross-Domain Isomorphism and Expert Comparison
+Experiment 3: Using persistence diagrams as “geometric barcodes,” compare topological signatures across visual-language, auditory-motor, and spatial-conceptual domains. Cross-domain identical Betti number features = support for the isomorphism conjecture. The bottleneck distance between persistence diagrams of different modality pair conditions provides the quantitative decision criterion.
+Experiment 4: Expert-novice comparison—do experts trained in one domain (e.g., visual-language) exhibit stronger Overlap Zone signatures in domains where they have no systematic training? This design tests whether cross-domain creative transfer operates via the universal processing structure hypothesized herein. The prediction is specific: expertise should transfer not at the level of content (visual-language experts need not know anything about music) but at the level of topological structure (the persistence profile in auditory-motor tasks should be elevated for visual-language experts relative to novices). If transfer occurs at the content level but not the structural level, the isomorphism conjecture is falsified.
+9. Discussion
+9.1 Limitations and Open Problems
+Several fundamental limitations must be acknowledged. First, the fiber bundle framework’s constitutive objects (, , ) remain at the level of candidate constructions rather than precisely determined mathematical objects. The entire three-conjecture program is contingent on advancing these definitions to proof-ready precision. Second, the pathological mirror’s empirical predictions rest on the assumption that the creativity-psychopathology spectrum can be adequately captured by a two-dimensional parameter space (coupling intensity × regulatory capacity); the true dimensionality may be higher, with additional factors such as attentional modulation, developmental history, and pharmacological state playing independent roles.
+Third, the computational architecture’s reliance on persistent homology as a differentiable training signal involves the bottleneck and the challenge of gradient propagation through discrete topological computations. While the differentiable topological layer of Hofer et al. (2019) provides a principled approach and the scalability roadmap in §6.2 outlines a staged migration path (Witness Complex, DTM filtration), scaling to production-level model sizes with millions of parameters remains unvalidated. Fourth, the ANALOGY-MM benchmark, while theoretically motivated, has not yet undergone psychometric validation—the item difficulty, discriminability, and cultural fairness of the cross-modal analogy tasks require empirical assessment. The forced-choice protocol introduced in §7.3 addresses the scalability of ETR computation but introduces its own limitations: forced-choice formats may suppress overflow errors that are themselves diagnostic of contact topology, a concern partially mitigated by the open-generation calibration subset.
+9.2 Long-Term Vision: From Architecture to Application
+If the synthetic data PoC and early behavioral experiments yield positive results, the long-term implications extend well beyond multimodal AI architecture. Protein structure prediction, for instance, currently operates within a separable representational paradigm (sequence → structure mapping). The Overlap Zone framework suggests that a class of protein function prediction tasks—those involving allosteric regulation, intrinsically disordered regions, and context-dependent conformational dynamics—may require non-separable representations of sequence, structure, and dynamics. This is a testable prediction that bridges the current framework to one of the most consequential domains in computational biology.
+Similarly, the framework has implications for scientific discovery systems that must integrate heterogeneous data sources (genomic, proteomic, metabolomic, clinical) in ways that go beyond concatenation or late fusion. If the structural insight is correct—that certain scientific questions require representations in which the information from different sources is constitutively inseparable—then the topological regularization approach may find application far beyond the creative cognition domain that motivates it. Drug discovery, for instance, increasingly requires simultaneous modeling of molecular structure, binding dynamics, cellular context, and patient-level variation—a multi-scale integration problem where the relevant information is distributed across representations that cannot be meaningfully decomposed into independent modality-specific features. Materials science presents analogous challenges, where the relationship between atomic structure, mesoscale organization, and macroscopic properties is constitutively non-separable in ways that current multi-scale simulation approaches approximate but cannot fully capture.
+9.3 Relation to Broader Debates in AI
+The contact topology diagnosis contributes to the ongoing debate about the nature of understanding in large language models. The Overlap Zone framework provides a precise structural claim: systems operating exclusively in the contact regime can exhibit impressive performance on tasks decomposable into propositional subtasks, but will systematically fail on tasks requiring the simultaneous, inseparable co-presence of propositional and non-propositional processing. This is not a claim about “consciousness” or “understanding” in the philosophical sense—it is a claim about representational topology with specific, testable computational predictions.
+9.4 Ethical Considerations
+The pathological mirror construct raises ethical considerations that must be addressed proactively. Operationalizing the creativity-psychopathology spectrum computationally—through structural tension indices and topological signatures—risks reductive treatment of clinical populations. We emphasize that the framework proposes a structural analogy (shared parameter space, different regions) rather than a clinical claim (creative people are pathological, or pathological people are creative). All neuroimaging and behavioral experiments involving clinical or at-risk populations will require institutional ethics board approval and must adhere to the highest standards of informed consent and data protection.
+10. Conclusion
+This paper identifies a structural limitation in current multimodal AI that is topological rather than parametric: the systematic suppression of non-separable cross-modal representations through training objectives and inductive biases. We term this missing representational mechanism overlap topology and propose to formalize it via connection theory on fiber bundles over the modality configuration space. By introducing the topological opposition between overlap isomorphism and superimposition collapse, the theory acquires a precise falsification condition: if highly creative individuals and those with high schizotypy exhibit topologically indistinguishable signature markers in neural representation space—i.e., and are statistically indistinguishable—the theory’s core distinction collapses.
+The computational proposal—Neural ODEs with topological regularization—directly responds to this diagnosis: not building an entirely new architecture, but designing training objectives that force existing architectures to maintain non-separable representations. The synthetic data PoC (executable within weeks) provides a low-cost entry point; the ANALOGY-MM benchmark provides an immediately deployable architectural diagnostic. The phased experimental agenda ensures that each escalation in cost and complexity is contingent on prior positive results, with explicit falsification criteria at every gate.
+What this paper truly seeks is not a new architecture for its own sake, but an empirical answer to a precise question: does there exist a class of cognitive and computational operations whose optimal performance essentially requires structurally inseparable representations? If yes, the implications for AI architecture are profound—and the pathological mirror opens new connections between computational psychiatry and multimodal AI safety. If no, the program exits cleanly at minimal cost, while contributing a precise topological vocabulary for analyzing multimodal integration strategies along the way.
+Appendix A: Precise Definitions of Core Terms
+-
+1.
+Contact Topology: A representational regime in which information from different modalities meets at low-dimensional boundaries of measure zero. The common geometric prior of current multimodal AI architectures.
+-
+2.
+Overlap Topology: A representational regime in which elements from different modalities are structurally inseparable within a shared region of non-zero interior, mutually constituting each other’s semantic content.
+-
+3.
+Overlap Zone: A cognitive processing region or representational state in which propositional and non-propositional content are simultaneously co-present and structurally inseparable.
+-
+4.
+Superimposition Collapse: The pathological mirror of the Overlap Zone—dissolution of the structural boundary between propositional and non-propositional dimensions, loss of transversality, and destruction of generative tension.
+-
+5.
+Transversality: The condition under which two subvarieties intersect while preserving each other’s local structural integrity. Overlap corresponds to transversal coupling; collapse corresponds to loss of transversality.
+-
+6.
+Creative Transformation (Chuànghuà): The meaning-emergence event co-generated by propositional and non-propositional dimensions within the Overlap Zone.
+-
+7.
+Xiàng (Operative Schema): An operative schema from the Chinese epistemological tradition—a dynamic structure that simultaneously organizes perceptual, conceptual, and procedural knowledge. Identified as a stable section within the fiber bundle framework.
+-
+8.
+Inseparability Signature: The core experimental prediction of the Overlap Zone—selective perturbation of one dimension produces semantically related synchronous covariation in the other dimension (not merely resource-competitive impairment).
+-
+9.
+Non-Separability Entropy (NS): , the Shannon entropy of squared Schmidt decomposition coefficients. NS iff is fully separable.
+-
+10.
+Structural Tension Index (): total persistence / total persistence, an operationalized indicator extracted from persistent homology.
+-
+11.
+Universal Overlap Zone Operator (UOO): An operator satisfying three conditions: (i) maintaining inseparability (NS ); (ii) bidirectional semantic coupling; (iii) cross-domain structural invariance.
+-
+12.
+Yang-Mills Three-Regime Model: Three dynamical regimes classified by : I (contact, no connection), II (overlap, ), III (collapse, ).
+-
+13.
+Dual-Threshold Model: Three-interval partition in NS-space: , , .
+-
+14.
+Shared Vulnerability Model: Carson’s (2011) framework: creativity and psychopathology share cognitive features; protective factors determine the outcome direction. Reinterpreted as a 2D parameter space (coupling intensity × regulatory capacity).
+-
+15.
+ANALOGY-MM: Cross-modal analogy evaluation benchmark. Core metric is ETR (error type ratio), detecting the “content acquired but structural mapping failed” error bias characteristic of contact topology. Scalable evaluation via 2×2 factorial forced-choice protocol (§7.3).
+-
+16.
+Dynamic Causal Modeling (DCM): A Bayesian framework for estimating effective (directed) connectivity among brain regions from fMRI data. Used in §8.3 to adjudicate among competing models of SN→DMN-ECN gating.
+-
+17.
+Granger Causality: A statistical test for directed temporal dependencies in time series. Applied to MEG source-reconstructed signals to test SN→DMN-ECN directionality at millisecond resolution (§8.3).
+-
+18.
+Witness Complex: A computationally efficient approximation to the Vietoris-Rips complex, constructed from a subset of landmark points. Enables scaling of persistent homology computation from to with (§6.2).
+-
+19.
+Cruciform Structure (shizi jiegou): The philosophical framework in which xiàng occupies the intersection of two axes: dào↔qì (vertical, metaphysical↔physical) and saying↔showing (horizontal, propositional↔presentational). §3.3 develops this structure; §5.8 provides its fiber bundle mapping.
+-
+20.
+Chuànghuà (chuanghua, Creative Transformation): The spontaneous meaning-emergence event at the saying/showing intersection. Computationally corresponds to the Neural ODE trajectory in which non-trivial topology dynamically emerges.
+-
+21.
+Huàcái (huacai, Institutional Cutting): The systematization of chuànghuà into repeatable, transmissible form. Computationally corresponds to the frozen parameters encoding the learned connection.
+-
+22.
+META-TOP (Metaphor-Topology): Three-tier benchmark extending ANALOGY-MM. Tests progressively deeper cross-modal topological understanding, from structural mapping (L1) through dynamical pattern recognition (L2) to cross-civilizational topological isomorphism (L3). Core metric: TSAS (Topological Structural Alignment Score).
+References
+Acar, S., & Sen, S. (2013). A multilevel meta-analysis of the relationship between creativity and schizotypy. Psychology of Aesthetics, Creativity, and the Arts, 7(3), 214–228.
+Adams, R. A., Stephan, K. E., Brown, H. R., Frith, C. D., & Friston, K. J. (2013). The computational anatomy of psychosis. Frontiers in Psychiatry, 4, 47.
+Alayrac, J.-B., Donahue, J., Luc, P., Miech, A., Barr, I., Hasson, Y., …, & Simonyan, K. (2022). Flamingo: A visual language model for few-shot learning. NeurIPS, 35.
+Alon, U., & Yahav, E. (2021). On the bottleneck of graph neural networks and its practical implications. Proceedings of ICLR.
+Anai, H., Chazal, F., Glisse, M., Ike, Y., Inakoshi, H., Tinarrage, R., & Umeda, Y. (2020). DTM-based filtrations. In Topological Data Analysis (pp. 33–66). Springer.
+Anticevic, A., Cole, M. W., Murray, J. D., Corlett, P. R., Wang, X.-J., & Krystal, J. H. (2012). The role of default network deactivation in cognition and disease. Trends in Cognitive Sciences, 16(12), 584–592.
+Bauer, U. (2021). Ripser: Efficient computation of Vietoris-Rips persistence barcodes. Journal of Applied and Computational Topology, 5, 391–423.
+Beaty, R. E., Kenett, Y. N., Christensen, A. P., Rosenberg, M. D., Benedek, M., Chen, Q., Fink, A., Qiu, J., Kwapil, T. R., Kane, M. J., & Silvia, P. J. (2018). Robust prediction of individual creative ability from brain functional connectivity. PNAS, 115(5), 1087–1092.
+Beaty, R. E., Seli, P., & Schacter, D. L. (2019). Network neuroscience of creative cognition. Current Opinion in Behavioral Sciences, 27, 22–30.
+Belting, H. (2011). An Anthropology of Images: Picture, Medium, Body. Princeton University Press.
+Benedek, M., & Fink, A. (2019). Toward a neurocognitive framework of creative cognition. Current Opinion in Behavioral Sciences, 27, 116–122.
+Boehm, G. (1994). Die Wiederkehr der Bilder. In G. Boehm (Ed.), Was ist ein Bild? (pp. 11–38). Fink.
+Bronstein, M. M., Bruna, J., Cohen, T., & Veličković, P. (2021). Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges. arXiv:2104.13478.
+Carrière, M., Chazal, F., & Ike, Y. (2020). PersLay: A neural network layer for persistence diagrams. Proceedings of AISTATS.
+Carson, S. H. (2011). Creativity and psychopathology: A shared vulnerability model. Canadian Journal of Psychiatry, 56(3), 144–153.
+Cohen, T. S., Weiler, M., Kicanaoglu, B., & Welling, M. (2019). Gauge equivariant convolutional networks. Proceedings of ICML.
+de Silva, V., & Carlsson, G. (2004). Topological estimation using witness complexes. In Symposium on Point-Based Graphics (pp. 157–166). Eurographics.
+Di Giovanni, F., Rowbottom, J., Chamberlain, B. P., Dong, X., & Bronstein, M. M. (2023). Understanding convolution on graphs via energies. Transactions on Machine Learning Research.
+Edelsbrunner, H., & Harer, J. (2010). Computational Topology: An Introduction. AMS.
+Eells, J., & Sampson, J. H. (1964). Harmonic mappings of Riemannian manifolds. American Journal of Mathematics, 86(1), 109–160.
+Evans, R. (1997). Translations from Drawing to Building and Other Essays. MIT Press.
+Gentner, D. (1983). Structure-mapping: A theoretical framework for analogy. Cognitive Science, 7(2), 155–170.
+Gilmer, J., Schoenholz, S. S., Riley, P. F., Vinyals, O., & Dahl, G. E. (2017). Neural message passing for quantum chemistry. Proceedings of ICML.
+Hofer, C., Kwitt, R., Niethammer, M., & Uhl, A. (2019). Deep learning with topological signatures. NeurIPS, 32.
+Horodecki, R., Horodecki, P., Horodecki, M., & Horodecki, K. (2009). Quantum entanglement. Reviews of Modern Physics, 81(2), 865–942.
+Jia, C., Yang, Y., Xia, Y., Chen, Y.-T., Parekh, Z., Pham, H., …, & Duerig, T. (2021). Scaling up visual and vision-language representation learning with noisy text supervision. Proceedings of ICML.
+Jost, J. (2017). Riemannian Geometry and Geometric Analysis (7th ed.). Springer.
+Jullien, F. (1995). The Propensity of Things: Toward a History of Efficacy in China. Zone Books.
+Kyaga, S., Lichtenstein, P., Boman, M., Hultman, C., Långström, N., & Landén, M. (2011). Creativity and mental disorder. British Journal of Psychiatry, 199(5), 373–379.
+Lake, B. M., Salakhutdinov, R., & Tenenbaum, J. B. (2015). Human-level concept learning through probabilistic program induction. Science, 350(6266), 1332–1338.
+Menon, V. (2011). Large-scale brain networks and psychopathology: A unifying triple network model. Trends in Cognitive Sciences, 15(10), 483–506.
+Mitchell, W. J. T. (1994). Picture Theory: Essays on Verbal and Visual Representation. University of Chicago Press.
+Moor, M., Horn, M., Rieck, B., & Borgwardt, K. (2020). Topological Autoencoders. Proceedings of ICML.
+Ngiam, J., Khosla, A., Kim, M., Nam, J., Lee, H., & Ng, A. Y. (2011). Multimodal deep learning. Proceedings of ICML.
+OpenAI. (2023). GPT-4 Technical Report. arXiv:2303.08774.
+Palaniyappan, L., & Liddle, P. F. (2012). Does the salience network play a cardinal role in psychosis? Journal of Psychiatry & Neuroscience, 37(1), 17–27.
+Petri, G., Expert, P., Turkheimer, F., Carhart-Harris, R., Nutt, D., Hellyer, P. J., & Vaccarino, F. (2014). Homological scaffolds of brain functional networks. Journal of the Royal Society Interface, 11(101), 20140873.
+Radford, A., Kim, J. W., Hallacy, C., Ramesh, A., Goh, G., Agarwal, S., …, & Sutskever, I. (2021). Learning transferable visual models from natural language supervision. Proceedings of ICML.
+Ramesh, A., Dhariwal, P., Nichol, A., Chu, C., & Chen, M. (2022). Hierarchical text-conditional image generation with CLIP latents. arXiv:2204.06125.
+Saggar, M., Sporns, O., Gonzalez-Castillo, J., Bandettini, P. A., Carlsson, G., Glover, G., & Reiss, A. L. (2018). Towards a new approach to reveal dynamical organization of the brain using topological data analysis. Nature Communications, 9, 1399.
+Saharia, C., Chan, W., Saxena, S., Li, L., Whang, J., Denton, E. L., …, & Norouzi, M. (2022). Photorealistic text-to-image diffusion models with deep language understanding. NeurIPS, 35.
+Stephan, K. E., Penny, W. D., Daunizeau, J., Moran, R. J., & Friston, K. J. (2009). Bayesian model selection for group studies. NeuroImage, 46(4), 1004–1017.
+Stolz, B. J., Harrington, H. A., & Porter, M. A. (2017). Persistent homology of time-dependent functional networks. Chaos, 27(4), 047410.
+Tan, X. (2008). Illustrating Architectonics: Pictorial Philosophy in Architectural Perspectives [Doctoral dissertation]. South China University of Technology.
+Tan, X. (2026). Jiaodiequ Tonggou Xing yu Tongyong Jiaodiequ Suanzi（quanwen xiuding ban）[Overlap Zone Isomorphism and the UOO]. Unpublished companion manuscript.
+Tan, X. (2026b). Jiaodiequ Tonggou Xing [Overlap Zone Isomorphism: On the Creative-Transformative Zone of Image]. Unpublished companion monograph.
+Taylor, C. L. (2017). Creativity and mood disorder: A systematic review and meta-analysis. Perspectives on Psychological Science, 12(6), 1040–1076.
+Team Gemini. (2024). Gemini: A family of highly capable multimodal models. arXiv:2312.11805.
+Topping, J., Di Giovanni, F., Chamberlain, B. P., Dong, X., & Bronstein, M. M. (2022). Understanding over-squashing and bottlenecks on graphs via curvature. Proceedings of ICLR.
+Weiler, M., & Cesa, G. (2019). General E(2)-equivariant steerable CNNs. NeurIPS, 32.
+Whitfield-Gabrieli, S., & Ford, J. M. (2012). Default mode network activity and connectivity in psychopathology. Annual Review of Clinical Psychology, 8, 49–76.
+Wittgenstein, L. (1921). Tractatus Logico-Philosophicus. Kegan Paul.
+This paper is a working draft. The mathematical sections (§5) require elevation to the precision needed for mathematicians to initiate formal work; the computational sections (§6) await implementation and validation; the experimental sections (§8) require ethical approval and pilot testing. We warmly welcome collaborators from all three pillar domains.
+Correspondence: Guangzhou Academy of Fine Arts
+
+KAYNAK : https://arxiv.org/abs/2604.04465

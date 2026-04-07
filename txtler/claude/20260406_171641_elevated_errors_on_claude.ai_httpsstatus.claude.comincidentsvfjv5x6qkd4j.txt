@@ -1,4 +1,3 @@
---- claude | Elevated errors on Claude.ai | score=54.29 ---
 Apr
 6
 ,
@@ -36,22 +35,3 @@ Identified
 - We have identified an issue resulting in elevated errors on Claude.ai, including desktop and mobile. Users may experience errors when attempting to login, engaging with voice mode, or completing chats with Claude. We are working to resolve this issue as soon as possible.
 
 KAYNAK : https://status.claude.com/incidents/vfjv5x6qkd4j
-
---- claude | Sonnet 4.6 elevated rate of errors | score=41.96 ---
-Apr
-6
-,
-21:45
-UTC
-Resolved
-- This incident has been resolved.
-Apr
-6
-,
-21:26
-UTC
-Investigating
-- We are currently investigating this issue.
-
-KAYNAK : https://status.claude.com/incidents/xmqkb966qt1h
-

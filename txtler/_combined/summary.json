@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-04-06T08:45:00.203305+00:00",
-  "cutoff_utc": "2026-04-05T08:45:00.203305+00:00",
+  "generated_at_utc": "2026-04-07T08:19:40.896893+00:00",
+  "cutoff_utc": "2026-04-06T08:19:40.896893+00:00",
   "max_keep_per_site": 5,
   "all_combined": "txtler/_combined/all_last24h.txt",
   "sites": {
@@ -14,8 +14,8 @@
     },
     "nextjs": {
       "feed": "https://github.com/vercel/next.js/releases.atom",
-      "saved_initial_count": 1,
-      "kept_after_top5": 1,
+      "saved_initial_count": 3,
+      "kept_after_top5": 3,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/nextjs",
       "site_combined": "txtler/_combined/nextjs_last24h.txt"
@@ -46,16 +46,16 @@
     },
     "claude": {
       "feed": "https://status.claude.com/history.rss",
-      "saved_initial_count": 0,
-      "kept_after_top5": 0,
+      "saved_initial_count": 2,
+      "kept_after_top5": 2,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/claude",
       "site_combined": "txtler/_combined/claude_last24h.txt"
     },
     "openai": {
       "feed": "https://openai.com/news/rss.xml",
-      "saved_initial_count": 0,
-      "kept_after_top5": 0,
+      "saved_initial_count": 1,
+      "kept_after_top5": 1,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/openai",
       "site_combined": "txtler/_combined/openai_last24h.txt"
@@ -78,16 +78,16 @@
     },
     "arxiv_ai": {
       "feed": "https://rss.arxiv.org/rss/cs.AI",
-      "saved_initial_count": 248,
+      "saved_initial_count": 492,
       "kept_after_top5": 5,
-      "removed_due_to_top5": 243,
+      "removed_due_to_top5": 487,
       "site_folder": "txtler/arxiv_ai",
       "site_combined": "txtler/_combined/arxiv_ai_last24h.txt"
     },
     "mit_ai": {
       "feed": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
-      "saved_initial_count": 0,
-      "kept_after_top5": 0,
+      "saved_initial_count": 2,
+      "kept_after_top5": 2,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/mit_ai",
       "site_combined": "txtler/_combined/mit_ai_last24h.txt"

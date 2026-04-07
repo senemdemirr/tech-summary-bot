@@ -1,15 +1,69 @@
---- nextjs | v16.2.1-canary.21 | score=42.61 ---
+--- nextjs | v16.2.1-canary.24 | score=52.12 ---
+Core Changes
+chore: Upgrade to pnpm 10.x:
+#92283
+fix(server-hmr): metadata routes overwrite page runtime HMR handler:
+#92273
+Turbopack: Add a check for node version before allowing workerThreads:
+#91614
 Misc Changes
-next-core: deduplicate output assets and detect content conflicts on emit:
-#92292
-docs: add deploy tests documentation to contributing guide:
-#92388
+turbo-persistence: optimize file syncing:
+#90542
+Bump turborepo from 2.8.11 to 2.9.4:
+#92425
+Turbopack: Remove
+turbo_tasks::apply_effects
+, use
+Effects::apply
+instead:
+#91858
 Credits
 Huge thanks to
-@sokra
-and
-@ztanner
+@bgw
+,
+@wbinnssmith
+, and
+@lukesandberg
 for helping!
 
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.21
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.24
+
+--- nextjs | v16.2.1-canary.23 | score=47.19 ---
+Core Changes
+Allow for parsing app route strings with and without slot names.:
+#92327
+Misc Changes
+use sorted inserts to improve builder performance:
+#91553
+[tests]: remove unnecessary skipDeployment flags:
+#92423
+Credits
+Huge thanks to
+@lukesandberg
+,
+@ztanner
+, and
+@gnoff
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.23
+
+--- nextjs | v16.2.1-canary.22 | score=36.71 ---
+Core Changes
+Handle edge runtime in places that import node:stream:
+#92354
+fix: add AGENTS.md at package root for agent discovery:
+#92376
+Fix fallback route params case in app-page handler:
+#91737
+Credits
+Huge thanks to
+@timneutkens
+,
+@aurorascharff
+, and
+@ijjk
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.22
 

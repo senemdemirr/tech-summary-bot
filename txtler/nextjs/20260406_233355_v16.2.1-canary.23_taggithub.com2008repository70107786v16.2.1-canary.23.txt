@@ -1,0 +1,18 @@
+Core Changes
+Allow for parsing app route strings with and without slot names.:
+#92327
+Misc Changes
+use sorted inserts to improve builder performance:
+#91553
+[tests]: remove unnecessary skipDeployment flags:
+#92423
+Credits
+Huge thanks to
+@lukesandberg
+,
+@ztanner
+, and
+@gnoff
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.23

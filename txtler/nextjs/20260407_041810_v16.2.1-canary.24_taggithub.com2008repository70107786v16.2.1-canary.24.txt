@@ -1,0 +1,28 @@
+Core Changes
+chore: Upgrade to pnpm 10.x:
+#92283
+fix(server-hmr): metadata routes overwrite page runtime HMR handler:
+#92273
+Turbopack: Add a check for node version before allowing workerThreads:
+#91614
+Misc Changes
+turbo-persistence: optimize file syncing:
+#90542
+Bump turborepo from 2.8.11 to 2.9.4:
+#92425
+Turbopack: Remove
+turbo_tasks::apply_effects
+, use
+Effects::apply
+instead:
+#91858
+Credits
+Huge thanks to
+@bgw
+,
+@wbinnssmith
+, and
+@lukesandberg
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.24
