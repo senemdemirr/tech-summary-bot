@@ -1,4 +1,3 @@
---- dotnet | Your Migration’s Source of Truth: The Modernization Assessment | score=92.25 ---
 I’ve been exploring
 GitHub Copilot’s modernization
 capabilities for .NET and Java applications, and I wanted to share what I’ve learned about the most critical piece of the puzzle: the assessment document.
@@ -262,49 +261,3 @@ appeared first on
 .
 
 KAYNAK : https://devblogs.microsoft.com/dotnet/your-migrations-source-of-truth-the-modernization-assessment/
-
---- dotnet | ASP.NET Core 2.3 end of support announcement | score=80.78 ---
-Today we are announcing that ASP.NET Core 2.3 will reach
-end of support on April 7, 2027
-. After that date, Microsoft will no longer provide security patches, bug fixes, or technical support for ASP.NET Core 2.3.
-This announcement provides the required 12 months of advance notice, as defined by the
-Microsoft Support Lifecycle Policy
-for products classified as “Tools.”
-Current support policy
-ASP.NET Core 2.3 packages (latest patched version only) are currently
-supported
-on .NET Framework, following the support cycle for those .NET Framework versions. After April 7, 2027, this support will end regardless of the .NET Framework version in use.
-Note that the
-ASP.NET Core 2.3 packages
-include the Entity Framework 2.3 packages, which will end support on the same date.
-Impact of end of support
-After ASP.NET Core 2.3 reaches end of support:
-Your applications
-will continue to run
-. End of support does not break existing applications.
-No new security updates will be issued for ASP.NET Core 2.3.
-Continuing to use an unsupported version may expose your applications to security vulnerabilities.
-Technical support will no longer be available for ASP.NET Core 2.3.
-The ASP.NET Core 2.3 packages will be deprecated.
-Upgrade recommendation
-We understand that upgrading is an investment, and we want to make the process as smooth as possible. Modern versions of .NET offer significant improvements in performance, security, and developer productivity that make the upgrade well worth the effort.
-We recommend upgrading to a
-currently supported version of .NET
-, such as .NET 10 (LTS).
-To help with the upgrade process, we recommend using
-GitHub Copilot modernization
-, which provides AI-powered assistance to help you analyze, plan, and execute your migration to a modern .NET version.
-Resources
-ASP.NET Core Support Policy
-GitHub Copilot modernization
-Migrate from ASP.NET to ASP.NET Core
-Closing
-ASP.NET Core 2.3 will reach end of support on April 7, 2027. We strongly recommend starting your migration to a supported version of .NET today, leveraging tools like GitHub Copilot modernization to facilitate the process. If you have any questions or need assistance, please reach out to us through our support channels.
-The post
-ASP.NET Core 2.3 end of support announcement
-appeared first on
-.NET Blog
-.
-
-KAYNAK : https://devblogs.microsoft.com/dotnet/aspnet-core-2-3-end-of-support/
-

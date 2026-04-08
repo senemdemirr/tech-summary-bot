@@ -1,0 +1,23 @@
+Apr
+8
+,
+07:59
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+Apr
+8
+,
+07:06
+UTC
+Update
+- We are continuing to investigate this issue.
+Apr
+8
+,
+06:23
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/lhws0phdvzz3
