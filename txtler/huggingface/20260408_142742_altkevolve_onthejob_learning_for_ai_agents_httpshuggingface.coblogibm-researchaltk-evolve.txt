@@ -1,4 +1,3 @@
---- huggingface | ALTK‑Evolve: On‑the‑Job Learning for AI Agents | score=80.10 ---
 ALTK‑Evolve: On‑the‑Job Learning for AI Agents
 TL;DR
 - Most AI agents re‑read transcripts instead of learning principles, so they repeat mistakes and don’t transfer lessons to new situations.
@@ -53,4 +52,3 @@ Star the repo, it helps others discover the project and directly guides what we 
 - Feedback & ideas: Open a GitHub issue or join the discussions — concrete use cases, benchmarks, and integration requests are especially helpful.
 
 KAYNAK : https://huggingface.co/blog/ibm-research/altk-evolve
-

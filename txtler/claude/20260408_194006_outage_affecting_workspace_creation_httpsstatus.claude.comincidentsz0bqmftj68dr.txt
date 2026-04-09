@@ -1,0 +1,24 @@
+Apr
+8
+,
+19:40
+UTC
+Resolved
+- The issue affecting API workspace creation has been resolved. Impact occurred from approximately 4:15 PM to 7:30 PM UTC.
+Apr
+8
+,
+19:28
+UTC
+Monitoring
+- A fix has been deployed for the issue affecting API workspace creation and we are monitoring for recovery.
+Apr
+8
+,
+19:22
+UTC
+Investigating
+- We are investigating errors related to creating workspaces via the Claude Console at platform.claude.com and via the admin API
+Other functionality including inference and the messages API is not impacted
+
+KAYNAK : https://status.claude.com/incidents/z0bqmftj68dr

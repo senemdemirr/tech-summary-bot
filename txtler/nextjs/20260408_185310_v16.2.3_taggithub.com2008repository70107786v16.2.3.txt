@@ -1,0 +1,38 @@
+Note
+This release is backporting security and bug fixes. For more information about the fixed security vulnerability, please see
+https://vercel.com/changelog/summary-of-cve-2026-23869
+. The release does
+not
+include all pending features/changes on canary.
+Core Changes
+Ensure app-page reports stale ISR revalidation errors via onRequestError (
+#92282
+)
+Fix [Bug]: manifest.ts breaks HMR in Next.js 16.2 (
+#91981
+through
+#92273
+)
+Deduplicate output assets and detect content conflicts on emit (
+#92292
+)
+Fix styled-jsx race condition: styles lost due to concurrent rendering (
+#92459
+)
+turbo-tasks-backend: stability fixes for task cancellation and error handling (
+#92254
+)
+Credits
+Huge thanks to
+@icyJoseph
+,
+@sokra
+,
+@wbinnssmith
+,
+@eps1lon
+and
+@ztanner
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.3

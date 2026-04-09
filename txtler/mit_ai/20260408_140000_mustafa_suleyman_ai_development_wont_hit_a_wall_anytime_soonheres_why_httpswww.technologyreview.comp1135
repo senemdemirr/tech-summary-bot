@@ -1,4 +1,3 @@
---- mit_ai | Mustafa Suleyman: AI development won’t hit a wall anytime soon—here’s why | score=71.32 ---
 We evolved for a linear world. If you walk for an hour, you cover a certain distance. Walk for two hours and you cover double that distance. This intuition served us well on the savannah. But it catastrophically fails when confronting AI and the core exponential trends at its heart.
 From the time I began work on AI in 2010 to now, the amount of training data that goes into frontier AI models has grown by a staggering 1 trillion times—from roughly 10¹⁴ flops (floating-point operations‚ the core unit of computation) for early systems to over 10²⁶ flops for today’s largest models. This is an explosion. Everything else in AI follows from this fact.
 The skeptics keep predicting walls. And they keep being wrong in the face of this epic generational compute ramp. Often, they point out that Moore’s Law is slowing. They also mention a lack of data, or they cite limitations on energy.
@@ -37,4 +36,3 @@ Skeptics accustomed to a linear world will continue predicting diminishing retur
 Mustafa Suleyman is CEO of Microsoft AI.
 
 KAYNAK : https://www.technologyreview.com/2026/04/08/1135398/mustafa-suleyman-ai-future/
-

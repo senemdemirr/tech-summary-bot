@@ -1,0 +1,31 @@
+<div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
+  <h1>CURE: LLM Tabanlı Tavsiye Sistemleri için Devre Farkındalıklı Unlearning</h1>
+  <p>Son yıllarda büyük dil modellerinde (LLM) kaydedilen ilerlemeler, kullanıcı ilgi alanları ve öğe nitelikleri hakkında zengin semantik anlayış ve akıl yürütme yetenekleri sayesinde tavsiye sistemleri için yeni fırsatlar sunmaktadır. Ancak, gizlilik düzenlemeleri sıkılaştıkça, kullanıcı verilerini LLM tabanlı tavsiye sistemlerine (LLMRec) entegre etmek önemli gizlilik riskleri doğurmakta ve unlearning algoritmalarını pratik uygulamalar için giderek daha önemli hale getirmektedir.</p>
+  <p>Mevcut unlearning yaklaşımlarının çoğu, unlearning işlemini unutma ve koruma hedeflerinin ağırlıklı bir kombinasyonu olarak formüle ederken, model parametrelerini tekdüze bir şekilde güncellemektedir. Bu tür formülasyonlar, iki hedef arasında kaçınılmaz olarak gradyan çatışmalarına yol açmakta, bu da kararsız optimizasyona ve ya etkisiz unlearning ya da model faydasında ciddi bozulmalara neden olmaktadır. Ayrıca, unlearning süreci büyük ölçüde kara kutu olarak kalmakta, bu da şeffaflığını ve güvenilirliğini zayıflatmaktadır.</p>
+  
+  <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
+  <p>CURE, LLM tabanlı tavsiye sistemlerinde unlearning işlemlerini daha etkili hale getirmek için devre farkındalıklı bir çerçeve sunmaktadır. Bu yaklaşım, model bileşenlerini işlevsel olarak farklı alt gruplara ayırarak ve seçici olarak güncelleyerek gradyan çatışmalarını hafifletmeyi amaçlamaktadır. CURE, öğe tavsiyesi için temel devreleri çıkarır ve bu devrelerdeki bireysel modüllerin unutma ve koruma hedeflerine nasıl katkıda bulunduğunu analiz eder. Bu analiz temelinde, modüller unutma-özgü, koruma-özgü ve görev-paylaşımlı gruplar olarak kategorize edilir ve gradyan çatışmalarını hafifletmek için işlev-özgü güncelleme kurallarına tabi tutulur.</p>
+  
+  <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
+  <p>CURE, unlearning işlemlerini iki aşamada ele alır: kritik devre çıkarımı ve görev-özgü parametre güncellemesi. İlk aşamada, modelin içsel hesaplama yollarını lokalize etmek için gradyan tabanlı bir analiz kullanılır. Uzun giriş istemleri altında bu devreleri hassas bir şekilde tanımlamak için kullanıcı-öğe grafiği kullanılır ve etkili modüller kontrastif aktivasyon analizi ile tespit edilir. İkinci aşamada, belirlenen devreler boyunca modüller işlevsel rollerine göre kategorize edilir ve seçici olarak güncellenir.</p>
+  
+  <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
+  <p>CURE, LLM tabanlı tavsiye sistemleri geliştiren ve kullanan araştırmacılar ve mühendisler için önemli bir araçtır. Gizlilik düzenlemelerine uyum sağlamak isteyen şirketler, kullanıcı verilerini daha güvenli bir şekilde yönetebilir ve unlearning işlemlerini daha etkili hale getirebilir. Ayrıca, bu yaklaşım, tavsiye sistemlerinin genel performansını korurken, kullanıcı verilerinin etkili bir şekilde kaldırılmasını sağlar.</p>
+  
+  <h2>Kısa Özet</h2>
+  <ul>
+    <li>CURE, devre farkındalıklı bir unlearning çerçevesi sunar.</li>
+    <li>Model bileşenlerini işlevsel olarak ayırarak gradyan çatışmalarını hafifletir.</li>
+    <li>İki aşamalı bir süreçle kritik devreleri çıkarır ve günceller.</li>
+    <li>Unlearning işlemlerinde daha fazla şeffaflık ve güvenilirlik sağlar.</li>
+    <li>Gizlilik düzenlemelerine uyum sağlamak isteyenler için önemli bir araçtır.</li>
+  </ul>
+  
+  <p>Metin, eğitmenler ve bakış açıları veya sınırlamalar ve belirsizlikler gibi konularda detay vermiyor.</p>
+  
+  <h2>Kapanış</h2>
+  <p>CURE, LLM tabanlı tavsiye sistemlerinde unlearning işlemlerini daha etkili hale getiren devre farkındalıklı bir çerçeve sunarak gradyan çatışmalarını hafifletir. Bu çerçeve, gizlilik düzenlemelerine uyum sağlamak isteyenler için önemli bir araçtır ve tavsiye sistemlerinin genel performansını korurken, kullanıcı verilerinin etkili bir şekilde kaldırılmasını sağlar.</p>
+
+  <h2>Kaynak</h2>
+  <p>Detaylı okumak için: <a href="https://arxiv.org/abs/2604.04982" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2604.04982</a></p>
+</div>

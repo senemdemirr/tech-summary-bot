@@ -1,82 +1,159 @@
---- nextjs | v16.2.1-canary.26 | score=51.95 ---
+--- nextjs | v16.2.1-canary.27 | score=66.14 ---
 Core Changes
-next-routing: middleware matching and app request URL normalization:
-#91859
-docs: clarify serverless runtime behavior for use cache:
-#92232
+fix: mention params and searchParams in blocking-route error messages:
+#92360
+CPU prof: Write profiles to .next-profiles instead of .next/cpu-profiles:
+#92078
+feat: generate root params types:
+#91019
+fix: resolve function configs in unstable_getResponseFromNextConfig:
+#92501
+Bundle skills/ directory into next/dist/skills:
+#92493
+Node.js streams: Fork points:
+#92252
+fix: replace docs/canary links with stable docs paths in error messages:
+#92528
 Misc Changes
-Adding more system info to the 'initialize project' trace:
-#92427
-CI: Update and cleanup next-stats-action, force using pnpm 10.33.0:
-#92475
-turbo-persistence: Use AtomicBool for is_empty() to avoid lock contention:
-#92481
+CI: Remove unused dependencies from next-stats-action dockerfile:
+#92485
+docs: add note on React canary version to View transitions guide:
+#92315
+docs: note PPR default in cacheComponents reference:
+#92378
+Upgrade swc_core 57 -> 58, swc_sourcemap 9 -> 10, swc_plugin_runner 24 -> 25:
+#91532
+docs: instant-navs draft, samples for build validation:
+#91850
+docs: add middleware.mdx deprecation stub for discoverability:
+#92281
+docs: improve blocking-route error page for params discoverability:
+#92359
+docs: clarify cacheLife() cannot be called at module scope:
+#92326
+perf: use whole_app_module_graph for get_compilation_issues MCP tool:
+#92473
+Turbopack: Write trace file to .next-profiles:
+#92189
+Update Rspack development test manifest:
+#92502
+Update Rspack production test manifest:
+#92503
+CI: Use pnpm lockfile for next-stats-action:
+#92488
+docs: add note on installing
+server-only
+in data security guide:
+#92445
+CI: Use minimumReleaseAge in pnpm workspace files:
+#92480
 Credits
 Huge thanks to
-@ijjk
-,
-@andrewimm
-,
 @bgw
 ,
-@wwenrr
-, and
-@lukesandberg
-for helping!
-
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.26
-
---- nextjs | v16.2.1-canary.25 | score=47.77 ---
-Core Changes
-Include more context in macOS Rosetta 2 warning message:
-#92436
-change the process name of builds:
-#92411
-Fix styled-jsx race condition: styles lost due to concurrent rendering:
-#92459
-turbo-tasks: fix hashed cell mode crash on task error (re-land
-#91576
-):
-#92108
-Optimize how we track data for persistence:
-#89370
-Route Handlers: Fix devRequestTimingInternalsEnd and Turbopack server HMR:
-#92271
-Misc Changes
-turbo-persistence: skip BlockCache for uncompressed (mmap-backed) blocks:
-#92390
-docs: clarify that proxy/middleware matches static assets by default:
-#92441
-turbo-persistence: pin referenced BlockCache entries to prevent eviction:
-#92361
-[test] Skip flaky
-client-cache.parallel-routes
-in production and deploy:
-#92195
-Fix sst inspect tool to respect
-CURRENT
-and stale sst files:
-#92414
-[turbopack] add family name to many spans:
-#92415
-scripts/pr-status: add reply-and-resolve-thread command:
-#92450
-[test] Regenerate checked-in tsconfig.json files:
-#92455
-Credits
-Huge thanks to
-@sokra
-,
-@bgw
+@aurorascharff
 ,
 @lukesandberg
 ,
 @icyJoseph
 ,
-@eps1lon
+@timneutkens
+,
+@sokra
+,
+@vercel-release-bot
+,
+@abhishekmardiya
+,
+@bgub
+,
+@TooTallNate
 , and
-@wbinnssmith
+@gaojude
 for helping!
 
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.25
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.27
+
+--- nextjs | v16.2.3 | score=55.41 ---
+Note
+This release is backporting security and bug fixes. For more information about the fixed security vulnerability, please see
+https://vercel.com/changelog/summary-of-cve-2026-23869
+. The release does
+not
+include all pending features/changes on canary.
+Core Changes
+Ensure app-page reports stale ISR revalidation errors via onRequestError (
+#92282
+)
+Fix [Bug]: manifest.ts breaks HMR in Next.js 16.2 (
+#91981
+through
+#92273
+)
+Deduplicate output assets and detect content conflicts on emit (
+#92292
+)
+Fix styled-jsx race condition: styles lost due to concurrent rendering (
+#92459
+)
+turbo-tasks-backend: stability fixes for task cancellation and error handling (
+#92254
+)
+Credits
+Huge thanks to
+@icyJoseph
+,
+@sokra
+,
+@wbinnssmith
+,
+@eps1lon
+and
+@ztanner
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.3
+
+--- nextjs | v16.2.1-canary.29 | score=51.56 ---
+Core Changes
+Turbopack: switch from immutable token to path prefix:
+#92164
+[build info]: distinguish between PPR and fully static routes in gSP:
+#92518
+[build info]: omit symbol from top level gSP route:
+#92525
+Misc Changes
+CI: Fix issue with conflicting 'engines.pnpm' field in next-stats-action:
+#92533
+Exclude use tests from react18 testing:
+#92542
+Fix React18 tests for unstable_io:
+#92543
+Credits
+Huge thanks to
+@bgw
+,
+@mischnic
+,
+@gnoff
+, and
+@ztanner
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.29
+
+--- nextjs | v15.5.15 | score=44.61 ---
+Please refer the following changelogs for more information about this security release:
+https://vercel.com/changelog/summary-of-cve-2026-23869
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v15.5.15
+
+--- nextjs | v16.2.1-canary.28 | score=43.06 ---
+We read every piece of feedback, and take your input very seriously.
+To see all available qualifiers, see our documentation.
+cd01ca9
+There was an error while loading. Please reload this page.
+v16.2.1-canary.28
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.28
 

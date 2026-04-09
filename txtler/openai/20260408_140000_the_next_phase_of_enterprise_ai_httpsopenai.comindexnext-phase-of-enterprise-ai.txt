@@ -1,5 +1,3 @@
---- openai | The next phase of enterprise AI | score=36.71 ---
 OpenAI outlines the next phase of enterprise AI, as adoption accelerates across industries with Frontier, ChatGPT Enterprise, Codex, and company-wide AI agents.
 
 KAYNAK : https://openai.com/index/next-phase-of-enterprise-ai
-

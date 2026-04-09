@@ -1,0 +1,4 @@
+Please refer the following changelogs for more information about this security release:
+https://vercel.com/changelog/summary-of-cve-2026-23869
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v15.5.15

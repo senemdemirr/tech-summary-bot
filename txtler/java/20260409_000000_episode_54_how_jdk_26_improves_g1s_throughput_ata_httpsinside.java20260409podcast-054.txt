@@ -1,4 +1,3 @@
---- java | Episode 54 “How JDK 26 Improves G1’s Throughput” [AtA] | score=69.28 ---
 G1 is Java’s default garbage collector in most environments, and its throughput has been considerably improved in JDK 26 by streamlining its write barriers. This conversation explores the background of that change and dives deep into regions, write barriers, concurrent marking, card tables, and how all that impacts throughput before eventually getting to the improvements made in Java 26, which lay further groundwork to G1 becoming the one and only default collector across
 all
 environments.
@@ -28,4 +27,3 @@ here
 .
 
 KAYNAK : https://inside.java/2026/04/09/podcast-054/
-
