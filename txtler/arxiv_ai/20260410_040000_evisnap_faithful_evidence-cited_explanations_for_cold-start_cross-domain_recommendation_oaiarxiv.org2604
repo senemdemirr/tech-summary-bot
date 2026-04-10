@@ -1,0 +1,157 @@
+EviSnap: Faithful Evidence-Cited Explanations for Cold-Start Cross-Domain Recommendation
+Abstract
+Cold-start cross-domain recommender (CDR) systems predict a user’s preferences in a target domain using only their source-domain behavior, yet existing CDR models either map opaque embeddings or rely on post-hoc or LLM-generated rationales that are hard to audit. We introduce EviSnap, a lightweight CDR framework whose predictions are explained by construction with evidence-cited, faithful rationales. EviSnap distills noisy reviews into compact facet cards using an LLM offline, pairing each facet with verbatim supporting sentences. It then induces a shared, domain-agnostic concept bank by clustering facet embeddings and computes user-positive, user-negative, and item-presence concept activations via evidence-weighted pooling. A single linear concept-to-concept map transfers users across domains, and a linear scoring head yields per-concept additive contributions, enabling exact score decompositions and counterfactual ’what-if’ edits grounded in the cited sentences. Experiments on the Amazon Reviews dataset across six transfers among Books, Movies, and Music show that EviSnap consistently outperforms strong mapping and review-text baselines while passing deletion- and sufficiency-based tests for explanation faithfulness.
+EviSnap: Faithful Evidence-Cited Explanations for Cold-Start Cross-Domain Recommendation
+Yingjun Dai Carleton University ON, Canada yingjundai@cmail.carleton.ca Ahmed El-Roby Carleton University ON, Canada ahmed.elroby@carleton.ca
+1 Introduction
+Real-world recommender systems frequently face cold-start users: people with interaction history in one domain (e.g., Movies) but none in a target domain (e.g., Music or Books). Cold-start cross-domain recommendation (CDR) tackles this by transferring preferences from a source domain to a target domain (Fernández-Tobías et al., 2012; Khan et al., 2017; Zang et al., 2022). However, most CDR systems remain hard to audit. Mapping-based methods learn a transfer function between latent user embeddings and scale well (Man et al., 2017; Hu et al., 2018; Zhu et al., 2022), but the transferred signal is opaque: the model cannot clearly state what preferences were moved or why a target item is recommended. Review-aware models often improve accuracy by encoding text (Zheng et al., 2017; Tay et al., 2018), yet their explanations are typically post-hoc (e.g., attention/highlight rationales) and may not reflect the actual scoring function (Jain and Wallace, 2019; Wiegreffe and Pinter, 2019; Zhang et al., 2020). More recently, LLM-based recommenders can generate fluent justifications (Bao et al., 2023; Mysore et al., 2023; Zhu et al., 2024), but these can be costly at inference and are not guaranteed to be faithful or verifiable (Wu et al., 2024).
+We argue that CDR needs an intermediate representation that is (i) shared across domains, (ii) grounded in verifiable evidence, and (iii) used directly by the predictor so that explanations can be tested rather than narrated (Lei et al., 2016; Ross et al., 2017; Rudin, 2019). To this end, we propose EviSnap, a lightweight CDR framework that produces faithful, evidence-cited explanations by construction. EviSnap operates in an evidence-grounded concept space built from reviews: an LLM distills raw reviews into compact facet cards (short, domain-agnostic facet phrases) and attaches verbatim supporting sentences. We embed facets from both domains and cluster them into a shared concept bank. For each user we compute separate positive and negative concept activations from praised vs. criticized evidence, and for each target item we compute concept presence activations from its evidence sentences. A single linear concept-to-concept map transfers users from the source concept space to the target space, and an additive linear scoring head produces ratings. Because the score is a sum of per-concept terms, EviSnap yields an exact score decomposition: the explanation is the model itself, paired with the highest-scoring user/item evidence sentences for each surfaced concept. The linear structure also enables transparent counterfactual edits (”what if this concept was stronger?”) with predictable changes in the score.
+Our main contributions are:
+-
+•
+Evidence-cited, domain-agnostic concept representation for CDR. We introduce an offline facet-card pipeline with verbatim evidence and induce a shared concept bank across domains, yielding sentence-traceable user-positive, user-negative, and item-presence activations.
+-
+•
+Transparent transfer and faithful explanations by construction. EviSnap uses a single linear concept mapping and an additive linear scorer, so reported per-concept contributions reconstruct the prediction exactly.
+-
+•
+Empirical gains with faithfulness diagnostics. Experiments over the Amazon Reviews dataset (He and McAuley, 2016) among Books, Movies, and Music , EviSnap outperforms strong mapping and text-based baselines while passing deletion- and sufficiency-based tests of explanation faithfulness (Lei et al., 2016).
+2 Problem Definition
+We study cross-domain recommendation (CDR) for cold-start users across two domains: a source domain and a target domain . Let be the user set and , the item sets in and . We observe ratings for some user–item pairs, and we use review text as side information: denotes the set of source-domain reviews written by user , and denotes the set of target-domain reviews written about item .
+We adopt a user-level cold-start split: users in training and test are disjoint. At inference time for a test user , we assume no target-domain history is available, i.e., only is observed for the user, while item-side text is available for target items.
+Our goal is to learn a predictor that estimates a cold-start user’s preference for a target item:
+where .
+3 Framework
+Given the cold-start CDR setting in Section 2, we instantiate with an interpretable, evidence-grounded model that predicts target-domain ratings using a shared concept space as shown in Figure 1. EviSnap (i) distills reviews into evidence-cited facet cards, (ii) induces a shared concept bank and computes user/item concept activations, and (iii) applies a simple linear transfer and linear scoring head. Because the final scorer is additive in concept features, the same quantities that produce also yield faithful, sentence-grounded explanations.
+In this section, we describe each module and its training objective in turn.
+3.1 Generative Facet Card Construction with LLMs
+We first preprocess review text into compact, auditable facet cards. For each source-domain user and each target-domain item , we input the corresponding bundle of reviews to an LLM and obtain a single JSON object (Figure 2). Each card contains a small set of short, domain-agnostic facet phrases paired with verbatim supporting sentences from the input reviews. Facets are accompanied by a support count.
+User cards include facet polarity ( liked, dislike), while item cards use polarity (items express properties only). We run this extraction offline once and treat facet phrases and evidence sentences as fixed inputs to EviSnap. The LLM is not used during model training or inference. This representation denoises long reviews while preserving traceability: every downstream concept activation can cite an original sentence.
+Example. User facets may include fast pacing () and slow plot () with copied evidence sentences; an item may include live energy () with evidence such as “The live drums give the songs amazing energy.”
+3.2 Evidence–Grounded Concept Space
+This stage builds a shared, interpretable feature space that supports both cross-domain transfer and faithful explanations. We want the model’s internal variables to be (i) domain-agnostic so they align across and , (ii) evidence-grounded so each activation can be traced to specific sentences, and (iii) simple enough that the final scoring function can decompose cleanly into per-concept contributions. We achieve this by inducing a concept bank from facet phrases and computing user/item concept activations by pooling sentence-to-concept evidence scores.
+Concept bank.
+We induce concepts by clustering facet phrases so that synonymous facets collapse into a single dimension and the same concept labels can be reused across domains. We embed every distinct facet phrase once using a frozen sentence encoder :
+We then cluster all facet embeddings with –means into clusters. The cluster centroids are our concept prototypes
+Each concept is labeled by the facet phrase in its cluster whose embedding is closest to . These labels (e.g., “live energy”, “vocal clarity”) appear in our explanations.
+Sentence–level evidence scores.
+We score concepts at the sentence level so that explanations can cite the single strongest supporting sentence (while still accounting for multiple mentions).
+For any entity (user or item), we have a small set of evidence sentences
+where is an evidence sentence and is a non–negative weight. We use
+so that facets mentioned in more reviews carry slightly more weight.
+We embed each sentence,
+and compute its alignment with each concept prototype using cosine similarity followed by ReLU:
+Here measures how strongly sentence supports concept . Negative or unrelated evidence is clipped to .
+Pooling over evidence.
+This pooling choice lets us produce explanations by pointing to the highest-scoring evidence sentence for each concept, while still rewarding concepts supported by multiple reviews.
+To obtain a fixed-length concept vector from a variable number of evidence sentences, we aggregate sentence-level alignments into one score per concept. We use weighted log–sum–exp pooling as a smooth max that highlights the strongest supporting sentence without discarding additional supporting evidence:
+where is a temperature. When is large, this behaves like a soft maximum over sentences.
+User and item concept vectors.
+We represent preference polarity explicitly for users (likes vs. dislikes) because it affects whether a concept should increase or decrease a target-item score, whereas items only express presence of properties.
+For users, facet cards differentiate positive and negative opinions. We pool them separately:
+-
+•
+from positive evidence sentences (facets the user likes),
+-
+•
+from negative evidence sentences (facets the user dislikes).
+We then form a signed source–domain user vector:
+Each entry is high and positive if the user repeatedly praises that concept, and negative if they repeatedly criticize it.
+For items in the target domain, facets describe item attributes rather than preferences. Therefore item facets have no polarity (we set polarity to 0) and we pool all item evidence sentences into a nonnegative concept vector:
+which encodes which concepts the item offers and how strongly.
+3.3 Cross–Domain Concept Mapping
+Cold-start users have no history in the target domain, so we must transfer their preferences from into a target-domain concept representation that can be compared with target items. We choose a single linear map for transparency: its weights directly show which source concepts contribute to which target concepts, making the transfer step itself inspectable rather than a black-box embedding shift.
+We now map each user’s source domain concept vector to a target domain vector. We adopt a simple linear map
+Matrix is learned from data and initialized to the identity. Intuitively, says how source concepts (e.g., “fast–paced action”) translate into target concepts (e.g., “live energy”).
+To keep easy to interpret and to avoid overfitting in the cold–start setting, we regularize it toward the identity:
+where is the identity matrix and denotes the Frobenius norm.
+3.4 Linear Rating Prediction
+Given mapped user concepts and item concepts , we need a scoring function that is (i) accurate enough to model user-item matching, but also (ii) additively decomposable so explanations can be faithful. We therefore use a linear head over per-concept features: an interaction term captures match (user preference aligned with item property), while marginal terms capture user and item specific tendencies. This keeps inference lightweight and ensures each concept’s effect on the score can be computed exactly.
+We construct a feature vector using an element wise interaction and optional marginal terms:
+where denotes element–wise multiplication. We then concatenate them:
+where .
+A single linear layer computes a centered rating score:
+where are the head weights and is an item bias parameter (one scalar per item). The final predicted rating adds back the target–domain mean rating :
+In practice, we compute the mean rating over the training portion of the target domain and train on centered labels . At evaluation time, we clamp to the valid rating range (e.g., ).
+Per–concept contributions (for explanation).
+The head weights can be seen as three blocks:
+each of length . The centered score can then be written as a sum over concepts:
+For explanation, we define the per–concept contribution
+and we display the top few positive and negative together with the concept label and the best–matching user and item evidence sentences. Crucially, the explanation is faithful by construction: there is no separate explanation module— is defined to be exactly the -th additive term in the model’s scoring function. Therefore the centered score decomposes exactly as
+so the reported contributions (plus the item bias and the mean ) reconstruct the predicted rating exactly.
+3.5 Training
+We train only the transfer and scoring parameters: the cross-domain map , the linear head weights , and item biases , so that predicted target-domain ratings fit observed ratings while keeping transfer interpretable and stable. We center ratings to factor out the global target-domain mean, and we apply light regularization to (i) keep near-identity to reduce overfitting and preserve concept semantics, and (ii) prevent item biases from dominating the explanation.
+Let denote the training set of user–item pairs in the target domain, with observed ratings . We use a user–level cold–start split: users in training and test do not overlap.
+We first compute the mean target–domain rating over training data,
+We then train the model to predict the centered rating . The main loss term is mean squared error:
+We add light regularization to stabilize the mapping and keep biases small:
+where and are small hyperparameters.
+The final training objective is
+We optimize with mini–batch stochastic gradient descent (AdamW in our implementation). Because all operations are linear in the learnable parameters (except for the fixed encoder and concept scoring), training is stable and efficient.
+4 Experimental Evaluation
+We evaluate EviSnap in the cold-start cross-domain recommendation setting on review-driven transfers between Movies, Books, and Music. This section describes the dataset construction and evaluation scenarios, and then introduces the baselines used for comparison.
+4.1 Dataset and Transfer Scenarios
+We use the Amazon Reviews 2014 dataset (He and McAuley, 2016) and consider the Books, Movies, and Music domains. Following common practice in cross-domain recommendation, we evaluate all six directed transfers among these domains.
+For each , we restrict to overlapping users who have source-domain text and at least one observed rating on a target-domain item. We then create a user-level cold-start split by randomly assigning 80% of these users to training and 20% to testing (users are disjoint across splits). At test time, the model observes only for the user (no target-domain user history), while target-item text is available for ; test ratings are used only for evaluation.
+To prevent leakage through item-side text, when constructing (and extracting target-item facet cards) we exclude all target-domain reviews authored by held-out users, so the model never observes target-domain review text from test users.
+4.2 Experimental Setting
+We use precomputed facet cards for source-domain users and target-domain items, constructed per task using the split and leakage prevention protocol in Section 4.1, and treat them as fixed inputs (no LLM calls during model training/evaluation). Facet phrases and evidence sentences are embedded with a frozen sentence encoder, clustered with -means to form a shared -concept bank, and pooled into user/item concept activations via evidence-weighted log-sum-exp pooling over ReLU cosine similarities. We train only the linear concept map and the additive linear head by minimizing MSE on centered target-domain ratings, regularizing toward identity and applying a small penalty on item biases. We use a single hyperparameter setting for all transfers and do not perform hyperparameter tuning. We ran each scenario 5 times and took the average.
+4.3 Baseline Methods
+We compare against five cross-domain recommendation baselines that cover both mapping-based transfer and review-text models:
+-
+•
+EMCDR (Man et al., 2017): learns latent representations in each domain and trains a mapping function to transfer user representations from to .
+-
+•
+PTUPCDR (Zhu et al., 2022): It uses a meta-network to generate personalized transfer (bridge) functions for different users.
+-
+•
+MACDR (Wang et al., 2024): It employs a prototype-enhanced mixture-of-experts transfer mechanism and distribution alignment to improve robustness under sparse supervision.
+-
+•
+DeepCoNN+ (Zheng et al., 2017): It is a text-based recommender that models users and items from review text; we use its cross-domain variant with an added mapping layer for transfer.
+-
+•
+HeroGraph Cui et al. (2020): It obtains cross-domain information by a shared graph, which is constructed by collecting users’ and items’ information from multiple domains.
+4.4 Main Results: Cold-Start Cross-Domain Recommendation
+Table 1 reports MAE/RMSE on six directed transfers among Books, Movies, and Music under the user-level cold-start split. EviSnap achieves the best performance on five of six transfer directions, and is second-best on the remaining MusicMovies setting, where HeroGraph is strongest (MAE , RMSE ). Averaged over transfers, EviSnap improves over the strongest review-text baseline DeepCoNN+ from to MAE and from to RMSE (relative and ), and yields larger gains over the best mapping-based baseline MACDR ( MAE, RMSE). The largest improvements occur on MoviesMusic, where EviSnap reduces MAE from to and RMSE from to . Overall, these results suggest that transferring users through an evidence-grounded concept space is competitive for cold-start CDR while maintaining an additive structure that directly supports faithful, sentence-grounded explanations.
+4.5 Ablation: Linear-Head Feature Blocks
+Our scorer is designed to be both accurate and decomposable into per-concept effects. To isolate whether gains come primarily from concept-level matching or from marginal user/item signals, we ablate which concept-feature blocks are fed into the linear head, while keeping the concept bank, pooling, mapping , item bias, and training objective fixed.
+Given mapped user concepts and item concepts , we define three blocks:
+We then form the head input using binary switches :
+This yields four variants: IntOnly , Int+User , Int+Item , and Full .
+On Music to Movies (other transfer directions show similar trends), Full performs best, reducing error relative to IntOnly by MAE and RMSE, indicating that marginal blocks provide additional signal beyond pure element-wise matching.
+4.6 Faithfulness Diagnostics
+Because is additive in concept terms (Section 3), we can test faithfulness via direct concept-space interventions. On Music to Movies (other transfers have similar behaviors), we report (i) deletion: ablate the top- positive/negative concepts ranked by and measure the resulting score change, using random deletions as a control; and (ii) sufficiency: keep only the top- concepts by and compute the residual . Figure 3 shows that top- deletion perturbs predictions far more than random, while a small set of top concepts largely reconstructs , supporting that the surfaced concepts are the model’s true drivers and that decisions are distributed across multiple facets.
+4.7 Qualitative Analysis
+Table 3 illustrates a cold-start Movies to Music explanation for user ALLHLOG4NLA0A and item B0007SMCWY. Each row corresponds to a concept in the shared concept bank. The reported score is the exact additive term in our linear head, so positive (negative) values raise (lower) the predicted rating by that amount. For each concept, we cite the highest-alignment verbatim sentence from the user’s Movies reviews and the item’s Music reviews, making the transfer auditable at the sentence level. In this case, the prediction is supported by aligned evidence for musicianship/deep cuts (the user values technical skill. the album provides many lesser-known performances), as well as complementary signals of great value and nostalgia. For readability, we show only the largest-magnitude contributions.
+5 Related Work
+Cold-start cross-domain recommendation (CDR) transfers a user’s signal from a source to a target domain, typically by learning domain-specific representations and a mapping/bridge function (e.g., EMCDR/CoNet and later personalized or prototype/mixture-based transfer) to cope with sparse supervision (Zang et al., 2022; Man et al., 2017; Hu et al., 2018; Zhu et al., 2022; Wang et al., 2024). Reviews provide fine-grained signals via aspect-style models and neural review encoders (Zheng et al., 2017; Tay et al., 2018), but many “explanations” in review-aware recommenders are post-hoc (e.g., attention/highlights) and need not reflect the true scoring rule (Jain and Wallace, 2019; Wiegreffe and Pinter, 2019); similarly, LLM-generated justifications can be fluent yet weakly coupled to the predictor and hard to audit (Bao et al., 2023; Wu et al., 2024). EviSnap follows interpretability-by-construction (Rudin, 2019): it distills reviews into facet cards with verbatim evidence and predicts in an additive concept space with a linear transfer, yielding exact per-concept contributions that can be directly validated via deletion/sufficiency interventions (Lei et al., 2016; Ross et al., 2017).
+6 Conclusion
+We propose EviSnap, a lightweight cold-start cross-domain recommender that transfers users through an evidence-grounded concept space derived from reviews. An offline LLM distills reviews into facet cards with verbatim evidence, and a shared concept bank with a linear map and additive head yields ratings with exact, evidence-cited per-concept contributions. Across six Amazon Reviews transfers among Books, Movies, and Music, EviSnap outperforms SOTA baselines, and shows the faithfulness of the surfaced concepts transfers.
+7 Limitations
+EviSnap relies on an offline LLM step to distill reviews into facet cards. While evidence sentences are verbatim, the extracted facet phrases and user polarity labels may be sensitive to the specific LLM and prompts and may inherit noise or biases from the model and data. Our approach also assumes sufficient review text for both source-domain users and target-domain items. Performance and explanation quality may degrade in text-sparse settings where users/items have few or no reviews. Finally, interpretability is enabled by an unsupervised -means concept bank and a linear mapping/additive head. Concept quality can depend on the encoder and the choice of , and the linear form may miss higher-order interactions that could benefit some transfers.
+References
+- Tallrec: an effective and efficient tuning framework to align large language model with recommendation. In Proceedings of the 17th ACM conference on recommender systems, pp. 1007–1014. Cited by: §1, §5.
+- HeroGRAPH: a heterogeneous graph framework for multi-target cross-domain recommendation.. In ORSUM@ RecSys, Cited by: 5th item.
+- Cross-domain recommender systems: a survey of the state of the art. In Spanish conference on information retrieval, Vol. 24. Cited by: §1.
+- Ups and downs: modeling the visual evolution of fashion trends with one-class collaborative filtering. In proceedings of the 25th international conference on world wide web, pp. 507–517. Cited by: 3rd item, §4.1.
+- Conet: collaborative cross networks for cross-domain recommendation. In Proceedings of the 27th ACM international conference on information and knowledge management, pp. 667–676. Cited by: §1, §5.
+- Attention is not explanation. arXiv preprint arXiv:1902.10186. Cited by: §1, §5.
+- Cross domain recommender systems: a systematic literature review. ACM Computing Surveys (CSUR) 50 (3), pp. 1–34. Cited by: §1.
+- Rationalizing neural predictions. In Proceedings of the 2016 Conference on Empirical Methods in Natural Language Processing, pp. 107–117. Cited by: 3rd item, §1, §5.
+- Cross-domain recommendation: an embedding and mapping approach.. In IJCAI, Vol. 17, pp. 2464–2470. Cited by: §1, 1st item, §5.
+- Large language model augmented narrative driven recommendations. In Proceedings of the 17th ACM conference on recommender systems, pp. 777–783. Cited by: §1.
+- Right for the right reasons: training differentiable models by constraining their explanations. In IJCAI, Cited by: §1, §5.
+- Stop explaining black box machine learning models for high stakes decisions and use interpretable models instead. Nature machine intelligence 1 (5), pp. 206–215. Cited by: §1, §5.
+- Multi-pointer co-attention networks for recommendation. In Proceedings of the 24th ACM SIGKDD international conference on knowledge discovery & data mining, pp. 2309–2318. Cited by: §1, §5.
+- Making non-overlapping matters: an unsupervised alignment enhanced cross-domain cold-start recommendation. IEEE Transactions on Knowledge and Data Engineering. Cited by: 3rd item, §5.
+- Attention is not not explanation. In Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP), pp. 11–20. Cited by: §1, §5.
+- A survey on large language models for recommendation. World Wide Web 27 (5), pp. 60. Cited by: §1, §5.
+- A survey on cross-domain recommendation: taxonomies, methods, and future directions. ACM Transactions on Information Systems 41 (2), pp. 1–39. Cited by: §1, §5.
+- Explainable recommendation: a survey and new perspectives. Foundations and Trends® in Information Retrieval 14 (1), pp. 1–101. Cited by: §1.
+- Joint deep modeling of users and items using reviews for recommendation. In Proceedings of the tenth ACM international conference on web search and data mining, pp. 425–434. Cited by: §1, 4th item, §5.
+- Collaborative large language model for recommender systems. In Proceedings of the ACM Web Conference 2024, pp. 3162–3172. Cited by: §1.
+- Personalized transfer of user preferences for cross-domain recommendation. In Proceedings of the fifteenth ACM international conference on web search and data mining, pp. 1507–1515. Cited by: §1, 2nd item, §5.
+
+KAYNAK : https://arxiv.org/abs/2604.06172

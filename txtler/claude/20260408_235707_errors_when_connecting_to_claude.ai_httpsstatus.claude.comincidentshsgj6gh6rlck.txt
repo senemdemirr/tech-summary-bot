@@ -1,9 +1,0 @@
-Apr
-8
-,
-23:57
-UTC
-Resolved
-- Some users experienced an error when trying to access Claude.ai on desktop and the web from 23:22–23:50 UTC. This issue has now been resolved.
-
-KAYNAK : https://status.claude.com/incidents/hsgj6gh6rlck
