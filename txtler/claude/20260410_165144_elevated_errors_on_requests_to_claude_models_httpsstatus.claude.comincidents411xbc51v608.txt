@@ -1,0 +1,23 @@
+Apr
+10
+,
+16:51
+UTC
+Resolved
+- The issue affecting requests to non-Opus models has been resolved.
+Apr
+10
+,
+16:42
+UTC
+Identified
+- We have identified the current issue as affecting requests to models other than Claude Opus 4.6, and are working to fully resolve this issue. We will provide additional updates shortly.
+Apr
+10
+,
+16:30
+UTC
+Investigating
+- We are investigating reports of elevated errors on requests to Claude across all products. We will provide an update as soon as possible.
+
+KAYNAK : https://status.claude.com/incidents/411xbc51v608

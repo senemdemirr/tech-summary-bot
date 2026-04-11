@@ -1,68 +1,47 @@
---- claude | Degraded Performance on Vaults | score=53.54 ---
+--- claude | Elevated errors on requests to Claude models | score=48.67 ---
 Apr
 10
 ,
-04:38
+16:51
 UTC
 Resolved
-- This incident has been resolved.
+- The issue affecting requests to non-Opus models has been resolved.
 Apr
 10
 ,
-04:36
-UTC
-Monitoring
-- A fix has been implemented and we are monitoring the results.
-Apr
-10
-,
-04:28
-UTC
-Investigating
-- We are currently investigating this issue.
-
-KAYNAK : https://status.claude.com/incidents/2z4mf00ffcwd
-
---- claude | Elevated Connector Error Rates | score=34.62 ---
-Apr
-9
-,
-17:34
-UTC
-Resolved
-- This incident has been resolved.
-Apr
-9
-,
-16:55
-UTC
-Monitoring
-- A fix has been implemented and we are monitoring the results.
-Apr
-9
-,
-16:54
-UTC
-Investigating
-- Certain connectors are experiencing higher error rates. We are investigating the issue.
-
-KAYNAK : https://status.claude.com/incidents/cb0h2zyzl0kd
-
---- claude | Sonnet 4.6 elevated rate of errors | score=20.85 ---
-Apr
-9
-,
-08:53
-UTC
-Resolved
-- This incident has been resolved.
-Apr
-9
-,
-08:07
+16:42
 UTC
 Identified
-- The issue has been identified and a fix is being implemented.
+- We have identified the current issue as affecting requests to models other than Claude Opus 4.6, and are working to fully resolve this issue. We will provide additional updates shortly.
+Apr
+10
+,
+16:30
+UTC
+Investigating
+- We are investigating reports of elevated errors on requests to Claude across all products. We will provide an update as soon as possible.
 
-KAYNAK : https://status.claude.com/incidents/v0t3z924dbhg
+KAYNAK : https://status.claude.com/incidents/411xbc51v608
+
+--- claude | Email login down | score=44.94 ---
+Apr
+11
+,
+00:00
+UTC
+Resolved
+- Email login was broken between approximately 3:46 PM and 4:52 PM PDT on April 10, 2026.
+
+KAYNAK : https://status.claude.com/incidents/qcfvv041lb1k
+
+--- claude | Some Claude.ai share links were inaccessible | score=31.25 ---
+Apr
+10
+,
+14:00
+UTC
+Resolved
+- Between April 2 and April 10, some users who were not signed in to Claude.ai (web, mobile, desktop) were not able to access some Claude.ai sharing links.
+
+KAYNAK : https://status.claude.com/incidents/ccm8hy0pld48
 
