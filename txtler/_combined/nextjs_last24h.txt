@@ -1,85 +1,32 @@
---- nextjs | v16.2.1-canary.32 | score=61.87 ---
+--- nextjs | v16.2.1-canary.33 | score=48.42 ---
 Core Changes
-Node.js streams: Add forkpoint for CacheComponents:
-#92444
-Resolve
-compilerOptions.paths
-in tsconfigs without
-compilerOptions.baseUrl
-:
-#92277
-Add codemod command to middleware deprecation warning:
-#92532
-[partial fallbacks]: enable by default:
-#92627
-refactor: write pages router export files directly to server/pages/:
-#90018
+feat(turbopack): add LocalPathOrProjectPath PostCSS config resolution:
+#91338
+Fix segment explorer file pill accessibility:
+#92608
+Perf: Only instrument clientComponentLoadTimes when used:
+#91385
 Misc Changes
-Fix NextFontIssue IssueStage: CodeGen → Resolve:
-#92588
-test: reduce writeToDisk memory test iterations to fix CI timeout:
-#92586
-Refactor effects system: dedup/conflict detection, simplified Effect trait:
-#92300
-fix(ci): improve Docker image cache streaming throughput and arch-awareness:
-#92617
-Turbopack: extract inline base64 decode helper to shared
-@turbopack/base64
-module:
-#92549
-docs: add Link transitionTypes version history:
-#92624
-CI: Download and run self-contained datadog-ci instead of using pnpm dlx or npx:
-#92546
-turbopack: move CSS module composes validation from code generation to resolving:
-#92582
-Drop turbo_tasks::function from ValueDebug trait items:
-#92593
-Turbopack: fix filesystem watcher config not applying follow_symlinks(false):
-#92631
-Bump swc to 63.1.1:
-#92604
-chore(turbopack): upgrade qfiler to v0.3.0-alpha.4:
-#92558
-Turbopack: cut number of client references in half:
-#92607
-fix(ci): improve Docker image caching and native build skip optimization:
-#92633
+Remove a ton of turbo task functions from Issue trait items:
+#92623
+feat(turbopack): change DiskFileSystem root to Vc for portable cache:
+#92603
+Turbopack: remove unused ChunkableModules struct:
+#92606
+Disable sccache temporarily:
+#92657
 Credits
 Huge thanks to
-@sokra
-,
-@timneutkens
-,
-@hamidrezahanafi
-,
-@mmastrac
-,
 @lukesandberg
 ,
-@aurorascharff
-,
-@bgw
-,
-@ztanner
+@sokra
 ,
 @mischnic
 ,
-@fireairforce
+@timneutkens
 , and
-@bgub
+@mmastrac
 for helping!
 
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.32
-
---- nextjs | v16.2.1-canary.31 | score=21.33 ---
-Core Changes
-Don't swallow strings thrown in Server Components:
-#92592
-Credits
-Huge thanks to
-@eps1lon
-for helping!
-
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.31
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.33
 

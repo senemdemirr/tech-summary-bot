@@ -1,9 +1,0 @@
-Core Changes
-Don't swallow strings thrown in Server Components:
-#92592
-Credits
-Huge thanks to
-@eps1lon
-for helping!
-
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.31
