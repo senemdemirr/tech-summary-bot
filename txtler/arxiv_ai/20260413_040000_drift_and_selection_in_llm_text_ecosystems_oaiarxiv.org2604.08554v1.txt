@@ -1,0 +1,701 @@
+Drift and selection in LLM text ecosystems
+Abstract. The public text record—the material from which both people and AI systems now learn—is increasingly shaped by its own outputs. Generated text enters the public record, later agents learn from it, and the cycle repeats. Here we develop an exactly solvable mathematical framework for this recursive process, based on variable-order -gram agents, and separate two forces acting on the public corpus. The first is drift: unfiltered reuse progressively removes rare forms, and in the infinite-corpus limit we characterise the stable distributions exactly. The second is selection: publication, ranking and verification filter what enters the record, and the outcome depends on what is selected. When publication merely reflects the statistical status quo, the corpus converges to a shallow state in which further lookahead brings no benefit. When publication is normative—rewarding quality, correctness or novelty—deeper structure persists, and we establish an optimal upper bound on the resulting divergence from shallow equilibria. The framework therefore identifies when recursive publication compresses public text and when selective filtering sustains richer structure, with implications for the design of AI training corpora.
+A human–AI feedback loop in public text
+Public text is increasingly produced and filtered by mixed human–AI systems: models generate drafts and suggestions, humans choose what to publish, and automated ranking, moderation, testing, verification and corpus-curation pipelines determine which outputs are surfaced, retained, deduplicated14 or suppressed. Some of this material later becomes training data for new models,1; 2; 3; 4 so later learners train not on an untouched web but on a public record already altered by earlier generators and filters.
+Prior work has shown that recursive reuse of synthetic data can delete tails, reduce diversity or induce collapse-like behaviour.5; 6; 7; 8 Related evidence from computer vision shows analogous contamination effects when generated outputs re-enter future datasets.9 Other work shows that the outcome depends strongly on the surrounding pipeline: iterative retraining can remain stable in some regimes,10 accumulation of real data can break the recursive curse,11 and synthetic-data loops can behave very differently when verification or correction is built into the loop.12; 13 These results have mostly been studied in isolation. We therefore do not claim to discover model collapse per se. Our contribution is a unified theory of public text environments that separates neutral drift from selective publication and studies what later learners inherit from the resulting public record.
+We introduce an exactly solvable framework for this recursive process based on variable-order -gram agents.18; 19; 20; 21; 22; 23 The framework is mathematically transparent: the relevant conditional distributions can be written down explicitly and the long-run fixed points can be characterised exactly. It separates two forces. Drift arises from repeated reuse of finite corpora and removes weakly supported forms even without any preference over content. Selection arises because publication, ranking, verification and omission change what becomes visible in the public record.
+In this framework, unfiltered reuse drives the public record toward shallow equilibria, in which the visible statistics can be matched without recovering deeper generative structure. By contrast, normative selection—publication rules that reward quality, correctness or novelty—can preserve richer structure. Recursive publication therefore has no single universal effect: it can stabilise polished outputs while removing the intermediate traces needed for learning from process rather than outcome alone.
+Neutral recursion is Wright–Fisher drift
+The neutral baseline is simple: fit an -gram model to the current corpus, retain a fraction of the documents, regenerate the rest from the fitted model, and repeat. In population-genetic terms, this is a Wright–Fisher-style reproduction process on text: rare forms are not selected against, but finite sampling makes them vulnerable to loss.
+When the corpus is very large—thought of, as in real-world training, as a large collection of independent documents rather than a single long text—the fitted -gram model converges to a well-defined conditional distribution determined by the current corpus. The stochastic instability is therefore a finite-sample phenomenon. If a word has frequency and the regenerated batch contains sampled tokens, the chance that it is absent from that batch is
+Rare forms are therefore the first to disappear. Without smoothing (that is, in any model that assigns zero probability to unseen events), tail support is systematically fragile.
+Theorem 1 captures the two baseline facts for the unsmoothed recursion: in finite corpora the unigram case is exactly Wright–Fisher drift, while in the infinite-corpus limit the general -gram recursion admits a complete fixed-point description.
+Equation (1) and Theorem 1(a) show that the expected frequency of a minority form is unchanged from one generation to the next: , so there is no systematic force driving any word toward extinction. What does change is the variance around that expectation, which accumulates under finite sampling: each generation introduces fresh random fluctuations, and in the pure-replacement case (), a rare form sampled zero times is lost permanently.
+Theorem 1(b) gives a complete description of the deterministic attractors. For a binary alphabet, trigrams yield a -dimensional polytope with extreme points; -grams yield an -dimensional polytope with extreme points. The number of extreme points grows super-exponentially with both alphabet size and context length: for an alphabet of size in the bigram case it already exceeds one million, and for realistic vocabularies it is astronomically large.28 Every extreme point corresponds to a simple cycle in the de Bruijn graph—the uniform distribution over the -grams that the cycle traverses—and every fixed point is a convex combination of these cycle distributions, parameterised by continuously many mixture weights. Although every extreme point is periodic, a generic fixed point is a mixture of cycles with different periods and is itself non-periodic for any practical purpose; the resulting text can exhibit irregular patterns of considerable length. Worked examples, verification code, and the general circulation-polytope proof are in the supplementary materials.
+Theorem 1 describes the pure unsmoothed baseline. In practice, back-off and smoothing change how loss manifests at higher orders. For longer contexts, the same finite-sample pressure acts on phrases and on the context windows that support them. What disappears first is often not the word itself but the highest-order support that allows the phrase to be regenerated. Back-off keeps the generator fluent, but by shortening memory it turns distinctive prose into more generic prose. Common forms therefore enjoy a compounding advantage over rare forms.
+Lookahead turns next-token prediction into selection
+Standard next-token prediction evaluates tokens by their immediate conditional likelihood. But a token that looks locally likely may still lead to a continuation that is later rejected. A natural alternative is therefore to ask not which token looks best now, but which token is most likely to remain acceptable for a prescribed number of further steps.
+A trace is the emitted token sequence. Whether a trace succeeds or fails may become clear only after several further steps, as later tokens reveal whether the continuation remains viable. The effective public next-token law is then the generator’s law conditioned on the continuation surviving. This is not a claim that a modern LLM literally enumerates every -step future. The same reweighting can arise from chain-of-thought reasoning, self-consistency selection, or external verifiers that suppress failing branches.24; 25; 17; 12; 13 What reaches the public record is typically only the accepted branch; the hidden search remains off-stage.
+This induces selection. A token is favoured not because it is locally common, but because it leads to continuations that survive the acceptance process. In code, proof and formal reasoning, this filter can be grounded in explicit success predicates. In open-ended prose, it may instead reinforce patterns already favoured by existing social or editorial preferences.
+Stable public equilibria under lookahead selection
+The key theoretical question is whether repeated lookahead-guided publication can settle to a stable distribution, and if so, what that distribution looks like.
+Write the corpus -gram distribution for the distribution of contiguous -token blocks measured in the corpus. Within this framework, a text environment is -shallow if its corpus -gram distribution coincides with the rollout law generated by its induced order- continuation law, so extending the context window beyond yields no additional gain. For normative publication, the fixed-point claim below is for the soft evaluator/verifier rules analysed in the appendix, not for arbitrary discontinuous hard filters.
+The two cases have distinct diagnostics. In the descriptive regime, the corpus -gram distribution approaches the rollout from its induced order- continuation law, so the environment becomes -shallow and the KL divergence collapses to zero. In the normative regime, first-step self-consistency can hold without full -shallowness: the lookahead first-token law can approach the ordinary one-step law while the KL divergence stabilises at a strictly positive value. The bound is tight: it is attained by distributing mass uniformly over cyclic windows from a de Bruijn word of order (see appendix, Section 5.6). Operationally, chain-of-thought, best-of- search, and short internal rollouts can be treated here as -gram publishers with : descriptive rules recycle generated blocks, whereas normative rules score candidate futures and therefore sustain a positive KL divergence.
+Greedy argmax publication can be discontinuous when the preferred continuation changes, whereas soft publication rules vary more smoothly because near-miss traces retain some weight. Figure 2 illustrates both regimes, with convergence claims for soft normative rules only under the appendix regularity conditions.
+Figure 2 shows the distinction in a matched exact experiment. In the descriptive recursion, the KL divergence between the corpus -gram distribution and the rollout from its induced order- continuation law collapses essentially to zero, so the public environment becomes -shallow. In the normative recursion, the ecosystem also converges, but to a stable nonzero KL divergence. Convergence of the ecosystem and collapse of the KL divergence between the corpus -gram distribution and its continuation-law rollout are therefore different questions.
+Whether such compression is desirable depends on what downstream agents need. For artefact-learning (reproducing a finished proof, a test-passing patch, or a polished explanation), filtering can remove dead ends and make successful structures easier to imitate. For process-learning (debugging, proof search, scientific exploration), failed attempts and intermediate steps can themselves be informative.
+Later learners inherit the public conditional
+The collection-of-texts formulation matters. For large token budgets, a single long published trajectory is not the right asymptotic object: empirical next-token frequencies along one dependent path need not recover the intended public conditional (concrete counterexamples exist). Publishing a collection of texts is both mathematically cleaner and closer to the way real corpora are assembled.
+In matched comparisons, a smoothed trigram learner and a small neural next-token learner both move toward the same target conditional. What is inherited is the public conditional; optimisation and approximation remain architecture-dependent. The same fitted -gram can then publish either by sampling from that conditional or by greedy argmax publication.
+If a later population publishes by sampling, it republishes itself. Under greedy argmax publication, it republishes the deterministic policy induced by . The training target remains , but the publication map can then be discontinuous at ties and near-ties.
+Taken together, Theorems 1–3 describe how drift and selection reshape the public conditional and how later learners inherit that reshaped conditional. Theorems 1(b) and 2 go beyond existence by giving a combinatorial characterisation of the equilibrium sets in terms of circulations on de Bruijn graphs and the -shallowness constraint. Filtering can therefore help artefact-learning by standardising successful outputs while harming process-learning when it erases the traces needed for search.
+A transparent laboratory
+The theorems above are proved in full generality, but the mechanisms they describe—support erosion under drift and probability redirection under selection—are most instructive when every intermediate quantity can be inspected. Figure 3 serves this purpose. It runs the recursive loop on a trigram model fitted to the public-domain fiction of Arthur Conan Doyle: a setting chosen not for scale but for transparency, since every conditional probability, every back-off event, and every selection step can be tracked exactly.
+The figure is illustrative rather than confirmatory: the theorems are mathematical results, and the role of the experiment is to make their mechanisms visible in real English text. Under neutral recursion, rare trigram contexts vanish and the generator is forced to fall back on shorter memory, producing increasingly generic continuations. Under lookahead filtering, selection preserves short-horizon viability at the cost of diversity: it suppresses tokens that would lead into unsupported contexts, so the model can continue generating from full trigram support for longer but the text becomes more repetitive. The trade-off between support and diversity is the signature of selection acting on a finite environment.
+The appendix and repository contain broader illustrations of all three theorems, including additional drift runs, descriptive-versus-normative block-law diagnostics, and matched cross-entropy inheritance tests. But the contribution of this paper is the theory, not any single experiment.
+Why this matters beyond -grams
+The broader claim of this paper is about the public conditional distribution. Recursive generation and publication filtering change the next-token law visible in the public record, and therefore change which artefacts and traces later learners can imitate. The -gram ecology makes that redistribution explicit in a setting where every quantity can be written down and analysed exactly. Extensions with heterogeneous agents, including different temperatures and context windows, are treated in the supplementary materials. More broadly, the circulation-polytope geometry of the unsmoothed baseline is only the first case of a richer landscape: different smoothing schemes, back-off strategies and interpolation methods each induce their own fixed-point geometry, and mapping that landscape is a natural direction for further work.
+This paper does not claim that transformers literally obey variable-order -gram dynamics. The role of -grams here is analogous to that of tabular Q-learning in reinforcement learning: they provide the idealised, exactly solvable case in which the theory can be stated in closed form, while neural architectures act as function-approximation proxies. The bridge to transformers is through the public conditional itself: once an environment induces a public next-token law, later learners trained by next-token cross-entropy are pulled toward that law to the extent permitted by model class and optimisation.26 Real LLM ecosystems add forces absent here—richer curation rules, reward-based filtering,16 and platform amplification15; 27—but the basic mechanism of drift, selection and inheritance persists beyond the -gram setting.
+Methods summary
+The illustrations in this paper use unsmoothed variable-order -gram models fitted by maximum likelihood, backing off only when the full-order count is zero.18; 19 Each generation publishes a collection of synthetic texts rather than a single long trajectory, refits the model, and repeats. Parameter settings for the Conan Doyle figures are given in the caption of Figure 3. Full proofs, exact diagnostics for Theorem 2, additional source-text and -gram experiments, arithmetic-environment comparisons, and cross-architecture inheritance tests are provided in the appendix and repository at https://github.com/SR123/LLM-text-ecosystems.
+Data availability
+The Conan Doyle source texts used for the main-text figures are public-domain Project Gutenberg editions. Additional appendix analyses use public-domain texts by Jane Austen and Charles Darwin. Cleaned corpus snapshots, train/validation/test splits, generated artefacts, summary CSV files, and repository manifests are available at https://github.com/SR123/LLM-text-ecosystems.
+Code availability
+The exact code used to generate all figures and tables in this paper, together with the notebook pipelines and supporting modules, is available at https://github.com/SR123/LLM-text-ecosystems. The main notebooks and helper modules are located in the repository’s notebooks/ and src/ directories.
+Acknowledgements
+The author thanks colleagues for feedback after an early preliminary version of this work was presented at an Informal Meeting on 6 March 2026, at the Centre for Fundamentals of AI and Computational Theory, Queen Mary University of London.
+Author contributions
+S.R. conceived the study, discovered the mathematical relationships, developed the theorems, and wrote the manuscript.
+Competing interests
+The author declares no competing interests.
+References
+- 1 Penedo, G. et al. The RefinedWeb Dataset for Falcon LLM: Outperforming curated corpora with web data, and web data only. In Advances in Neural Information Processing Systems 36 (Datasets and Benchmarks Track) (2023).
+- 2 Penedo, G. et al. The FineWeb Datasets: Decanting the Web for the Finest Text Data at Scale. Preprint at arXiv:2406.17557 (2024).
+- 3 DataComp-LM Consortium. DataComp-LM: In search of the next generation of training sets for language models. In Advances in Neural Information Processing Systems 37 (Datasets and Benchmarks Track) (2024).
+- 4 Albalak, A. et al. A survey on data selection for language models. Preprint at arXiv:2402.16827 (2024).
+- 5 Shumailov, I. et al. AI models collapse when trained on recursively generated data. Nature 631, 755–759 (2024).
+- 6 Alemohammad, S. et al. Self-consuming generative models go MAD. In Proc. Int. Conf. Learn. Representations (2024).
+- 7 Bohacek, M. & Farid, H. Nepotistically trained generative-AI models collapse. Preprint at arXiv:2311.12202 (2023).
+- 8 Guo, Y. et al. The curious decline of linguistic diversity: training language models on synthetic text. In Findings of NAACL (2024).
+- 9 Hataya, R., Bao, H. & Arai, H. Will large-scale generative models corrupt future datasets? In Proc. IEEE/CVF Int. Conf. Computer Vision 20555–20565 (2023).
+- 10 Bertrand, Q., Bose, A. J., Duplessis, A., Jiralerspong, M. & Gidel, G. On the stability of iterative retraining of generative models on their own data. In Proc. Int. Conf. Learn. Representations (2024).
+- 11 Gerstgrasser, M. et al. Is model collapse inevitable? Breaking the curse of recursion by accumulating real and synthetic data. Preprint at arXiv:2404.01413 (2024).
+- 12 Feng, Y. et al. Beyond model collapse: scaling up with synthesized data requires verification. Preprint at arXiv:2406.07515 (2024).
+- 13 Gillman, N. et al. Self-correcting self-consuming loops for generative model training. Proc. Mach. Learn. Res. 235, 15646–15677 (2024).
+- 14 Dodge, J. et al. Documenting large webtext corpora: a case study on the Colossal Clean Crawled Corpus. In Proc. Conf. Empirical Methods in Natural Language Processing 1286–1305 (2021).
+- 15 Huszár, F. et al. Algorithmic amplification of politics on Twitter. Proc. Natl Acad. Sci. USA 119, e2025334119 (2022).
+- 16 Ouyang, L. et al. Training language models to follow instructions with human feedback. In Advances in Neural Information Processing Systems 35, 27730–27744 (2022).
+- 17 Lightman, H. et al. Let’s verify step by step. Preprint at arXiv:2305.20050 (2023).
+- 18 Katz, S. M. Estimation of probabilities from sparse data for the language model component of a speech recognizer. IEEE Trans. ASSP 35, 400–401 (1987).
+- 19 Kneser, R. & Ney, H. Improved backing-off for -gram language modeling. In Proc. ICASSP 181–184 (1995).
+- 20 Shannon, C. E. Prediction and entropy of printed English. Bell System Technical Journal 30, 50–64 (1951).
+- 21 Griffiths, T. L. & Kalish, M. L. Language evolution by iterated learning with Bayesian agents. Cognitive Science 31, 441–480 (2007).
+- 22 Kirby, S., Griffiths, T. & Smith, K. Iterated learning and the evolution of language. Current Opinion in Neurobiology 28, 108–114 (2014).
+- 23 Boyd, R. & Richerson, P. J. Culture and the Evolutionary Process. (University of Chicago Press, 1985).
+- 24 Wei, J. et al. Chain-of-thought prompting elicits reasoning in large language models. In Advances in Neural Information Processing Systems 35, 24824–24837 (2022).
+- 25 Wang, X. et al. Self-consistency improves chain of thought reasoning in language models. In Proc. Int. Conf. Learn. Representations (2023).
+- 26 Bengio, Y., Ducharme, R., Vincent, P. & Jauvin, C. A neural probabilistic language model. J. Mach. Learn. Res. 3, 1137–1155 (2003).
+- 27 Dujeancourt, A. & Garz, M. Algorithmic content selection and the impact on news consumption. Preprint at SSRN:4450616 (2023).
+- 28 Maurer, U. M. Asymptotically-tight bounds on the number of cycles in generalized de Bruijn–Good graphs. Discrete Applied Mathematics 37/38, 421–436 (1992).
+Appendix: A Guided Route Through the Results
+Drift and selection in LLM text ecosystems
+Søren Riis
+Queen Mary University of London, London, United Kingdom
+s.riis@qmul.ac.uk
+Abstract. This appendix accompanies the main paper Drift and selection in LLM text ecosystems. It is organised as seven cumulative sections that develop the mathematical core and illustrate it with select experiments. Section 1 introduces the -gram model, the urtext recursion, and shows experimentally how vocabulary contracts under finite sampling; it states Theorem 1 part (a) (drift) in full, including the Wright–Fisher identification and effective population size. Section 2 takes the complementary limit , where the distributional recursion on -gram laws becomes exact, and gives a complete characterisation of all fixed points as circulations on de Bruijn graphs (Theorem 1 part (b)), with fully worked examples from bigrams through -grams and the general circulation-polytope proof. Section 3 develops the machinery for projecting fixed points to different window lengths and introduces the distinction between shallow and deep distributions. Section 4 introduces agent populations—ordinary -gram agents and lookahead -gram agents—and develops the selection theory (Theorems 2 and 3), including the distinction between descriptive and normative publication rules. Section 5 isolates the information-theoretic diagnostics for Theorem 2 and shows, in matched exact runs, how descriptive recursion drives the KL divergence and distance to zero while a normative publication rule can converge to a stable nonzero KL divergence. Section 6 presents basic results for the more general setting in which text is produced by a large population of agents with different context windows and publication temperatures, extending the single-agent framework of Sections 1–5. Section 7 provides an overview table of the experimental matrix. Each section includes pointers to the repository notebooks and scripts where the reader can reproduce figures and tables. The full repository is at https://github.com/SR123/LLM-text-ecosystems.
+Contents
+- References
+-
+1 The -gram model, drift, and vocabulary loss under recursion
+- 1.1 Orientation
+- 1.2 The token set and corpus
+- 1.3 The variable-order -gram model
+- 1.4 The urtext and the recursive loop
+- 1.5 Why rare words disappear first
+- 1.6 Experiment: vocabulary contraction in Doyle, Austen, and Darwin
+- 1.7 Rare contexts and the fragility of higher-order support
+- 1.8 The -gram model as a Markov chain on contexts
+- 1.9 The mixed-environment unigram recursion and Theorem 1
+- 1.10 Theorem 1 (drift in the mixed environment)
+- 1.11 Section 1 in brief
+- 2 The limit : fixed-point polytope and circulations
+- 3 From fixed points to shallow and deep text
+- 4 Selection, publication rules, and Theorems 2–3
+- 5 Project–lift diagnostics for Theorem 2
+- 6 Extensions: heterogeneous populations and the argmax limit
+- 7 Experiment matrix overview
+- References
+1 The -gram model, drift, and vocabulary loss under recursion
+1.1 Orientation
+This section introduces the basic setup: a finite text corpus, a variable-order -gram model fitted to it, and the recursive loop in which the model generates new text that becomes the corpus for the next generation. The goal in this section is to see, in the simplest possible setting, how recursive resampling erodes rare structure, and to develop the distributional theory that yields Theorem 1 (drift). This section covers the following:
+-
+•
+the definition of a variable-order -gram model with back-off (falling back to shorter contexts when the full context is unseen);
+-
+•
+the fit–generate–refit recursion from a fixed starting corpus (the urtext—the original human-written text from which the recursion begins);
+-
+•
+vocabulary contraction across generations, measured experimentally;
+-
+•
+the mechanism by which rare words and rare phrases are the first casualties; and
+-
+•
+the mixed-environment unigram recursion, Theorem 1 (drift) in full, and why the replacement fraction controls the speed but not the destination.
+1.2 The token set and corpus
+Definition 1 (Token set and text).
+Let be a finite set of tokens, called the token set (or vocabulary). In a word-level model, each element of is a word; in a character-level model, each element is a character. A text (or corpus) of length is a sequence
+Example 1 (Conan Doyle).
+Take to be the set of distinct words appearing in the combined public-domain fiction of Arthur Conan Doyle (Project Gutenberg editions). Tokenisation is word-level: punctuation, page numbers and Gutenberg boilerplate are stripped; hyphenated words (e.g. “well-known”) and contractions (e.g. “don’t”) are kept as single tokens; all tokens are lowercased. The corpus is the concatenation of those texts, with tokens and distinct words. We use Doyle throughout this section as the primary running example, with Jane Austen ( tokens, ) and Charles Darwin ( tokens, ) as supplementary corpora.
+1.3 The variable-order -gram model
+The idea is simple: to predict the next word, look at the preceding words and use the empirical frequencies from the corpus.
+Definition 2 (Context and -gram counts).
+Fix a maximum order . For every context string with and every token , let
+be the number of times follows in the corpus . The empirical conditional probability is
+whenever the denominator is nonzero.
+Definition 3 (Back-off).
+If the full-order context (the preceding tokens) has never been seen in the corpus, the model backs off to a shorter context: it drops the oldest token and tries the -gram context, then the -gram context, and so on, down to the unigram (empty context) distribution. This is the variable-order -gram generator used throughout.
+Example 2 (A trigram model, ).
+With , the model looks at the two preceding words (a bigram context). To generate the next word after “Sherlock Holmes”, it looks up all words that ever followed “Sherlock Holmes” in the corpus and samples in proportion to their counts. If “Sherlock Holmes” never appeared, it backs off to the unigram context of “Holmes” alone; if even that is absent, it falls back to the global word-frequency distribution. We use trigrams () in most experiments because they are the shortest context length that already exhibits interesting phrase-level structure while remaining simple enough for exact computation.
+Why -grams?
+We do not claim that -gram models are realistic surrogates for modern transformers. The point is that they are the simplest next-token predictors where the entire conditional distribution is exactly computable and easy to inspect. The relationship is analogous to that between tabular Q-learning and deep reinforcement learning: tabular Q-values are the idealised, exactly solvable objects, and neural networks serve as function-approximation proxies whose convergence guarantees ultimately rest on the tabular theory. Here, -grams play the tabular role—they are next-token predictors for which the ecosystem dynamics can be written in closed form—and the theorems proved for them identify forces (drift, selection, inheritance) that are structural properties of any next-token prediction loop, not artefacts of a particular architecture. If these forces already produce non-trivial dynamics in -grams, then they live at the level of distributions and of which traces enter the environment, not at the level of transformer internals.
+1.4 The urtext and the recursive loop
+Definition 4 (Urtext).
+The starting corpus is called the urtext. It can be a fixed human-written text or a stochastic randomly generated corpus; it is the initial sequence from which the recursion begins. Once and the model order are fixed, the law of the stochastic recursion is fully determined by one additional parameter: the replacement fraction .
+Definition 5 (The fit–generate–refit loop).
+At each generation :
+-
+(i)
+Fit. Compute the empirical -gram kernel from the current corpus .
+-
+(ii)
+Keep. Retain a fraction of unchanged.
+-
+(iii)
+Generate. Sample a fresh block of tokens from the fitted model .
+-
+(iv)
+Concatenate. The kept block and the generated block together form .
+The parameter controls the speed of change. When , the entire corpus is replaced each generation (the most aggressive setting). When , three-quarters of the corpus is carried over unchanged, and only one quarter is regenerated. In both cases, the regenerated text is sampled from the model fitted to the current corpus, so the loop is self-referential: models learn from text that earlier models helped produce.
+Remark 1 (The population-genetics analogy).
+The recursion has a direct analogy in population genetics. Words play the role of alleles, the corpus is the gene pool, and retraining on a finite regenerated sample creates the next generation. With and at the unigram level, this is exactly the Wright–Fisher model from population genetics—the foundation of neutral drift theory. We develop this connection rigorously below.
+1.5 Why rare words disappear first
+Consider a word that appears with frequency in the current corpus. If the regenerated block contains tokens drawn independently, each with probability of being that word, then the probability that the word is completely absent from the regenerated block is
+For a common word with and , this is essentially zero. For a rare word with , this is . So a word that appears just once in a corpus of tokens has roughly a chance of vanishing in a single generation—and in an unsmoothed model (one that assigns zero probability to words it has never seen), once a word vanishes it can never return.
+This is the basic mechanism of drift: finite sampling from a distribution in which rare events have small probability.
+1.6 Experiment: vocabulary contraction in Doyle, Austen, and Darwin
+The repository contains a notebook that runs the recursive loop on three cleaned literary corpora: Arthur Conan Doyle, Jane Austen, and Charles Darwin. Each corpus is modelled with an unsmoothed word-level trigram model () and the mixed-replacement update of Definition 5 (fixed_size_mix in the code). Three replacement fractions are tested: , over generations.
+What to look for.
+Two primary metrics are tracked at each generation:
+-
+•
+Vocabulary retention: the fraction of the original word types (generation 0) that still have positive count at generation .
+-
+•
+Trigram-type retention: the fraction of distinct trigram types from generation 0 that survive at generation .
+An auxiliary metric tracks the active vocabulary—word types whose frequency exceeds the baseline threshold .
+What the figures show.
+Figure 4 shows that vocabulary retention declines monotonically, with stronger replacement fractions producing steeper declines. At full replacement () after generations, roughly half the vocabulary is lost across all three corpora: retention is for Doyle, for Austen, and for Darwin.
+Trigram-type retention falls even faster (Figure 5): down to , , and for Doyle, Austen, and Darwin respectively at . This makes sense: a trigram can only survive if all three of its component words survive and the specific three-word sequence is regenerated. Higher-order structure is more fragile than lower-order structure, because there are more “points of failure.”
+The positive side of drift.
+The same concentration pressure that deletes rare literary vocabulary can also suppress low-support orthographic variation. In an Austen orthographic-variant pilot, low-support spelling variants are injected into a clean corpus and then subjected to the same recursive resampling. The mechanism that removes rare forms also reduces the variant count while increasing the canonical form’s share—but it simultaneously erodes rare clean vocabulary. This is why Theorem 1 is best read as a theorem of concentration rather than a theorem of simple deterioration.
+1.7 Rare contexts and the fragility of higher-order support
+The vocabulary-retention plots show the overall effect, but it is worth understanding the mechanism more precisely. The key insight is that what disappears first is often not the word itself but the highest-order support that allows a specific phrase to be regenerated.
+Proposition 1 (Rare-pattern loss under finite sampling).
+Let be a -gram with and long-run frequency under the current model. Generate a synthetic corpus consisting of one or more texts with a combined length of tokens, and fit an unsmoothed maximum-likelihood -gram model. Then:
+-
+(a)
+If and the corpus consists of i.i.d. unigram draws, the exact dropout probability is
+-
+(b)
+For general , if is the count of in the synthetic corpus, then
+The expectation is exact when the corpus is a single sequence; when it consists of separate texts, -grams cannot span text boundaries, so the effective number of positions is at most .
+-
+(c)
+If is a full-order pattern with and , then the retrained model satisfies . In an unsmoothed model without back-off at that context, this loss is absorbing: the token can never again follow context .
+Proof.
+Part (a) is immediate from independence. Part (b) follows from the first-moment bound (Markov’s inequality): . Part (c) is the definition of unsmoothed maximum likelihood. ∎
+Back-off complicates permanent loss: a missing higher-order pattern can still be generated through a shorter context. But back-off turns distinctive prose into more generic prose, because the shorter context is shared with many other continuations. Common forms therefore enjoy a compounding advantage over rare forms across generations.
+1.8 The -gram model as a Markov chain on contexts
+Before stating the drift theorem, it is useful to see that any fixed-order -gram model defines a Markov chain on contexts. This viewpoint will be essential in the next section for the selection theory.
+Proposition 2 (Context Markov chain).
+Fix and a conditional distribution giving the probability of emitting token after context , where is the set of all contexts of length . Let be the current context and the next emitted token. Write for the shift map: the context obtained by appending token to context and dropping the oldest token. The successor context is . Then is a time-homogeneous Markov chain on with transition matrix
+If is irreducible and aperiodic (meaning every context can eventually be reached from any other, and the chain does not cycle with a fixed period), it has a unique stationary distribution , and the empirical context frequencies along a single trajectory converge almost surely to .
+Proof.
+Given , the next token is drawn from and the next context is determined by the shift map . This is exactly the Markov property. Convergence follows from the ergodic theorem for finite Markov chains 14. ∎
+What this means.
+Once an -gram kernel has been fitted, the text dynamics are those of a finite Markov chain on contexts. The urtext matters only through the fitted kernel and the initial context distribution. This is the key simplification that makes the selection theory in Section 4 tractable.
+1.9 The mixed-environment unigram recursion and Theorem 1
+We now set up the formal model for Theorem 1 on drift. The key object is the number of tokens belonging to a designated “minority” vocabulary class.
+Definition 6 (Minority count chain).
+Fix a corpus of token positions and a designated minority subset (a single rare word, a dialect cluster, or any vocabulary subset of interest). Let be the number of positions occupied by tokens from at generation , and write for the minority frequency.
+Definition 7 (One-generation transition).
+At each generation, the corpus is updated in two steps:
+-
+Step 1
+Retention. Of the positions, exactly are chosen uniformly at random (without replacement) to be kept unchanged. The remaining positions are marked for replacement.
+-
+Step 2
+Resampling. Each of the replacement positions is filled independently by drawing a token from the current empirical distribution: minority with probability , majority with probability . Once a minority token is lost from the entire corpus, it cannot reappear.
+Conditional on , the new count decomposes as
+where and are conditionally independent given :
+-
+•
+is the number of minority tokens among the kept positions. Since these are drawn without replacement from a corpus of tokens of which are minority, follows a hypergeometric distribution:
+-
+•
+is the number of minority tokens among the newly drawn positions. Each is drawn independently with probability of being minority, so follows a binomial distribution:
+The boundary states and are absorbing: once the minority has been completely lost (or has taken over the entire corpus), it stays that way.
+1.10 Theorem 1 (drift in the mixed environment)
+Theorem 1 (Drift in the mixed environment).
+Consider the count chain on defined above, and write . Then:
+-
+(a)
+(Unbiased expected value.) . Equivalently, . The expected minority frequency next generation equals its current value—there is no systematic upward or downward trend. (In probability theory, a process with this property is called a martingale.) Despite the absence of any trend, random fluctuations accumulate over time and eventually drive the count to one of the absorbing boundaries.
+-
+(b)
+(Variance.) In the full discrete model:
+For large with fixed, this simplifies to .
+-
+(c)
+(Extinction probability.) Let be the first generation at which the minority has either completely vanished or taken over the entire corpus. Then almost surely, and
+This is independent of : the replacement fraction does not affect whether a rare token eventually goes extinct, only how quickly.
+-
+(d)
+(Effective population size.) In the diffusion scaling (where time is measured in units of generations), the effective population size is
+When , this gives , the classical Wright–Fisher value (the Wright–Fisher model being the foundational model of neutral genetic drift in population genetics 15).
+-
+(e)
+(Wright–Fisher identification.) When , every position is replaced and a.s., so . This is exactly the classical Wright–Fisher model.
+-
+(f)
+(Single-step dropout.) For a single minority token ():
+Proof.
+(a) (Unbiased expected value.) The expected number of minority tokens retained is (the mean of the hypergeometric), and the expected number redrawn as minority is (the mean of the binomial). Adding: .
+(b) (Variance.) Since and are conditionally independent, . The hypergeometric variance is . The binomial variance is . For large the hypergeometric term simplifies to , so the total is . The variance does not directly determine the expected waiting time for extinction, but it controls the rate at which the random walk spreads: a larger per-step variance means faster movement toward the absorbing boundaries.
+(c) (Extinction.) By (a), the expected value of never changes. The variance in (b) is strictly positive whenever , so the count keeps fluctuating and cannot remain in the interior forever: it must eventually reach , i.e. almost surely. Because the expected value is preserved at every step, it is also preserved at the stopping time (this is a standard result in probability theory, known as the optional stopping theorem for bounded processes). So . At time the count is either or , so writing we get , which gives .
+(d) (Effective population size.) By definition, satisfies . Dividing the variance of by and comparing gives .
+(e) (Wright–Fisher.) When , every position is replaced, so and , which is the definition of the Wright–Fisher model.
+(f) (Single-step dropout.) For , the token is lost when it is neither retained nor redrawn. It fails to be retained with probability (the chance its single position is among the replaced ones). Conditional on not being retained, it must also not be redrawn in any of the new draws, each of which selects it with probability : this happens with probability . Combining: . ∎
+What controls and what it does not.
+This clean separation is one of the most useful consequences of the theorem:
+In words: every rare token will eventually be lost with probability , no matter what is. Conversely, a selectively neutral token that currently occupies out of positions will, through drift alone, eventually take over the entire corpus with probability . This may seem counter-intuitive: pure chance, with no selective advantage, can drive a token to complete dominance. For a token appearing just once (), the fixation probability is —tiny but nonzero—while the extinction probability is , overwhelmingly close to . This is the same mathematics that governs neutral alleles in population genetics.
+Smaller slows the random walk (larger ), but it does not prevent extinction—it only delays it. Indeed, as Section 4 will show, selection pressures can accelerate the loss of certain patterns, making extinction even more inevitable than the neutral theory predicts.
+1.11 Section 1 in brief
+An -gram model fitted to a fixed corpus, together with a replacement fraction , defines a deterministic recursive loop. Finite resampling causes rare words and rare phrases to disappear, with higher-order structure (-grams for larger ) being the most fragile. The same concentration pressure can be beneficial (standardising spelling variants) or harmful (deleting rare literary vocabulary), depending on what is rare and whether it is valuable. The minority-frequency process is a martingale: its expected value is unchanged, but variance accumulates and drives rare forms to extinction. The extinction probability is universal—independent of —and only the speed depends on . The Wright–Fisher identification () connects the recursion to one of the best-understood stochastic processes in mathematical biology. The complementary question—what happens in the infinite-corpus limit , where sampling noise vanishes and the distributional recursion becomes exact—is treated in Section 2, which gives a complete characterisation of all fixed points as circulations on de Bruijn graphs (Theorem 1).
+2 The limit : fixed-point polytope and circulations
+2.1 Orientation
+Theorem 1 analysed the stochastic recursion for finite corpus size . In the limit , each generation samples perfectly from the model’s distribution: no rare pattern is lost by chance, and the distributional recursion becomes exact—the updated -gram law is fully determined by the current one, even though the underlying text generation remains stochastic. The fixed points of this map—the distributions that reproduce themselves exactly under one round of fit, generate, refit—are the natural candidates for long-run equilibria. This section characterises the full set of such fixed points, first through small worked examples where every solution can be found by hand, then through a general theorem that connects the fixed-point set to circulations on de Bruijn graphs.
+2.2 Bigrams over binary tokens
+Fix the token set and model order . The context space is , and a conditional distribution over the next token is specified by two parameters:
+with and .
+There are four bigrams , , , and two unigrams , . A bigram distribution is a vector on with and .
+The fixed-point condition.
+A distribution is a fixed point if it reproduces itself under one round of the recursion: fit the conditional probabilities from , generate an infinite text from those conditionals, and measure the resulting bigram frequencies—if they equal , it is a fixed point. Concretely, the map extracts the conditional probabilities from , computes the long-run frequencies of the chain they define, and returns the corresponding bigram distribution. The fixed-point equation is .
+Extracting the conditional probabilities.
+Given , the induced conditional probabilities are
+so that each conditional distribution is obtained by normalising the corresponding bigram counts.
+Stationary distribution.
+The context chain has transition matrix
+with stationary distribution
+Generated bigram law.
+The rollout law is . Substituting and simplifying:
+The key observation is that regardless of the values of , , , .
+Solving .
+Comparing with the requirement that and , the fixed-point equation forces . Once , the denominator becomes (using ), and each component reduces to identically. No further constraints arise.
+Proposition 3 (Fixed-point set for binary bigrams).
+The set of all fixed points of the descriptive bigram recursion over is
+This is a -simplex (triangle) inside the -simplex of all bigram distributions. The single defining constraint is the stationary flow-balance condition: in any stationary Markov chain on , the probability flux equals the flux .
+Proof.
+We showed above that if and only if . The set of satisfying with is a -simplex. ∎
+Convexity.
+is convex: it is the intersection of the linear subspace with the simplex , and the intersection of convex sets is convex. Explicitly, if and , then still satisfies , still sums to , and has all entries non-negative.
+Extreme points.
+The three vertices of are:
+These are exactly the three deterministic ergodic Markov chains on —the ones where every is a point mass and the chain has a unique stationary distribution.
+Remark 2 (The fourth deterministic rule).
+There is a fourth rule in which each token always repeats itself: , . Under this rule, a text that starts with stays at forever, and likewise for ; the long-run frequency of depends entirely on how the text began. Any starting mixture with is therefore self-consistent, and these mixtures trace out the edge – of the triangle . So this rule contributes an entire edge of fixed points rather than a single vertex.
+Induced unigram probabilities.
+At a fixed point , the unigram probabilities are
+These range continuously from (vertex ) through (vertex and many interior points) to (vertex ).
+Alternative parametrisation by .
+Every interior fixed point corresponds bijectively to a kernel :
+The diagonal gives the memoryless (i.i.d.) chains, where the next token is independent of the current context and . The centre of the simplex is the fair-coin case .
+Information-theoretic quantities.
+At a fixed point with kernel , the entropy rate of the chain is
+where is the binary entropy function. The entropy rate satisfies bit, with if and only if the chain is memoryless (), and at all three vertices (where the chain is deterministic). The maximum bit is achieved uniquely at the fair-coin point .
+Connection to drift (Theorem 1).
+Every interior fixed point is a transient state of the neutral drift process: under Theorem 1, finite resampling eventually drives the system to one of the absorbing vertices or . The alternating vertex is absorbing for the -gram table (every context has a unique continuation, so resampling reproduces the same table) but is an unstable equilibrium in the sense that any perturbation reintroduces back-off and allows drift to act. The fixed-point set therefore describes the instantaneous self-consistency condition, not the long-run fate under finite-corpus recursion.
+2.3 Trigrams over binary tokens
+Increasing the model order to moves the context space to and the kernel to for . There are now eight -grams. Write the distribution as
+Flow-balance conditions.
+The fixed-point condition again reduces to stationarity of the context distribution: the bigram marginal on the first two positions of a -gram must equal the marginal on the last two. Define the left and right marginals:
+Setting for each of the four bigram contexts yields four equations, of which three are independent:
+Constraint (I) equates the flow out of context into token with the flow into context from token ; constraint (II) does the same for context ; and (III) is the corresponding balance for contexts and .
+The polytope.
+Using (I)–(III) to eliminate , , and , the free variables are , , , , , subject to
+The last inequality ensures . This defines a -dimensional convex polytope in .
+Proposition 4 (Extreme points for binary trigrams).
+The fixed-point polytope has exactly six extreme points. Every extreme point is the trigram distribution of a periodic binary sequence in which a deterministic rule assigns to each context a unique next token. The eight components of give the frequencies of the eight trigrams :
+Proof.
+The polytope has six inequality constraints in four dimensions (after the normalisation equality). A vertex occurs where exactly four constraints are tight. Enumerating all candidate subsets and solving yields exactly six feasible vertices, which are those listed. Each is verified to satisfy by direct computation. That every vertex is deterministic follows from inspection: the non-zero entries of each are uniform on a single orbit of a deterministic context map. ∎
+Structure of the extreme points.
+The six vertices are organised by the period of the corresponding binary sequence:
+-
+•
+Period ( orbits): the constant sequences and .
+-
+•
+Period ( orbit): the alternation , with context cycle .
+-
+•
+Period ( orbits): with cycle , and its complement with cycle .
+-
+•
+Period ( orbit): with the full -cycle .
+The pair and the pair are related by the bit-flip symmetry . The vertices and are each unchanged by this swap.
+Deterministic rules that do not visit all contexts.
+A deterministic rule assigns to each context exactly one successor. There are such rules on the four contexts . Of these, exactly eventually visit every context (these are the six vertices above) and do not—they get trapped in a subset of contexts. A trapped rule has no single well-defined long-run distribution; instead, its long-run behaviour depends on the starting context. As in the bigram case (Remark 2), each such rule contributes an entire edge or face of fixed points to the trigram fixed-point polytope , rather than a single vertex.
+2.4 -grams over binary tokens
+At order the context space is with contexts, and there are possible -grams. The flow-balance conditions contribute independent linear constraints, giving an -dimensional convex polytope with exactly extreme points. Each extreme point corresponds to a simple directed cycle in the de Bruijn graph—a periodic sequence that visits some subset of contexts in a fixed cyclic order, with each visited context having a unique successor. The cycles range from period (the constant sequences, visiting a single context) to period (visiting all eight contexts):
+The two period- orbits are the only ones long enough to visit all eight contexts; they are known as de Bruijn sequences of order . Most extreme points visit only a subset of contexts: the period- orbits visit just one, the period- orbits visit three, and so on. For each extreme point of period , the -gram distribution is uniform on the visited -grams, with each receiving mass .
+Symmetry.
+The bit-flip symmetry pairs of the vertices into symmetric pairs and leaves unchanged (periods , , and ). Every pair consists of a “-heavy” and a “-heavy” periodic sequence.
+2.5 The general pattern: simple cycles in the de Bruijn graph
+The three worked examples reveal a uniform structure.
+Proposition 5 (Extreme points of the -gram fixed-point polytope).
+For order- models over a token set of size , the extreme points of the fixed-point polytope are in one-to-one correspondence with the distinct simple cycles in the de Bruijn graph . Each extreme point is the uniform distribution on the -grams traversed by the cycle; each visited -gram receives mass where is the cycle length.
+Equivalently, the extreme points are the stationary distributions of the deterministic ergodic Markov chains on the context space : each such chain follows a single periodic orbit, visiting distinct contexts in a fixed cyclic order.
+Counting extreme points.
+Over binary tokens, the number of extreme points for each is the number of distinct simple cycles (up to rotation) in :
+The dimension of is always : the -gram simplex has dimension , and the flow-balance conditions contribute independent constraints. The number of extreme points grows rapidly with and does not equal the total number of distinct binary periodic sequences (up to rotation) of period : the de Bruijn-graph constraint that all consecutive -grams must be distinct is strictly stronger than primitivity of the periodic sequence.
+Why not every necklace is valid.
+A necklace is an equivalence class of binary strings under cyclic rotation—in other words, a periodic sequence considered up to where one starts reading it. A binary necklace of period with may repeat an -gram, making it impossible to assign a unique next token to that context. For example, at the necklace (period ) produces -grams , where appears twice with different successors ( and ), so no deterministic rule can generate this sequence. The valid necklace produces -grams —all distinct.
+2.6 The general theorem: circulations on de Bruijn graphs
+The pattern observed in the binary examples holds for any number of tokens and model order . The key insight is that the flow-balance condition identifying the fixed-point set is exactly the circulation condition on the de Bruijn graph, for which the extreme-point structure is a classical result in combinatorial optimisation (see, e.g., Schrijver 29).
+Theorem 1 (continued: fixed-point polytope as circulation polytope).
+Let be a finite token set of size and the model order. The set of self-consistent -gram distributions (fixed points of the fit–generate–refit recursion in the limit ) satisfies:
+-
+(a)
+(Dimension.) is a convex polytope of dimension .
+-
+(b)
+(Defining constraints.) is defined by independent flow-balance constraints within the -simplex .
+-
+(c)
+(Extreme points.) The extreme points of are in one-to-one correspondence with simple directed cycles in the de Bruijn graph . The extreme point corresponding to a cycle of length is the uniform distribution on the traversed -grams, each receiving mass .
+-
+(d)
+(Convex decomposition.) Every self-consistent -gram distribution is a convex combination of these deterministic periodic-orbit distributions.
+Proof.
+Fixed-point condition = flow balance. The fixed-point condition —where fits the conditional probabilities from and generates the resulting -gram distribution—is equivalent to the statement that for every -gram context , the total probability of -grams that begin with equals the total probability of -grams that end with :
+Write for the fitted conditional distribution and for the context frequency. If , then is the long-run context frequency of the chain defined by (since summed over predecessors that transition into ), and , so regeneration reproduces . Conversely, if is a fixed point, then must be the long-run context frequency, which gives .
+This is exactly the conservation-of-flow condition at every node of the de Bruijn graph , where nodes are -gram contexts and each -gram is a directed edge from to . Together with and , the constraints define the polytope of non-negative unit circulations on .
+Part (a): dimension. The flow-balance equations sum to the same value () on both sides, so at most are independent. They are generically independent, giving dimension .
+Part (b): distinct cycles give distinct extreme points. Two simple directed cycles are distinct if they traverse different edge sets (identifying rotations of the same cycle). If cycles and are distinct, some -gram is traversed by one but not the other: then but (or vice versa), so .
+Part (c): each cycle flow is an extreme point. Let be a simple cycle of length and suppose with and .
+Step 1: and are supported on . If edge is not in , then , so . Since , , and both , we must have .
+Step 2: . The edges of form a single simple directed cycle: every visited node has exactly one incoming edge in and one outgoing edge in . For any non-negative unit circulation supported on these edges, flow balance at each visited node forces . Since the edges form a single cycle, this propagates around the cycle and forces all edge flows to be equal: for all . The unit-flow condition gives , so . Therefore , and the decomposition is trivial.
+Part (d): every extreme point is a cycle flow. Let be an extreme point of . Consider the support graph with . Since satisfies flow balance, every node in has at least one incoming and one outgoing edge in , so contains at least one directed cycle.
+If is a single simple cycle, we are done by Step 2 above.
+If contains more than one cycle, we derive a contradiction. Let be a simple directed cycle in that does not use all edges of , and let be its elementary cycle flow. Since (there are edges in outside ), the vector is a nonzero vector that satisfies flow balance at every node and whose entries sum to zero. For sufficiently small , both
+are non-negative (since on and outside ), balanced, and have unit total flow. Then with , contradicting being an extreme point.
+Therefore every extreme point of is an elementary cycle flow, and every self-consistent -gram distribution is a convex combination of these cycle flows. ∎
+Corollary 1 (Cycle–distribution bijection).
+Different simple directed cycles in produce different -gram distributions. Conversely, every extreme fixed-point distribution determines the cycle uniquely: it is recovered as the subgraph on , which has a unique cyclic ordering since every visited node has exactly one successor in the support.
+Verification across token counts and model orders.
+Exhaustive enumeration confirms the theorem for small cases. Table 2 lists the number of extreme points (simple directed cycles in the de Bruijn graph) for all feasible combinations of the number of tokens and model order . A Jupyter notebook reproducing and extending this table is included in the GitHub repository.
+For example, the ternary bigram case (, ) has extreme points corresponding to simple cycles in : three constant sequences (, , ), three period- alternations (, , ), and two period- full cycles (, ).
+2.7 Section 2 in brief
+The fixed-point condition for -gram distributions reduces to flow conservation on the de Bruijn graph —a linear condition—so the fixed-point set is a convex polytope of dimension . By the correspondence between extreme circulations and simple cycles (Theorem 1), the extreme points are in bijection with simple directed cycles in ; each is the uniform distribution on the -grams traversed by a single deterministic periodic orbit. Every self-consistent -gram distribution is a convex combination of these deterministic extremes. This characterisation is fully general: it holds for any finite token set and any model order, and connects the fixed-point structure of the paper’s recursion to well-studied objects in combinatorial optimisation and symbolic dynamics.
+3 From fixed points to shallow and deep text
+3.1 Orientation
+Section 2 characterised the fixed points of the neutral recursion as circulations on de Bruijn graphs. This section asks what those fixed points look like when viewed at shorter or longer window lengths, and uses that viewpoint to define shallow and deep text distributions. The key tool is the project–lift test: marginalise an -gram distribution to order , then roll forward from the induced order- continuation law. This isolates exactly what longer context adds.
+3.2 Induced -gram distributions and the projection of extreme points
+An -gram distribution on induces, for every , a -gram distribution by marginalisation: for each -gram ,
+Because this map is linear, it sends the -gram circulation polytope to a convex set of -gram distributions, and preserves convex combinations: if is a mixture of cycle distributions, then with the same weights .
+For , an -gram fixed point also determines a -gram distribution, because the fixed point determines an order- continuation law whose rollout specifies the frequency of every -gram. Concretely, , where are the conditional probabilities extracted from .
+Proposition 6 (Extremality is preserved upward).
+Let be a simple directed cycle of period in , and let be the corresponding extreme point of the -gram circulation polytope . Then for every , the induced -gram distribution is the uniform distribution on distinct -grams and is an extreme point of the -gram circulation polytope . Moreover, the map is injective.
+Proof.
+The cycle corresponds to a periodic token sequence of minimal period . At window length , the consecutive -grams are all distinct (this is the simple-cycle condition in ). Now take any . If two -grams starting at positions and (with ) were identical, their length- prefixes—the -grams at positions and —would also be identical, contradicting distinctness of the -grams. So all consecutive -grams are distinct, each appearing once per period, giving the uniform distribution with mass on each. This is precisely the extreme point of corresponding to the same periodic orbit viewed as a simple cycle in .
+For injectivity: two distinct simple cycles in differ in at least one -gram, hence their induced -gram distributions differ as well (the -gram marginal is determined by the -gram distribution). ∎
+Extremality is not preserved downward.
+The converse fails: an extreme point of can marginalise to a non-extreme point of for . For a concrete example, take , and consider the trigram distribution that places mass on each of the six trigrams and zero on the remaining trigrams. These six trigrams form a simple cycle in , so is an extreme point of . But marginalising to bigrams, the bigram arises from two trigrams ( and ), receiving mass , while the remaining four bigrams each receive mass . This non-uniform distribution is not the uniform distribution on any simple cycle in , hence it is not an extreme point of . Among the extreme points of for , exactly lose extremality when projected to bigrams.
+Why this asymmetry matters in practice.
+The upward–downward contrast is not merely a mathematical curiosity. In a real text ecosystem, agents maintain a corpus by reading and publishing with some finite context window. The asymmetry says that when the context window is increased—for example, when a new generation of models can attend to longer passages—the statistical structure already present in the corpus is preserved: the longer-window agent can faithfully maintain the existing text statistics while potentially capturing additional structure. When the context window is reduced, however, the finer-grained statistics of the corpus generally cannot be maintained: a shorter-window agent loses access to distinctions that required the longer context, and the corpus drifts toward a coarser equilibrium. In short, upgrading context is safe; downgrading context is lossy.
+3.3 Shallow and deep token distributions
+The concepts of shallow and deep are properties of probability distributions over token windows, not of individual texts. In practice, a trained language model implicitly defines such a distribution: for any window length , the model assigns a probability to every -token block. A specific neural architecture (such as a transformer) is a proxy for this distribution; the definitions below apply to the distribution itself, regardless of how it is represented.
+Definition 8 (-shallow and -deep).
+Let be a probability distribution over token sequences from a fixed vocabulary of tokens. For any window length , write for the induced distribution over contiguous -token blocks, and write for the induced distribution over -token blocks.
+The distribution is -shallow if for every the -token distribution can be recovered from alone: marginalising to -token blocks and rolling forward via the order- continuation law extracted from reproduces exactly. Equivalently, is -shallow if and only if the next token depends only on the preceding tokens.
+The distribution is -deep if it is not -shallow: the distribution over -token (or longer) blocks cannot be recovered from any window shorter than .
+An -shallow distribution has no predictive structure beyond what a window of tokens can see. Any agent with a longer context window—whether an -gram model with lookahead or a transformer with a larger attention span—extracts no benefit from the additional context. Conversely, an -deep distribution contains genuine structure that shorter windows miss: a longer context window gives the agent a real advantage.
+These are properties of the distribution, not of any particular sample or model architecture. In the population-limit setting considered here, any sufficiently expressive next-token learner trained on an -shallow environment has no further predictive gain from using a context window longer than . A learner trained on an -deep corpus can, in principle, exploit the full depth.
+Application to -grams.
+In the -gram setting, the distribution is a distribution over -grams, and the continuation law is the conditional . The project–lift test makes -shallowness checkable: given an -gram distribution (with ), marginalise to and then lift—extract the order- continuation law from and compute the -gram distribution it implies. Write for the result. Then is -shallow if and only if . When the equality fails, the gap quantifies exactly the structure that lies beyond the -gram window.
+Example.
+Consider and the -gram distribution that places mass on each of , , and zero elsewhere (the extreme point corresponding to the period- cycle in ).
+-
+•
+-shallow: marginalising to trigrams gives mass on each of . Lifting back via the trigram continuation law recovers the original -gram distribution exactly, because every bigram context determines a unique next token.
+-
+•
+Not -shallow (hence -deep): marginalising to bigrams gives mass on each of . The bigram continuation law has and , so lifting to -grams produces , , and other -grams that were not present in the original. The bigram model spreads probability over -grams that the true distribution excludes.
+Measuring depth.
+The project–lift test gives a binary verdict (-shallow or not), but the mismatch between the original distribution and the lifted version can also be measured. If is the true -token distribution and is the rollout from its induced order- continuation law, the KL divergence
+decomposes depth into the cross-entropy of the true distribution against the -gram rollout minus the entropy of the true distribution itself. This quantity is zero if and only if the distribution is -shallow; when it is positive, it measures exactly how much structure lies beyond the -gram window. Section 5 develops this into a full diagnostic framework and applies it to matched descriptive-versus-normative experiments.
+3.4 Section 3 in brief
+Projecting fixed points to shorter or longer window lengths reveals an important asymmetry: increasing context preserves structure, while decreasing context is generally lossy. This leads naturally to the distinction between -shallow and -deep distributions. The project–lift test provides an exact criterion: a corpus is -shallow precisely when its -gram distribution is recovered by rolling forward from its induced order- continuation law.
+4 Selection, publication rules, and Theorems 2–3
+4.1 Orientation
+We now turn from properties of distributions to publication dynamics. The question is not only what structure is present in a corpus, but whether selection preserves it, erases it, or creates an incentive for longer context. Descriptive publication recycles visible text and drives the corpus toward -shallowness. Normative publication scores futures and can stabilise environments that need not be -shallow. Theorem 2 gives the fixed-point picture; Theorem 3 explains why later learners inherit the resulting public conditional.
+4.2 Descriptive versus normative publication
+Before introducing the formal selection machinery, we separate two fundamentally different kinds of publication rules, because the outcome of recursive publication depends entirely on which kind is in play.
+Descriptive publication.
+In a descriptive rule, agents may use any internal reasoning—including lookahead and chain-of-thought—but they do not apply external quality criteria (such as correctness checks, novelty requirements, or verification against outside sources) when deciding what to publish. Some agents publish -grams sampled directly from the current corpus; others generate new text from the induced order- continuation law, possibly after extensive internal deliberation. What makes the rule descriptive is not the absence of computation but the absence of normative standards: the agent accepts the statistical status quo and publishes accordingly.
+Theorem 2 (stated below) shows that under descriptive publication, the corpus converges to an -shallow distribution: the corpus -gram distribution equals the rollout from its own induced order- continuation law, and lookahead becomes redundant. Even agents that “think” before publishing cannot sustain depth beyond the -gram window when no quality filter is applied.
+Normative publication.
+In a normative rule, agents score, filter, or verify their output against some quality criterion before publishing. The criterion need not be external: it can be an outside check such as a unit test or experimental result, but equally an internal one such as deductive validity. An agent that derives mathematical theorems from axioms is applying a normative rule—the proof must be valid—even though the criterion is entirely internal to the formal system. The depth arises because the certificate (the proof) may need to be much longer than the agent’s context window, so the published text carries structure that no short-context model can reproduce.
+Under normative publication, the fixed-point corpus need not be -shallow: the acceptance filter can sustain statistical structure beyond what the agent’s -gram window captures, and lookahead remains beneficial.
+Why this matters.
+The descriptive/normative distinction determines whether recursive publication compresses or preserves structure. Descriptive selection is self-defeating: it drives the corpus toward shallowness, erasing the very structure that made lookahead useful. Normative selection can be self-sustaining: it maintains deep structure that rewards continued lookahead. In real text ecosystems, both kinds of publication coexist—some agents generate entirely new text while others recycle, paraphrase, or rank existing text—and the balance between descriptive and normative forces shapes the long-run corpus.
+4.3 Agents, acceptance, and the selection mechanism
+Consider a population of agents that all read the same public corpus and publish text back into it. An ordinary agent fits an -gram continuation law to the current corpus and generates text token by token from that law. A lookahead agent uses the same fitted continuation law but reweights each candidate token by the probability that its continuation will be accepted—that is, that the generated trace will satisfy some criterion over the next steps. The ordinary agent simply imitates; the lookahead agent selects.
+The acceptance-conditioned continuation law.
+Let be the fitted continuation law and let be an acceptance event—a criterion on future traces. For context and candidate token , define the acceptance value
+and the total acceptance probability
+The acceptance-conditioned continuation law is
+The second equality is Bayes’ rule: is the conditional distribution of the first token given that the continuation will be accepted.
+Remark 3 (Unfolding the acceptance value for survival).
+When the acceptance event requires the trace to survive for further steps, the acceptance value is a finite-horizon survival probability on the context graph. Conditioning on , the first token is fixed, so the remaining uncertainty begins after the updated context
+Equivalently,
+where
+In the finite-state setting, these values can be computed by dynamic programming through the survival probabilities .
+What counts as acceptance?
+The framework is deliberately general. In the Conan Doyle trigram illustration, acceptance means that the generated trajectory survives at full trigram order for at least more steps without being forced to back off, that is, without reverting from full-order trigram generation to a shorter-context rule. In verifier-rich domains, acceptance can mean that a unit test passes, a proof checker accepts, or a constraint is satisfied. Equation (5) is a target conditional distribution, not a claim that any agent literally enumerates every -step future: in an LLM system, the same effective bias can arise from chain-of-thought reasoning, sampling several candidate traces and discarding failures, or tool-assisted verification.
+Example 3 (Survival-based acceptance in the trigram illustration).
+With , define the alive set as the set of bigram contexts with at least one outgoing sampled trigram. The acceptance event is -step survival:
+where is the first time the generator is forced to back off from trigram generation to a shorter-context rule. Then
+where
+is the -step survival probability, computable by dynamic programming on the finite support graph.
+4.4 Why hard rules are analytically fragile
+At the cross-entropy baseline () used throughout this paper, the main analytical complication is back-off rather than selection sharpness. But for lower-temperature or argmax () publication rules, a hard threshold makes the update map non-differentiable or even discontinuous: an arbitrarily small change in the fitted continuation law may switch which continuation wins and hence abruptly change what enters the corpus. Smoothing the selection rule becomes essential for convergence analysis.
+A soft publication rule replaces exact exclusion by continuous reweighting. Near-miss continuations still retain positive mass, but with lower weight than better ones. This makes the induced publication law vary smoothly with the fitted continuation law and is therefore much easier to analyse. In favourable cases the resulting update operator is even contractive, yielding uniqueness and convergence of the fixed point.
+One convenient family is Gibbs or Boltzmann reweighting. Given a utility assigned to a candidate continuation from context , define
+Here controls the sharpness of selection: small gives a permissive rule, while large approaches winner-take-all behaviour. In this sense, hard publication is the singular limit of soft publication.
+The same principle appears in probabilistic modelling: conditioning on an event that can have zero or near-zero probability is often unstable, whereas continuous likelihood reweighting is much better behaved.
+4.5 Theorem 2: fixed points under selection
+The key question is whether repeated publication can settle to a stable distribution.
+Theorem 2 (Fixed points under selection).
+Let a population of -gram agents with -step lookahead (equivalently, -gram agents with ) publish into a shared corpus.
+Part (a): Descriptive publication. A fixed-point corpus -gram distribution satisfies
+where refits an order- continuation law from the corpus and generates the corresponding -gram rollout. Equivalently, the fixed points are exactly the -shallow distributions inside the fixed-point polytope : the corpus -gram distribution coincides with the rollout from its induced order- continuation law. Descriptive selection therefore drives the corpus toward -shallowness, so lookahead becomes redundant at equilibrium.
+Part (b): Normative publication. For the soft normative rules analysed here—those whose quality standard demands structure that no order- continuation law can produce—the fixed-point corpus is not -shallow: the corpus -gram distribution retains genuine structure beyond the -gram window, and the KL divergence between the corpus distribution and the rollout from its induced order- continuation law is strictly positive at the fixed point. Moreover, the KL divergence is bounded above by bits, and this bound is optimal: it is attained by cyclic de Bruijn constructions (Section 5.6). Normative selection is self-sustaining: it maintains deep structure that rewards continued lookahead.
+Worked example (Part (a)): descriptive publication by bigram agents with one-step lookahead.
+We illustrate Part (a) of Theorem 2 by expanding the binary trigram example from Section 2.3. Consider bigram agents () with one-step lookahead (, so ) under descriptive publication. The polytope is the -dimensional trigram polytope with six extreme points described earlier, and the descriptive fixed-point condition becomes
+so the trigram distribution must equal the trigram rollout from its induced bigram continuation law.
+Away from the singular corner , a binary bigram continuation law is parameterised by two probabilities,
+with the complementary transitions and . The unique stationary distribution on contexts is
+The corresponding trigram distribution is , giving the eight values
+As ranges over , this traces out a -dimensional surface inside the -dimensional polytope . The three vertices of that lie on this surface are easily verified: gives and (vertex ); gives and (); gives and (, the alternating cycle). The full set is this parameterised surface together with its limiting edge as .
+Three features are worth recording:
+-
+1.
+Dimension drop. is -dimensional inside the -dimensional polytope . More generally, , the same as .
+-
+2.
+Non-convexity. is not convex: a mixture of two -shallow distributions is generically not -shallow, because the condition imposes quadratic constraints on the trigram probabilities.
+-
+3.
+Extreme-point filter. Of the six vertices of , only (all zeros), (all ones), and (the alternating cycle) lie in . The distributions corresponding to the period- and period- cycles have genuine trigram structure that cannot be generated by any bigram law.
+For example, for the cycle one has , so . Since , this forces . But then
+contradicting .
+Worked example (Part (b)): why normative publication can sustain depth.
+We now illustrate Part (b) using the same setting (, , ). The three vertices of that are not -shallow are , , and . For each, we can compute the induced bigram law, the bigram rollout, and the KL divergence that measures the depth lost by the bigram window. Writing trigram probabilities in the order :
+Vertex (cycle , period ). The distribution is . The induced bigram law has , , with stationary distribution , . The bigram rollout is , which spreads probability to trigrams and that do not appear in the cycle. The KL divergence is bits.
+Vertex (cycle , period ). By the bit-flip symmetry , the calculation mirrors : , , and bits.
+Vertex (cycle , period ). The distribution is . Here , so the stationary distribution is and the bigram rollout is the uniform distribution . The KL divergence is bit—the largest gap of any distribution in .
+The pattern is clear: the longer the period of the cycle, the more trigram structure is invisible to the bigram window, and the larger the KL divergence. A numerical search over the full polytope confirms that achieves the global maximum of bit. Under descriptive publication, all three gaps would collapse to zero as the corpus is driven toward . Under normative publication, an acceptance criterion that favours the relevant pattern can counteract this drift, sustaining trigram structure that the bigram window alone cannot generate and keeping the KL divergence positive.
+Remark 4.
+The parameters in this example are small (, , ), but every ingredient—the fixed-point polytope, the -shallow surface, the induced continuation law, and the KL divergence—is defined by finite-dimensional linear algebra and elementary probability. For any specific distribution in , the KL divergence between the distribution and its order- rollout can be computed in closed form for general , , and . In particular, for specific normative publication rules with an explicit target, the depth of the resulting fixed point is an explicit function of the parameters, not merely a qualitative prediction.
+4.6 From selection to inheritance
+The acceptance-conditioned continuation law matters because it is what later learners see in the environment. Once the public corpus has been shaped by selection, an ordinary next-token learner does not need to re-perform the selection step: it trains on the filtered environment itself. This is why Theorem 3 is the natural bridge beyond -grams. The inheritance claim is therefore about the target conditional written into the corpus, not about the internal mechanism that first produced it.
+4.7 Theorem 3: cross-entropy inheritance
+Theorem 3 (Cross-entropy inheritance).
+Let be a public next-token conditional generated by an environment published as a collection of texts. Training a later learner by expected next-token cross-entropy recovers whenever the model class contains . More generally, when the class does not contain , cross-entropy minimisation recovers the KL-closest conditional in that class.
+This is the bridge beyond -grams. For an unconstrained order- -gram table, the theorem is just relative-frequency estimation stated in cross-entropy language. Fix a context and write for the empirical next-token frequencies in the published environment. Among all conditional distributions on that context, is exactly the one that minimises the empirical next-token cross-entropy. So if the -gram class is large enough to represent the target conditional, and the learner later generates by sampling from its fitted table, then it selects the next token from exactly the same conditional distribution singled out by cross-entropy minimisation. With finite data this is the empirical conditional rather than the population limit , and greedy decoding is different again because it uses only rather than the full distribution.
+The architecture-independent message.
+The key consequence is that different architectures trained on the same filtered corpus converge to the same target conditional, to the extent permitted by their representational capacity and optimisation. A smoothed trigram agent and a small neural network, both trained on an environment shaped by selection, move toward the same public conditional . What is inherited is the public conditional; optimisation and approximation remain architecture-dependent.
+Sampling versus argmax publication.
+The theorem is about the fitted conditional, not about how that conditional is later decoded into text. If a learner recovers and then publishes by sampling, the published next-token law is itself. If instead it publishes greedily, the induced policy is
+So a population of argmax agents does not republish ; it republishes a deterministic policy derived from . The argmax map is discontinuous at ties and near-ties: a small change in can switch the winner and abruptly change what enters the corpus. This is the same fragility discussed in Section 4.4 for hard publication rules, and it means that multiple fixed points, path dependence, and abrupt winner switches are generic possibilities under greedy decoding. Section 6 works out the geometry of the (argmax) fixed-point set in detail: in place of the convex circulation polytope that arises at , one obtains a union of simplices built from vertex-disjoint cycles.
+4.8 Section 4 in brief
+This section introduced publication dynamics. Descriptive publication (no quality standard applied) drives the corpus toward -shallowness; normative publication (output scored or verified against some criterion) need not. Theorem 2 makes this precise. The acceptance-conditioned continuation law provides the formal selection mechanism; soft rules are analytically tractable while hard rules introduce discontinuities. Theorem 3 (cross-entropy inheritance) completes the arc: later learners trained on the filtered corpus recover the public conditional, regardless of architecture.
+5 Project–lift diagnostics for Theorem 2
+5.1 Orientation
+Section 3 introduced the project–lift test: compare a corpus -gram distribution with the rollout from its induced order- continuation law. This section applies that comparison dynamically along the recursion. The central distinction is between two questions that can come apart:
+-
+•
+Does the recursion converge?
+-
+•
+Does it converge to an -shallow corpus?
+The primary diagnostics are the and KL gaps between the corpus distribution and its project–lift rollout; entropy is a useful secondary contextual quantity.
+5.2 The project–lift diagnostics
+When the corpus distribution at generation is on length- blocks, the natural strong comparison object is the rollout from its induced order- continuation law:
+This gives two canonical diagnostics:
+The gap measures total probability mismatch. The KL divergence measures how surprising the corpus -gram distribution would be if one insisted that it had been generated by the induced order- continuation law. At a descriptive fixed point, both vanish.
+Entropy is useful too, but it answers a different question. The corpus -gram entropy says how spread out the visible corpus is; the induced -gram entropy says how spread out the fitted short-memory dynamics are. Neither one, by itself, tells us whether the corpus -gram distribution is actually order- generated. For theorem testing, KL and are primary; entropy is secondary.
+5.3 Matched exact experiment: descriptive collapse versus normative plateau
+We illustrate the diagnostics on a deliberately matched pair of exact recursions, one descriptive and one normative, that differ only in the publication rule. The experiment is designed to test whether the project–lift diagnostics can separate two situations that look superficially similar: both recursions converge, but only the descriptive one converges to an -shallow corpus.
+Construction.
+A seed order- continuation law is drawn by placing uniform mass on randomly chosen trigrams (out of possible). The initial corpus -gram distribution is the exact rollout , with , , . At each generation the entire corpus is replaced ( in the notation of Section 1): of the new material is contributed by the lookahead -agents and by the order- agents who publish from the fitted continuation law. In the descriptive case, the -agents recycle the current corpus -gram distribution. In the normative case, they publish from a fixed target: an independent random -gram distribution drawn from a Dirichlet prior over randomly chosen -grams. This target is genuinely -deep—it was not generated by any order- continuation law—so a large persistent project–lift gap is structurally possible, and the normative run tests whether the diagnostics can detect it. Both runs share the same initial corpus and the same random seed; only the publication rule differs.
+(The figures in this section are generated by the exact script build_theorem2_information_tutorial_case.py in GitHub/scripts/. The accompanying notebook ngram_theorem2_strong_diagnostics_teaching.ipynb in GitHub/notebooks/basic_theory/ lets the reader experiment with different settings, including the vocabulary size, model order , block length , the lookahead mixing fraction, the seed initialisation mode (uniform, Dirichlet, or random text), and the choice between descriptive and normative publication rules.)
+Results.
+By generation , the descriptive run has driven the KL divergence below and the gap below . The normative run, by contrast, has converged to a stable corpus distribution with KL divergence bits and gap . The two recursions therefore separate sharply: the descriptive diagnostics collapse, whereas the normative diagnostics stabilise at a nonzero plateau. A KL gap of bits is not a small residual mismatch: on average, encoding a -gram drawn from the normative equilibrium with the rollout from the induced trigram continuation law costs about extra bits per block.
+5.4 Convergence versus -shallowness
+This is the right place to be careful with interpretation. In the normative case, the issue is not failure of convergence. The recursion does converge, but it converges to a corpus distribution that is not order- generated. In the present matched run, the residual mismatch is also macroscopically large ( bits of KL divergence), so this is not a near-shallow artefact but a genuine stable departure from -shallowness. This is exactly why convergence and -shallowness are different questions: the normative recursion can stabilise without satisfying the descriptive fixed-point condition.
+5.5 Where the normative gap lives
+At the final normative equilibrium (recall that the tokens here are synthetic labels –, not real words), the largest single -gram mismatch is on block 3-0-4-4-4, whose probability differs by roughly between the corpus distribution and the rollout from the induced trigram continuation law. Several other blocks, such as 1-3-2-2-4, 4-0-3-3-3, and 4-1-0-0-2, retain comparably visible discrepancies.
+Knowing that a gap exists is not enough; we want to know where it lives. Using the prefix/suffix decomposition from Section 3, the total gap can be separated into a prefix-frequency term and a weighted suffix-conditional term. Any -gram can be decomposed into its trigram prefix and the conditional suffix .
+Because the normative target is genuinely -deep, the gap now lives in both components: different prefix frequencies and different conditional suffix laws given the same prefix. Numerically, the prefix-frequency term contributes to the total gap, while the weighted suffix-conditional term contributes . This contrasts with a near-shallow target, where the suffix conditionals would already be aligned and only the prefix masses would differ. Figure 9 highlights the visible prefix contribution; the suffix-conditional component is also nonzero in this genuinely -deep example.
+This is why the project–lift diagnostics are useful. They separate three questions that are easy to conflate:
+-
+•
+Has the recursion converged?
+-
+•
+Has the corpus -gram distribution become order- generated?
+-
+•
+If not, where is the residual mismatch located?
+The matched exact run answers them cleanly. In the descriptive case: yes, yes, nowhere substantial. In the normative case: yes, no, and the residual mismatch lives in both prefix frequencies and suffix conditionals.
+5.6 An extremal project–lift KL gap
+The matched experiment above shows that a normative publication rule can converge to a stable corpus with a substantial project–lift gap. It is natural to ask how large that gap can be in principle. The answer is exact: for fixed alphabet size and hidden extra depth , the block-level KL divergence is at most bits, and this bound is sharp.
+The sharpness witness is a cyclic de Bruijn word. We first record why such a word exists.
+Lemma 1 (Eulerian de Bruijn cycle and induced cyclic word).
+Let be an alphabet of size , and let be the de Bruijn graph whose vertices are the -grams over and whose edges are the -grams. Then:
+-
+1.
+has an Eulerian cycle of length .
+-
+2.
+Any such Eulerian cycle induces a cyclic word of length whose cyclic length- windows are exactly the distinct -grams over , each appearing once.
+-
+3.
+The primitive period of is exactly .
+Proof.
+Each vertex has indegree and outdegree equal to , since one may prepend or append any symbol of . The graph is strongly connected: from any vertex to any vertex , append one by one. Hence the directed Euler criterion applies, so has an Eulerian cycle. Its length is the number of edges, namely .
+Write the Eulerian cycle as a cyclic sequence of edges . Consecutive edges overlap in their last and first symbols, so reading the new symbol contributed by each edge produces a cyclic word of length . Its cyclic length- windows are exactly the edge labels, hence every -gram appears exactly once.
+If had period , then there could be at most distinct cyclic length- windows. But has exactly such windows, one for each -gram. Therefore . ∎
+Proposition 7 (Extremal project–lift KL gap).
+Fix an alphabet of size , integers , and any corpus -gram distribution on . Let
+be the rollout from the induced order- continuation law. Then
+Equivalently, if , then
+The bound is sharp. Let be a cyclic de Bruijn sequence of order over , equivalently an Eulerian cycle in the de Bruijn graph . Let be the uniform distribution on the cyclic length- windows cut from . Then
+Proof.
+Let , and write
+By construction, has the same -gram marginal as , and for each it generates from the induced order- continuation law extracted from . Thus
+where the conditional on the right is read from the -gram marginal of .
+Applying the chain rule for KL divergence gives
+Each term is a conditional mutual information, so
+because takes values in an alphabet of size . Summing over the indices proves (6).
+To show sharpness, let be a cyclic de Bruijn word of order , which exists by Lemma 1. Every -gram appears exactly once in one period of length . Therefore the -gram marginal of the cyclic window distribution is uniform:
+Hence every -context is followed equally often by each token, so the induced order- continuation law is uniform:
+It follows that the project–lift rollout is the uniform law on all -grams:
+On the other hand, is supported on exactly distinct cyclic length- windows, one from each starting position of the de Bruijn cycle. These windows are distinct because their first symbols are distinct. Each therefore has mass . So
+This proves sharpness. ∎
+Remark 5 (Significance).
+Proposition 7 identifies the absolute scale of the project–lift diagnostic. No normative publication rule with hidden extra depth can produce a larger block-level KL gap than bits, because every such rule ultimately produces some corpus -gram distribution , and the bound above is universal over all such .
+The de Bruijn construction shows that this worst case is not merely formal but attainable. Each hidden step beyond the order- window can contribute a full bits of irreducible mismatch. This is not a literal model of natural language, but it is a sharp combinatorial benchmark: a positive project–lift KL gap need not be a small perturbative effect; in principle it can scale linearly with the hidden extra depth preserved by normative selection.
+Remark 6 (The scale in the matched experiment).
+In the matched experiment of Section 5.3, we have , , and , so the universal upper bound is
+The observed normative plateau of bits therefore attains about of the maximum possible project–lift KL gap at this depth.
+Remark 7 (Companion gap).
+For the same extremal de Bruijn construction,
+so the diagnostic is also asymptotically maximal as the hidden extra depth grows.
+5.7 Section 5 in brief: completing Theorem 2
+This section has developed the project–lift diagnostics—the distance and KL divergence between the corpus -gram distribution and the rollout from its induced order- continuation law—and used them to complete the quantitative content of Theorem 2, Part (b).
+Strict positivity. When the normative quality standard demands structure that no order- continuation law can produce, the fixed-point corpus -gram distribution is not -shallow, so .
+Optimal upper bound. Proposition 7 establishes that the project–lift KL gap satisfies
+for any corpus -gram distribution , where is the hidden extra depth and is the alphabet size. The bound is attained by the uniform distribution on cyclic windows from a de Bruijn word of order (Lemma 1), so it is optimal.
+Together, these results complete Part (b) of Theorem 2: normative publication with hidden extra depth produces a strictly positive KL gap that is bounded above by the optimal value bits.
+6 Extensions: heterogeneous populations and the argmax limit
+6.1 Orientation
+The preceding sections studied populations in which all agents share the same model order and generate at the same temperature. This section records two extensions. First, public text environments are typically heterogeneous: some agents use shorter contexts and others longer ones; some sample at high temperature and others publish near-deterministically. Second, one boundary case of this heterogeneity—the argmax limit —admits an exact fixed-point characterisation.
+This section is exploratory and is not needed for understanding Theorems 1–3 on a first reading. Its purpose is to show how the core framework extends beyond a single homogeneous population, and to isolate one exactly solvable boundary case where the geometry changes sharply.
+6.2 Setup: a population of -agents
+Consider a population of agent classes, indexed by . Each class is specified by:
+-
+•
+a model order ;
+-
+•
+a publication temperature ; and
+-
+•
+a population share with .
+Fix a common output block length
+The public corpus at generation is represented by an -gram distribution . From , class extracts its own order- continuation law , samples from it at temperature , and contributes an -gram distribution back to the corpus.
+At temperature , the continuation law induced by is
+At this recovers the unmodified law; as it approaches the uniform distribution; as it approaches deterministic argmax publication.
+6.3 The mixed-population recursion
+With the common output block length fixed, the aggregate recursion is
+where denotes: extract the order- continuation law, apply temperature , and roll it forward to an -gram distribution.
+A fixed point is therefore a corpus distribution that reproduces itself under the weighted mixture of all agent classes. When all are equal, this reduces to the single-population recursion studied earlier.
+6.4 Basic observations
+Existence.
+The simplex of -gram distributions is compact and convex, and the mixed-population operator above is continuous for fixed positive temperatures. Hence at least one fixed point exists by Brouwer’s theorem.
+Temperature heterogeneity breaks the circulation-polytope structure.
+At the descriptive single-population fixed points form the circulation polytope of Section 2. Once different temperatures are mixed, the update is nonlinear even before any normative filtering is introduced. The resulting fixed-point set need not be convex, even when all agents use the same model order.
+Context-window heterogeneity imposes mixed-resolution constraints.
+When some agents use order and others use order , the fixed point is constrained simultaneously by both resolutions. It need not be individually self-consistent at either resolution alone, but it must be stable under their weighted combination.
+A tractable boundary case.
+A full characterisation of the general heterogeneous recursion is open. The one boundary regime that can be analysed exactly is the deterministic argmax limit , to which we now turn.
+6.5 The exactly solvable boundary case: homogeneous argmax agents
+To isolate the effect of deterministic publication, fix a common model order and take the limit . We assume a fixed deterministic tie-breaking rule whenever the argmax is not unique. Thus every visited context has a single published successor, denoted .
+Individual texts are then deterministic, but the population still produces a nontrivial -gram distribution because the public corpus is a collection of independently initiated texts. Different initial contexts can flow into different periodic orbits of the deterministic map , so the population-level corpus may remain a genuine mixture.
+Why vertex-disjointness is required.
+At , convex combinations of cycle distributions are self-consistent because the mixture conditional reproduces both branches with the correct frequencies. At , this fails whenever two cycles visit the same context with different successors: the argmax chooses only one successor, destroying the minority branch. By contrast, if two cycles are vertex-disjoint, then every visited context has a unique successor with conditional probability , so the argmax is automatically self-consistent regardless of the mixture weights.
+Worked example: , .
+The de Bruijn graph has nodes (the bigram contexts) and edges (the trigrams). Consider the two vertex-disjoint cycles
+They correspond to the periodic texts
+and their context sets and are disjoint. Hence for any the mixture
+is a fixed point.
+A larger example is obtained from the six pairwise vertex-disjoint cycles
+which cover all nine contexts. Their convex hull is a -simplex of fixed points. For reference, exhaustive enumeration in yields vertex-disjoint cycle collections in total, of which are maximal.
+Proposition 8 ( fixed points).
+Fix and , and consider the infinite-corpus descriptive recursion at temperature with a fixed deterministic tie-breaking rule. A distribution on -grams is a fixed point if and only if
+where are pairwise vertex-disjoint simple directed cycles in the de Bruijn graph and is the uniform distribution on the -grams traversed by .
+Proof.
+Let be the deterministic successor map induced by argmax and the fixed tie-breaking rule. A corpus distribution is a fixed point exactly when it is stationary under the deterministic update .
+If is supported on pairwise vertex-disjoint cycles , then every visited context has a unique successor with conditional probability , so the argmax map agrees with the successor on each cycle. The uniform distribution on each cycle is stationary under , and any convex combination of these cycle measures is therefore stationary. This proves sufficiency.
+Conversely, let be a fixed point. Because is deterministic on a finite state space, every context eventually enters a periodic orbit. A stationary distribution cannot place positive mass on transient contexts, since transient mass is shifted away after one step. Hence the support of lies entirely on periodic orbits of , i.e. on simple directed cycles in . Distinct cycles of a deterministic map are automatically vertex-disjoint, and the stationary distribution restricted to each cycle is uniform. Therefore is a convex combination of uniform cycle distributions on pairwise vertex-disjoint simple cycles. ∎
+6.6 Geometry of the fixed-point set
+The fixed-point set is a union of simplices:
+where the union runs over all collections of pairwise vertex-disjoint simple directed cycles. Each collection of cycles contributes an -simplex of mixture weights.
+This contrasts sharply with the case, where the full circulation polytope is convex and all cycle distributions can be mixed freely. At , only vertex-disjoint cycles can coexist, so the geometry becomes topologically richer but globally non-convex.
+Marginalisation remains linear inside any fixed simplex: if
+then every shorter -gram marginal is
+What fails globally is convexity across incompatible simplices: mixtures of fixed points supported on cycle families that share a context are not themselves fixed points, because the shared context forces a single argmax successor.
+6.7 Section 6 in brief
+Heterogeneous populations extend the core framework by allowing different context windows and temperatures. In full generality the resulting fixed-point geometry is nonlinear and remains open. The exactly solvable boundary case is the argmax limit : there the fixed-point set is a union of simplices generated by vertex-disjoint cycle distributions. These are exploratory extensions of the core theory rather than part of the main theorem chain.
+6.8 Directions
+A full characterisation of the mixed recursion remains open. Natural next questions include uniqueness versus multiplicity of fixed points under temperature heterogeneity, the geometry induced by mixtures of different context windows, and the interaction between deterministic argmax components and positive-temperature exploratory components.
+7 Experiment matrix overview
+Data and code availability
+The exact code used to generate all figures and tables is available at https://github.com/SR123/LLM-text-ecosystems. Text corpora are public-domain Project Gutenberg editions. The main notebooks and helper modules are in the repository’s notebooks/ and src/ directories.
+References
+- 1 Shumailov, I. et al. AI models collapse when trained on recursively generated data. Nature 631, 755–759 (2024).
+- 2 Alemohammad, S. et al. Self-consuming generative models go MAD. In International Conference on Learning Representations (ICLR) (2024).
+- 3 Bohacek, M. & Farid, H. Nepotistically trained generative-AI models collapse. Preprint at arXiv:2311.12202 (2023).
+- 4 Guo, Y. et al. The curious decline of linguistic diversity: training language models on synthetic text. In Findings of the Association for Computational Linguistics: NAACL 2024, 3589–3604 (2024).
+- 5 Shannon, C. E. Prediction and entropy of printed English. Bell Syst. Tech. J. 30, 50–64 (1951).
+- 6 Katz, S. M. Estimation of probabilities from sparse data for the language model component of a speech recognizer. IEEE Trans. Acoust. Speech Signal Process. 35(3), 400–401 (1987).
+- 7 Kneser, R. & Ney, H. Improved backing-off for -gram language modeling. In Proc. IEEE International Conference on Acoustics, Speech, and Signal Processing (ICASSP), Vol. 1, 181–184 (1995).
+- 8 Bengio, Y., Ducharme, R., Vincent, P. & Jauvin, C. A neural probabilistic language model. J. Mach. Learn. Res. 3, 1137–1155 (2003).
+- 9 Griffiths, T. L. & Kalish, M. L. Language evolution by iterated learning with Bayesian agents. Cognitive Science 31, 441–480 (2007).
+- 10 Wei, J. et al. Chain-of-thought prompting elicits reasoning in large language models. In NeurIPS 35, 24824–24837 (2022).
+- 11 Wang, X. et al. Self-consistency improves chain of thought reasoning. In International Conference on Learning Representations (ICLR) (2023).
+- 12 Feng, Y. et al. Beyond model collapse: scaling up with synthesized data requires verification. In International Conference on Learning Representations (ICLR) (2025).
+- 13 Gillman, N. et al. Self-correcting self-consuming loops for generative model training. In Proc. 41st International Conference on Machine Learning, PMLR 235, 15646–15677 (2024).
+- 14 Norris, J. R. Markov Chains. (Cambridge Univ. Press, 1997).
+- 15 Ewens, W. J. Mathematical Population Genetics I: Theoretical Introduction. (Springer, 2nd edn, 2004).
+- 16 Gerstgrasser, M. et al. Is model collapse inevitable? Breaking the curse of recursion by accumulating real and synthetic data. Preprint at arXiv:2404.01413 (2024).
+- 17 Bertrand, Q. et al. On the stability of iterative retraining of generative models on their own data. In International Conference on Learning Representations (ICLR) (2024).
+- 18 Hataya, R., Bao, H. & Arai, H. Will large-scale generative models corrupt future datasets? In Proc. IEEE/CVF Int. Conf. Computer Vision 20555–20565 (2023).
+- 19 Dodge, J. et al. Documenting large webtext corpora: a case study on the Colossal Clean Crawled Corpus. In Proc. Conf. Empirical Methods in Natural Language Processing 1286–1305 (2021).
+- 20 Penedo, G. et al. The FineWeb Datasets: Decanting the Web for the Finest Text Data at Scale. Preprint at arXiv:2406.17557 (2024).
+- 21 DataComp-LM Consortium. DataComp-LM: In search of the next generation of training sets for language models. In Advances in Neural Information Processing Systems 37 (Datasets and Benchmarks Track) (2024).
+- 22 Huszár, F. et al. Algorithmic amplification of politics on Twitter. Proc. Natl Acad. Sci. USA 119, e2025334119 (2022).
+- 23 Dujeancourt, A. & Garz, M. Algorithmic content selection and the impact on news consumption. Preprint at SSRN:4450616 (2023).
+- 24 Ouyang, L. et al. Training language models to follow instructions with human feedback. In Advances in Neural Information Processing Systems 35, 27730–27744 (2022).
+- 25 Lightman, H. et al. Let’s verify step by step. Preprint at arXiv:2305.20050 (2023).
+- 26 Cover, T. M. & Thomas, J. A. Elements of Information Theory. (Wiley, 2nd edn, 2006).
+- 27 Kirby, S., Griffiths, T. & Smith, K. Iterated learning and the evolution of language. Current Opinion in Neurobiology 28, 108–114 (2014).
+- 28 T. van Aardenne-Ehrenfest and N. G. de Bruijn. Circuits and trees in oriented linear graphs. Simon Stevin, 28:203–217, 1951.
+- 29 Schrijver, A. Combinatorial Optimization: Polyhedra and Efficiency. (Springer, 2003).
+
+KAYNAK : https://arxiv.org/abs/2604.08554
