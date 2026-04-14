@@ -1,0 +1,18 @@
+Core Changes
+Exclude trace files from directory deletion in builds:
+#92486
+Switch segment prefetch cache miss response from 204 to 404:
+#92751
+Misc Changes
+Re-enable sccache:
+#92746
+Credits
+Huge thanks to
+@lukesandberg
+,
+@mmastrac
+, and
+@acdlite
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.37

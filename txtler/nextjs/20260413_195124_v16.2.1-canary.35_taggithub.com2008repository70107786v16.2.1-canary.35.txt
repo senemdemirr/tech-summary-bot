@@ -1,4 +1,3 @@
---- nextjs | v16.2.1-canary.35 | score=60.16 ---
 Core Changes
 Update font data:
 #92704
@@ -61,46 +60,3 @@ Huge thanks to
 for helping!
 
 KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.35
-
---- nextjs | v16.2.1-canary.37 | score=42.36 ---
-Core Changes
-Exclude trace files from directory deletion in builds:
-#92486
-Switch segment prefetch cache miss response from 204 to 404:
-#92751
-Misc Changes
-Re-enable sccache:
-#92746
-Credits
-Huge thanks to
-@lukesandberg
-,
-@mmastrac
-, and
-@acdlite
-for helping!
-
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.37
-
---- nextjs | v16.2.1-canary.38 | score=36.15 ---
-Core Changes
-Ensure x-nextjs-data header is only set during resolve:
-#92752
-Credits
-Huge thanks to
-@ijjk
-for helping!
-
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.38
-
---- nextjs | v16.2.1-canary.36 | score=31.27 ---
-Core Changes
-Fix prefetch hints not being loaded during revalidation:
-#92625
-Credits
-Huge thanks to
-@acdlite
-for helping!
-
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.36
-

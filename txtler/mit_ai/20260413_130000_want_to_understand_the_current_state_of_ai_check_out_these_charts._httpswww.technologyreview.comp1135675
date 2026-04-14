@@ -1,4 +1,3 @@
---- mit_ai | Want to understand the current state of AI? Check out these charts. | score=82.46 ---
 If you’re following AI news, you’re probably getting whiplash. AI is a gold rush. AI is a bubble. AI is taking your job. AI can’t even read a clock. The 2026 AI Index from Stanford University’s Institute for Human-Centered Artificial Intelligence, AI’s annual report card, comes out today and cuts through some of that noise.
 Despite predictions that AI development may hit a wall, the report says that the top models just keep getting better. People are adopting AI faster than they picked up the personal computer or the internet. AI companies are generating revenue faster than companies in any previous technology boom, but they’re also spending hundreds of billions of dollars on data centers and chips. The benchmarks designed to measure AI, the policies meant to govern it, and the job market are struggling to keep up. AI is sprinting, and the rest of us are trying to find our shoes.
 All that speed comes at a cost. AI data centers around the world can now draw 29.6 gigawatts of power, enough to run the entire state of New York at peak demand. Annual water use from running OpenAI’s GPT-4o alone may exceed the drinking water needs of 12 million people. At the same time, the supply chain for chips is alarmingly fragile. The US hosts most of the world’s AI data centers, and one company in Taiwan, TSMC, fabricates almost every leading AI chip.
@@ -51,37 +50,3 @@ Despite this federal action, state legislatures in the US passed a record 150 AI
 But for all the legislative activity, Gil says, regulation is running behind the technology because we don’t really understand how it works. “Governments are cautious to regulate AI because … we don’t understand many things very well,” she says. “We don’t have a good handle on those systems.”
 
 KAYNAK : https://www.technologyreview.com/2026/04/13/1135675/want-to-understand-the-current-state-of-ai-check-out-these-charts/
-
---- mit_ai | Why opinion on AI is so divided | score=68.72 ---
-This story originally appeared in The Algorithm, our weekly newsletter on AI. To get stories like this in your inbox first,
-sign up here
-.
-In an industry that doesn’t stand still, Stanford’s AI Index,
-an annual roundup of key results and trends
-, is a chance to take a breath. (It’s a
-marathon, not a sprint
-, after all.)
-This year’s report
-, which dropped today, is full of striking stats. A lot of the value comes from having numbers to back up gut feelings you might already have, such as the sense that the US is gunning harder for AI than everyone else: It hosts 5,427 data centers (and counting). That’s more than 10 times as many as any other country.
-There’s also a reminder that the hardware supply chain the AI industry relies on has some major choke points. Here’s perhaps the most remarkable fact: “A single company, TSMC, fabricates almost every leading AI chip, making the global AI hardware supply chain dependent on one foundry in Taiwan.” One foundry! That’s just wild.
-But the main takeaway I have from the 2026 AI Index is that the state of AI right now is shot through with inconsistencies. As my colleague Michelle Kim put it today in her
-piece about the report
-: “If you’re following AI news, you’re probably getting whiplash. AI is a gold rush. AI is a bubble. AI is taking your job. AI can’t even read a clock.” (The Stanford report notes that Google DeepMind’s top reasoning model, Gemini Deep Think, scored a gold medal in the International Math Olympiad but is unable to read analog clocks half the time.)
-Michelle does a great job covering the report’s highlights. But I wanted to dwell on a question that I can’t shake. Why is it so hard to know exactly what’s going on in AI right now?
-The widest gap seems to be between experts and non-experts. “AI experts and the general public view the technology’s trajectory very differently,” the authors of the AI Index write. “Assessing AI’s impact on jobs, 73% of U.S. experts are positive, compared with only 23% of the public, a 50 percentage point gap. Similar divides emerge with respect to the economy and medical care.”
-That’s a
-huge
-gap. What’s going on? What do experts know that the public doesn’t? (“Experts” here means US-based researchers who took part in AI conferences in 2023 and 2024.)
-I suspect part of what’s going on is that experts and non-experts base their views on very different experiences. “The degree to which you are awed by AI is perfectly correlated with how much you use AI to code,” a software developer
-posted on X the other day
-. Maybe that’s tongue-in-cheek, but there’s definitely something to it.
-The latest models from the top labs are now better than ever at producing code. Because technical tasks like coding have right or wrong results, it is easier to train models to do them, compared with tasks that are more open-ended. What’s more, models that can code are proving to be profitable, so model makers are throwing resources at improving them.
-This means that people who use those tools for coding or other technical work are experiencing this technology at its best. Outside of those use cases, you get more of a mixed bag. LLMs still make dumb mistakes. This phenomenon has become known as the “jagged frontier”: Models are very good at doing some things and less good at others.
-The influential AI researcher
-Andrej Karpathy
-also had some thoughts. “Judging by my [timeline] there is a growing gap in understanding of AI capability,” he wrote in reply to that X post. He noted that power users (read: people who use LLMs for coding, math, or research) not only keep up to date with the latest models but will often pay $200 a month for the best versions. “The recent improvements in these domains as of this year have been nothing short of staggering,” he continued.
-Because LLMs are still improving fast, someone who pays to use Claude Code will in effect be using a different technology from someone who tried using the free version of Claude to plan a wedding six months ago. Those two groups are speaking past each other.
-Where does that leave us? I think there are two realities. Yes, AI is far better than a lot of people realize. And yes, it is still pretty bad at a lot of stuff that a lot of people care about (and it may stay that way). Anyone making bets about the future on either side should bear that in mind.
-
-KAYNAK : https://www.technologyreview.com/2026/04/13/1135720/why-opinion-on-ai-is-so-divided/
-
