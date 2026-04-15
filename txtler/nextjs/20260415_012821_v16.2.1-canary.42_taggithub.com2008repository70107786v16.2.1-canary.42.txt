@@ -1,0 +1,15 @@
+Core Changes
+Scope Safari ?ts= cache-buster to CSS/font assets only (Pages Router):
+#92580
+Enable wasm plugins on windows arm:
+#92544
+prefetchInlining: fix build crash on notFound() pages:
+#92806
+Credits
+Huge thanks to
+@lukesandberg
+and
+@acdlite
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.42

@@ -1,0 +1,9 @@
+Misc Changes
+Fix turbo cache flag: use --force:
+#92796
+Credits
+Huge thanks to
+@mmastrac
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.40

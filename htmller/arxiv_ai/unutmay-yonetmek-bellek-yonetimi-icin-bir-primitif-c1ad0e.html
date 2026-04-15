@@ -1,0 +1,29 @@
+<div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
+  <h1>Unutmayı Yönetmek: Bellek Yönetimi için Bir Primitif</h1>
+  <p>Günümüzün ajan bellek sistemleri, deneyim biriktirme yeteneğine sahip olsa da, bellek kalitesini yönetmek için ilkesel bir operasyonel metrikten yoksundur. Bu, ajanın görev dağılımı değiştikçe hangi anıların güvenilir, bastırılması veya gözden düşmesi gerektiğine karar vermeyi içerir. Yazım anındaki önem puanları statiktir; dinamik yönetim sistemleri ise sonuç geri bildirimleri yerine, LLM değerlendirmesi veya yapısal sezgiler kullanır. Bu makale, Bellek Değeri (Memory Worth - MW) öneriyor: Başarı ile başarısız sonuçlarla ne sıklıkta eşleştiğini izleyen iki sayaçlı bir sinyal, bayatlık tespiti, geri çağırma bastırma ve gözden düşme kararları için hafif ve teorik olarak temellendirilmiş bir temel sağlar.</p>
+  <p>MW'nin, minimum keşif koşulunun sağlandığı sabit bir geri çağırma rejimi altında, koşullu başarı olasılığına neredeyse kesin olarak yakınsadığını kanıtlıyoruz. Önemli olan, bunun nedensel değil, ilişkisel bir nicelik olmasıdır: Sonuçların eşzamanlılığını ölçer, nedensel katkıyı değil. Bunun, bellek yönetimi için hala yararlı bir operasyonel sinyal olduğunu savunuyoruz ve bunu, gerçek faydaların bilindiği kontrollü bir sentetik ortamda ampirik olarak doğruluyoruz: 10.000 bölümden sonra, Bellek Değeri ile gerçek faydalar arasındaki Spearman sıra korelasyonu, değerlendirmelerini asla güncellemeyen sistemlere kıyasla 20 bağımsız tohumda ulaşır.</p>
+
+  <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
+  <p>Bu makale, ajan bellek sistemlerinin, hangi anıların güvenilir olduğunu belirlemek için nasıl bir yönetim mekanizması geliştirebileceğine odaklanıyor. Mevcut sistemler, genellikle yazım anındaki statik önem puanlarına dayanırken, önerilen Bellek Değeri sistemi, her bir bellek için başarı ve başarısızlık sonuçlarıyla eşzamanlılıkları izleyerek daha dinamik ve güncel bir değerlendirme sunuyor. Bu, belleklerin zamanla nasıl değer kaybettiğini veya kazandığını belirlemeye yardımcı olabilir.</p>
+
+  <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
+  <p>Bellek Değeri, her bellek için iki sayaç kullanarak, başarısızlık ve başarı sonuçlarıyla eşzamanlılıkları izler. Bu sistem, bayatlık tespiti, geri çağırma bastırma ve gözden düşme kararlarını destekler. Causal attribution gerektirmez ve mevcut sistemlere kolayca entegre edilebilir. Teorik olarak, Bellek Değeri'nin, minimum keşif koşulunun sağlandığı sabit bir geri çağırma rejimi altında, koşullu başarı olasılığına yakınsadığı kanıtlanmıştır.</p>
+
+  <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
+  <p>Bellek Değeri, özellikle dinamik görev dağılımına sahip ajanlar için önemlidir. Bu sistem, belleklerin güvenilirliğini daha doğru bir şekilde değerlendirmeye yardımcı olabilir, bu da ajanların daha etkili kararlar almasına olanak tanır. Ayrıca, bellek yönetimi sistemlerinin daha verimli çalışmasını sağlayarak, gereksiz veya bayat bilgilerin sistemden çıkarılmasına yardımcı olabilir.</p>
+
+  <h2>Kısa Özet</h2>
+  <ul>
+    <li>Bellek Değeri, her bellek için başarı ve başarısızlık eşzamanlılıklarını izleyen iki sayaç kullanır.</li>
+    <li>Sistem, bayatlık tespiti ve geri çağırma bastırma kararlarını destekler.</li>
+    <li>Teorik olarak, koşullu başarı olasılığına yakınsadığı kanıtlanmıştır.</li>
+    <li>Mevcut sistemlere kolayca entegre edilebilir ve causal attribution gerektirmez.</li>
+    <li>Dinamik görev dağılımına sahip ajanlar için bellek güvenilirliğini artırabilir.</li>
+  </ul>
+
+  <h2>Kapanış</h2>
+  <p>Bellek Değeri, ajan bellek sistemleri için önemli bir yenilik sunuyor. Bu sistem, belleklerin zamanla nasıl değer kaybettiğini veya kazandığını belirlemeye yardımcı olarak, daha etkili bellek yönetimi stratejilerinin geliştirilmesine olanak tanır. Gelecekte, bu tür sistemlerin daha geniş bir uygulama alanı bulabileceği ve ajanların daha etkili kararlar almasına yardımcı olabileceği öngörülmektedir.</p>
+
+  <h2>Kaynak</h2>
+  <p>Detaylı okumak için: <a href="https://arxiv.org/abs/2604.12007" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2604.12007</a></p>
+</div>

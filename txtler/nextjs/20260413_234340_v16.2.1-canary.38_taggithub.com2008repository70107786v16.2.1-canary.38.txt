@@ -1,9 +1,0 @@
-Core Changes
-Ensure x-nextjs-data header is only set during resolve:
-#92752
-Credits
-Huge thanks to
-@ijjk
-for helping!
-
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.38

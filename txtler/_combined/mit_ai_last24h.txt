@@ -1,87 +1,75 @@
---- mit_ai | Want to understand the current state of AI? Check out these charts. | score=82.46 ---
-If you’re following AI news, you’re probably getting whiplash. AI is a gold rush. AI is a bubble. AI is taking your job. AI can’t even read a clock. The 2026 AI Index from Stanford University’s Institute for Human-Centered Artificial Intelligence, AI’s annual report card, comes out today and cuts through some of that noise.
-Despite predictions that AI development may hit a wall, the report says that the top models just keep getting better. People are adopting AI faster than they picked up the personal computer or the internet. AI companies are generating revenue faster than companies in any previous technology boom, but they’re also spending hundreds of billions of dollars on data centers and chips. The benchmarks designed to measure AI, the policies meant to govern it, and the job market are struggling to keep up. AI is sprinting, and the rest of us are trying to find our shoes.
-All that speed comes at a cost. AI data centers around the world can now draw 29.6 gigawatts of power, enough to run the entire state of New York at peak demand. Annual water use from running OpenAI’s GPT-4o alone may exceed the drinking water needs of 12 million people. At the same time, the supply chain for chips is alarmingly fragile. The US hosts most of the world’s AI data centers, and one company in Taiwan, TSMC, fabricates almost every leading AI chip.
-The data reveals a technology evolving faster than we can manage. Here’s a look at some of the key points from this year’s report.
-The US and China are nearly tied
-In a long, heated race with immense geopolitical stakes, the US and China are almost neck and neck on AI model performance, according to Arena, a community-driven
-ranking platform
-that allows users to compare the outputs of large language models on identical prompts. In early 2023, OpenAI had a lead with ChatGPT, but this gap narrowed in 2024 as Google and Anthropic released their own models. In February 2025, R1, an AI model built by the Chinese lab DeepSeek, briefly matched the top US model, ChatGPT. As of March 2026, Anthropic leads, trailed closely by xAI, Google, and OpenAI. Chinese models like DeepSeek and Alibaba lag only modestly. With the best AI models separated in the rankings by razor-thin margins, they’re now competing on cost, reliability, and real-world usefulness.
-The index notes that the US and China have different AI advantages. While the US has more powerful AI models, more capital, and an estimated 5,427 data centers (more than 10 times as many as any other country), China leads in AI research publications, patents, and robotics.
-As competition intensifies, companies like OpenAI, Anthropic, and Google no longer disclose their training code, parameter counts, or data-set sizes. “We don’t know a lot of things about predicting model behaviors,” says Yolanda Gil, a computer scientist at the University of Southern California who coauthored the report. This lack of transparency makes it difficult for independent researchers to study how to make AI models safer, she says.
-AI models are advancing super fast
-Despite predictions that development will plateau, AI models keep getting better and better. By some measures, they now meet or exceed the performance of human experts on tests that aim to measure PhD-level science, math, and language understanding. SWE-bench Verified, a software engineering benchmark for AI models, saw top scores jump from around 60% in 2024 to almost 100% in 2025. In 2025, an AI system produced a weather forecast on its own.
-“I am stunned that this technology continues to improve, and it’s just not plateauing in any way,” says Gil.
-However, AI still struggles in plenty of other areas. Because the models learn by processing enormous amounts of text and images rather than by experiencing the physical world, AI exhibits “jagged intelligence.”
-Robots
-are still in their early days and succeed in only 12% of household tasks. Self-driving cars are farther along: Waymos are now roaming across five US cities, and Baidu’s Apollo Go vehicles are shuttling riders around in China. AI is also expanding into professional domains like law and finance, but no model dominates the field yet.
-But the way we test AI is broken
-These reports of progress should be taken with a grain of salt. The benchmarks designed to track AI progress are struggling to keep up as models quickly
-blow past their ceilings
-, the Stanford report says. Some are
-poorly constructed
-—a popular benchmark that tests a model’s math abilities has a 42% error rate. Others can be
-gamed
-: when models are trained on benchmark test data, for example, they can learn to score well without getting smarter.
-Because AI is rarely used the same way it’s tested, strong benchmark performance
-doesn’t always translate
-to real-world performance. And for complex, interactive technologies such as AI agents and robots, benchmarks barely exist yet.
-AI companies are also sharing less about how their models are trained, and independent testing sometimes tells a different story from what they report. “A lot of companies are not releasing how their models do in certain benchmarks, particularly the responsible-AI benchmarks,” says Gil. “The absence of how your model is doing on a benchmark maybe says something.”
-AI is starting to affect jobs
-Within three years of going mainstream, AI is now used by more than half of people around the world, a rate of adoption faster than the personal computer or the internet. An estimated 88% of organizations now use AI, and four in five university students use it.
-It’s early days for deployment, and AI’s impact on jobs is hard to measure. Still, some studies suggest AI is beginning to affect young workers in certain professions. According to a 2025
-study
-by economists at Stanford, employment for software developers aged 22 to 25 has fallen nearly 20% since 2022. The decline might not be pinned on AI alone, as broader macroeconomic conditions could be to blame, but AI appears to be playing a part.
-Employers say that hiring may continue to tighten. According to a 2025 survey conducted by McKinsey & Company, a third of organizations expect AI to shrink their workforce in the coming year, particularly in service and supply chain operations and software engineering. AI is boosting productivity by 14% in
-customer service
-and 26% in
-software development
-, according to research cited by the index, but such gains are not seen in tasks requiring more judgment. Overall, it’s still too early to understand the bigger economic impact of AI.
-People have complicated feelings about AI
-Around the world, people feel both optimistic and anxious about AI: 59% of people think that it will provide more benefits than drawbacks, while 52% say that it makes them nervous, according to an Ipsos survey cited in the index.
-Notably, experts and the public see the future of AI very differently, according to a Pew survey. The biggest gap is around the future of work: While 73% of experts think that AI will have a positive impact on how people do their jobs, only 23% of the American public thinks so. Experts are also more optimistic than the public about AI’s impact on education and medical care, but they agree that AI will hurt elections and personal relationships.
-Among all countries surveyed, Americans trust their government least to regulate AI appropriately, according to another Ipsos survey. More Americans worry federal AI regulation won’t go far enough than worry it will go too far.
-Governments are struggling to regulate AI
-Governments around the world are struggling to regulate AI, but there were some minor successes last year. The EU AI Act’s first prohibitions, which ban the use of AI in predictive policing and emotion recognition
+--- mit_ai | Building trust in the AI era with privacy-led UX | score=98.02 ---
+The practice of privacy-led user experience (UX) is a design philosophy that treats transparency around data collection and usage as an integral part of the customer relationship. An undertapped opportunity in digital marketing, privacy-led UX treats user consent not as a tick-box compliance exercise, but rather as the first overture in an ongoing customer relationship. For the companies that get it right, the payoff can bring something more intangible, valuable, and durable than simple consent rates: consumer trust.
+The opportunities of privacy-led UX have only recently come into focus. Adelina Peltea, the chief marketing officer at Usercentrics, has seen enterprise sentiment shift: “Even just a few years ago, this space was viewed more as a trade-off between growth and compliance,” she says. “But as the market has matured, there’s been a greater focus on how to tie well-designed privacy experiences to business growth.”
+DOWNLOAD THE REPORT
+And it turns out that well-designed, value-forward consent experiences routinely outperform initial estimates.
+Touchpoints for privacy-led UX often include consent management platforms, terms and conditions, privacy policies, data subject access request (DSAR) tools, and, increasingly, AI data use disclosures.
+This report examines how data transparency builds trust with customers; how this, in turn, can support business performance; and how organizations can maintain this trust even as AI systems add complexity to consent processes.
+Key findings include the following:
+Privacy is evolving from a one-time consent transaction into an ongoing data relationship. Rather than asking users for broad permissions up front, leading organizations are introducing data-sharing decisions gradually, matching the depth of the ask to the stage of the customer relationship. Companies that take this tack tend to gather both a larger quantity and higher quality of consumer data, the value of which often compounds over time.
+Privacy-led UX is a prerequisite for AI growth. The consumer data that organizations gather is rapidly becoming a core foundation upon which AI-powered personalization is built. Organizations that establish clear, enforceable privacy and data transparency policies now are better positioned to deploy AI responsibly and at scale in the future. This starts with correctly configured consent mode across ad platforms.
+Agentic AI introduces new levels of both complexity and opportunity. As AI systems begin acting on users’ behalf, the traditional consent moment may never occur. Governing agent-generated data flows requires privacy infrastructure that goes well beyond the cookie banner.
+Realizing the advantages of privacy-led UX requires cross-functional collaboration and clear leadership. Privacy-led UX touches marketing, product, legal, and data teams—but someone must own the strategy and weave the threads together. Chief marketing officers
+(CMOs) are often best positioned for that role, given their visibility across brand, data, and customer experience.
+A practical framework can support businesses in getting it right. Organizations must define their data collection and usage strategies and ensure their UX incorporates data consent, including a focus on banner design. Following a blueprint for evaluating and improving privacy-led UX supports consistency at every consent touchpoint.
+Download the report.
+This content was produced by Insights, the custom content arm of MIT Technology Review. It was not written by MIT Technology Review’s editorial staff. It was researched, designed, and written by human writers, editors, analysts, and illustrators. This includes the writing of surveys and collection of data for surveys. AI tools that may have been used were limited to secondary production processes that passed thorough human review.
+
+KAYNAK : https://www.technologyreview.com/2026/04/15/1135530/building-trust-in-the-ai-era-with-privacy-led-ux/
+
+--- mit_ai | Redefining the future of software engineering | score=69.32 ---
+Software engineering has experienced two seismic shifts this century. First was the rise of the open source movement, which gradually made code accessible to developers and engineers everywhere. Second, the adoption of development operations (DevOps) and agile methodologies took software from siloed to collaborative development and from batch to continuous delivery. Now, a third such shift looks to be taking shape with the adoption of agentic AI in software engineering.
+Thus far, engineering teams have mainly used AI to assist with coding, testing, and other individual tasks, within tightly designed parameters. But with agentic capabilities, AI agents become reasoning, self-directing entities that can manage not just discrete tasks but entire software projects—and do so largely autonomously. If adopted and fully embraced by engineering teams, agentic AI will usher in end-to-end software process automation and, ultimately, agent-managed development and product lifecycle automation.
+DOWNLOAD THE REPORT
+This report, which is based on a survey of 300 engineering and technology executives, finds that software engineering teams are seeing the potential in agentic AI and are beginning to put it to use, but so far in a mainly limited fashion. Their ambitions for it are high, but most realize it will take time and effort to reduce the barriers to its full diffusion in software operations. As with DevOps and agile, reaping the full benefits of agentic AI in engineering will require sometimes difficult organizational and process change to accompany technology adoption. But the gains to be won in speed, efficiency, and quality promise to make any such pain well worthwhile.
+Key findings include the following:
+Adoption momentum is building.
+While half of organizations deem agentic AI a top investment priority for software engineering today, it will be a leading investment for over four-fifths in two years. That spending is driving accelerated adoption. Agentic AI is in (mostly limited) use by 51% of software teams today, and 45% have plans to adopt it within the next 12 months.
+Early gains will be incremental.
+It will take time for software teams’ investments in agentic AI to start bearing fruit. Over the next two years, most expect the improvements from agent use to be slight (14%) or at best moderate (52%). But around one-third (32%) have higher expectations, and 9% think the improvements will be game changing.
+Agents will accelerate time-to-market.
+The chief gains from agentic AI use over that two-year time frame will come from greater speed. Nearly all respondents (98%) expect their teams’ delivery of software projects from pilot to production to accelerate, with the anticipated increase in speed averaging 37% across the group.
+The goal for most is full agentic lifecycle management.
+Teams’ ambitions for scaling agentic AI are high. Most aim for AI agents to be managing the product development and software development lifecycles (PDLC and SDLC) end to end relatively quickly. At 41% of organizations, teams aim to achieve this for most or all products in 18 months. That figure will rise to 72% two years from now, if expectations are met.
+Compute costs and integration pose key early challenges.
+For all survey respondents—but especially in early-adopter verticals such as media and entertainment and technology hardware—integrating agents with existing applications and the cost of computing resources are the main challenges they face with agentic AI in software engineering. The experts we interviewed, meanwhile, emphasize the bigger change management difficulties teams will face in changing workflows.
+Download the report
+This content was produced by Insights, the custom content arm of MIT Technology Review. It was not written by MIT Technology Review’s editorial staff. It was researched, designed, and written by human writers, editors, analysts, and illustrators. This includes the writing of surveys and collection of data for surveys. AI tools that may have been used were limited to secondary production processes that passed thorough human review.
+
+KAYNAK : https://www.technologyreview.com/2026/04/14/1134397/redefining-the-future-of-software-engineering/
+
+--- mit_ai | Coming soon: 10 Things That Matter in AI Right Now | score=60.11 ---
+Each year we compile our 10 Breakthrough Technologies list, featuring our educated predictions for which technologies will have the biggest impact on how we live and work.
+This year, however, we had a dilemma. While our final picks encompass all our core coverage areas (energy, AI, and biotech, plus a few more),
+our 2026 list
+was harder to wrangle than normal. Why? We had
+so many
+worthy AI candidates we couldn’t fit them all in! (The ones that made it were
+AI companions
 ,
-took effect. Japan, South Korea, and Italy also passed national AI laws. Meanwhile, the US federal government moved toward deregulation, with President Trump issuing an
-executive order
-seeking to handcuff states from regulating AI.
-Despite this federal action, state legislatures in the US passed a record 150 AI-related bills. California enacted landmark legislation, including SB 53, which mandates safety disclosures and whistleblower protections for developers of AI models. New York passed the RAISE Act, requiring AI companies to publish safety protocols and report critical safety incidents.
-But for all the legislative activity, Gil says, regulation is running behind the technology because we don’t really understand how it works. “Governments are cautious to regulate AI because … we don’t understand many things very well,” she says. “We don’t have a good handle on those systems.”
+mechanistic interpretability
+,
+generative coding
+, and
+hyperscale data centers
+.) Many great ideas fell by the wayside to keep the list as wide-ranging as possible.
+Well, that got us thinking: What if we made an entirely new list that was all about AI? We got excited about that idea—and before we knew it we had the beginnings of what we’re calling
+10 Things That Matter in AI Right Now
+. It’s an entirely new annual list that we’re proud to be publishing for the first time on April 21, 2026. We’ll unveil it on stage for attendees at our signature AI conference, EmTech AI, held on MIT’s campus (
+it’s not too late to get tickets
+), and then publish the list online later that day.
+The process for coming up with the list was similar to the way we pick our 10 Breakthrough Technologies. We petitioned our AI team of reporters and editors to propose ideas, put them all in a document, and engaged in some robust discussion. Eventually, we voted for our favorites and whittled the long list down to a final 10.
+But there’s a slight difference between this list and our 10 Breakthrough Technologies. AI is already such a big part of our lives that we didn’t want to restrict ourselves to nominating only
+technologies
+. Instead, we wanted to put together a definitive annual list that highlights what we believe are the biggest ideas, topics, and research directions in AI right now. So yes, it will include cutting-edge AI technologies, but it will also feature other trends and developments in AI that we want to bring to our subscribers’ attention.
+Think of it as a sneak peek inside the collective brain of our crack AI reporting team: These are the things that our reporters will be watching this year. We intend to follow the items on this list really closely, and you will see it reflected in the news and feature stories we publish in 2026.
+For us,
+10 Things That Matter in AI Right Now
+is a guide to how we view the current AI landscape. It will be a source of discussion, debate, and maybe some arguments! We are so excited to share it with you on April 21. If you want to be among the first to see it—
+join us at EmTech AI
+or
+become a subscriber
+to livestream the announcement.
 
-KAYNAK : https://www.technologyreview.com/2026/04/13/1135675/want-to-understand-the-current-state-of-ai-check-out-these-charts/
-
---- mit_ai | Why opinion on AI is so divided | score=68.72 ---
-This story originally appeared in The Algorithm, our weekly newsletter on AI. To get stories like this in your inbox first,
-sign up here
-.
-In an industry that doesn’t stand still, Stanford’s AI Index,
-an annual roundup of key results and trends
-, is a chance to take a breath. (It’s a
-marathon, not a sprint
-, after all.)
-This year’s report
-, which dropped today, is full of striking stats. A lot of the value comes from having numbers to back up gut feelings you might already have, such as the sense that the US is gunning harder for AI than everyone else: It hosts 5,427 data centers (and counting). That’s more than 10 times as many as any other country.
-There’s also a reminder that the hardware supply chain the AI industry relies on has some major choke points. Here’s perhaps the most remarkable fact: “A single company, TSMC, fabricates almost every leading AI chip, making the global AI hardware supply chain dependent on one foundry in Taiwan.” One foundry! That’s just wild.
-But the main takeaway I have from the 2026 AI Index is that the state of AI right now is shot through with inconsistencies. As my colleague Michelle Kim put it today in her
-piece about the report
-: “If you’re following AI news, you’re probably getting whiplash. AI is a gold rush. AI is a bubble. AI is taking your job. AI can’t even read a clock.” (The Stanford report notes that Google DeepMind’s top reasoning model, Gemini Deep Think, scored a gold medal in the International Math Olympiad but is unable to read analog clocks half the time.)
-Michelle does a great job covering the report’s highlights. But I wanted to dwell on a question that I can’t shake. Why is it so hard to know exactly what’s going on in AI right now?
-The widest gap seems to be between experts and non-experts. “AI experts and the general public view the technology’s trajectory very differently,” the authors of the AI Index write. “Assessing AI’s impact on jobs, 73% of U.S. experts are positive, compared with only 23% of the public, a 50 percentage point gap. Similar divides emerge with respect to the economy and medical care.”
-That’s a
-huge
-gap. What’s going on? What do experts know that the public doesn’t? (“Experts” here means US-based researchers who took part in AI conferences in 2023 and 2024.)
-I suspect part of what’s going on is that experts and non-experts base their views on very different experiences. “The degree to which you are awed by AI is perfectly correlated with how much you use AI to code,” a software developer
-posted on X the other day
-. Maybe that’s tongue-in-cheek, but there’s definitely something to it.
-The latest models from the top labs are now better than ever at producing code. Because technical tasks like coding have right or wrong results, it is easier to train models to do them, compared with tasks that are more open-ended. What’s more, models that can code are proving to be profitable, so model makers are throwing resources at improving them.
-This means that people who use those tools for coding or other technical work are experiencing this technology at its best. Outside of those use cases, you get more of a mixed bag. LLMs still make dumb mistakes. This phenomenon has become known as the “jagged frontier”: Models are very good at doing some things and less good at others.
-The influential AI researcher
-Andrej Karpathy
-also had some thoughts. “Judging by my [timeline] there is a growing gap in understanding of AI capability,” he wrote in reply to that X post. He noted that power users (read: people who use LLMs for coding, math, or research) not only keep up to date with the latest models but will often pay $200 a month for the best versions. “The recent improvements in these domains as of this year have been nothing short of staggering,” he continued.
-Because LLMs are still improving fast, someone who pays to use Claude Code will in effect be using a different technology from someone who tried using the free version of Claude to plan a wedding six months ago. Those two groups are speaking past each other.
-Where does that leave us? I think there are two realities. Yes, AI is far better than a lot of people realize. And yes, it is still pretty bad at a lot of stuff that a lot of people care about (and it may stay that way). Anyone making bets about the future on either side should bear that in mind.
-
-KAYNAK : https://www.technologyreview.com/2026/04/13/1135720/why-opinion-on-ai-is-so-divided/
+KAYNAK : https://www.technologyreview.com/2026/04/14/1135298/coming-soon-10-things-that-matter-in-ai-right-now/
 

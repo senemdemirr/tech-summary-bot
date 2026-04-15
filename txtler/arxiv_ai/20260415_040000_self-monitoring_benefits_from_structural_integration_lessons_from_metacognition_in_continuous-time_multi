@@ -1,0 +1,235 @@
+Self-Monitoring Benefits from Structural Integration:
+Lessons from Metacognition in
+Continuous-Time Multi-Timescale Agents
+Abstract
+Self-monitoring capabilities—metacognition, self-prediction, and subjective duration—are often proposed as useful additions to reinforcement learning agents. But do they actually help? We investigate this question in a continuous-time multi-timescale agent operating in predator-prey survival environments of varying complexity, including a 2D partially observable variant. We first show that three self-monitoring modules, implemented as auxiliary-loss add-ons to a multi-timescale cortical hierarchy, provide no statistically significant benefit across 20 random seeds, 1D and 2D predator-prey environments with standard and non-stationary variants, and training horizons up to 50,000 steps. Diagnosing the failure, we find the modules collapse to near-constant outputs (confidence std , attention allocation std ) and the subjective duration mechanism shifts the discount factor by less than . Policy sensitivity analysis confirms the agent’s decisions are unaffected by module outputs in this design. We then show that structurally integrating the module outputs—using confidence to gate exploration, surprise to trigger workspace broadcasts, and self-model predictions as policy input—produces a medium-large improvement over the add-on approach (Cohen’s , , paired) in a non-stationary environment. Component-wise ablations reveal that the TSM-to-policy pathway contributes most of this gain. However, structural integration does not significantly outperform a baseline with no self-monitoring (, ), and a parameter-matched control without modules performs comparably, so the benefit may lie in recovering from the trend-level harm of ignored modules rather than in self-monitoring content. The architectural implication is that self-monitoring should sit on the decision pathway, not beside it.
+1 Introduction
+A predator moves at a different timescale than the seasons change. An animal surviving in the wild must simultaneously track fast threats (a lunging predator), medium-term opportunities (a ripening fruit patch), and slow environmental patterns (the migration of prey herds). The neural architectures that support this kind of multi-timescale integration are well-studied (Murray et al., 2014; Hasson et al., 2015). This raises the question of whether agents that process information across timescales should also monitor their own processing—maintaining confidence estimates, predicting their own future states, and adjusting temporal horizons based on what is happening internally.
+Theories of consciousness—Global Workspace Theory (Baars, 1988; Dehaene and Changeux, 2011), Integrated Information Theory (Tononi et al., 2016), Higher-Order Theories (Rosenthal, 2006), and the Attention Schema Theory (Graziano, 2013)—each propose mechanisms by which biological systems achieve self-monitoring, temporal integration, and adaptive regulation. Recent work has begun connecting these ideas to computational architectures: Goyal et al. (2022) implemented a shared workspace for modular networks, and Juliani et al. (2022) explored theoretical links between conscious function and general intelligence in agents. The implicit assumption in this line of work is that self-monitoring capabilities, once added to an agent, will improve performance. We test this assumption.
+We build a continuous-time agent with a multi-timescale cortical hierarchy and equip it with three self-monitoring modules inspired by theories of consciousness:
+-
+1.
+Metacognition: confidence estimates, surprise detection, and attention allocation across processing timescales.
+-
+2.
+Temporal self-model: prediction of the agent’s own future internal states, creating a form of self-knowledge.
+-
+3.
+Subjective duration: a learned “felt time” signal that modulates the discount factor.
+Our investigation proceeds in three stages:
+-
+1.
+Null result. When implemented as auxiliary-loss add-ons (the standard approach), the three modules provide no statistically significant benefit. Across 20 seeds, 1D and 2D predator-prey environments (standard and non-stationary variants), and training horizons up to 50,000 steps, the full model never significantly outperforms a baseline with no self-monitoring. A parameter-matched control and a random-auxiliary-loss control perform equally well.
+-
+2.
+Diagnosis. The modules fail because their outputs collapse to near-constants that the agent learns to ignore. Confidence varies by less than std across all seeds; attention allocation by less than , even around deaths. Subjective duration shifts the discount by under . Policy sensitivity analysis confirms that perturbing module outputs produces negligible change in the agent’s action distribution.
+-
+3.
+Structural fix. Replacing the add-on design with structural integration—routing confidence into exploration gating, surprise into workspace triggering, and self-model predictions into the policy head—produces a substantial improvement over the add-on approach (Cohen’s ) in a non-stationary environment. Component-wise ablations show that the TSM-to-policy pathway contributes most to this gain. However, structurally integrated self-monitoring does not significantly outperform a no-self-monitoring baseline, and a param-matched control without modules performs comparably, so we cannot attribute the gain to self-monitoring content rather than additional capacity.
+The contribution is a practical architectural lesson: in the environments we study, self-monitoring for RL agents is more effective when the decision pathway depends on the monitoring signals, and fails when the signals are attached as optional features via auxiliary losses. We support this claim with controlled experiments, parameter-matched and random-auxiliary baselines, component-wise ablations, and policy sensitivity analysis. We do not claim that these modules produce phenomenal consciousness (Chalmers, 1995; Block, 1995); our contribution is about engineering self-monitoring into agents in a way that avoids the auxiliary-loss trap. Generalization to larger-scale agents and more complex environments is untested.
+2 Related Work
+Multi-timescale recurrent networks.
+The idea that neural systems should operate at multiple temporal resolutions is well-established in neuroscience (Murray et al., 2014) and machine learning (El Hihi and Bengio, 1995; Chung et al., 2017). Liquid time-constant networks (Hasani et al., 2021) developed input-dependent time constants for continuous-time neural ODEs. Neural circuit policies (Lechner et al., 2020) demonstrated that such architectures can learn interpretable control policies. Our base architecture builds on this line of work, extending liquid cells with Hebbian plasticity and exponential moving average memory.
+Global workspace models.
+Global Workspace Theory (Baars, 1988) proposes that conscious processing involves broadcasting information into a shared workspace. Goyal et al. (2022) implemented this as a bottleneck attention mechanism between modular networks. Juliani et al. (2022) explored agents with workspace-inspired architectures. These works add workspace mechanisms as structural components; we examine when such components actually contribute to task performance.
+Metacognition and auxiliary losses in RL.
+Self-monitoring in reinforcement learning has been approached through uncertainty-driven exploration (Osband et al., 2016), confidence calibration in neural networks (Guo et al., 2017), and meta-learning (Wang et al., 2016). Cleeremans et al. (2020) argued that metacognition should be understood as the system learning to redescribe its own representations. A common pattern in these approaches is to add self-monitoring as an auxiliary loss: the module is trained to predict some internal quantity, and the resulting gradients improve the shared representation. Our results show that this approach can fail completely when the module outputs are not used for decision-making.
+Self-models and predictive processing.
+Predictive processing frameworks (Clark, 2013; Friston, 2010) emphasize that brains continuously predict their own sensory inputs. Hafner et al. (2020) showed that world models can support planning in RL. Our temporal self-model predicts the agent’s own future internal states rather than external observations, closer to the interoceptive self-models proposed by Seth et al. (2012). We find that self-prediction only helps when the predictions feed into the policy, not when they are trained solely as an auxiliary objective.
+Subjective time perception.
+The psychological literature on time perception (Eagleman, 2008; Wittmann, 2009) suggests that subjective temporal experience varies with event density and threat. Computational models of interval timing (Matell and Meck, 2004) typically focus on psychophysical data. Our subjective duration module attempts to use felt time as a learning signal by modulating the discount factor, but we find the effect is negligibly small in practice ( change in ).
+Negative results in consciousness-inspired AI.
+Recent work has examined whether AI systems satisfy proposed criteria for consciousness (Butlin et al., 2023) and developed theoretical frameworks connecting consciousness to computation (Seth, 2021). We ask a different question: whether functional analogs of consciousness-associated capabilities actually improve agent performance. For add-on implementations, the answer is no.
+3 Method
+3.1 Environment
+The agent lives in a one-dimensional toroidal world of size with wraparound boundaries. The world contains food sources and predators. Food sources are stationary; predators chase the agent with speed 0.6 (the agent moves at speed 1.0) plus Gaussian noise. Time advances in variable steps drawn from a log-normal distribution with mean 1.0 and standard deviation 0.3, clamped to .
+Eating food (within radius 2.0) gives reward , restores 0.2 energy, and respawns the food at a random location. Getting caught by a predator (within radius 1.5) gives reward and teleports the agent to a random position. The agent has an energy level (clamped to ) that decays at per step. A periodic danger wave sweeps across the world with period 200 time units, active for 30% of each cycle; the danger zone has spatial width 15. Being inside the danger zone incurs a continuous penalty of .
+The observation vector () consists of relative positions and two type flags (is-food, is-predator) for each of the 8 nearest entity slots (with 7 real entities and one zero-padded slot), the agent’s normalized position, velocity, and energy level, and three danger-wave features (phase, active flag, relative distance to danger center).
+3.2 Base Architecture: Multi-Timescale Cortical Hierarchy
+Figure 1 shows the full architecture. The agent processes observations through three Plastic Cortical Cells arranged in a feedforward hierarchy. Each cell extends a liquid time-constant neural ODE (Hasani et al., 2021) with two forms of plasticity:
+Liquid dynamics.
+Each cell computes:
+where is a learnable time constant (stored in log-space), is the hidden state, and controls how much new information is incorporated at each step. Fast cells () update quickly; slow cells () retain information across many steps.
+Hebbian trace.
+A rank-one Hebbian learning rule maintains a fast associative trace :
+with decay and learning rate . The trace allows rapid one-shot association between inputs and hidden states without gradient-based learning.
+EMA memory.
+An exponential moving average provides a slowly changing context signal to each cell.
+The three cells have hidden dimension and are initialized with (fast), (medium), (slow). Cell 1 receives the projected observation; each subsequent cell receives the layer-normalized output of the previous cell.
+Interleaved global workspace.
+Every steps, a transformer encoder with 2 attention heads collects the last hidden states from all three levels, runs self-attention across the 15 tokens (5 per level), and broadcasts information back via gated addition. The gates are initialized with bias (near zero), so the workspace starts inert and learns when cross-level communication helps.
+3.3 Metacognition Module
+The metacognition module receives the concatenated hidden states from all three levels () and produces two groups of outputs.
+Confidence, uncertainty, and attention allocation are produced by a two-layer MLP (). The first output (sigmoid) gives a scalar confidence estimate; the second (softplus) gives an uncertainty estimate. Three further outputs pass through a softmax to produce an attention allocation over cortical levels, modulating the workspace broadcast gates. When the metacognition module assigns high weight to the slow level, the workspace broadcasts more from level 3.
+Surprise is computed separately by maintaining a low-rank prediction of the next step’s hidden states. At each step, the module predicts for each level via down-projection () followed by up-projection (). At the next step, surprise is the MSE between predicted and actual states, averaged across levels. This surprise signal is fed back as input to the agent on subsequent steps.
+The full metacognition signal concatenates both groups: .
+The auxiliary loss for metacognition is the surprise prediction error itself, weighted by .
+3.4 Temporal Self-Model (TSM)
+The temporal self-model (TSM) predicts the agent’s own hidden states steps into the future. An encoder () compresses the current state, a horizon embedding modulates the compressed representation, and a decoder () produces the predicted future states for all three levels:
+A buffer of the last hidden-state snapshots stores past states. When the buffer contains an entry from steps ago, the model re-runs its prediction from those stored states and compares with the current actual states. This delayed comparison is the self-prediction loss ().
+A separate predictability head (, sigmoid) learns per-level scores indicating how self-predictable each cortical level is. These scores are not used for decision-making; they emerge as a learned self-description.
+3.5 Subjective Duration Module
+The subjective duration module produces a scalar “felt duration” per step, representing the agent’s learned sense of how much is happening. It receives 8 features:
+A context projection () and a feature projection () are concatenated and passed through a two-layer MLP (). The output passes through softplus plus a floor of 0.1, ensuring positivity.
+The felt duration modulates the discount factor during REINFORCE updates:
+where , , and is clamped to . When felt duration is high (dense events), decreases, making the agent weight immediate rewards more heavily. When felt duration is low (calm period), increases, encouraging longer-term planning.
+The module has no direct loss—it is trained entirely through the effect of on the policy gradient.
+3.6 Training
+The agent chooses among three discrete actions (move left, stay, move right) via a two-layer policy head () with softmax output, trained with REINFORCE and an EMA reward baseline (decay 0.99). An observation prediction head (linear, ) applied to the deepest cortical level predicts the next observation; its MSE loss provides an auxiliary learning signal. The entropy bonus is estimated as the negative mean log-probability of the sampled actions within each BPTT window (a single-sample approximation to the policy entropy). The optimizer is Adam with learning rate . The total loss combines:
+with , , , . Gradients are clipped to norm 1.0. Updates occur every 50 steps (the BPTT window), after which all hidden states are detached.
+3.7 Structural Integration (Fix)
+The add-on design described above feeds module outputs back as input features that the agent may learn to use. Our structural integration variant instead places the module outputs on the decision-making critical path, so the agent cannot bypass them:
+Confidence exploration gating.
+Instead of a fixed entropy coefficient , we use , where is the mean confidence over the BPTT window. Low confidence increases exploration; high confidence reduces it.
+Surprise workspace trigger.
+Instead of broadcasting every steps, the workspace fires when the surprise signal exceeds a learned threshold . This makes the global workspace reactive to unexpected events rather than periodic.
+Self-model predictions policy input.
+The policy head receives two inputs: (1) a predictability-weighted combination of all three cortical levels where are the TSM’s per-level predictability scores, and (2) the TSM’s predicted future state at the deepest level, detached from the TSM’s gradient graph. The policy head thus sees both the current state (weighted by self-assessed reliability) and a forecast of the agent’s own future internal state.
+These changes increase the policy head input dimension from to but add no new learnable parameters beyond the surprise threshold scalar.
+3.8 Non-Stationary Environment Variant
+To test conditions where self-monitoring should theoretically help, we also evaluate on a harder variant with:
+-
+•
+Predator phases: predators alternate between aggressive (full speed) and passive ( speed) phases with period 500 time units. The agent must detect which phase it is in.
+-
+•
+Poison food: 30% of food items are poisonous (reward instead of ), visually indistinguishable from safe food. The agent must track its own health response.
+-
+•
+Noisy observations: Gaussian noise () and random dropout (15%) are applied to the observation vector.
+3.9 2D Partially Observable Variant
+To test whether our findings generalize beyond the 1D setting, we implement a 2D toroidal environment () with five discrete actions (stay, up, down, left, right). The observation space expands to : 8 nearest entities 4 features (relative , relative , is-food, is-predator) plus 5 agent-state features and 2 danger features. All other dynamics (food, predators, danger waves) carry over with appropriate 2D distance calculations. When combined with the non-stationary flags (noisy observations, predator phases, poison food), this creates a richer setting where self-monitoring should in principle be more valuable.
+3.10 Component-Wise Structural Ablation
+To identify which structural pathway contributes most to the improvement, we test three single-pathway variants:
+-
+•
+Confidence only: confidence gates entropy coefficient, but workspace remains periodic and TSM does not enter the policy head.
+-
+•
+Surprise only: surprise triggers reactive workspace broadcasts, but entropy is fixed and TSM does not enter the policy head.
+-
+•
+TSM only: self-model predictions and predictability-weighted states enter the policy head, but entropy is fixed and workspace remains periodic.
+Each variant uses the full set of self-monitoring modules but only structurally integrates one pathway, allowing us to isolate each component’s contribution.
+3.11 Policy Sensitivity Analysis
+To directly measure whether module outputs affect decisions, we compute the KL divergence between the agent’s policy under normal conditions and under perturbation of individual module outputs. At every 100 steps during evaluation, we perturb each module signal (confidence, surprise, predictability) by a fixed magnitude (), re-run the policy head, and measure . High KL indicates the policy is sensitive to the module output; near-zero KL confirms the module is being ignored. This analysis provides direct evidence for the ignore-ability hypothesis beyond the indirect evidence from output variance.
+4 Experiments
+4.1 Setup
+All experiments use 20 random seeds. We compare conditions across two environment variants (standard and non-stationary) and two training horizons (10,000 and 50,000 steps). Conditions include:
+-
+•
+Full (add-on): all three self-monitoring modules as auxiliary-loss add-ons (37,400 parameters)
+-
+•
+Structural: all three modules with structural integration (38,400 parameters)
+-
+•
+No self-monitoring: all modules removed (26,700 parameters)
+-
+•
+Param-matched: hidden dimension increased to 40 (38,649 parameters), no modules
+-
+•
+Aux control: all modules present with matched parameters, but trained against random targets (isolates whether targeted vs any auxiliary loss matters)
+-
+•
+Single : all values fixed at 30 (no multi-timescale processing)
+We use the food-to-death ratio as our primary metric: total food items eaten divided by over the full training run for each seed. In practice, no seed achieved zero deaths. All error bars are sample standard deviations (). Statistical tests are Welch’s -tests; paired -tests are used where the same seeds appear in both conditions. We report Cohen’s effect sizes and note that with , individual comparisons have moderate power.
+4.2 Phase 1: Add-On Modules Do Not Help
+Table 1 shows the core null result. In the standard environment with 10,000 steps, the full add-on model (food/death ratio ) is statistically indistinguishable from the no-self-monitoring baseline (), the parameter-matched control (), and the random-auxiliary control (). No pairwise comparison reaches significance (all ).
+This null result holds across all tested conditions:
+4.3 Phase 2: Diagnosing the Failure
+Why do the modules fail? We examine module outputs in detail for seed 42 (full add-on mode, standard environment) and report summary statistics across all 20 seeds where applicable. Figure 2 visualizes the collapse for seed 42.
+Confidence is a constant.
+For seed 42, the metacognition module’s confidence output has mean and standard deviation across 10,000 steps. Across all 20 seeds, the median per-seed confidence standard deviation is (max ). The agent receives a near-constant feature that contributes nothing to decision-making.
+Attention allocation does not shift.
+The three-way attention allocation over cortical levels has per-level std (median across seeds: ). It does not change around deaths, danger waves, or food encounters. The workspace broadcast modulation by attention allocation is multiplying near-constant weights by near-zero gate values.
+Subjective duration has negligible effect.
+Felt duration ranges from 0.73 to 0.91 across steps for seed 42. The resulting ranges from 0.99009 to 0.99027—a change of . The discount factor is effectively constant. The subjective duration module, despite its 273 parameters, does not influence learning.
+Policy sensitivity confirms ignore-ability.
+To go beyond indirect evidence from output variance, we directly measured policy sensitivity by perturbing each module output and computing . In the add-on design, perturbing confidence by produces mean KL , confirming that the policy is insensitive to the module outputs. The agent has learned to route decisions through pathways that bypass the module signals entirely.
+Root cause: the feedback loop is circular.
+The module outputs (meta-signal, self-prediction error, felt duration) are fed back as input features alongside the observation. But these signals are derived from the hidden states, which are themselves derived from the observations. In a fully observable environment, the agent already has all the information it needs. The module outputs are a lossy, delayed re-encoding of data the agent already possesses. There is no inductive bias forcing the agent to use these signals, so gradient descent learns to ignore them.
+4.4 Phase 3: Structural Integration
+Table 1 includes the structural integration condition. The key comparison is in the non-stationary environment with 50,000 training steps:
+Structural vs add-on.
+The structurally integrated agent () outperforms the original add-on approach () with Cohen’s (medium-large effect) and (paired -test). The structural agent wins on 13 of 20 seeds. Since the only change is how module outputs enter the decision pathway, the improvement comes from eliminating the ignore-ability of the add-on design. This result is marginally significant; a larger sample may resolve it.
+Add-on vs no self-monitoring.
+The add-on agent () trends below the no-self-monitoring baseline () with and . This difference is not significant, but the direction is consistent with the hypothesis that ignored modules cause mild harm through gradient competition. We rely on this trend, not a significant result, when we describe the add-on design as harmful below.
+Structural vs no self-monitoring.
+The structural agent () is not significantly better than the no-self-monitoring baseline (, , ). While it trends higher and wins 11/20 seeds, the effect is small. Structural integration recovers from the trend-level harm of the add-on design but does not demonstrate that self-monitoring provides a decisive advantage over having none at all.
+Structural vs aux control.
+In the standard 50k environment, structural () outperforms random-auxiliary () with and . Targeted self-monitoring signals may provide more value than random auxiliary losses, though the difference does not reach significance.
+Param-matched comparison.
+The param-matched control () numerically outperforms the structural agent () in the non-stationary 50k condition, though the difference is not significant (, ). Simply increasing hidden dimension from 32 to 40 without any self-monitoring modules produces comparable or better results. This means we cannot rule out that additional capacity, rather than self-monitoring content, drives the structural agent’s improvement over the add-on design.
+4.5 Phase 4: Component-Wise Structural Ablation
+To determine which structural pathway contributes most, we tested each pathway in isolation (Table 2). In the non-stationary environment with 50,000 steps:
+The TSM-only variant performs closest to the full structural agent (), suggesting that routing self-model predictions into the policy head is the most impactful structural change. The confidence-gating and surprise-triggered workspace pathways each provide a partial improvement over the add-on baseline but do not recover the full structural benefit alone. The three pathways appear complementary, with the TSM-to-policy route carrying the largest individual contribution.
+4.6 Phase 5: 2D Partially Observable Environment
+We also evaluated the add-on modules in a 2D toroidal environment (Section 3.8). Performance is much lower across all conditions (food/death ratios ), indicating that agents barely learn in this harder setting within 10,000 steps. The null result for add-on modules holds: the full add-on model () does not outperform the no-self-monitoring baseline (). However, we did not test structural integration in 2D, so we cannot assess whether the architectural lesson transfers. The 2D environment may require longer training horizons or architectural changes to support meaningful learning.
+4.7 Learned Properties
+Despite the null performance result, the self-monitoring modules learn interpretable internal structure:
+Predictability hierarchy.
+The temporal self-model learns that slow cortical levels () are more self-predictable than fast levels (). This ordering follows from the architecture—slow levels change less per step—but confirms that the self-prediction objective captures meaningful variation across timescales.
+Decreasing self-prediction error.
+The metacognition module’s surprise and the TSM’s prediction error both decrease over training. Because these are auxiliary losses, a decrease is expected from optimization. However, the decrease accelerates during periods when survival performance also improves, suggesting the self-prediction and task objectives reinforce each other.
+5 Discussion
+Why add-on self-monitoring fails.
+Self-monitoring modules implemented as auxiliary-loss add-ons collapse to near-constant outputs that the agent learns to ignore. The modules sit outside the decision-making pathway. The agent receives module outputs as input features, but there is no inductive bias requiring their use. Gradient descent finds it easier to ignore these noisy, redundant features than to learn how to exploit them. Policy sensitivity analysis confirms this directly: perturbing module outputs in the add-on design produces negligible KL divergence in the policy distribution. The auxiliary losses still flow gradients through the shared cortical cells, and these gradients may push representations toward being good for self-prediction rather than good for action selection. The trend-level performance drop of the add-on agent relative to the no-self-monitoring baseline in the non-stationary environment (, ) is consistent with such gradient competition, though the effect is not significant and does not appear in the standard environment.
+Why structural integration helps.
+Structural integration places module outputs on the critical path, addressing the ignore-ability problem directly. Confidence directly scales the entropy bonus, so the agent’s exploration rate depends on it. Surprise triggers workspace broadcasts, so cross-level communication requires it. Self-model predictions enter the policy head, so the agent sees predicted future states alongside current states. The modules are no longer optional input features—they are load-bearing parts of the architecture. Component-wise ablation reveals that the TSM-to-policy pathway carries the largest individual contribution, though the three pathways appear complementary.
+The result is a medium-large improvement () over the add-on design in non-stationary environments. However, structural integration does not significantly outperform having no self-monitoring at all (, ). The gain over the add-on design appears to come from preventing the trend-level harm of ignored modules (add-on vs. no-self-monitoring: , ), not from self-monitoring per se.
+Capacity confound.
+The structural integration changes are not pure re-routings of existing signals: the TSM-to-policy pathway doubles the policy head’s input dimension from to , and the param-matched control (which simply increases hidden dimension without any self-monitoring) numerically outperforms the structural agent in the non-stationary 50k condition. We cannot fully disentangle whether the structural agent’s improvement over the add-on design comes from self-monitoring content or from additional representational capacity in the policy head. A control condition providing random features of matching dimension to the policy head would resolve this but is beyond our current experiments.
+The auxiliary-loss trap.
+For consciousness-inspired and self-monitoring AI architectures more broadly, our results indicate that auxiliary losses alone are not sufficient to make self-monitoring useful, at least in the environments we tested. Consciousness-inspired architectures (Goyal et al., 2022; Juliani et al., 2022) and theoretical accounts of machine metacognition (Cleeremans et al., 2020) typically frame self-monitoring as something to be trained via auxiliary objectives. Our results show that this approach can produce modules that train successfully (loss decreases, representations form) but have zero impact on behavior. The module learns to predict, but the agent does not learn to use the predictions. The relevant design criterion is whether the agent’s decision pathway depends on the module outputs—trainability alone is insufficient. This conclusion is drawn from a specific class of environments; the auxiliary-loss approach may prove more effective with richer partial observability or larger model capacity.
+Implications for consciousness-inspired AI.
+Theories of consciousness propose self-monitoring mechanisms (Baars, 1988; Rosenthal, 2006; Graziano, 2013) that are architecturally central to biological cognition, not peripheral add-ons. Our results align with this perspective: self-monitoring is more effective when it sits on the decision pathway. Computational implementations of consciousness theories should attend to where self-monitoring sits in the processing architecture—placement matters more than presence.
+Limitations.
+Our evaluation spans two environment families (1D and 2D toroidal predator-prey worlds) with non-stationary variants, but both are relatively simple compared to the settings where self-monitoring is most likely to matter. The parameter budget is small (37,400 total). Training is relatively short (50,000 steps maximum). The structural integration variant, while showing improvement over add-on modules, does not significantly outperform the no-self-monitoring baseline or the param-matched control, leaving open whether the modules provide genuine value or whether the architectural changes simply add capacity and reduce the trend-level harm of the add-on design.
+The component-wise ablation bundles each structural pathway with its associated module; a fully factorial design crossing module presence with integration pathway, and a control providing random features of matching dimension to the policy head (to resolve the capacity confound discussed above), would provide stronger causal evidence but are beyond our current scope. Policy sensitivity analysis uses a fixed perturbation magnitude; dose-response curves across multiple magnitudes would strengthen the findings.
+Larger environments with richer dynamics—multi-agent settings, partially observable 3D worlds, hierarchical task structures, continual learning under distribution shift—might reveal clearer benefits of self-monitoring and are important directions for future work.
+The random-auxiliary control tests whether any auxiliary loss helps, but it does not test every possible alternative. Specific non-random auxiliary tasks (e.g., reward prediction, next-action prediction) might provide comparable benefits without self-monitoring. Our param-matched control and aux-control together bound the contribution, but comparing against every possible auxiliary objective is beyond scope.
+With seeds, our statistical power is moderate. The structural-vs-add-on comparison () is borderline; a larger sample might resolve it. We report effect sizes throughout to complement significance tests.
+Representation without function.
+The self-monitoring modules learn interpretable internal structure (a predictability hierarchy, decreasing self-prediction error) even when they do not improve task performance. Whether these learned representations constitute anything resembling self-knowledge is a question behavioral data alone cannot answer (Nagel, 1974). What we can say is that the functional value of self-monitoring depends on architectural integration.
+6 Conclusion
+We investigated whether self-monitoring modules—metacognition, temporal self-models, and subjective duration—improve continuous-time multi-timescale RL agents. The answer depends on how the modules are integrated.
+As auxiliary-loss add-ons, the modules provide no statistically significant benefit across 20 seeds in both 1D and 2D predator-prey environments, and training up to 50,000 steps. Diagnosis reveals their outputs collapse to near-constants that the agent ignores, and policy sensitivity analysis confirms the agent’s decisions are unaffected by these signals.
+Structurally integrating the module outputs—using confidence for exploration gating, surprise for workspace triggering, and self-model predictions as policy inputs—improves over the add-on design (Cohen’s ) in non-stationary environments. Component-wise ablation shows the TSM-to-policy pathway contributes most to this gain. However, structurally integrated self-monitoring does not significantly surpass a baseline with no self-monitoring (, ), and a param-matched control without modules performs comparably. The primary benefit of structural integration appears to be recovering from the trend-level harm of the add-on design rather than extracting value from self-monitoring per se.
+The practical lesson is that self-monitoring modules are more effective on the decision pathway than beside it. Auxiliary losses can train modules that learn interesting internal representations, but unless the agent’s action selection depends on the module outputs, the modules are behaviorally inert. Whether self-monitoring can provide a clear advantage over no self-monitoring likely depends on environment complexity and partial observability.
+Future work should explore settings where self-monitoring should matter more strongly—partially observable multi-agent environments, continual learning under distribution shift, or hierarchical planning—and should investigate whether the structural integration principle holds at larger model scales. Component-wise factorial designs crossing module presence with integration pathway, a random-feature control to isolate the capacity confound in the TSM-to-policy pathway, and dose-response sensitivity analysis across perturbation magnitudes, would provide stronger causal evidence for the mechanisms at work.
+Acknowledgments
+Claude Code (Anthropic) was used to assist in implementing the experimental code.
+References
+- Baars [1988] Bernard J Baars. A cognitive theory of consciousness. Cambridge University Press, 1988.
+- Block [1995] Ned Block. On a confusion about a function of consciousness. Behavioral and Brain Sciences, 18(2):227–247, 1995.
+- Butlin et al. [2023] Patrick Butlin, Robert Long, Eric Elmoznino, Yoshua Bengio, Jonathan Birch, Axel Constant, George Deane, Stephen M Fleming, Chris Frith, Xu Ji, et al. Consciousness in artificial intelligence: insights from the science of consciousness. arXiv preprint arXiv:2308.08708, 2023.
+- Chalmers [1995] David J Chalmers. Facing up to the problem of consciousness. Journal of Consciousness Studies, 2(3):200–219, 1995.
+- Chung et al. [2017] Junyoung Chung, Sungjin Ahn, and Yoshua Bengio. Hierarchical multiscale recurrent neural networks. In International Conference on Learning Representations, 2017.
+- Clark [2013] Andy Clark. Whatever next? predictive brains, situated agents, and the future of cognitive science. Behavioral and Brain Sciences, 36(3):181–204, 2013.
+- Cleeremans et al. [2020] Axel Cleeremans, Dalila Achoui, Arnaud Beauny, Lars Keuninckx, Jean-Rémy Martin, Santiago Muñoz-Moldes, Laurène Vuillaume, and Adélaïde de Heering. Learning to be conscious. Trends in Cognitive Sciences, 24(2):112–123, 2020.
+- Dehaene and Changeux [2011] Stanislas Dehaene and Jean-Pierre Changeux. Experimental and theoretical approaches to conscious processing. Neuron, 70(2):200–227, 2011.
+- Eagleman [2008] David M Eagleman. Human time perception and its illusions. Current Opinion in Neurobiology, 18(2):131–136, 2008.
+- El Hihi and Bengio [1995] Salah El Hihi and Yoshua Bengio. Hierarchical recurrent neural networks for long-term dependencies. In Advances in Neural Information Processing Systems, volume 8, pages 493–499, 1995.
+- Friston [2010] Karl Friston. The free-energy principle: a unified brain theory? Nature Reviews Neuroscience, 11(2):127–138, 2010.
+- Goyal et al. [2022] Anirudh Goyal, Aniket Didolkar, Alex Lamb, Kartikeya Badola, Nan Rosemary Ke, Nasim Rahaman, Jonathan Binas, Charles Blundell, Michael Mozer, and Yoshua Bengio. Coordination among neural modules through a shared global workspace. In International Conference on Learning Representations, 2022.
+- Graziano [2013] Michael SA Graziano. Consciousness and the social brain. Oxford University Press, 2013.
+- Guo et al. [2017] Chuan Guo, Geoff Pleiss, Yu Sun, and Kilian Q Weinberger. On calibration of modern neural networks. In International Conference on Machine Learning, pages 1321–1330. PMLR, 2017.
+- Hafner et al. [2020] Danijar Hafner, Timothy P Lillicrap, Jimmy Ba, and Mohammad Norouzi. Dream to control: Learning behaviors by latent imagination. In International Conference on Learning Representations, 2020.
+- Hasani et al. [2021] Ramin Hasani, Mathias Lechner, Alexander Amini, Daniela Rus, and Radu Grosu. Liquid time-constant networks. Proceedings of the AAAI Conference on Artificial Intelligence, 35(9):7657–7666, 2021.
+- Hasson et al. [2015] Uri Hasson, Janice Chen, and Christopher J Honey. Hierarchical process memory: memory as an integral component of information processing. Trends in Cognitive Sciences, 19(6):304–313, 2015.
+- Juliani et al. [2022] Arthur Juliani, Kai Arulkumaran, Shuntaro Sasai, and Ryota Kanai. On the link between conscious function and general intelligence in humans and machines. Transactions on Machine Learning Research, 2022.
+- Lechner et al. [2020] Mathias Lechner, Ramin Hasani, Alexander Amini, Thomas A Henzinger, Daniela Rus, and Radu Grosu. Neural circuit policies enabling auditable autonomy. Nature Machine Intelligence, 2(10):642–652, 2020.
+- Matell and Meck [2004] Matthew S Matell and Warren H Meck. Cortico-striatal circuits and interval timing: coincidence detection of oscillatory processes. Cognitive Brain Research, 21(2):139–170, 2004.
+- Murray et al. [2014] John D Murray, Alberto Bernacchia, David J Freedman, Ranulfo Romo, Jonathan D Wallis, Xinying Cai, Camillo Padoa-Schioppa, Tatiana Pasternak, Hyojung Seo, Daeyeol Lee, et al. A hierarchy of intrinsic timescales across primate cortex. Nature Neuroscience, 17(12):1661–1663, 2014.
+- Nagel [1974] Thomas Nagel. What is it like to be a bat? The Philosophical Review, 83(4):435–450, 1974.
+- Osband et al. [2016] Ian Osband, Charles Blundell, Alexander Pritzel, and Benjamin Van Roy. Deep exploration via bootstrapped DQN. Advances in Neural Information Processing Systems, 29, 2016.
+- Rosenthal [2006] David M Rosenthal. Consciousness and mind. Oxford University Press, 2006.
+- Seth [2021] Anil Seth. Being You: A New Science of Consciousness. Dutton, 2021.
+- Seth et al. [2012] Anil K Seth, Keisuke Suzuki, and Hugo D Critchley. An interoceptive predictive coding model of conscious presence. Frontiers in Psychology, 2:395, 2012.
+- Tononi et al. [2016] Giulio Tononi, Melanie Boly, Marcello Massimini, and Christof Koch. Integrated information theory: from consciousness to its physical substrate. Nature Reviews Neuroscience, 17(7):450–461, 2016.
+- Wang et al. [2016] Jane X Wang, Zeb Kurth-Nelson, Dhruva Tirumala, Hubert Soyer, Joel Z Leibo, Rémi Munos, Charles Blundell, Dharshan Kumaran, and Matt Botvinick. Learning to reinforcement learn. arXiv preprint arXiv:1611.05763, 2016.
+- Wittmann [2009] Marc Wittmann. The inner experience of time. Philosophical Transactions of the Royal Society B: Biological Sciences, 364(1525):1955–1967, 2009.
+
+KAYNAK : https://arxiv.org/abs/2604.11914

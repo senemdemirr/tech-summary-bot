@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-04-14T08:51:49.875706+00:00",
-  "cutoff_utc": "2026-04-13T08:51:49.875706+00:00",
+  "generated_at_utc": "2026-04-15T08:52:44.085881+00:00",
+  "cutoff_utc": "2026-04-14T08:52:44.085881+00:00",
   "max_keep_per_site": 5,
   "all_combined": "txtler/_combined/all_last24h.txt",
   "sites": {
@@ -22,8 +22,8 @@
     },
     "angular": {
       "feed": "https://blog.angular.dev/feed",
-      "saved_initial_count": 1,
-      "kept_after_top5": 1,
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/angular",
       "site_combined": "txtler/_combined/angular_last24h.txt"
@@ -38,8 +38,8 @@
     },
     "dotnet": {
       "feed": "https://devblogs.microsoft.com/dotnet/feed/",
-      "saved_initial_count": 0,
-      "kept_after_top5": 0,
+      "saved_initial_count": 2,
+      "kept_after_top5": 2,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/dotnet",
       "site_combined": "txtler/_combined/dotnet_last24h.txt"
@@ -62,8 +62,8 @@
     },
     "google_ai": {
       "feed": "https://blog.google/technology/ai/rss/",
-      "saved_initial_count": 0,
-      "kept_after_top5": 0,
+      "saved_initial_count": 2,
+      "kept_after_top5": 2,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/google_ai",
       "site_combined": "txtler/_combined/google_ai_last24h.txt"
@@ -78,16 +78,16 @@
     },
     "arxiv_ai": {
       "feed": "https://rss.arxiv.org/rss/cs.AI",
-      "saved_initial_count": 731,
+      "saved_initial_count": 339,
       "kept_after_top5": 5,
-      "removed_due_to_top5": 726,
+      "removed_due_to_top5": 334,
       "site_folder": "txtler/arxiv_ai",
       "site_combined": "txtler/_combined/arxiv_ai_last24h.txt"
     },
     "mit_ai": {
       "feed": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
-      "saved_initial_count": 2,
-      "kept_after_top5": 2,
+      "saved_initial_count": 3,
+      "kept_after_top5": 3,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/mit_ai",
       "site_combined": "txtler/_combined/mit_ai_last24h.txt"

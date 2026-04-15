@@ -1,23 +1,3 @@
---- google_ai | Turn your best AI prompts into one-click tools in Chrome | score=83.98 ---
-Turn your best AI prompts into one-click tools in Chrome
-People are using AI in Chrome to help them get more done on the web — whether that’s answering questions, comparing information or clarifying concepts.
-Until now, repeating an AI task — like asking for ingredient substitutions to make a recipe vegan — meant re-entering the same prompt as you visited different pages. To make this easier, we’re launching Skills in Chrome, which lets you save and reuse your most helpful AI prompts and run them with a single click.
-Build your own one-click workflows
-When you write a prompt that you’ll want to use again, you can save it as a Skill directly from your chat history. The next time you need it, select your saved Skill in Gemini in Chrome by typing forward slash ( / ) or clicking the plus sign ( + ) button, and your Skill will run on the page you’re viewing, along with any other tabs you select. You can edit your saved Skills and create new ones at any time.
-Early testers have used Skills in Chrome to create personalized and powerful workflows for a wide range of tasks. Here are just a few examples.
-- Health & Wellness: quickly calculating protein macros for any recipe
-- Shopping: generating side-by-side spec comparisons across multiple tabs
-- Productivity: scanning lengthy documents for important information
-Get started with our Skills library
-We’re also launching a library of ready-to-use Skills for common tasks and workflows.
-Want to break down the ingredients of a product you’re viewing online? Or select the perfect gift from multiple options by cross-referencing your budget with the recipient’s interests? We wrote Skills that do these things and more. If you find one that looks interesting, you can add it as a saved Skill and give it a try. And if you want to customize it to better fit your needs, you can edit the Skill and update the prompt.
-Stay in control
-Skills are built on Chrome’s foundation of security and privacy, and they utilize the same safeguards we apply to prompts in Gemini in Chrome. That means a Skills prompt will ask for confirmation before taking certain actions, such as adding an event to your calendar or sending an email. And Skills benefit from Chrome’s layered protections, including automated red-teaming and auto-update capabilities.
-Starting today, we’re rolling out Skills to Gemini in Chrome on 1 , helping you streamline your AI-powered browsing. Your saved Skills are available on any signed-in Chrome desktop device and can be managed by typing forward slash ( / ) in Gemini in Chrome and then clicking the compass icon.
-
-KAYNAK : https://blog.google/products-and-platforms/products/chrome/skills-in-chrome/
-
---- google_ai | Bringing people together at AI for the Economy Forum | score=80.55 ---
 Bringing people together at AI for the Economy Forum
 Today we’re bringing people together in Washington D.C. to discuss how AI will impact the economy and jobs. At our inaugural AI for the Economy Forum, co-hosted with MIT FutureTech, we’re starting with a simple premise: neither the benefits nor the risks are automatic or guaranteed. How AI impacts our lives, jobs and economy is something we as a society can shape – and fully realizing AI’s economic potential will require a new era of partnership between companies, workers, governments, researchers and more. At the forum, economists, industry leaders, policymakers and experts will gather to share information, identify gaps in current understanding, and lay the foundation for ongoing collaboration.
 Google has a long-standing commitment to helping positively shape this transition. Today, we’re building on that commitment in two critical ways. First, we are making new investments in research to ensure governments, companies, researchers, and civil society have the information required to make smart decisions. Second, we are providing training opportunities to equip people with the skills needed to navigate a changing economy.
@@ -38,4 +18,3 @@ We’re committed because, over time, we’ve seen the power of digital tools, i
 Ultimately, no single entity can manage this shift alone. We see the forum as an important step in building the collaboration, partnerships, and understanding needed to help to navigate the AI transition successfully.
 
 KAYNAK : https://blog.google/company-news/outreach-and-initiatives/creating-opportunity/ai-economy-forum/
-
