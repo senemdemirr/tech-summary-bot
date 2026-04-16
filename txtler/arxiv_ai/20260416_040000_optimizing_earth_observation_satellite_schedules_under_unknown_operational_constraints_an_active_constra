@@ -1,0 +1,193 @@
+Optimizing Earth Observation Satellite Schedules
+under Unknown Operational Constraints:
+An Active Constraint Acquisition Approach
+Abstract
+Earth Observation (EO) satellite scheduling (deciding which imaging tasks to perform and when) is a well-studied combinatorial optimization problem. Existing methods typically assume that the operational constraint model is fully specified in advance. In practice, however, constraints governing separation between observations, power budgets, and thermal limits are often embedded in engineering artefacts or high-fidelity simulators rather than in explicit mathematical models. We study EO scheduling under unknown constraints: the objective is known, but feasibility must be learned interactively from a binary oracle. Working with a simplified model restricted to pairwise separation and global capacity constraints, we introduce Conservative Constraint Acquisition (CCA), a domain-specific procedure designed to identify justified constraints efficiently in practice while limiting unnecessary tightening of the learned model. Embedded in the Learn&Optimize framework, CCA supports an interactive search process that alternates optimization under a learned constraint model with targeted oracle queries. On synthetic instances with up to 50 tasks and dense constraint networks, L&O improves over a no-knowledge greedy baseline and uses far fewer main oracle queries than a two-phase acquire-then-solve baseline (FAO). For , the average gap drops from 65–68% (Priority Greedy) to 17.7–35.8% using L&O. At , where the CP-SAT reference is the best feasible solution found in 120 s, L&O improves on FAO on average (17.9% vs. 20.3%) while using 21.3 main queries instead of 100 and about less execution time.
+Keywords: Earth observation scheduling, constraint acquisition, interactive optimisation, unknown constraints.
+1 Introduction
+1.1 The Problem
+An Earth Observation satellite orbits the planet and has a limited number of opportunities to photograph ground targets during each pass. Each target has a time window during which it is visible and a priority reflecting its importance. The scheduler must decide which targets to image and at which time slot, so as to maximize total priority while respecting operational constraints. Following the EO literature [3, 6], we refer to this as a scheduling problem.
+Running example.
+Consider a satellite passing over three ground targets. We discretize the orbit into time slots of, say, 30 seconds each. Each target is visible only during a short arc of the orbit:
+The visibility window lists the slots during which target is geometrically visible from the satellite. Windows are short (typically a few slots) because the satellite moves at km/s and any ground point is in view for at most a few minutes.
+To photograph a target, the satellite must point its camera at the correct angle. After imaging one target, it must rotate to a new angle for the next, then waits for settlement. This time imposes a separation constraint: if imaging requires a large rotation to reach , the satellite needs several slots to complete the manoeuvre. For instance, means the angular distance between and requires at least seconds of rotation and settling. The required gap is pair-specific: it depends on the angular distance between the two targets as seen from the spacecraft.
+In the example, is at slot 5 and at slot 6, giving a gap of : the satellite is still rotating when ’s window arrives, so it cannot image both. The best feasible schedule is with total priority of 14.
+1.2 Why Constraints Could be Unknown
+Every existing EO scheduler takes the constraint model as given. In practice, this assumption breaks for three reasons.
+Constraints live in engineering artefacts, not in models. The minimum separation time between observations depends on the satellite’s attitude control system (reaction wheels, star trackers, firmware) and is typically specified in engineering margin documents, not as a mathematical formula. The power budget per orbit depends on battery state-of-health, thermal conditions, and duty-cycle history.
+Constraints change over the mission lifetime. A firmware update may alter stabilization times. For example, battery degradation tightens power budgets, a reaction wheel failure changes the rotation capabilities,… Each change invalidates the previous model and requires manual re-derivation.
+For new missions, no validated model exists. The engineering team often has a high-fidelity simulator that can evaluate any proposed plan, but extracting an explicit constraint model from the simulator is expensive and error-prone.
+These observations motivate the use of a feasibility oracle: a system that evaluates any proposed schedule and returns yes or no, without revealing which constraint was violated. The natural instantiation is a high-fidelity spacecraft simulator [2], which models attitude dynamics, power subsystems, thermal behaviour, and all onboard constraints. Given a proposed plan, the simulator propagates the full spacecraft state and reports whether all hardware limits are satisfied. The oracle could also be an operational validation tool, i.e. software that checks candidate schedules against flight rules. In both cases the oracle embodies the full constraint model implicitly but does not expose it.
+Why the oracle gives only yes/no.
+A natural question is why the oracle cannot simply report which constraint was violated, which would make acquisition trivial. The reason is that the oracle does not represent constraints in the planner’s language. A spacecraft simulator propagates continuous physical state (e.g., attitude quaternions, reaction wheel momentum, battery charge, thermal loads,…) through coupled differential equations. When a schedule fails, the simulator reports a physical symptom: “reaction wheel momentum exceeded safe margin at s” or “battery state-of-charge dropped below 20% during slots 12–18.” Translating this into a discrete constraint like requires understanding the relationship between rotation angles, reaction wheel dynamics, and the specific task pair that caused the problem. Moreover, a single rejection may reflect multiple simultaneous violations (e.g. a thermal overload caused by three observations jointly, not by any pair), and operational validation tools are often black-box systems certified for correctness, not for diagnostic output.
+Even when simulators produce partial diagnostics (e.g. “power budget exceeded in window [10, 25]”), the symptom does not specify the constraint parameters: is it or ? The mapping from physical symptoms to constraint language remains ambiguous.
+Our approach learns constraints from these binary answers while simultaneously optimizing the schedule.
+1.3 Scope and Contributions
+A simplified constraint model.
+Real satellite operations involve dozens of constraint types: orbital dynamics, cloud coverage, downlink scheduling, stereo pair coordination, thermal limits, and more. We study a simplified model restricted to two operationally dominant families: pairwise separation (minimum time gap between observations) and global capacity (maximum observations in a sliding time window). This restriction lets us design a domain-specific acquisition procedure and study the interaction between oracle-guided learning and optimization in a controlled setting.
+Contributions:
+-
+1.
+We formulate EO Scheduling under Unknown Constraints (EOSP-UC), a simplified model in which the feasibility constraints are hidden behind a binary oracle (Section 3).
+-
+2.
+We introduce Conservative Constraint Acquisition (CCA), a domain-specific acquisition procedure tailored to the separation / capacity structure of EOSP-UC. CCA is not a generic constraint acquisition algorithm: it exploits the ordering structure within these two constraint families and does not generalize to arbitrary languages (Section 4).
+-
+3.
+We embed CCA in the Learn&Optimize framework [1], interleaving constraint acquisition with CP-SAT optimization so that the algorithm improves the schedule continuously while learning, and terminates as soon as an oracle-accepted proposal is found rather than waiting for full acquisition (Section 4).
+-
+4.
+We evaluate on synthetic instances with and dense constraint networks. For , L&O reduces the average gap from 65–68% (Priority Greedy) to 17.7–35.8%. At , L&O improves over FAO on average (17.9% vs. 20.3%) while using 21.3 main queries instead of 100 and about less wall-clock time (Section 5).
+In summary, this is (to the best of our knowledge) the first application of active constraint acquisition to EO scheduling and the first study of EO optimisztion under unknown constraints.
+2 Background and Related Work
+2.1 EO Satellite Scheduling
+The EO scheduling problem was formally posed by Bensana et al. [5] and defined comprehensively by Lemaître et al. [6] for the French Pléiades programme. The goal is to maximise total observation profit subject to visibility windows, transition constraints (minimum rotation and stabilization time between observations), and onboard resource limits (memory, energy). Agile satellites can adjust their attitude along three axes, extending observation windows but introducing sequence-dependent transition times that make the problem NP-hard [3].
+Solution approaches span exact methods (branch-and-bound [7, 11], MILP [9], constraint programming [10, 12]), constructive and neighbourhood-search heuristics [6, 8, 19, 13, 14, 20], and deep reinforcement learning [15, 16, 17, 18]. Wang et al. [3] survey 62 papers over 20 years and Ferrari et al. [4] extend the coverage to 2024. Every method assumes a fully specified constraint model.
+2.2 Optimization under Uncertain or Unknown Constraints
+A related but distinct line of work addresses optimization when constraints are uncertain rather than unknown. Dong et al. [28] study cloud job scheduling where capacity constraints are stochastic and must be predicted from historical data. Their predict-then-optimise framework (CUC) handles distributional uncertainty but assumes the constraint structure is known and only the parameters are noisy. In contrast, our setting assumes prior knowledge of the constraint language but not of the hidden active model. That is, the learner knows the relevant families of constraints and a candidate basis, but must discover which constraints are actually justified, and at what parameter values, through binary feasibility queries.
+2.3 Constraint Acquisition
+Constraint acquisition learns a constraint satisfaction or optimisation model from data. Conacq [22] performs passive learning from labelled examples. QuAcq [23] introduced active acquisition via partial-assignment queries: given a negative example, its FindScope and FindC subroutines identify one exact constraint from the hidden model , maintaining the strong invariant . Extensions include multi-constraint acquisition [24], time-bounded query generation [25], structure exploitation [26] and qualitative constraint acquisition [31].
+In its original formulation, Learn&Optimize [1] joins constraint acquisition with optimization, maintaining upper and lower bounds on the true optimum and allowing early termination when those bounds converge. Bessiere et al. [27] also study solving without an explicit model but via passive acquisition rather than interactive optimization. No prior work has applied constraint acquisition to EO scheduling.
+3 Problem Formulation
+Definition 1 (EOSP-UC: EO Scheduling under Unknown Constraints).
+Let be a set of imaging tasks, each with priority weight and a visibility window , where is the planning horizon in discrete slots. Decision variable assigns task to a specific slot within its window, or leaves it unscheduled (). In constraint acquisition terminology, the domain of each variable is . For example, if , then : the scheduler can image at slot 3, 4, or 5, or skip it. The choice of slot matters because it affects separation from other tasks. The objective is:
+A hidden constraint set restricts which assignments are feasible. An oracle accepts any complete assignment and returns yes if satisfies every constraint in , no otherwise. The oracle does not indicate which constraint was violated. This membership oracle is the standard model in constraint acquisition [21, 23, 1]: it reflects the practical reality that feasibility checkers (simulators, validation tools) evaluate schedules holistically without decomposing failures into individual named constraints (see Section 1.2 for a detailed justification).
+Simplified constraint model.
+We restrict to two families:
+-
+•
+Separation : if both tasks and are scheduled, their slots must satisfy . Physically, reflects the time the satellite needs to rotate between the pointing angles of targets and and re-stabilise (see Section 1.1);
+-
+•
+Capacity : at most tasks may be scheduled in any window of consecutive slots. Physically, this models the power budget (the battery cannot sustain more than high-power imaging activations within a -slot interval) or downlink bandwidth limits.
+Window constraints are embedded in the variable domains. This is a deliberate simplification: real operations involve additional families (see Section 1.3).
+Constraint language.
+The language consists of two constraint families: (pairwise separation) and (global capacity). The candidate basis is obtained by instantiating : for all task pairs with a range of plausible values, plus for a neighbourhood of plausible values. We assume : the candidate basis is rich enough to contain every true constraint.
+4 Methodology
+4.1 Learn&Optimize Framework
+The algorithm maintains two sets. The learned set starts empty and grows as the oracle rejects proposals. The candidate basis starts as the instantiated constraints (generated from ) that are consistent with a dummy oracle-feasible schedule, and then shrinks as YES answers rule out incompatible candidates. Thus, denotes the language, the current candidate basis, and the current learned constraint model.
+In the ideal case, if CCA preserves a sound learning invariant, then can be interpreted as an optimistic model-side value and as a tightened model-side value. In the current CCA-based implementation, however, the learned model may be over-constrained (due to the conservative approach), so we do not assume a fixed ordering between and the true hidden optimum in general. Accordingly, and should be interpreted as optima of constraint models used by the algorithm, not automatically as certified bounds on .
+Query generation.
+Each iteration solves , that is, it maximizes subject only to the currently learned constraints. Because is only a part for the hidden model , the returned schedule may still violate constraints enforced by the oracle.
+Model-side optima.
+For analysis we distinguish three quantities:
+Here is the true hidden optimum, while and are optima of the learned and tightened constraint models, respectively. Only under an additional soundness invariant should these be interpreted as upper or lower bounds on .
+4.2 Conservative Constraint Acquisition (CCA)
+CCA is a domain-specific procedure designed for the separation / capacity structure of EOSP-UC. It is not a general-purpose constraint acquisition algorithm: unlike QuAcq [23], it does not implement FindScope or FindC, and it does not generalise to arbitrary constraint languages. For other constraint families, QuAcq or its successors should be used.
+The key idea is conservatism. When the oracle rejects a schedule, CCA refines the current constraint model using domain-specific partial queries and prunes dominated candidates from the basis. In an idealized setting this can be interpreted as learning constraints justified by the hidden model. In the present implementation we treat CCA operationally as a conservative model-refinement procedure rather than as a complete recovery algorithm for .
+Procedure (Algorithm 2).
+Given a rejected schedule :
+-
+1.
+Pair querying. For each task pair whose current candidate separations are violated by , submit a two-task query and, if needed, binary-search over the sorted values in using window-consistent pair assignments. If a strongest justified gap is found, add to and prune all weaker separation candidates for that pair from .
+-
+2.
+Capacity fallback. If no justified separation is found, learn the weakest violated capacity candidate, namely the smallest violated window width together with the largest still-violated capacity at that width.
+After learning a constraint, prune by removing all dominated candidates. Here denotes the set of candidate separation values for pair currently present in .
+4.3 Implementation Details
+OptSol.
+We implement OptSol using CP-SAT (Google OR-Tools) as a time-limited anytime solver. Each call is given a maximum time limit of cpsat_iter_t seconds (20 s in the reported experiments), although in practice CP-SAT often terminates much earlier when optimality is certified quickly. We use 4 parallel workers and a fixed random seed for reproducibility. CP-SAT returns the best feasible solution found within the time limit, along with a certificate of optimality if the search completes. When optimality is proved, the returned value coincides with the exact optimum of the current learned model, otherwise it should be read as the best value found under the current learned model within the time budget. Accordingly, the experimental “Opt()” curves are empirical CP-SAT values under , not certified upper bounds unless CP-SAT has proved optimality at that iteration.
+FAO baseline.
+FAO runs CCA for 100 queries, then solves the learned with CP-SAT. If the result violates , it is repaired by dropping lowest-priority tasks until oracle-feasible. Both FAO and L&O use CCA and receive the same oracle budget, so the comparison isolates the effect of interleaving acquisition with optimization.
+4.4 End-to-End Example
+We trace Algorithm 1 on a small instance to show how the interaction works in practice.
+Setup.
+Three tasks: (priority 3), (priority 2), (priority 2). Horizon slots. Visibility windows , , represent the scheduled-slot part of each variable’s domain: . Hidden constraints (unknown to the algorithm): (at least 3 slots between and ) and (at most 1 task in any 5-slot window). Candidate basis : with for each pair, plus with , .
+Initialisation.
+Schedule the highest-priority task: at slot 3. The oracle confirms feasibility. Set ; initialise the basis as all constraints derived from and consistent with . Best known solution: , value .
+Initial pruning.
+Before the first oracle query, CCA eliminates candidates that can never be violated. The minimum slot gap between and across their windows is , so and are pruned immediately. Similarly is pruned (). The basis retains 12 candidates instead of 15.
+Iteration 1.
+returns (value 7). Oracle: no ( violates the hidden separation).
+CCA sorts violated pairs by their strongest candidate in . Pair has with maximum and is queried first. CCA binary-searches using window-consistent partial queries (, ):
+-
+•
+, gap: partial query , . Oracle: no (separation violated: ). Justified; binary search tries .
+-
+•
+, gap: partial query , . Oracle: no (capacity violated: slots 2 and 5 are both in window , count ). The oracle returns no regardless of the cause. is recorded as justified. No stronger candidate remains.
+The binary search returns . Because the partial query was rejected by the capacity constraint rather than by separation, CCA learns , an over-tightened constraint: the true hidden separation is , but the algorithm cannot distinguish the cause of rejection. Update and prune all candidates from .
+Iteration 2.
+With in , tasks and can never be co-scheduled: the maximum slot gap achievable in is . therefore returns (value 5). Oracle: yes (no separation constraint on and is satisfied since slots 2 and 7 lie in disjoint 5-slot windows). Update , value .
+Outcome.
+Two main oracle queries plus two partial queries. Best solution: , value . Learned model: , an over-tightened constraint of the true . is never queried because the second oracle call returns yes before any capacity violation is encountered. Fraction of hidden constraints exactly identified: . The true optimum is 5 and is recovered despite incomplete constraint learning: the over-tightened separation suffices to steer the solver toward a feasible optimal schedule, illustrating that exact recovery of the hidden model is not required for good solutions.
+5 Experiments
+5.1 Setup
+Instance generation.
+We generate instances with tasks, planning horizon , and priorities drawn from . Each window is a random sub-interval of . Hidden constraints: separation on of task pairs ( slots) and one global capacity constraint with window width and limit set empirically so that Twenty seeds (0–19) per configuration. For the CP-SAT reference is the best feasible solution found within 120 s rather than a proven optimum, so reported gaps are upper bounds.
+Constraint language.
+contains for all pairs with (i.e. sep_lang_max), plus in a neighbourhood of radius 2 around the true parameters ( candidates). Language sizes range from () to (). At initialisation, candidates that are always satisfied given the task windows (Section 4.2) are pruned, reducing the effective basis.
+Methods.
+-
+•
+PG (Priority Greedy): schedule by descending priority, repair by dropping cheapest tasks until oracle-feasible. Uses no constraint knowledge.
+-
+•
+CP-SAT: OR-Tools on the full hidden model with a 120 s limit. For it proves optimality on all reported seeds and for it is treated as a best-feasible reference.
+-
+•
+FAO (Full Acquire-then-Optimise): CCA acquisition (100 queries) CP-SAT on learned oracle-feasibility repair.
+-
+•
+L&O: Algorithm 1 with CCA and query cutoff .
+Metrics.
+Gap: , where is the CP-SAT reference value. Main queries: number of oracle calls on full schedules (excludes CCA partial queries). For FAO this is always 100 and for L&O it is the iteration at which the algorithm terminates. : iteration at which the best solution was first found during the L&O interleaved phase (not applicable to FAO). Time: total wall-clock time including the final CP-SAT solve. Speedup: FAO time / L&O time. frac: fraction of exactly identified in at termination (reported in the text).
+5.2 Results
+Tables 1–2 present the results. L&O terminates well before the 100-query cutoff on average: the Accepted-Opt() stopping condition fires after only 5–21 main queries depending on . The model-side convergence condition () never fired in any run: with a large candidate basis and a time-limited OptSol, the two bounds did not meet within the query budget before the feasibility of OptSol cutoff.
+5.3 Convergence
+(1) L&O substantially improves over no constraint knowledge.
+PG, which ignores the hidden constraints during optimisation, shows average gaps of 65.0%, 66.3%, 68.0%, 73.4%, and 72.7% for . L&O reduces these to 17.7%, 35.8%, 27.1%, 20.2%, and 17.9%, respectively. The improvement is especially clear for , where the CP-SAT reference is proven optimal on all seeds.
+(2) L&O uses far fewer main queries than FAO while remaining competitive in quality.
+The best L&O solution is found after only 5.3, 8.2, 14.2, 16.3, and 21.3 main queries on average for , compared with the fixed 100-query acquisition phase of FAO. In terms of quality, L&O matches or improves on FAO at , , , and , and is only slightly worse at (20.2% vs. 19.4%), a difference well within one standard deviation (8.1 vs. 7.5) and likely attributable to the stochastic behaviour of time-limited CP-SAT across seeds rather than a systematic advantage of FAO. At , L&O improves over FAO on average by 2.4 percentage points (17.9% vs. 20.3%), wins on 6 of the 20 seeds, and reduces average wall-clock time from 695.0 s to 130.0 s.
+(3) Partial knowledge still suffices.
+The best solution is typically found with only a small fraction of the hidden constraints exactly identified: the mean value of is 0.096, 0.056, 0.065, 0.045, and 0.041 for . This indicates that many hidden constraints never bind the best schedule. What matters is learning the few constraints that rule out the strongest competing assignments.
+(4) L&O stops early.
+Figure 1 illustrates a typical pattern. The CP-SAT value under the learned model decreases as CCA adds constraints, while the best oracle-confirmed solution jumps whenever a proposed schedule is accepted. Because optimization and acquisition are interleaved, L&O can terminate as soon as a strong accepted solution is found, rather than spending the full 100-query budget on acquisition before attempting a final solve. This anytime property is the dominant practical advantage over FAO in the current implementation.
+5.4 Discussion
+Why does L&O help in practice?
+The dominant advantage is not that it perfectly reconstructs the hidden model, but that it does not wait until the end of acquisition before searching for good schedules. FAO always spends its full 100-query budget before the final CP-SAT call. In contrast, L&O typically finds its best solution after 5–21 main queries and then terminates immediately once an accepted optimistic proposal is obtained. This is why the wall-clock speedups in Table 2 remain large even when solution quality is similar.
+Partial learning is enough.
+A striking empirical observation is that L&O does not need to recover most of the hidden model to find good schedules. Averaged over seeds, stays between 0.041 and 0.096. Note that measures exact identification: a constraint learned as when the truth is counts as unidentified, even though the over-tightened constraint may block the same competing assignments just as effectively. What matters in practice is not exact recovery but learning enough of the constraint structure to steer the solver away from infeasible high-value schedules.
+Oracle call accounting.
+Each L&O iteration makes one main oracle query, but CCA partial queries add overhead. The mean total oracle calls grow from 48 () to 727 (), compared with 143 to 904 for FAO. If each oracle call corresponds to a simulator run, these totals still represent minutes rather than the much larger engineering cost of manually specifying the constraint model.
+6 Conclusion
+We have presented, to our knowledge, the first study of EO satellite scheduling under unknown operational constraints. By interleaving constraint acquisition with optimization, the method learns from oracle queries while continuously improving a solution schedule. On a simplified model with separation and capacity constraints and dense hidden networks, L&O improves over a no-knowledge greedy baseline and uses far fewer main oracle queries than a two-phase acquire-then-optimise pipeline. In the current experiments, the strongest average advantage over FAO appears at (17.9% vs. 20.3% gap, relative to a best-feasible CP-SAT reference) together with about a wall-clock speedup.
+A key empirical insight is that most hidden constraints never need to be identified exactly. The best solution is typically found with only 4–10% of hidden constraints exactly recovered, suggesting that effective interactive scheduling depends more on discovering the few constraints that eliminate strong competitors than on reconstructing the entire hidden model.
+Limitations.
+(i) CCA may learn over-tightened constraints (as illustrated in Section 4.4): when a pair query is rejected by a capacity constraint rather than by separation, CCA records a stronger separation than the truth. The learned model may therefore exclude some feasible schedules, which can cause L&O to miss the true optimum even when the CP-SAT solve under is exact. (ii) The experimental implementation uses time-limited CP-SAT inside OptSol, so the plotted “Opt()” values and the stop event should be interpreted as implementation-level anytime signals rather than universal optimality certificates. (iii) The constraint model is restricted to separation and capacity, extending to richer families requires either generalizing CCA or replacing it with a generic algorithm such as QuAcq. (iv) We assume a perfect, stationary oracle. Noisy oracles and constraint drift are not handled.
+Future work.
+(i) Stronger solver engineering for the per-iteration CP-SAT calls, including better stopping logic (ii) validation on real satellite scheduling datasets with physically grounded constraints (e.g. the Eddy & Kochenderfer dataset [29] with slew-derived separations) (iii) multi-satellite constellations (iv) noisy and approximate oracles (v) constraint drift via periodic basis reset (vi) QuAcq for settings where the constraint language is not known in advance.
+References
+- [1] M.-B. Belaid, A. Gotlieb, N. Lazaar. Solve optimization problems with unknown constraint networks. arXiv:2111.11871, 2021.
+- [2] L. Wang, Y. Xiang, H. Huang, D. Li, C. Gao, S. Liu. Towards realistic Earth-observation constellation scheduling: Benchmark and methodology. arXiv:2510.26297, 2025.
+- [3] X. Wang, G. Wu, L. Xing, W. Pedrycz. Agile Earth observation satellite scheduling over 20 years: formulations, methods, and future directions. IEEE Systems Journal, 15(3):3881–3892, 2021.
+- [4] G. Ferrari et al. Satellite scheduling problems: A survey of applications in Earth and outer space observation. Computers & Operations Research, 2024.
+- [5] E. Bensana, M. Lemaître, G. Verfaillie. Earth observation satellite management. Constraints, 4(3):293–299, 1999.
+- [6] M. Lemaître, G. Verfaillie, F. Jouhaud, J.-M. Lachiver, N. Bataille. Selecting and scheduling observations of agile satellites. Aerospace Science and Technology, 6(5):367–381, 2002.
+- [7] V. Gabrel, A. Moulet, C. Murat, V.T. Paschos. A new single model and derived algorithms for the satellite shot planning problem using graph theory concepts. Annals of Operations Research, 69:115–134, 1997.
+- [8] M. Vasquez, J.-K. Hao. A logic-constrained knapsack formulation and a tabu algorithm for the daily photograph scheduling of an Earth observation satellite. Computational Optimization and Applications, 20(2):137–157, 2001.
+- [9] N. Bianchessi, G. Righini. Planning and scheduling algorithms for the COSMO-SkyMed constellation. Aerospace Science and Technology, 12(7):535–544, 2008.
+- [10] G. Verfaillie, M. Lemaître. Selecting and scheduling observations for agile satellites: some lessons from the constraint reasoning community. In CP, LNCS 2239, pp. 785–789. Springer, 2001.
+- [11] X. Chu, Y. Chen, L. Xing. A branch and bound algorithm for agile Earth observation satellite scheduling. Discrete Dynamics in Nature and Society, 2017.
+- [12] P. Miralles et al. A constraint programming model for the super-agile Earth observation satellite imaging scheduling problem. arXiv:2601.11967, 2026.
+- [13] L. He, X. Liu, G. Laporte, Y. Chen, Y. Chen. An improved adaptive large neighbourhood search algorithm for multiple agile satellites scheduling. Computers & Operations Research, 100:12–25, 2018.
+- [14] C. Han, Y. Gu, G. Wu, X. Wang. Simulated annealing-based heuristic for multiple agile satellites scheduling under cloud coverage uncertainty. IEEE TSMC, 53(5):2863–2874, 2022.
+- [15] M. Chen, Y. Chen, Y. Chen, W. Qi. Deep reinforcement learning for agile satellite scheduling problem. In IEEE SSCI, pp. 126–132, 2019.
+- [16] X. Zhao, Z. Wang, G. Zheng. Two phase neural combinatorial optimization with reinforcement learning for agile satellite scheduling. Journal of Aerospace Information Systems, 17:346–357, 2020.
+- [17] L. Wei, Y. Chen, M. Chen, Y. Chen. Deep reinforcement learning and parameter transfer for multi-objective agile EOS scheduling. Applied Soft Computing, 110:107607, 2021.
+- [18] A. Herrmann, H. Schaub. Reinforcement learning for the agile Earth-observing satellite scheduling problem. IEEE Transactions on Aerospace and Electronic Systems, 2023.
+- [19] R. Xu, H. Chen, X. Liang, H. Wang. Priority-based constructive algorithms for scheduling agile Earth observation satellites with total priority maximization. Expert Systems with Applications, 51:195–206, 2016.
+- [20] X. Wang, C. Han, R. Zhang, Y. Gu. Scheduling multiple agile Earth observation satellites for oversubscribed targets using complex networks theory. IEEE Access, 7:110605–110615, 2019.
+- [21] C. Bessiere, F. Koriche, N. Lazaar, B. O’Sullivan. Constraint acquisition. Artificial Intelligence, 244:315–342, 2017.
+- [22] C. Bessiere, R. Coletta, F. Koriche, B. O’Sullivan. A SAT-based version space algorithm for acquiring constraint satisfaction problems. In ECML, pp. 23–34, 2005.
+- [23] C. Bessiere, R. Coletta, E. Hebrard, G. Katsirelos, N. Lazaar, N. Narodytska, C.-G. Quimper, T. Walsh. Constraint acquisition via partial queries. In IJCAI, 2013.
+- [24] R. Arcangioli, C. Bessiere, N. Lazaar. Multiple constraint acquisition. In IJCAI, pp. 698–704, 2016.
+- [25] H.A. Addi, C. Bessiere, R. Ezzahir, N. Lazaar. Time-bounded query generator for constraint acquisition. In CPAIOR, pp. 1–17, 2018.
+- [26] D.C. Tsouros, K. Stergiou, C. Bessiere. Structure-driven multiple constraint acquisition. In CP, pp. 709–725, 2019.
+- [27] C. Bessiere, R. Coletta, N. Lazaar. Solve a constraint problem without modeling it. In ICTAI, pp. 1–7. IEEE, 2014.
+- [28] Z. Dong, H. Ye, G. Yu, N. Zhang, R. Chen. Predictive job scheduling under uncertain constraints in cloud computing. In IJCAI, pp. 2992–2998, 2021.
+- [29] D. Eddy, M. J. Kochenderfer. A maximum independent set method for scheduling earth-observing satellite constellations. Journal of Spacecraft and Rockets, 58(5):1416–1429, 2021. Dataset: https://zenodo.org/records/10934666.
+- [30] OECD. Expanding access to satellite Earth observation data: What it means for privacy, security and trust. OECD Policy Blog, February 2026.
+- [31] M.-B. Belaid, N. Belmecheri, A. Gotlieb, N. Lazaar, H. Spieker. Query-driven qualitative constraint acquisition. Journal of Artificial Intelligence Research, 79:241–271, 2024.
+
+KAYNAK : https://arxiv.org/abs/2604.13283

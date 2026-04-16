@@ -1,48 +1,157 @@
---- nextjs | v16.2.1-canary.42 | score=45.50 ---
+--- nextjs | v16.2.1-canary.44 | score=56.47 ---
 Core Changes
-Scope Safari ?ts= cache-buster to CSS/font assets only (Pages Router):
+fix(trace-server): default MCP port to --port + 1 to avoid conflicts:
+#92831
+Revert "Node.js streams: Add forkpoint for prerenderToStream":
+#92845
+Warn for non-deterministic
+"use cache"
+args during final prerender:
+#92820
+Misc Changes
+Share native binaries via GitHub artifacts:
+#92758
+Turbopack: shorter error message for ModuleBatchesGraph::get_entry_index:
+#92828
+Turbopack: refactor export analysis:
+#92781
+[ci] Skip sccache on Windows runners:
+#92847
+Turbopack: remove StarImportAnalyzer:
+#92830
+Turbopack: analyzer improvement followups:
+#92834
+Update Rspack production test manifest:
+#92674
+Update Rspack development test manifest:
+#92673
+Turbopack: move assignment_scopes computation into ImportMap:
+#92835
+docs: restructure instant nav guide for clarity:
+#92684
+docs: add documentation for no-typos ESLint rule:
+#92809
+Credits
+Huge thanks to
+@mmastrac
+,
+@sokra
+,
+@mischnic
+,
+@timneutkens
+,
+@vercel-release-bot
+,
+@unstubbable
+,
+@icyJoseph
+, and
+@MukundaKatta
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.44
+
+--- nextjs | v16.2.4 | score=55.49 ---
+Note
+This release is backporting bug fixes. It does
+not
+include all pending features/changes on canary.
+Core Changes
+chore: Bump reqwest to 0.13.2 (Fixes Google Fonts with Turbopack for Windows on ARM64) (
+#92713
+)
+Turbopack: fix filesystem watcher config not applying follow_symlinks(false) (
+#92631
+)
+Scope Safari ?ts= cache-buster to CSS/font assets only (Pages Router) (
 #92580
-Enable wasm plugins on windows arm:
-#92544
-prefetchInlining: fix build crash on notFound() pages:
-#92806
+)
+Compiler: Support boolean and number primtives in next.config defines (
+#92731
+)
+turbo-tasks: Fix recomputation loop by allowing cell cleanup on error during recomputation (
+#92725
+)
+Turbopack: shorter error for ChunkGroupInfo::get_index_of (
+#92814
+)
+Turbopack: shorter error message for ModuleBatchesGraph::get_entry_index (
+#92828
+)
+Adding more system info to the 'initialize project' trace (
+#92427
+)
 Credits
 Huge thanks to
+@Badbird5907
+,
 @lukesandberg
-and
-@acdlite
+,
+@andrewimm
+,
+@sokra
+, and
+@mischnic
 for helping!
 
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.42
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.4
 
---- nextjs | v16.2.1-canary.39 | score=41.17 ---
-We read every piece of feedback, and take your input very seriously.
-To see all available qualifiers, see our documentation.
-a9fed93
-There was an error while loading. Please reload this page.
-v16.2.1-canary.39
-
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.39
-
---- nextjs | v16.2.1-canary.41 | score=35.46 ---
+--- nextjs | v16.2.1-canary.43 | score=40.15 ---
+Core Changes
+webpack: fix swcPlugins with relative paths:
+#92770
+Node.js streams: Add forkpoint for logMessagesAndSendErrorsToBrowser:
+#92510
+Node.js streams: Add forkpoint for createCombinedPayloadStream:
+#92511
+Node.js streams: Add forkpoint for renderWithRestartOnCacheMissInValidation:
+#92512
+Node.js streams: Add forkpoint for prerenderToStream:
+#92513
+Perf: Fast path for trace() when opentelemetry is not enabled:
+#92678
 Misc Changes
-Fix devlow-bench: tsconfig rootDir mismatch with package.json bin:
-#92800
+turbopack: gate ValueDebugFormat and ValueDebug behind debug_assertions:
+#92628
+Add TurboMalloc::thread_park() to flush and collect on thread park:
+#92804
+Stop using deprecated
+baseUrl
+:
+#92653
+Turbopack: Use FrozenMap for module export information:
+#92802
+pr-status: Show all participants in review thread overview:
+#92730
+docs: draftMode alignment:
+#92794
+Turbopack: remove webpack chunk detection:
+#92773
+Turbopack: refactor ESM codegen generation:
+#92777
+Fix monorepo
+@next/swc
+binary postinstall:
+#92813
+Turbopack: shorter error for ChunkGroupInfo::get_index_of:
+#92814
+Turbopack: properly set NODE_ENV for SWC plugins:
+#92579
 Credits
 Huge thanks to
-@mmastrac
+@sokra
+,
+@eps1lon
+,
+@bgw
+,
+@icyJoseph
+,
+@mischnic
+, and
+@timneutkens
 for helping!
 
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.41
-
---- nextjs | v16.2.1-canary.40 | score=30.26 ---
-Misc Changes
-Fix turbo cache flag: use --force:
-#92796
-Credits
-Huge thanks to
-@mmastrac
-for helping!
-
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.40
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.43
 

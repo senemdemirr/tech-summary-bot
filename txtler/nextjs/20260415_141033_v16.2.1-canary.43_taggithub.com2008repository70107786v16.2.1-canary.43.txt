@@ -1,0 +1,56 @@
+Core Changes
+webpack: fix swcPlugins with relative paths:
+#92770
+Node.js streams: Add forkpoint for logMessagesAndSendErrorsToBrowser:
+#92510
+Node.js streams: Add forkpoint for createCombinedPayloadStream:
+#92511
+Node.js streams: Add forkpoint for renderWithRestartOnCacheMissInValidation:
+#92512
+Node.js streams: Add forkpoint for prerenderToStream:
+#92513
+Perf: Fast path for trace() when opentelemetry is not enabled:
+#92678
+Misc Changes
+turbopack: gate ValueDebugFormat and ValueDebug behind debug_assertions:
+#92628
+Add TurboMalloc::thread_park() to flush and collect on thread park:
+#92804
+Stop using deprecated
+baseUrl
+:
+#92653
+Turbopack: Use FrozenMap for module export information:
+#92802
+pr-status: Show all participants in review thread overview:
+#92730
+docs: draftMode alignment:
+#92794
+Turbopack: remove webpack chunk detection:
+#92773
+Turbopack: refactor ESM codegen generation:
+#92777
+Fix monorepo
+@next/swc
+binary postinstall:
+#92813
+Turbopack: shorter error for ChunkGroupInfo::get_index_of:
+#92814
+Turbopack: properly set NODE_ENV for SWC plugins:
+#92579
+Credits
+Huge thanks to
+@sokra
+,
+@eps1lon
+,
+@bgw
+,
+@icyJoseph
+,
+@mischnic
+, and
+@timneutkens
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.43

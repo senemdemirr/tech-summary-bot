@@ -1,0 +1,52 @@
+Core Changes
+fix(trace-server): default MCP port to --port + 1 to avoid conflicts:
+#92831
+Revert "Node.js streams: Add forkpoint for prerenderToStream":
+#92845
+Warn for non-deterministic
+"use cache"
+args during final prerender:
+#92820
+Misc Changes
+Share native binaries via GitHub artifacts:
+#92758
+Turbopack: shorter error message for ModuleBatchesGraph::get_entry_index:
+#92828
+Turbopack: refactor export analysis:
+#92781
+[ci] Skip sccache on Windows runners:
+#92847
+Turbopack: remove StarImportAnalyzer:
+#92830
+Turbopack: analyzer improvement followups:
+#92834
+Update Rspack production test manifest:
+#92674
+Update Rspack development test manifest:
+#92673
+Turbopack: move assignment_scopes computation into ImportMap:
+#92835
+docs: restructure instant nav guide for clarity:
+#92684
+docs: add documentation for no-typos ESLint rule:
+#92809
+Credits
+Huge thanks to
+@mmastrac
+,
+@sokra
+,
+@mischnic
+,
+@timneutkens
+,
+@vercel-release-bot
+,
+@unstubbable
+,
+@icyJoseph
+, and
+@MukundaKatta
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.1-canary.44

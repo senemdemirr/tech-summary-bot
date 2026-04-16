@@ -1,0 +1,43 @@
+Note
+This release is backporting bug fixes. It does
+not
+include all pending features/changes on canary.
+Core Changes
+chore: Bump reqwest to 0.13.2 (Fixes Google Fonts with Turbopack for Windows on ARM64) (
+#92713
+)
+Turbopack: fix filesystem watcher config not applying follow_symlinks(false) (
+#92631
+)
+Scope Safari ?ts= cache-buster to CSS/font assets only (Pages Router) (
+#92580
+)
+Compiler: Support boolean and number primtives in next.config defines (
+#92731
+)
+turbo-tasks: Fix recomputation loop by allowing cell cleanup on error during recomputation (
+#92725
+)
+Turbopack: shorter error for ChunkGroupInfo::get_index_of (
+#92814
+)
+Turbopack: shorter error message for ModuleBatchesGraph::get_entry_index (
+#92828
+)
+Adding more system info to the 'initialize project' trace (
+#92427
+)
+Credits
+Huge thanks to
+@Badbird5907
+,
+@lukesandberg
+,
+@andrewimm
+,
+@sokra
+, and
+@mischnic
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.4

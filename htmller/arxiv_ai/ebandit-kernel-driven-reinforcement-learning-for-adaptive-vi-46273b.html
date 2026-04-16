@@ -1,0 +1,32 @@
+<div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
+  <h1>eBandit: Kernel-Driven Reinforcement Learning for Adaptive Video Streaming</h1>
+  <p>Video streaming, özellikle artan talep ve kullanıcı beklentileriyle, internetin en kritik performans bileşenlerinden biri haline gelmiştir. Kullanıcıların video izleme deneyimlerini optimize etmek için, adaptif bitrate (ABR) algoritmaları, mevcut bant genişliğine göre video kalitesini belirler. Ancak, günümüzün ABR algoritmaları, kullanıcı alanında çalıştıkları için, ağ katmanındaki önemli sinyallere erişemezler ve bu da gecikmeli tepkilere neden olur.</p>
+  <p>eBandit, bu sorunu çözmek için geliştirilmiş bir çerçevedir. Linux çekirdeği içinde eBPF kullanarak, ağ izleme ve ABR algoritma seçimlerini çekirdeğe taşır. Bu sayede, ağ durumu hakkında daha doğru ve hızlı kararlar alınabilir. eBandit, canlı TCP metriklerinden türetilen ödüllere dayalı olarak üç ABR algoritmasını değerlendirir ve epsilon-greedy Multi-Armed Bandit (MAB) modeliyle en uygun politikayı seçer.</p>
+  
+  <h2>Büyük resim: Bu içerik ne anlatıyor ve neden önemli?</h2>
+  <p>eBandit, adaptif video akışı için ABR algoritmalarının çekirdek seviyesinde çalışmasını sağlayarak, kullanıcı alanındaki sınırlamaları aşmayı hedefliyor. Kullanıcı alanında çalışan mevcut ABR algoritmaları, ağ katmanındaki önemli sinyalleri göremediğinden, ağ değişikliklerine geç tepki verir. eBandit, bu algoritmaları Linux çekirdeğine taşıyarak, daha hızlı ve doğru kararlar alınmasını sağlıyor. Bu yaklaşım, video akış kalitesini artırarak, kullanıcı deneyimini iyileştiriyor.</p>
+  
+  <h2>Teknik detaylar / öne çıkan noktalar</h2>
+  <p>eBandit, Linux'un eBPF alt sistemi üzerine inşa edilmiştir ve TCP bağlantılarını soket olayları düzeyinde izler. TCP metriklerinden elde edilen ödüller, çekirdek içinde epsilon-greedy MAB kullanılarak hesaplanır. Kullanıcı alanındaki istemci, çekirdek tarafından seçilen politikayı uygulayan ince bir yürütücü haline gelir. Bu yapı, sıfır yeniden derleme ve mikro saniye altı gecikme ile çalışır.</p>
+  <p>eBPF programları, çekirdek kancalarına bağlı olarak çalışır ve TCP kontrol bloğu alanlarına sıfır kopya ve sıfır bağlam değişimi ile erişim sağlar. eBandit, daha derin RL modelleri yerine epsilon-greedy MAB modelini tercih eder. Bu model, eBPF yığını ve talimat sınırları içinde çalışacak şekilde tasarlanmıştır.</p>
+  
+  <h2>Etkiler: Kimleri nasıl etkiler?</h2>
+  <p>eBandit, video akışı hizmeti sağlayıcıları ve son kullanıcılar için önemli faydalar sunar. Sağlayıcılar, ağ durumu hakkında daha doğru bilgiye sahip olarak, kullanıcı deneyimini optimize edebilirler. Son kullanıcılar ise, daha az kesinti ve daha yüksek kaliteli video akışı deneyimi yaşarlar. Bu, özellikle mobil cihazlar gibi değişken ağ koşullarına sahip ortamlarda önemli bir avantajdır.</p>
+  
+  <h2>Kısa özet</h2>
+  <ul>
+    <li>eBandit, ABR algoritmalarını Linux çekirdeğine taşıyarak, ağ durumu hakkında daha doğru ve hızlı kararlar alınmasını sağlar.</li>
+    <li>eBPF kullanımı, sıfır kopya ve sıfır bağlam değişimi ile TCP kontrol bloğu alanlarına erişim sağlar.</li>
+    <li>Epsilon-greedy MAB modeli, çekirdek içinde çalışarak, en uygun ABR politikasını seçer.</li>
+    <li>eBandit, mobil cihazlar gibi değişken ağ koşullarında daha iyi performans gösterir.</li>
+    <li>Video akışı hizmeti sağlayıcıları ve son kullanıcılar için önemli faydalar sunar.</li>
+  </ul>
+  
+  <p>Metin, şu konularda detay vermiyor: eğitmenler ve bakış açısı, sınırlamalar ve belirsizlikler.</p>
+  
+  <h2>Kapanış</h2>
+  <p>eBandit, ABR politikalarının çekirdek seviyesinde seçilmesini sağlayarak, video akış kalitesini artırmada önemli bir adım atmaktadır. Gelecekte, eBandit'in daha da geliştirilmesi ve farklı ağ koşullarında test edilmesi planlanmaktadır.</p>
+  
+  <h2>Kaynak</h2>
+  <p>Detaylı okumak için: <a href="https://arxiv.org/abs/2604.08791" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2604.08791</a></p>
+</div>

@@ -1,4 +1,3 @@
---- dotnet | Pin Clustering in .NET MAUI Maps | score=71.40 ---
 If you’ve ever loaded a map with dozens — or hundreds — of pins, you know the result: an overlapping mess that’s impossible to interact with. Starting in
 .NET MAUI 11 Preview 3
 , the Map control supports pin clustering out of the box on Android and iOS/Mac Catalyst.
@@ -89,4 +88,3 @@ appeared first on
 .
 
 KAYNAK : https://devblogs.microsoft.com/dotnet/pin-clustering-in-dotnet-maui-maps/
-
