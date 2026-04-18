@@ -1,3 +1,0 @@
-OpenAI updates the Agents SDK with native sandbox execution and a model-native harness, helping developers build secure, long-running agents across files and tools.
-
-KAYNAK : https://openai.com/index/the-next-evolution-of-the-agents-sdk

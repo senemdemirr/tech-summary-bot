@@ -1,4 +1,3 @@
---- huggingface | Building a Fast Multilingual OCR Model with Synthetic Data | score=92.32 ---
 Building a Fast Multilingual OCR Model with Synthetic Data
 Synthetic data generation offers a way out of these tradeoffs. By rendering text onto images programmatically, we get both the scale of web scraping and the label purity of hand annotation. Every bounding box, transcription, and reading order relationship is known exactly because we placed it there, and we have full control over which layouts, font styles, and edge cases appear in the training set. The challenge is realism. Simulating diverse layouts and realistic document scenarios is difficult, but with the right rendering engine and strong randomization across fonts, colors, backgrounds, augmentations, and layout structures, it is possible to build enough invariance that models trained on synthetic data generalize well to real-world documents.
 Using this approach, we built Nemotron OCR v2, a multilingual OCR model that is both accurate and fast. Accuracy is driven by data: 12 million synthetic training images across six languages brought NED scores from 0.56–0.92 down to 0.035–0.069 on non-English languages. Speed is driven by architecture: a shared detection backbone whose features are reused by both the recognizer and relational model, eliminating redundant computation and enabling 34.7 pages/second on a single A100 GPU. The synthetic data pipeline is generic enough to extend to any language for which fonts and source text exist.
@@ -57,4 +56,3 @@ Acknowledgments
 Thank you to Bo Liu, Théo Viel and Mike Ranzinger for contributing code, strategy and additional validation to this work.
 
 KAYNAK : https://huggingface.co/blog/nvidia/nemotron-ocr-v2
-

@@ -1,5 +1,0 @@
---- deepmind | Gemini 3.1 Flash TTS: the next generation of expressive AI speech | score=38.03 ---
-Our newest audio model introduces granular audio tags that give you precise control to direct AI speech for expressive audio generation.
-
-KAYNAK : https://deepmind.google/blog/gemini-3-1-flash-tts-the-next-generation-of-expressive-ai-speech/
-
