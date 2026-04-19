@@ -1,86 +1,13 @@
---- nextjs | v16.3.0-canary.1 | score=48.74 ---
-Core Changes
-Support more prefetch configuration options:
-#92859
-Improve deduping of concurrent
-'use cache'
-invocations:
-#91830
-[partial fallbacks]: include prefetch requests in shell upgrade handling:
-#92894
-Redesign blocking route dev overlay and build errors:
-#92638
-Switch to cargo-binstall and pre-built sccache binaries:
-#92911
-Remove prefetch from instant config:
-#92761
+--- nextjs | v16.3.0-canary.2 | score=41.26 ---
 Misc Changes
-Fix flake in rewrites-manual-href-as test:
-#92948
-docs: amends to preserving-ui-state guide:
-#92270
+Improve "make root node" trace attributes:
+#92941
+CI: Track SWC native binary size in PR stats comment:
+#92938
 Credits
 Huge thanks to
-@gnoff
-,
-@unstubbable
-,
-@ztanner
-,
-@aurorascharff
-,
-@mmastrac
-, and
-@icyJoseph
-for helping!
-
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.1
-
---- nextjs | v16.3.0-canary.0 | score=45.34 ---
-Core Changes
-fix(next/image): ensure
-images.maximumResponseBody
-applies to local images too:
-#92920
-Refactor trace server sort to SortMode enum (execution order / value / name):
-#92873
-Perf: Simplify static metadata handling:
-#92630
-remove flag guarding
-unstable_io
-:
-#92923
-Misc Changes
-[ci] Cache passing test results so CI retries skip them:
-#92832
-fix accidental test duplication:
-#92922
-rename MagicAny:
-#92918
-turbopack: reduce EffectStateStorage memory by storing u128 content hashes:
-#92902
-turbo-trace-server: reduce allocation overhead when loading large trace files:
-#92896
-Turbopack: optimize SelfTimeTree performance, memory usage, and fix range query boundaries:
-#92931
-[ci]: fix backport sync script:
-#92942
-Credits
-Huge thanks to
-@styfle
-,
-@mmastrac
-,
-@ztanner
-,
-@lukesandberg
-,
 @sokra
-,
-@timneutkens
-, and
-@gnoff
 for helping!
 
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.0
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.2
 
