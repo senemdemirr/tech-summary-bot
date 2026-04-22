@@ -1,0 +1,121 @@
+--- mit_ai | China’s open-source bet | score=91.41 ---
+Silicon Valley AI companies follow a familiar playbook: Keep the secret sauce behind an API, and charge for every drop. China’s leading AI labs are playing a different game: They ship models as downloadable “open-weight” packages. This lets developers adapt the models and run them on their own hardware to build products without negotiating a commercial relationship with a US gatekeeper.
+This strategy went mainstream after DeepSeek
+open-sourced its R1 reasoning model
+in January 2025. That model matched the performance of the best American systems, reportedly at a fraction of the cost. On raw capability, the gap between US and Chinese labs seemed to have suddenly narrowed. But China also won something subtler and stickier: goodwill with developers. Giving away what your rivals charge for has a way of doing that.
+China rode that momentum hard. A year after DeepSeek’s release, there’s now a cohort of Chinese open-source giants following the same blueprint, including
+Z.ai
+(formerly Zhipu), Moonshot, Alibaba’s Qwen, and MiniMax. They’re all racing to release more capable models, and they are closing in on US rivals at a pace few anticipated.
+That matters because AI hype is dying down, and companies are shifting focus from buzzy pilots to deployment and integration, where cheaper and more customizable tools tend to win. Chinese pricing means developers with limited budgets can experiment more, and open weights mean they can adapt models without asking for permission.
+A study
+by researchers at MIT and Hugging Face found that Chinese open-weight models accounted for 17.1% of global AI model downloads over the year ending in August 2025. That narrowly surpassed the US share of 15.86%—the first time China had led in this metric. And
+Hugging Face data
+from last month shows that Alibaba’s models, including its Qwen family, now have the most user-generated variants—more than models from Google and Meta combined.
+The open-source ideal, though, runs headlong into some hard realities. Chinese models carry the imprint of China’s content moderation regime and are trained to avoid outputs that conflict with government policy. And in February, Anthropic
+accused
+several Chinese labs of illicitly extracting capabilities from Claude through distillation, a process where you use one model’s outputs to train another. That’s a standard industry practice, but top US firms like OpenAI and Anthropic claim that Chinese companies have used fraudulent methods to do it.
+Despite pushback from the West, much of the Global South is embracing Chinese models, seeing open-source as a path to AI sovereignty. Singapore’s government-backed AI Singapore program chose Alibaba’s Qwen over Meta’s Llama to build its latest regional model on; last year,
+Malaysia announced
+that its sovereign AI ecosystem would run on DeepSeek. Meanwhile, founders from Nairobi to São Paulo to San Francisco are building on Chinese foundations.
+US tech CEOs believe the best models should stay proprietary, partly so they can recoup enormous training costs and partly out of concern that powerful frontier models could be weaponized. Chinese labs, for their part, are not purely idealistic: Open-source is not only free advertising but also a shrewd workaround. Without access to cutting-edge chips restricted by US export controls, releasing models openly accelerates the cycle of external feedback and contributions that compensates for constrained compute. The more developers build on your models, the stronger your ecosystem becomes, as Linux and Android have shown. That adoption naturally translates into API usage and revenue.
+Either way, open-source models have already made AI’s future more multipolar than Silicon Valley expected. And there’s no way of turning back.
+
+KAYNAK : https://www.technologyreview.com/2026/04/21/1135658/china-open-source-models-ai-artificial-intelligence/
+
+--- mit_ai | Humanoid data | score=85.34 ---
+I was recently invited to join an app that would pay me cryptocurrency to film myself doing tasks like putting food into a bowl, microwaving it, and then taking it out. Another website suggested I try a new game in which I’d remotely control a robotic arm in Shenzhen, China, as it completed puzzles and tasks, to help improve the robot’s dexterity.
+What on earth is happening? Well, just as our words became training data for large language models, robotics companies are betting that data about the way we move will help them build more capable humanoid robots. They see humanoids—despite being trickier to train than simple robotic arms—as more easily slotting into the places where humans work today (and someday replacing them entirely).
+This new notion for how to train humanoids arguably began with the launch of ChatGPT in 2022. Large language models were able to generate text through exposure to massive amounts of training data—every word ever written that AI companies could find (or, some argue, steal). Roboticists wanted to apply these scaling laws to robotics but lacked an internet-size collection of data describing how we move.
+Put off by how difficult this would be to amass, companies used workarounds, like teaching robots to move in virtual simulations. However, simulations never perfectly model how things like friction or elasticity work in the real world, so the robots trained in them tended to (literally) stumble.
+Now companies building humanoid robots have decided that collecting real-world data, as cumbersome as it is, could yield a massive payoff. That’s where things got weird.
+Early efforts
+were quaint and academic. Labs collected hours and hours of data from people doing household tasks, like flipping waffles or cleaning their desks, while wearing cameras or handheld grippers. The data was shared openly. But as venture capital money poured into robotics—$6.1 billion in 2025 for humanoids alone—the race to create this training data has gotten more competitive, and more elaborate.
+There are now
+training centers in China
+where people wear exoskeletons and virtual-reality hardware while they do the same repetitive task, like wiping a table, hundreds of times per day. Gig workers in Nigeria, Argentina, and India are filming themselves doing
+chores at home
+. Earlier this year, I
+learned
+that a delivery company in the US had outfitted its employees with sensors that track their movements as they carry boxes, in part to study injuries but also with the goal of training robots that could replace them.
+All this points to a surreal future of work in which physical laborers increasingly become data collectors. But training robots on movement data we collect is still a complicated proposition. It’s not clear that it’s even possible to do it at the scale potentially needed to yield technical breakthroughs, let alone build a profitable business.
+What is the value of a clip of me opening my microwave? How many thousands of those moments would it take to teach a robot to cook dinner? Perhaps this’ll be the year we find out.
+
+KAYNAK : https://www.technologyreview.com/2026/04/21/1135656/humanoid-data-robot-training-ai-artificial-intelligence/
+
+--- mit_ai | Supercharged scams | score=83.90 ---
+When ChatGPT was released to the public in late 2022, it opened people’s eyes to how easily generative AI could churn out vast amounts of human-seeming text from simple prompts. This quickly caught the attention of criminals, who soon began using large language models to
+produce malicious emails
+—both the untargeted spam kind and more sophisticated, targeted attacks designed to steal money and sensitive information.
+Since then, cybercriminals have adopted AI tools to
+supercharge their operations
+. They’ve used the technology to do everything from composing phishing emails and creating hyperrealistic, convincing deepfake clips to tweaking malicious software (commonly known as malware) so it is harder to detect. They can also use AI to automate the
+search for vulnerabilities in networks and computer systems
+, quickly generate ransom notes, and analyze vast swathes of stolen data to pinpoint what’s most valuable.
+AI’s impact on hacking itself is not so clear-cut. But we
+do
+know that AI is lowering the barriers for would-be attackers, providing them with an ever-evolving arsenal of new capabilities, and making it faster, cheaper, and easier than ever before for them to try to infiltrate their targets. For example, scam centers across Southeast Asia are embracing inexpensive AI tools to quickly target greater numbers of potential victims and to swiftly switch to new locations,
+Interpol
+has warned. Similarly, the United Arab Emirates recently claimed to have foiled a
+series of shadowy AI-backed attacks
+on its vital sectors. And because these spammy, scattergun attacks can be pumped out at a colossal scale, they don’t need to be very sophisticated to have the desired effect—just lucky enough to get into a machine that happens to be undefended, or into the inbox of an unsuspecting victim at the right time.
+Many organizations are already struggling to cope with the sheer volume of cyberattacks targeting them. The problem is likely to get significantly worse as increasing numbers of criminals try their luck, and as the capabilities of publicly available generative AI systems continue to improve. Earlier this month, AI company Anthropic claimed that Mythos, a model it’s developed and is now testing, found thousands of critical vulnerabilities, including some in every major operating system and web browser. Anthropic
+says
+all of them have been patched, but it’s delaying the model’s release as a result of these new capabilities and set up a consortium of tech companies called Project Glasswing that it says will try to put these capabilities to work for defensive purposes in the meantime.
+Right now, cybersecurity researchers are optimistic that sloppier attacks can be thwarted through basic defenses, highlighting just how important it is to keep on top of software updates and stick to network security protocols. How well positioned we’ll be to ward off more sophisticated attacks in the future is much less clear.
+The good news is that AI is also being used to defend. Each day, Microsoft—just one of the many businesses keeping tabs on such threats—processes more than 100 trillion signals flagged by its AI systems as potentially malicious or suspicious. The company says that between April 2024 and April 2025, it managed to block $4 billion worth of scams and fraudulent transactions, many of which may have been aided by AI content. The same technology that makes such attacks possible could also be our best bet at keeping us safe in years to come.
+
+KAYNAK : https://www.technologyreview.com/2026/04/21/1135647/supercharged-scams-ai-artificial-intelligence/
+
+--- mit_ai | Weaponized deepfakes | score=83.67 ---
+For years, experts have warned that deepfakes—AI-generated videos, images, or audio recordings of people doing or saying things they haven’t actually done in real life—could be deployed in malicious ways.
+These dangers are now here. Improvements in deepfake technology, and the widespread availability of easy-to-use and cheap (or free) generative models, have made it easier than ever for anyone to fake reality in a way that’s increasingly difficult to spot.
+We’re not just talking about
+AI slop
+, the often obviously fake content that has taken over the internet. Rather, weaponized deepfakes—from sexually explicit images to scam posts to political propaganda—may look startlingly real. There are already examples around the world of their
+inciting violence
+,
+trying to change
+minds (and
+maybe even votes
+), and
+generally sowing mistrust
+.
+That’s why experts worry that weaponized deepfakes will further crater critical thinking skills, as well as our trust in institutions and each other. This has dire effects for society and governance—and, of course, for the people targeted. As with many other examples of technology’s harms, the human impacts will weigh disproportionately on women and marginalized groups; though the technology has evolved in the past few years, a 2023
+study
+found that 98% of deepfakes were pornographic in nature, and 99% depicted women.
+Just take Grok. Since Elon Musk launched the “edit image”
+function of this AI chatbot late last year, users have created millions of sexualized images, including many of children and women; one
+report
+estimated that 81% of these Grok-produced images depicted women. Despite widespread criticism, xAI’s initial response was to limit the feature to paying members; it has since blocked the nudity feature in jurisdictions where it is illegal.
+There’s also been an explosion of political deepfakes. The Trump administration, for example, has regularly produced and shared AI-generated images and videos. Not all of them are even meant to look real, but others appear to be designed to sway public opinion and even humiliate the person depicted.
+In January, meanwhile, Texas attorney general Ken Paxton shared a
+video
+appearing to show his opponent in the Republican primary for a US Senate seat, Senator John Cornyn, dancing with Representative Jasmine Crockett, a contender for the Democratic nomination. But this never happened—a fact the ad did not disclose clearly.
+Suggested solutions include instituting new
+technical safeguards
+and detection methods at the big AI firms, encouraging users to take more protective actions, and crafting new legislation or applying existing regulatory frameworks, like copyright law, to the issue.
+But these all have limits. Technical solutions can be bypassed; for instance, bad actors can simply switch to open-source models built without safeguards. Getting people to change how they behave, such as by watermarking photos or posting less personal information online, is simply unrealistic. Stronger regulations require enforcement—and while President Trump has signed legislation that criminalizes deepfake porn, his administration continues to post
+other types of harmful deepfakes. In late January, for instance, the White House shared an
+altered
+image of a Minneapolis civil rights lawyer, darkening her skin and changing her facial expression from one of calm to exaggerated crying.
+The problem could get much worse—and soon. There are high-stakes midterm elections in the United States later this year, and the federal agencies that traditionally addressed elections-related information integrity have been weakened. So have many outside research groups dedicated to fact-checking and fighting election-related disinformation.
+
+KAYNAK : https://www.technologyreview.com/2026/04/21/1135652/weaponized-deepfakes-ai-artificial-intelligence/
+
+--- mit_ai | Agent orchestration | score=83.52 ---
+When people say AI will speed up drug development or fear that it will bring about mass layoffs, what they have in mind—whether they know it or not—are AI agents. ChatGPT made large language models a mass consumer product. But to change the world, AI needs to do more than just talk back: It needs to do stuff. And that’s where agents come in.
+Now, after much hype, the first bona fide multi-agent tools are starting to show their colors.
+OpenClaw—a personal AI assistant that you could talk to from your phone—got everyone’s attention. Beneath the buzz, OpenClaw had a
+limited set of tricks
+—and a
+saboteur’s approach to security
+. But it felt like the future. And so companies from Nvidia to Tencent have been quick to build their own safer, more reliable bots on top of OpenClaw’s open-source code.
+But the real power of agents comes when they can work as a team. Instead of lone-wolf bots carrying out single tasks, such as using a browser to make a restaurant reservation or sending you a summary of your inbox, new tools can yoke together multiple agents, give each of them a different job, and orchestrate their behaviors so that they all pull together to complete more complex tasks than an individual agent could do by itself.
+For example, Claude Code, released by Anthropic last year, lets you launch and coordinate several coding agents at once (some users have reported having as many as a couple of dozen subagents on the go), with different agents working on different parts of the code base at the same time. Agents can also be given specific roles: One writes code, another tests it, a third fixes bugs, and so on. Such tools promise to turn coders into project managers, letting them delegate and oversee many more tasks than they could cope with by themselves.
+But coding was just the start. The latest multi-agent tools are aimed at people who don’t need or don’t want to develop software. Desktop apps such as Anthropic’s Claude Cowork (which the firm claims to have built using Claude Code in just 10 days, instead of the several months such a project might otherwise have taken), OpenAI’s Codex, and Perplexity’s Computer are all pitched as general-purpose productivity tools for white-collar professionals. They let you hand off bespoke workflows to teams of agents that coordinate across a wide range of computer-based office tasks, from managing inboxes and inventory to handling customer complaints.
+And it’s not just office work. Multi-agent tools like Google DeepMind’s Co-Scientist let researchers use teams of AI agents to coordinate literature searches, generate and test hypotheses, design experiments, and more.
+Think of multi-agent systems as the new assembly lines. Henry Ford’s innovation upended entire industries last century. In theory, networks of AI agents could do to white-collar knowledge work what assembly lines did to manufacturing.
+That’s the vision, at least. Because this technology also comes with huge risks. It’s no secret that LLMs can be unpredictable. That’s an annoyance when chatbots are stuck inside their screen. When they start interacting more with the real world, it could be disastrous. Are we ready for agents to be let loose on our ubiquitous digital infrastructure, from health care to finance, social media to missile launchers?
+
+KAYNAK : https://www.technologyreview.com/2026/04/21/1135654/agent-orchestration-ai-artificial-intelligence/
+

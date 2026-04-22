@@ -1,0 +1,18 @@
+I was recently invited to join an app that would pay me cryptocurrency to film myself doing tasks like putting food into a bowl, microwaving it, and then taking it out. Another website suggested I try a new game in which I’d remotely control a robotic arm in Shenzhen, China, as it completed puzzles and tasks, to help improve the robot’s dexterity.
+What on earth is happening? Well, just as our words became training data for large language models, robotics companies are betting that data about the way we move will help them build more capable humanoid robots. They see humanoids—despite being trickier to train than simple robotic arms—as more easily slotting into the places where humans work today (and someday replacing them entirely).
+This new notion for how to train humanoids arguably began with the launch of ChatGPT in 2022. Large language models were able to generate text through exposure to massive amounts of training data—every word ever written that AI companies could find (or, some argue, steal). Roboticists wanted to apply these scaling laws to robotics but lacked an internet-size collection of data describing how we move.
+Put off by how difficult this would be to amass, companies used workarounds, like teaching robots to move in virtual simulations. However, simulations never perfectly model how things like friction or elasticity work in the real world, so the robots trained in them tended to (literally) stumble.
+Now companies building humanoid robots have decided that collecting real-world data, as cumbersome as it is, could yield a massive payoff. That’s where things got weird.
+Early efforts
+were quaint and academic. Labs collected hours and hours of data from people doing household tasks, like flipping waffles or cleaning their desks, while wearing cameras or handheld grippers. The data was shared openly. But as venture capital money poured into robotics—$6.1 billion in 2025 for humanoids alone—the race to create this training data has gotten more competitive, and more elaborate.
+There are now
+training centers in China
+where people wear exoskeletons and virtual-reality hardware while they do the same repetitive task, like wiping a table, hundreds of times per day. Gig workers in Nigeria, Argentina, and India are filming themselves doing
+chores at home
+. Earlier this year, I
+learned
+that a delivery company in the US had outfitted its employees with sensors that track their movements as they carry boxes, in part to study injuries but also with the goal of training robots that could replace them.
+All this points to a surreal future of work in which physical laborers increasingly become data collectors. But training robots on movement data we collect is still a complicated proposition. It’s not clear that it’s even possible to do it at the scale potentially needed to yield technical breakthroughs, let alone build a profitable business.
+What is the value of a clip of me opening my microwave? How many thousands of those moments would it take to teach a robot to cook dinner? Perhaps this’ll be the year we find out.
+
+KAYNAK : https://www.technologyreview.com/2026/04/21/1135656/humanoid-data-robot-training-ai-artificial-intelligence/

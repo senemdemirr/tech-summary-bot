@@ -1,4 +1,3 @@
---- huggingface | QIMMA قِمّة ⛰: A Quality-First Arabic LLM Leaderboard | score=81.86 ---
 QIMMA قِمّة ⛰: A Quality-First Arabic LLM Leaderboard
 QIMMA validates benchmarks before evaluating models, ensuring reported scores reflect genuine Arabic language capability in LLMs.
 🏆 Leaderboard · 🔧 GitHub · 📄 Paper
@@ -91,4 +90,3 @@ url={https://arxiv.org/abs/2604.03395},
 }
 
 KAYNAK : https://huggingface.co/blog/tiiuae/qimma-arabic-leaderboard
-

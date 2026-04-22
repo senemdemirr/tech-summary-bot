@@ -1,4 +1,3 @@
---- dotnet | .NET 10.0.7 Out-of-Band Security Update | score=73.23 ---
 We are releasing .NET 10.0.7 as an out-of-band (OOB) update to address a security issue introduced in
 Microsoft.AspNetCore.DataProtection
 Security update details
@@ -51,4 +50,3 @@ appeared first on
 .
 
 KAYNAK : https://devblogs.microsoft.com/dotnet/dotnet-10-0-7-oob-security-update/
-
