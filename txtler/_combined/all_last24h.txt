@@ -1,4 +1,4 @@
---- arxiv_ai | AblateCell: A Reproduce-then-Ablate Agent for Virtual Cell Repositories | score=103.22 ---
+--- arxiv_ai | AblateCell: A Reproduce-then-Ablate Agent for Virtual Cell Repositories | score=103.08 ---
 0.19216 0.33333 0.74902A0.17255 0.29804 0.69804b0.15686 0.26667 0.65098l0.14118 0.23529 0.60392a0.12549 0.20392 0.55686t0.10588 0.16863 0.50588e0.0902 0.13725 0.45882C0.07451 0.10588 0.41176e0.0549 0.07059 0.36078l0.03922 0.03922 0.31373l\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:: A Reproduce-then-Ablate Agent for Virtual Cell Repositories
 Abstract
 Systematic ablations are essential to attribute performance gains in AI Virtual Cells, yet they are rarely performed because biological repositories are under-standardized and tightly coupled to domain-specific data and formats. While recent coding agents can translate ideas into implementations, they typically stop at producing code and lack a verifier that can reproduce strong baselines and rigorously test which components truly matter. We introduce AblateCell, a reproduce-then-ablate agent for virtual cell repositories that closes this verification gap. AblateCell first reproduces reported baselines end-to-end by auto-configuring environments, resolving dependency and data issues, and rerunning official evaluations while emitting verifiable artifacts. It then conducts closed-loop ablation by generating a graph of isolated repository mutations and adaptively selecting experiments under a reward that trades off performance impact and execution cost. Evaluated on three single-cell perturbation prediction repositories (CPA, GEARS, BioLORD), AblateCell achieves 88.9% (+29.9% to human expert) end-to-end workflow success and 93.3% (+53.3% to heuristic) accuracy in recovering ground-truth critical components. These results enable scalable, repository-grounded verification and attribution directly on biological codebases.
@@ -364,7 +364,7 @@ These failures highlight that semantically meaningful ablations can still introd
 
 KAYNAK : https://arxiv.org/abs/2604.19606
 
---- arxiv_ai | AutomationBench | score=103.00 ---
+--- arxiv_ai | AutomationBench | score=102.86 ---
 AutomationBench
 Abstract
 Existing AI benchmarks for software automation rarely combine cross-application coordination, autonomous API discovery, and policy adherence. Real business workflows demand all three: a single task may span a CRM, inbox, calendar, and messaging platform — requiring the agent to find the right endpoints, follow a policy document, and write correct data to each system. To address this gap, we introduce AutomationBench, a benchmark for evaluating AI agents on cross-application workflow orchestration via REST APIs. Drawing on real workflow patterns from Zapier’s platform, tasks span Sales, Marketing, Operations, Support, Finance, and HR domains. Agents must discover relevant endpoints themselves, follow layered business rules, and navigate environments with irrelevant and sometimes misleading records. Grading is programmatic and end-state only: whether the correct data ended up in the right systems. Even the best frontier models currently score below 10%. AutomationBench provides a challenging, realistic measure of where current models stand relative to the agentic capabilities businesses actually need.
@@ -634,7 +634,7 @@ No message posted to #facilities-general
 
 KAYNAK : https://arxiv.org/abs/2604.18934
 
---- arxiv_ai | Has Automated Essay Scoring Reached Sufficient Accuracy? Deriving Achievable QWK Ceilings from Classical Test Theory | score=103.00 ---
+--- arxiv_ai | Has Automated Essay Scoring Reached Sufficient Accuracy? Deriving Achievable QWK Ceilings from Classical Test Theory | score=102.86 ---
 11email: uto@ai.lab.uec.ac.jp
 Has Automated Essay Scoring Reached Sufficient Accuracy? Deriving Achievable QWK Ceilings from Classical Test Theory
 Abstract
@@ -802,7 +802,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2604.19131
 
---- arxiv_ai | Who Shapes Brazil's Vaccine Debate? Semi-Supervised Modeling of Stance and Polarization in YouTube's Media Ecosystem | score=103.00 ---
+--- arxiv_ai | Who Shapes Brazil's Vaccine Debate? Semi-Supervised Modeling of Stance and Polarization in YouTube's Media Ecosystem | score=102.86 ---
 Who Shapes Brazil’s Vaccine Debate? Semi-Supervised Modeling of Stance and Polarization in YouTube’s Media Ecosystem
 Abstract.
 Vaccination remains a cornerstone of global public health, yet the COVID-19 pandemic exposed how online misinformation, political polarization, and declining institutional trust can undermine immunization efforts. Most of the prior computational studies that analyzed vaccine discourse on social platforms focus on English-language data, specific vaccines, or short time windows, impairing our understanding of long-term dynamics in high-impact, non-English contexts like Brazil, home to one of the world’s most comprehensive immunization systems. We here present the largest longitudinal study of Brazil’s vaccine discourse on YouTube, leveraging a semi-supervised stance detection framework that combines self-labeling and self-training to classify nearly 1.4 million comments. By integrating stance with temporal patterns, engagement metrics, and channel taxonomy (legacy media, science communicators, digital-native outlets), we map how pro- and anti-vaccine narratives evolve and circulate within a hybrid media ecosystem. Our results show that semi-supervised learning substantially improves stance classification robustness, enabling fine-grained tracking of public attitudes across Brazil’s full immunization schedule. Polarization spikes during epidemiological crises, especially COVID-19, but becomes fragmented across vaccines and interaction patterns in the post-pandemic period. Notably, science communication and digital-native channels emerge as the primary loci of both supportive and oppositional engagement, revealing structural vulnerabilities in contemporary health communication. Thus, our work advances computational methods for large-scale stance modeling while offering actionable evidence for public health agencies, platform governance, and online information ecosystems.
@@ -982,7 +982,7 @@ This work was supported by the Conselho Nacional de Desenvolvimento Científico 
 
 KAYNAK : https://arxiv.org/abs/2604.18586
 
---- arxiv_ai | Skillful Global Ocean Emulation and the Role of Correlation-Aware Loss | score=103.00 ---
+--- arxiv_ai | Skillful Global Ocean Emulation and the Role of Correlation-Aware Loss | score=102.86 ---
 Skillful Global Ocean Emulation and the Role of Correlation-Aware Loss
 Abstract
 Machine learning emulators have shown extraordinary skill in forecasting atmospheric states, and their application to global ocean dynamics offers similar promise. Here, we adapt the GraphCast architecture into a dedicated ocean-only emulator, driven by prescribed atmospheric conditions, for medium-range predictions. The emulator is trained on NOAA’s UFS-Replay dataset. Using a hour time step, single initial condition, and without using autoregressive training, we produce an emulator that provides skillful forecasts for day lead times. We further demonstrate the use of Mahalanobis distance as loss that improves the forecast skill compared to the Mean Squared Error loss by explicitly accounting for the correlations between tendencies of the target variables. Using spatial correlation analysis of the forecasted fields, we also show that the proposed correlation-aware loss acts as a statistical-dynamical regularizer for the slow, correlated dynamics of the global oceans, offering a better background forecast for downstream tasks like data assimilation.
@@ -1041,277 +1041,289 @@ The authors declare no conflicts of interest for this manuscript.
 
 KAYNAK : https://arxiv.org/abs/2604.18727
 
---- mit_ai | China’s open-source bet | score=91.41 ---
-Silicon Valley AI companies follow a familiar playbook: Keep the secret sauce behind an API, and charge for every drop. China’s leading AI labs are playing a different game: They ship models as downloadable “open-weight” packages. This lets developers adapt the models and run them on their own hardware to build products without negotiating a commercial relationship with a US gatekeeper.
-This strategy went mainstream after DeepSeek
-open-sourced its R1 reasoning model
-in January 2025. That model matched the performance of the best American systems, reportedly at a fraction of the cost. On raw capability, the gap between US and Chinese labs seemed to have suddenly narrowed. But China also won something subtler and stickier: goodwill with developers. Giving away what your rivals charge for has a way of doing that.
-China rode that momentum hard. A year after DeepSeek’s release, there’s now a cohort of Chinese open-source giants following the same blueprint, including
-Z.ai
-(formerly Zhipu), Moonshot, Alibaba’s Qwen, and MiniMax. They’re all racing to release more capable models, and they are closing in on US rivals at a pace few anticipated.
-That matters because AI hype is dying down, and companies are shifting focus from buzzy pilots to deployment and integration, where cheaper and more customizable tools tend to win. Chinese pricing means developers with limited budgets can experiment more, and open weights mean they can adapt models without asking for permission.
-A study
-by researchers at MIT and Hugging Face found that Chinese open-weight models accounted for 17.1% of global AI model downloads over the year ending in August 2025. That narrowly surpassed the US share of 15.86%—the first time China had led in this metric. And
-Hugging Face data
-from last month shows that Alibaba’s models, including its Qwen family, now have the most user-generated variants—more than models from Google and Meta combined.
-The open-source ideal, though, runs headlong into some hard realities. Chinese models carry the imprint of China’s content moderation regime and are trained to avoid outputs that conflict with government policy. And in February, Anthropic
-accused
-several Chinese labs of illicitly extracting capabilities from Claude through distillation, a process where you use one model’s outputs to train another. That’s a standard industry practice, but top US firms like OpenAI and Anthropic claim that Chinese companies have used fraudulent methods to do it.
-Despite pushback from the West, much of the Global South is embracing Chinese models, seeing open-source as a path to AI sovereignty. Singapore’s government-backed AI Singapore program chose Alibaba’s Qwen over Meta’s Llama to build its latest regional model on; last year,
-Malaysia announced
-that its sovereign AI ecosystem would run on DeepSeek. Meanwhile, founders from Nairobi to São Paulo to San Francisco are building on Chinese foundations.
-US tech CEOs believe the best models should stay proprietary, partly so they can recoup enormous training costs and partly out of concern that powerful frontier models could be weaponized. Chinese labs, for their part, are not purely idealistic: Open-source is not only free advertising but also a shrewd workaround. Without access to cutting-edge chips restricted by US export controls, releasing models openly accelerates the cycle of external feedback and contributions that compensates for constrained compute. The more developers build on your models, the stronger your ecosystem becomes, as Linux and Android have shown. That adoption naturally translates into API usage and revenue.
-Either way, open-source models have already made AI’s future more multipolar than Silicon Valley expected. And there’s no way of turning back.
-
-KAYNAK : https://www.technologyreview.com/2026/04/21/1135658/china-open-source-models-ai-artificial-intelligence/
-
---- mit_ai | Humanoid data | score=85.34 ---
-I was recently invited to join an app that would pay me cryptocurrency to film myself doing tasks like putting food into a bowl, microwaving it, and then taking it out. Another website suggested I try a new game in which I’d remotely control a robotic arm in Shenzhen, China, as it completed puzzles and tasks, to help improve the robot’s dexterity.
-What on earth is happening? Well, just as our words became training data for large language models, robotics companies are betting that data about the way we move will help them build more capable humanoid robots. They see humanoids—despite being trickier to train than simple robotic arms—as more easily slotting into the places where humans work today (and someday replacing them entirely).
-This new notion for how to train humanoids arguably began with the launch of ChatGPT in 2022. Large language models were able to generate text through exposure to massive amounts of training data—every word ever written that AI companies could find (or, some argue, steal). Roboticists wanted to apply these scaling laws to robotics but lacked an internet-size collection of data describing how we move.
-Put off by how difficult this would be to amass, companies used workarounds, like teaching robots to move in virtual simulations. However, simulations never perfectly model how things like friction or elasticity work in the real world, so the robots trained in them tended to (literally) stumble.
-Now companies building humanoid robots have decided that collecting real-world data, as cumbersome as it is, could yield a massive payoff. That’s where things got weird.
-Early efforts
-were quaint and academic. Labs collected hours and hours of data from people doing household tasks, like flipping waffles or cleaning their desks, while wearing cameras or handheld grippers. The data was shared openly. But as venture capital money poured into robotics—$6.1 billion in 2025 for humanoids alone—the race to create this training data has gotten more competitive, and more elaborate.
-There are now
-training centers in China
-where people wear exoskeletons and virtual-reality hardware while they do the same repetitive task, like wiping a table, hundreds of times per day. Gig workers in Nigeria, Argentina, and India are filming themselves doing
-chores at home
-. Earlier this year, I
-learned
-that a delivery company in the US had outfitted its employees with sensors that track their movements as they carry boxes, in part to study injuries but also with the goal of training robots that could replace them.
-All this points to a surreal future of work in which physical laborers increasingly become data collectors. But training robots on movement data we collect is still a complicated proposition. It’s not clear that it’s even possible to do it at the scale potentially needed to yield technical breakthroughs, let alone build a profitable business.
-What is the value of a clip of me opening my microwave? How many thousands of those moments would it take to teach a robot to cook dinner? Perhaps this’ll be the year we find out.
-
-KAYNAK : https://www.technologyreview.com/2026/04/21/1135656/humanoid-data-robot-training-ai-artificial-intelligence/
-
---- mit_ai | Supercharged scams | score=83.90 ---
-When ChatGPT was released to the public in late 2022, it opened people’s eyes to how easily generative AI could churn out vast amounts of human-seeming text from simple prompts. This quickly caught the attention of criminals, who soon began using large language models to
-produce malicious emails
-—both the untargeted spam kind and more sophisticated, targeted attacks designed to steal money and sensitive information.
-Since then, cybercriminals have adopted AI tools to
-supercharge their operations
-. They’ve used the technology to do everything from composing phishing emails and creating hyperrealistic, convincing deepfake clips to tweaking malicious software (commonly known as malware) so it is harder to detect. They can also use AI to automate the
-search for vulnerabilities in networks and computer systems
-, quickly generate ransom notes, and analyze vast swathes of stolen data to pinpoint what’s most valuable.
-AI’s impact on hacking itself is not so clear-cut. But we
-do
-know that AI is lowering the barriers for would-be attackers, providing them with an ever-evolving arsenal of new capabilities, and making it faster, cheaper, and easier than ever before for them to try to infiltrate their targets. For example, scam centers across Southeast Asia are embracing inexpensive AI tools to quickly target greater numbers of potential victims and to swiftly switch to new locations,
-Interpol
-has warned. Similarly, the United Arab Emirates recently claimed to have foiled a
-series of shadowy AI-backed attacks
-on its vital sectors. And because these spammy, scattergun attacks can be pumped out at a colossal scale, they don’t need to be very sophisticated to have the desired effect—just lucky enough to get into a machine that happens to be undefended, or into the inbox of an unsuspecting victim at the right time.
-Many organizations are already struggling to cope with the sheer volume of cyberattacks targeting them. The problem is likely to get significantly worse as increasing numbers of criminals try their luck, and as the capabilities of publicly available generative AI systems continue to improve. Earlier this month, AI company Anthropic claimed that Mythos, a model it’s developed and is now testing, found thousands of critical vulnerabilities, including some in every major operating system and web browser. Anthropic
-says
-all of them have been patched, but it’s delaying the model’s release as a result of these new capabilities and set up a consortium of tech companies called Project Glasswing that it says will try to put these capabilities to work for defensive purposes in the meantime.
-Right now, cybersecurity researchers are optimistic that sloppier attacks can be thwarted through basic defenses, highlighting just how important it is to keep on top of software updates and stick to network security protocols. How well positioned we’ll be to ward off more sophisticated attacks in the future is much less clear.
-The good news is that AI is also being used to defend. Each day, Microsoft—just one of the many businesses keeping tabs on such threats—processes more than 100 trillion signals flagged by its AI systems as potentially malicious or suspicious. The company says that between April 2024 and April 2025, it managed to block $4 billion worth of scams and fraudulent transactions, many of which may have been aided by AI content. The same technology that makes such attacks possible could also be our best bet at keeping us safe in years to come.
-
-KAYNAK : https://www.technologyreview.com/2026/04/21/1135647/supercharged-scams-ai-artificial-intelligence/
-
---- mit_ai | Weaponized deepfakes | score=83.67 ---
-For years, experts have warned that deepfakes—AI-generated videos, images, or audio recordings of people doing or saying things they haven’t actually done in real life—could be deployed in malicious ways.
-These dangers are now here. Improvements in deepfake technology, and the widespread availability of easy-to-use and cheap (or free) generative models, have made it easier than ever for anyone to fake reality in a way that’s increasingly difficult to spot.
-We’re not just talking about
-AI slop
-, the often obviously fake content that has taken over the internet. Rather, weaponized deepfakes—from sexually explicit images to scam posts to political propaganda—may look startlingly real. There are already examples around the world of their
-inciting violence
-,
-trying to change
-minds (and
-maybe even votes
-), and
-generally sowing mistrust
+--- huggingface | Gemma 4 VLA Demo on Jetson Orin Nano Super | score=85.60 ---
+Gemma 4 VLA Demo on Jetson Orin Nano Super
+You speak → Parakeet STT → Gemma 4 → [Webcam if needed] → Kokoro TTS → Speaker
+Press SPACE to record, SPACE again to stop. This is a simple VLA: the model decides on its own whether to act based on the context of what you asked, no keyword triggers, no hardcoded logic. If your question needs Gemma to open her eyes, she'll decide to take a photo, interpret it, and answer you with that context in mind. She's not describing the picture, she's answering your actual question using what she saw.
+And honestly? It's pretty impressive that this runs on a Jetson Orin Nano. :)
+Get the code
+The full script for this tutorial lives on GitHub, in my Google_Gemma
+repo next to the Gemma 2 demos:
+👉 github.com/asierarranz/Google_Gemma
+Grab it with either of these (pick one):
+# Option 1: clone the whole repo
+git clone https://github.com/asierarranz/Google_Gemma.git
+cd Google_Gemma/Gemma4
+# Option 2: just download the script
+wget https://raw.githubusercontent.com/asierarranz/Google_Gemma/main/Gemma4/Gemma4_vla.py
+That single file (Gemma4_vla.py
+) is all you need. It pulls the STT/TTS models and voice assets from Hugging Face on first run.
+Hardware
+What we used:
+- NVIDIA Jetson Orin Nano Super (8 GB)
+- Logitech C920 webcam (mic built in)
+- USB speaker
+- USB keyboard (to press SPACE)
+Not tied to these exact devices, any webcam, USB mic, and USB speaker that Linux sees should work.
+Step 1: System packages
+Fresh Jetson, let's install the basics:
+sudo apt update
+sudo apt install -y \
+git build-essential cmake curl wget pkg-config \
+python3-pip python3-venv python3-dev \
+alsa-utils pulseaudio-utils v4l-utils psmisc \
+ffmpeg libsndfile1
+build-essential
+and cmake
+are only needed if you go the native llama.cpp route (Option A in Step 4). The rest is for audio, webcam, and Python.
+Step 2: Python environment
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install opencv-python-headless onnx_asr kokoro-onnx soundfile huggingface-hub numpy
+Step 3: Free up RAM (optional but recommended)
+Heads up: this step may not be strictly necessary. But we're pushing this 8 GB board pretty hard with a fairly capable model, so giving ourselves some headroom makes the whole experience smoother, especially if you've been playing with Docker or other heavy stuff before this.
+These are just the commands that worked nicely for me. Use them if they help.
+Add some swap
+Swap won't speed up inference, but it acts as a safety net during model loading so you don't get OOM-killed at the worst moment.
+sudo fallocate -l 8G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+Kill memory hogs
+sudo systemctl stop docker 2>/dev/null || true
+sudo systemctl stop containerd 2>/dev/null || true
+pkill -f tracker-miner-fs-3 || true
+pkill -f gnome-software || true
+free -h
+Close browser tabs, IDE windows, anything you don't need. Every MB counts.
+If you're going with the Docker route in Step 4, obviously don't stop Docker here, you'll need it. Still kill the rest though.
+Still tight on RAM?
+From our tests, Q4_K_M
+(native build) and Q4_K_S
+(Docker) run comfortably on the 8 GB board once you've done the cleanup above. But if you've got other stuff you can't kill and memory is still tight, you can drop one step down to a Q3
+quant, same model, a bit less smart, noticeably lighter. Just swap the filename in Step 4:
+gemma-4-E2B-it-Q3_K_M.gguf # instead of Q4_K_M
+Honestly though, stick with Q4_K_M
+if you can. It's the sweet spot.
+Step 4: Serve Gemma 4
+You need a running llama-server
+with Gemma 4 before launching the demo. We'll build llama.cpp
+natively on the Jetson, it gives the best performance and full control over the vision projector that the VLA demo needs.
+Build llama.cpp
+cd ~
+git clone https://github.com/ggml-org/llama.cpp.git
+cd llama.cpp
+cmake -B build \
+-DGGML_CUDA=ON \
+-DCMAKE_CUDA_ARCHITECTURES="87" \
+-DGGML_NATIVE=ON \
+-DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release -j4
+Download the model and vision projector
+mkdir -p ~/models && cd ~/models
+wget -O gemma-4-E2B-it-Q4_K_M.gguf \
+https://huggingface.co/unsloth/gemma-4-E2B-it-GGUF/resolve/main/gemma-4-E2B-it-Q4_K_M.gguf
+wget -O mmproj-gemma4-e2b-f16.gguf \
+https://huggingface.co/ggml-org/gemma-4-E2B-it-GGUF/resolve/main/mmproj-gemma4-e2b-f16.gguf
+The mmproj
+file is the vision projector. Without it Gemma can't see, so don't skip it.
+Start the server
+~/llama.cpp/build/bin/llama-server \
+-m ~/models/gemma-4-E2B-it-Q4_K_M.gguf \
+--mmproj ~/models/mmproj-gemma4-e2b-f16.gguf \
+-c 2048 \
+--image-min-tokens 70 --image-max-tokens 70 \
+--ubatch-size 512 --batch-size 512 \
+--host 0.0.0.0 --port 8080 \
+-ngl 99 --flash-attn on \
+--no-mmproj-offload --jinja -np 1
+One flag worth mentioning: -ngl 99
+tells llama-server
+to push all the model's layers onto the GPU (99 is just "as many as the model has"). If you ever run into memory issues, you can lower that number to offload fewer layers to GPU and the rest to CPU. For this setup though, all layers on GPU should work fine.
+Verify it's up
+From another terminal:
+curl -s http://localhost:8080/v1/chat/completions \
+-H "Content-Type: application/json" \
+-d '{"model":"gemma4","messages":[{"role":"user","content":"Hi!"}],"max_tokens":32}' \
+| python3 -m json.tool
+If you get JSON back, you're good.
+Step 5: Find your mic, speaker, and webcam
+Microphone
+arecord -l
+Look for your USB mic. In our case the C920 showed up as plughw:3,0
 .
-That’s why experts worry that weaponized deepfakes will further crater critical thinking skills, as well as our trust in institutions and each other. This has dire effects for society and governance—and, of course, for the people targeted. As with many other examples of technology’s harms, the human impacts will weigh disproportionately on women and marginalized groups; though the technology has evolved in the past few years, a 2023
-study
-found that 98% of deepfakes were pornographic in nature, and 99% depicted women.
-Just take Grok. Since Elon Musk launched the “edit image”
-function of this AI chatbot late last year, users have created millions of sexualized images, including many of children and women; one
-report
-estimated that 81% of these Grok-produced images depicted women. Despite widespread criticism, xAI’s initial response was to limit the feature to paying members; it has since blocked the nudity feature in jurisdictions where it is illegal.
-There’s also been an explosion of political deepfakes. The Trump administration, for example, has regularly produced and shared AI-generated images and videos. Not all of them are even meant to look real, but others appear to be designed to sway public opinion and even humiliate the person depicted.
-In January, meanwhile, Texas attorney general Ken Paxton shared a
-video
-appearing to show his opponent in the Republican primary for a US Senate seat, Senator John Cornyn, dancing with Representative Jasmine Crockett, a contender for the Democratic nomination. But this never happened—a fact the ad did not disclose clearly.
-Suggested solutions include instituting new
-technical safeguards
-and detection methods at the big AI firms, encouraging users to take more protective actions, and crafting new legislation or applying existing regulatory frameworks, like copyright law, to the issue.
-But these all have limits. Technical solutions can be bypassed; for instance, bad actors can simply switch to open-source models built without safeguards. Getting people to change how they behave, such as by watermarking photos or posting less personal information online, is simply unrealistic. Stronger regulations require enforcement—and while President Trump has signed legislation that criminalizes deepfake porn, his administration continues to post
-other types of harmful deepfakes. In late January, for instance, the White House shared an
-altered
-image of a Minneapolis civil rights lawyer, darkening her skin and changing her facial expression from one of calm to exaggerated crying.
-The problem could get much worse—and soon. There are high-stakes midterm elections in the United States later this year, and the federal agencies that traditionally addressed elections-related information integrity have been weakened. So have many outside research groups dedicated to fact-checking and fighting election-related disinformation.
-
-KAYNAK : https://www.technologyreview.com/2026/04/21/1135652/weaponized-deepfakes-ai-artificial-intelligence/
-
---- mit_ai | Agent orchestration | score=83.52 ---
-When people say AI will speed up drug development or fear that it will bring about mass layoffs, what they have in mind—whether they know it or not—are AI agents. ChatGPT made large language models a mass consumer product. But to change the world, AI needs to do more than just talk back: It needs to do stuff. And that’s where agents come in.
-Now, after much hype, the first bona fide multi-agent tools are starting to show their colors.
-OpenClaw—a personal AI assistant that you could talk to from your phone—got everyone’s attention. Beneath the buzz, OpenClaw had a
-limited set of tricks
-—and a
-saboteur’s approach to security
-. But it felt like the future. And so companies from Nvidia to Tencent have been quick to build their own safer, more reliable bots on top of OpenClaw’s open-source code.
-But the real power of agents comes when they can work as a team. Instead of lone-wolf bots carrying out single tasks, such as using a browser to make a restaurant reservation or sending you a summary of your inbox, new tools can yoke together multiple agents, give each of them a different job, and orchestrate their behaviors so that they all pull together to complete more complex tasks than an individual agent could do by itself.
-For example, Claude Code, released by Anthropic last year, lets you launch and coordinate several coding agents at once (some users have reported having as many as a couple of dozen subagents on the go), with different agents working on different parts of the code base at the same time. Agents can also be given specific roles: One writes code, another tests it, a third fixes bugs, and so on. Such tools promise to turn coders into project managers, letting them delegate and oversee many more tasks than they could cope with by themselves.
-But coding was just the start. The latest multi-agent tools are aimed at people who don’t need or don’t want to develop software. Desktop apps such as Anthropic’s Claude Cowork (which the firm claims to have built using Claude Code in just 10 days, instead of the several months such a project might otherwise have taken), OpenAI’s Codex, and Perplexity’s Computer are all pitched as general-purpose productivity tools for white-collar professionals. They let you hand off bespoke workflows to teams of agents that coordinate across a wide range of computer-based office tasks, from managing inboxes and inventory to handling customer complaints.
-And it’s not just office work. Multi-agent tools like Google DeepMind’s Co-Scientist let researchers use teams of AI agents to coordinate literature searches, generate and test hypotheses, design experiments, and more.
-Think of multi-agent systems as the new assembly lines. Henry Ford’s innovation upended entire industries last century. In theory, networks of AI agents could do to white-collar knowledge work what assembly lines did to manufacturing.
-That’s the vision, at least. Because this technology also comes with huge risks. It’s no secret that LLMs can be unpredictable. That’s an annoyance when chatbots are stuck inside their screen. When they start interacting more with the real world, it could be disastrous. Are we ready for agents to be let loose on our ubiquitous digital infrastructure, from health care to finance, social media to missile launchers?
-
-KAYNAK : https://www.technologyreview.com/2026/04/21/1135654/agent-orchestration-ai-artificial-intelligence/
-
---- huggingface | QIMMA قِمّة ⛰: A Quality-First Arabic LLM Leaderboard | score=81.86 ---
-QIMMA قِمّة ⛰: A Quality-First Arabic LLM Leaderboard
-QIMMA validates benchmarks before evaluating models, ensuring reported scores reflect genuine Arabic language capability in LLMs.
-🏆 Leaderboard · 🔧 GitHub · 📄 Paper
-If you've been tracking Arabic LLM evaluation, you've probably noticed a growing tension: the number of benchmarks and leaderboards is expanding rapidly, but are we actually measuring what we think we're measuring?
-We built QIMMA قمّة (Arabic for "summit"), to answer that question systematically. Instead of aggregating existing Arabic benchmarks as-is and running models on them, we applied a rigorous quality validation pipeline before any evaluation took place. What we found was sobering: even widely-used, well-regarded Arabic benchmarks contain systematic quality issues that can quietly corrupt evaluation results.
-This post walks through what QIMMA is, how we built it, what problems we found, and what the model rankings look like once you clean things up.
-🔍 The Problem: Arabic NLP Evaluation Is Fragmented and Unvalidated
-Arabic is spoken by over 400 million people across diverse dialects and cultural contexts, yet the Arabic NLP evaluation landscape remains fragmented. A few key pain points have motivated this work:
-Translation issues. Many Arabic benchmarks are translations from English. This introduces distributional shifts. Questions that feel natural in English become awkward or culturally misaligned in Arabic, making benchmark data less representative of how Arabic is naturally used.
-Absent quality validation. Even native Arabic benchmarks are often released without rigorous quality checks. Annotation inconsistencies, incorrect gold answers, encoding errors, and cultural bias in ground-truth labels have all been documented in established resources.
-Reproducibility gaps. Evaluation scripts and per-sample outputs are rarely released publicly, making it hard to audit results or build on prior work.
-Coverage fragmentation. Existing leaderboards cover isolated tasks and narrow domains, making holistic model assessment difficult.
-To illustrate where QIMMA sits relative to existing platforms:
-QIMMA is the only platform combining all five properties: open source, predominantly native Arabic content, systematic quality validation, code evaluation, and public per-sample inference outputs.
-⛰ What's in QIMMA?
-QIMMA consolidates 109 subsets from 14 source benchmarks into a unified evaluation suite of over 52,000 samples, spanning 7 domains:
-A few things stand out about this design:
-- 99% native Arabic content. The only exception is code evaluation, which is inherently language-agnostic.
-- First Arabic leaderboard with code evaluation. QIMMA integrates Arabic-adapted versions of HumanEval+ and MBPP+, making it possible to assess coding capability with Arabic-language problem statements.
-- Diversity in Domains and Tasks. QIMMA evaluates real-world competency areas including education, governance, healthcare, creative expression, and software development.
-🔬 The Quality Validation Pipeline
-This is the methodological heart of QIMMA. Before running a single model, we applied a multi-stage validation pipeline to every sample in every benchmark.
-Stage 1: Multi-Model Automated Assessment
-Each sample was independently evaluated by two state-of-the-art LLMs:
-- Qwen3-235B-A22B-Instruct
-- DeepSeek-V3-671B
-We chose two models with strong Arabic capability but different training data compositions, so that their combined judgment is more robust than either alone.
-Each model scores a sample against a 10-point rubric, with binary scores (0 or 1) per criterion:
-A sample is eliminated if either model scores it below 7/10. Samples where both models agree on elimination are dropped immediately. However, where only one model flags a sample, it proceeds to human review in Stage 2.
-Stage 2: Human Annotation and Review
-Flagged samples are reviewed by native Arabic speakers with cultural and dialectal familiarity. Human annotators make final calls on:
-- Cultural context and regional variation
-- Dialectal nuance
-- Subjective interpretation
-- Subtle quality issues automated assessment may miss
-For culturally sensitive content, multiple perspectives are considered, since "correctness" can genuinely vary across Arab regions.
-⚠️ What We Found: Systematic Quality Problems
-The pipeline revealed recurring quality issues across benchmarks; not isolated errors, but systematic patterns reflecting gaps in how benchmarks were originally constructed.
-By the Numbers
-Taxonomy of Issues Found
-⚖️ Answer Quality
-False or mismatched gold indices, factually wrong answers, missing or raw text answers.
-📄 Text & Formatting Quality
-Corrupt or illegible text, spelling and grammar errors, and duplicate samples.
-💬 Cultural Sensitivity
-Stereotype reinforcement and monolithic generalizations about diverse communities.
-🤝 Gold Answer Compliance
-Misalignment of gold answers with evaluation protocols.
-💻 Code Benchmark: A Different Kind of Quality Work
-Code benchmarks required a different intervention. Rather than discarding samples, we refined the Arabic problem statements in 3LM's Arabic adaptations of HumanEval+ and MBPP+, leaving task identifiers, reference solutions, and test suites completely unchanged.
-The modification rates were striking:
-Modifications fell into five categories:
-- Linguistic refinement : normalizing toward natural Modern Standard Arabic and consistent imperative style
-- Clarity improvements : fixing ambiguous instructions and unclear constraints
-- Consistency normalization : standardizing mathematical terminology, punctuation, and example formatting
-- Structural corrections : fixing broken triple-quoted strings, indentation errors, corrupted text fragments
-- Semantic refinements : clarifying whether ranges are inclusive/exclusive, preserving task intent
-⚙️ Evaluation Setup
-Evaluation Framework
-QIMMA uses LightEval, EvalPlus and FannOrFlop as its evaluation framework, chosen for consistency, multilingual community adoption, and reproducibility.
-Metrics by Task Type
-Prompt Templates
-QIMMA standardizes prompting by question format, with six template types:
-All prompts are in Arabic. For MizanQA and ArabCulture, benchmark-specific system prompts from the original papers are preserved.
-🏆 Leaderboard Results
-Results as of April 2026; covering top 10 evaluated models. Visit the live leaderboard for current rankings.
-- Scale does not guarantee best performance. The top 10 spans models from 32B to 397B parameters, with several mid-size models outperforming larger ones on specific domains.
-- Arabic-specialized models lead on cultural and linguistic tasks. Jais-2-70B-Chat ranks highest on ArabicMMLU and ArabCulture, while Karnak leads on 3LM STEM and ArabLegalQA.
-- Coding remains the hardest domain for Arabic-specialized models. The top HumanEval+ and MBPP+ scores belong to multilingual models, with Qwen3.5-397B leading both.
-The Size-Performance Relationship
-Across the full leaderboard (46 models), a clear but imperfect size-performance correlation emerges. However, there are interesting exceptions:
-- Arabic-specialized models often outperform size-matched multilingual models
-- Instruction-tuned models consistently outperform their base counterparts except for Qwen3
-- Some smaller Arabic-specialized models (Fanar-1-9B, ALLaM-7B) outperform much larger multilingual models on specific domains
-🌟 What Makes QIMMA Different
-To summarize the distinctive properties of QIMMA:
-🔗 Resources
-- 🏆 Leaderboard: QIMMA Leaderboard
-- 💻 Code: GitHub
-- 📄 Paper: Are Arabic Benchmarks Reliable? QIMMA's Quality-First Approach to LLM Evaluation
-🔖 Citation
-@misc{alqadi2026arabicbenchmarksreliableqimmas,
-title={Are Arabic Benchmarks Reliable? QIMMA's Quality-First Approach to LLM Evaluation},
-author={Leen AlQadi and Ahmed Alzubaidi and Mohammed Alyafeai and Hamza Alobeidli and Maitha Alhammadi and Shaikha Alsuwaidi and Omar Alkaabi and Basma El Amel Boussaha and Hakim Hacid},
-year={2026},
-eprint={2604.03395},
-archivePrefix={arXiv},
-primaryClass={cs.CL},
-url={https://arxiv.org/abs/2604.03395},
+Speaker
+pactl list short sinks
+This lists your PulseAudio sinks. Pick the one that matches your speaker, it'll be a long ugly name like alsa_output.usb-...
+. In my case it was alsa_output.usb-Generic_USB2.0_Device_20130100ph0-00.analog-stereo
+, but yours will be different.
+Webcam
+v4l2-ctl --list-devices
+Usually index 0
+(i.e. /dev/video0
+).
+Quick test
+export MIC_DEVICE="plughw:3,0"
+export SPK_DEVICE="alsa_output.usb-Generic_USB2.0_Device_20130100ph0-00.analog-stereo"
+arecord -D "$MIC_DEVICE" -f S16_LE -r 16000 -c 1 -d 3 /tmp/test.wav
+paplay --device="$SPK_DEVICE" /tmp/test.wav
+If you hear yourself, you're set.
+Step 6: Run the demo
+Make sure the server from Step 4 is running, then:
+source .venv/bin/activate
+export MIC_DEVICE="plughw:3,0"
+export SPK_DEVICE="alsa_output.usb-Generic_USB2.0_Device_20130100ph0-00.analog-stereo"
+export WEBCAM=0
+export VOICE="af_jessica"
+python3 Gemma4_vla.py
+On first launch, the script downloads Parakeet STT, Kokoro TTS, and generates voice prompt WAVs. Takes a minute, then you're live.
+- SPACE → start recording
+- speak your question
+- SPACE → stop recording
+There's also a text-only mode if you want to skip audio setup and test the LLM path directly:
+python3 Gemma4_vla.py --text
+Changing the voice
+Kokoro ships with many voices. Switch with:
+export VOICE="am_puck"
+python3 Gemma4_vla.py
+Some good ones: af_jessica
+, af_nova
+, am_puck
+, bf_emma
+, am_onyx
+.
+How it works
+The script exposes exactly one tool to Gemma 4:
+{
+"name": "look_and_answer",
+"description": "Take a photo with the webcam and analyze what is visible."
 }
+When you ask a question:
+- Your speech is transcribed locally (Parakeet STT)
+- Gemma gets the text plus the tool definition
+- If the question needs vision, she calls
+look_and_answer
+, the script grabs a webcam frame and sends it back - Gemma answers, and Kokoro speaks it out loud
+There's no keyword matching. The model decides when it needs to see. That's the VLA part.
+The --jinja
+flag on llama-server
+is what enables this, it activates Gemma's native tool-calling support.
+Troubleshooting
+Server runs out of memory, do the cleanup from Step 3 again. Close everything. This model fits on 8 GB, but you have to be tidy.
+No sound, check pactl list short sinks
+and make sure SPK_DEVICE
+matches a real sink.
+Mic records silence, double-check with arecord -l
+, then test recording manually.
+First run is slow, normal. It's downloading models and generating voice prompts. Second run is fast.
+Environment variables
+Bonus: just want to try Gemma 4 in text mode?
+If you don't care about the full VLA demo and just want to poke at Gemma 4 on your Jetson without building anything, there's a ready-to-go Docker image from Jetson AI Lab with llama.cpp
+pre-compiled for Orin:
+sudo docker run -it --rm --pull always \
+--runtime=nvidia --network host \
+-v $HOME/.cache/huggingface:/root/.cache/huggingface \
+ghcr.io/nvidia-ai-iot/llama_cpp:latest-jetson-orin \
+llama-server -hf unsloth/gemma-4-E2B-it-GGUF:Q4_K_S
+One line, no compilation, and -hf
+pulls the GGUF from Hugging Face on first run. Hit http://localhost:8080
+with any OpenAI-compatible client and chat away.
+Heads up: this Docker path is text-only. It doesn't load the vision projector, so it won't work with the VLA demo above. For the full webcam experience, stick with the native build in Step 4.
+Hope you enjoyed this tutorial! If you have any questions or ideas, feel free to reach out. :)
+Asier Arranz | NVIDIA
 
-KAYNAK : https://huggingface.co/blog/tiiuae/qimma-arabic-leaderboard
+KAYNAK : https://huggingface.co/blog/nvidia/gemma4
 
---- dotnet | .NET 10.0.7 Out-of-Band Security Update | score=73.23 ---
-We are releasing .NET 10.0.7 as an out-of-band (OOB) update to address a security issue introduced in
-Microsoft.AspNetCore.DataProtection
-Security update details
-This release includes a fix for
-CVE-2026-40372
-After the Patch Tuesday
-.NET 10.0.6
-release, some customers reported that decryption was failing in their applications. This behavior was reported in
-aspnetcore issue #66335
-.
-While investigating those reports, we determined that the regression also exposed a vulnerability. In versions
-10.0.0
-through
-10.0.6
-of the
-Microsoft.AspNetCore.DataProtection
-NuGet package, the managed authenticated encryptor could compute its HMAC validation tag over the wrong bytes of the payload and then discard the computed hash, which could result in elevation of privilege.
-Update required
-If your application uses ASP.NET Core Data Protection, update the
-Microsoft.AspNetCore.DataProtection
-package to 10.0.7 as soon as possible to address the decryption regression and security vulnerability.
-Download .NET 10.0.7
-.NET 10.0
-Release Notes
-10.0 release notes
-Installers and binaries
-10.0.7
-Container Images
-images
-Linux packages
-10.0
-Known Issues
-10.0
-Installation guidance
-Download and install the
-.NET 10.0.7 SDK or Runtime
-.
-Verify installation by running
-dotnet --info
-and confirming you are on 10.0.7.
-Rebuild and redeploy your applications using updated images or packages.
-Share your feedback
-If you experience any issues after installing this update, please let us know in the
-.NET release feedback issues
-.
-The post
-.NET 10.0.7 Out-of-Band Security Update
-appeared first on
-.NET Blog
-.
+--- mit_ai | AI needs a strong data fabric to deliver business value | score=72.58 ---
+Artificial intelligence is moving quickly in the enterprise, from experimentation to everyday use. Organizations are deploying copilots, agents, and predictive systems across finance, supply chains, human resources, and customer operations. By the end of 2025, half of companies used AI
+in at least three business functions
+, according to a recent survey.
+But as AI becomes embedded in core workflows, business leaders are discovering that the biggest obstacle is not model performance or computing power but the quality and the context of the data on which those systems rely. AI essentially introduces a new requirement: Systems must not only access data — they must understand the business context behind it.
+Without that context, AI can generate answers quickly but still make the wrong decision, says Irfan Khan, president and chief product officer of SAP Data & Analytics.
+“AI is incredibly good at producing results,” he says. “It moves fast, but without context it can’t exercise good judgment, and good judgment is what creates a return on investment for the business. Speed without judgment doesn’t help. It can actually hurt us.”
+In the emerging era of autonomous systems and intelligent applications, that context layer is becoming essential. To provide context, companies need a well-designed data fabric that does more than just integrate data, Khan says. The right data fabric allows organizations to scale AI safely, coordinate decisions across systems and agents, and ensure that automation reflects real business priorities rather than making decisions in isolation.
+Recognizing this, many organizations are rethinking their data architecture. Instead of simply moving data into a single repository, they are looking for ways to connect information across applications, clouds, and operational systems while preserving the semantics that describe how the business works. That shift is driving growing interest in data fabric as a foundation for AI infrastructure.
+Losing context is a critical AI problem
+Traditional data strategies have largely focused on aggregation. Over the past two decades, organizations have invested heavily in extracting information from operational systems and loading it into centralized warehouses, lakes, and dashboards. This approach makes it easier to run reports, monitor performance, and generate insights across the business, but in the process, much of the meaning attached to that data — how it relates to policies, processes, and real-world decisions — is lost.
+Take two companies using AI to manage supply-chain disruptions. If one uses raw signals such as inventory levels, lead times, and supply scores, while the other adds context across business processes, policies, and metadata, both systems will rapidly analyze the data but likely come up with different conclusions.
+Information such as which customers are strategic accounts, what tradeoffs are acceptable during shortages, and the status of extended supply chains will allow one AI system to make strategic decisions, while the other will not have the proper context, Khan says.
+“Both systems move very quickly, but only one moves in the right direction,” he says. “This is the context premium and the advantage you gain when your data foundation preserves context across processes, policies and data by design.”
+In the past, companies implicitly managed a lack of context because human experts provided the missing information, but with AI, there is a shortfall and that creates serious limitations. AI systems do not just display information; they act on it. If a system does not explain why data matters, an AI model may optimize for the wrong outcome. Inventory numbers, payment histories, or demand signals might be accurate, but they do not necessarily reveal which customers must be prioritized, which contractual obligations apply, or which products are strategically important. As a result, the system can produce answers that are technically correct but operationally flawed.
+This realization is changing how companies think about AI readiness. Most acknowledge that they do not have the mature data processes and infrastructure in place to trust their data and their AI systems. Only one in five organizations consider their approach to data to be highly mature, and
+only 9% feel fully prepared
+to integrate and interoperate with their data systems.
+Don’t consolidate, integrate
+The emerging solution is a data fabric: An abstraction layer that spans infrastructure, architecture, and logical organization. For agentic AI, the fabric becomes the primary interface, allowing agents to interact with business knowledge rather than raw storage systems. Knowledge graphs play a central role, enabling agents to query enterprise data using natural language and business logic.
+The value of the data fabric relies on three components: Intelligent compute to provide speed, a knowledge pool to provide business understanding and context, and agents to provide autonomous action are grounded in that understanding. What makes this powerful is how these capabilities work together, says Khan.
+The technology provides the architecture — a foundation that makes agent-to-agent communication and coordination possible. The process will define how businesses and IT share ownership, and establish governance and a culture in which people trust enough to adopt it. Now all three things must work together for a business data fabric to truly be successful.
+“It empowers confident, consistent decisions, and when these elements all come together, AI just doesn’t analyze and interpret the data — it drives smarter, faster decisions that really create business impact,” he says. “This is the promise of a thoughtfully designed business data fabric, where every part reinforces the other, and every insight is grounded in trust and clarity.”
+Technically, building a data-fabric layer requires several capabilities. Data must be accessible across multiple environments through federation rather than forced consolidation. A semantic or knowledge layer is needed to harmonize meaning across systems, often supported by knowledge graphs and catalog-driven metadata. Governance and policy enforcement must also operate across the fabric so that AI systems can access data securely and consistently.
+Together, these elements create a foundation where AI interacts with business knowledge instead of raw storage systems — an essential step for moving from experimentation to real enterprise automation.
+Beyond data isolation and dashboards
+In the emerging era of agentic AI, the responsibility for monitoring, analyzing, and making decisions based on data increasingly shifts to software. AI agents can monitor events, trigger workflows, and make decisions in real time, often without direct human intervention. That speed creates new opportunities, but it also raises the stakes. When multiple agents operate across finance, supply chain, procurement, or customer operations, they must be guided by the same understanding of business priorities.
+Without a common knowledge layer connecting disparate data together, coordination between systems quickly breaks down. One system might optimize for margin, another for liquidity, and another for compliance, each working from a different slice of data.
+Importantly, most enterprises already possess much of the knowledge needed to make this work, says Khan. Years of operational data, master data, workflows, and policy logic already exist across business applications — companies just need to make it accessible. Companies that
+deploy data fabrics gain greater trust
+in their data, with more than two thirds of enterprises seeing improved data accessibility, data visibility, and exerting more control over their data.
+“The opportunity isn’t just inventing context from scratch, it’s activating and connecting the context across your business that already exists,” he continues, adding that a data fabric is the “architecture that ensures data semantics, business processes and policies are connected as a unified system across all the clouds.”
+This content was produced by Insights, the custom content arm of MIT Technology Review. It was not written by MIT Technology Review’s editorial staff. It was researched, designed, and written by human writers, editors, analysts, and illustrators. This includes the writing of surveys and collection of data for surveys. AI tools that may have been used were limited to secondary production processes that passed thorough human review.
 
-KAYNAK : https://devblogs.microsoft.com/dotnet/dotnet-10-0-7-oob-security-update/
+KAYNAK : https://www.technologyreview.com/2026/04/22/1135295/ai-needs-a-strong-data-fabric-to-deliver-business-value/
 
---- google_ai | 3 new ways Ads Advisor is making Google Ads safer and faster | score=41.01 ---
-Three new agentic safety and policy features integrated into Ads Advisor will help protect and streamline your Google Ads account.
+--- google_ai | Elevating Austria: Google invests in its first data center in the Alps. | score=63.77 ---
+Google has been a proud part of Austria’s landscape for years, and today, we’re announcing our first data center in Kronstorf, generating 100 direct jobs. This facility …
 
-KAYNAK : https://blog.google/products/ads-commerce/ads-advisor-google-ads/
+KAYNAK : https://blog.google/innovation-and-ai/infrastructure-and-cloud/global-network/google-data-center-austria/
+
+--- claude | MCP apps unavailable on Claude.ai | score=59.09 ---
+Apr
+23
+,
+02:09
+UTC
+Resolved
+- This incident has been resolved.
+Apr
+23
+,
+00:57
+UTC
+Update
+- We have resolved the issue impacting MCP Apps on Claude.ai.
+Apr
+23
+,
+00:41
+UTC
+Identified
+- We have identified an issue impacting the availability of MCP applications on Claude.ai, including desktop and mobile. We are working on a fix and will provide an update as soon as possible.
+
+KAYNAK : https://status.claude.com/incidents/9tyl1z4b03cs
+
+--- openai | Making ChatGPT better for clinicians | score=44.49 ---
+OpenAI makes ChatGPT for Clinicians free for verified U.S. physicians, nurse practitioners, and pharmacists, supporting clinical care, documentation, and research.
+
+KAYNAK : https://openai.com/index/making-chatgpt-better-for-clinicians
+
+--- openai | Speeding up agentic workflows with WebSockets in the Responses API | score=42.86 ---
+A deep dive into the Codex agent loop, showing how WebSockets and connection-scoped caching reduced API overhead and improved model latency.
+
+KAYNAK : https://openai.com/index/speeding-up-agentic-workflows-with-websockets
+
+--- google_ai | We're launching two specialized TPUs for the agentic era. | score=28.65 ---
+The eighth generation of Google’s TPU includes two specialized chips that will power the future of AI.
+
+KAYNAK : https://blog.google/innovation-and-ai/infrastructure-and-cloud/google-cloud/tpus-8t-8i-cloud-next/
+
+--- openai | Introducing workspace agents in ChatGPT | score=28.49 ---
+Workspace agents in ChatGPT are Codex-powered agents that automate complex workflows, run in the cloud, and help teams scale work across tools securely.
+
+KAYNAK : https://openai.com/index/introducing-workspace-agents-in-chatgpt
+
+--- openai | Workspace agents | score=27.98 ---
+Learn how to build, use, and scale workspace agents in ChatGPT to automate repeatable workflows, connect tools, and streamline team operations.
+
+KAYNAK : https://openai.com/academy/workspace-agents
 

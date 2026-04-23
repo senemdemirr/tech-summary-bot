@@ -1,4 +1,4 @@
---- arxiv_ai | AblateCell: A Reproduce-then-Ablate Agent for Virtual Cell Repositories | score=103.22 ---
+--- arxiv_ai | AblateCell: A Reproduce-then-Ablate Agent for Virtual Cell Repositories | score=103.08 ---
 0.19216 0.33333 0.74902A0.17255 0.29804 0.69804b0.15686 0.26667 0.65098l0.14118 0.23529 0.60392a0.12549 0.20392 0.55686t0.10588 0.16863 0.50588e0.0902 0.13725 0.45882C0.07451 0.10588 0.41176e0.0549 0.07059 0.36078l0.03922 0.03922 0.31373l\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:: A Reproduce-then-Ablate Agent for Virtual Cell Repositories
 Abstract
 Systematic ablations are essential to attribute performance gains in AI Virtual Cells, yet they are rarely performed because biological repositories are under-standardized and tightly coupled to domain-specific data and formats. While recent coding agents can translate ideas into implementations, they typically stop at producing code and lack a verifier that can reproduce strong baselines and rigorously test which components truly matter. We introduce AblateCell, a reproduce-then-ablate agent for virtual cell repositories that closes this verification gap. AblateCell first reproduces reported baselines end-to-end by auto-configuring environments, resolving dependency and data issues, and rerunning official evaluations while emitting verifiable artifacts. It then conducts closed-loop ablation by generating a graph of isolated repository mutations and adaptively selecting experiments under a reward that trades off performance impact and execution cost. Evaluated on three single-cell perturbation prediction repositories (CPA, GEARS, BioLORD), AblateCell achieves 88.9% (+29.9% to human expert) end-to-end workflow success and 93.3% (+53.3% to heuristic) accuracy in recovering ground-truth critical components. These results enable scalable, repository-grounded verification and attribution directly on biological codebases.
@@ -364,7 +364,7 @@ These failures highlight that semantically meaningful ablations can still introd
 
 KAYNAK : https://arxiv.org/abs/2604.19606
 
---- arxiv_ai | AutomationBench | score=103.00 ---
+--- arxiv_ai | AutomationBench | score=102.86 ---
 AutomationBench
 Abstract
 Existing AI benchmarks for software automation rarely combine cross-application coordination, autonomous API discovery, and policy adherence. Real business workflows demand all three: a single task may span a CRM, inbox, calendar, and messaging platform — requiring the agent to find the right endpoints, follow a policy document, and write correct data to each system. To address this gap, we introduce AutomationBench, a benchmark for evaluating AI agents on cross-application workflow orchestration via REST APIs. Drawing on real workflow patterns from Zapier’s platform, tasks span Sales, Marketing, Operations, Support, Finance, and HR domains. Agents must discover relevant endpoints themselves, follow layered business rules, and navigate environments with irrelevant and sometimes misleading records. Grading is programmatic and end-state only: whether the correct data ended up in the right systems. Even the best frontier models currently score below 10%. AutomationBench provides a challenging, realistic measure of where current models stand relative to the agentic capabilities businesses actually need.
@@ -634,7 +634,7 @@ No message posted to #facilities-general
 
 KAYNAK : https://arxiv.org/abs/2604.18934
 
---- arxiv_ai | Has Automated Essay Scoring Reached Sufficient Accuracy? Deriving Achievable QWK Ceilings from Classical Test Theory | score=103.00 ---
+--- arxiv_ai | Has Automated Essay Scoring Reached Sufficient Accuracy? Deriving Achievable QWK Ceilings from Classical Test Theory | score=102.86 ---
 11email: uto@ai.lab.uec.ac.jp
 Has Automated Essay Scoring Reached Sufficient Accuracy? Deriving Achievable QWK Ceilings from Classical Test Theory
 Abstract
@@ -802,7 +802,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2604.19131
 
---- arxiv_ai | Who Shapes Brazil's Vaccine Debate? Semi-Supervised Modeling of Stance and Polarization in YouTube's Media Ecosystem | score=103.00 ---
+--- arxiv_ai | Who Shapes Brazil's Vaccine Debate? Semi-Supervised Modeling of Stance and Polarization in YouTube's Media Ecosystem | score=102.86 ---
 Who Shapes Brazil’s Vaccine Debate? Semi-Supervised Modeling of Stance and Polarization in YouTube’s Media Ecosystem
 Abstract.
 Vaccination remains a cornerstone of global public health, yet the COVID-19 pandemic exposed how online misinformation, political polarization, and declining institutional trust can undermine immunization efforts. Most of the prior computational studies that analyzed vaccine discourse on social platforms focus on English-language data, specific vaccines, or short time windows, impairing our understanding of long-term dynamics in high-impact, non-English contexts like Brazil, home to one of the world’s most comprehensive immunization systems. We here present the largest longitudinal study of Brazil’s vaccine discourse on YouTube, leveraging a semi-supervised stance detection framework that combines self-labeling and self-training to classify nearly 1.4 million comments. By integrating stance with temporal patterns, engagement metrics, and channel taxonomy (legacy media, science communicators, digital-native outlets), we map how pro- and anti-vaccine narratives evolve and circulate within a hybrid media ecosystem. Our results show that semi-supervised learning substantially improves stance classification robustness, enabling fine-grained tracking of public attitudes across Brazil’s full immunization schedule. Polarization spikes during epidemiological crises, especially COVID-19, but becomes fragmented across vaccines and interaction patterns in the post-pandemic period. Notably, science communication and digital-native channels emerge as the primary loci of both supportive and oppositional engagement, revealing structural vulnerabilities in contemporary health communication. Thus, our work advances computational methods for large-scale stance modeling while offering actionable evidence for public health agencies, platform governance, and online information ecosystems.
@@ -982,7 +982,7 @@ This work was supported by the Conselho Nacional de Desenvolvimento Científico 
 
 KAYNAK : https://arxiv.org/abs/2604.18586
 
---- arxiv_ai | Skillful Global Ocean Emulation and the Role of Correlation-Aware Loss | score=103.00 ---
+--- arxiv_ai | Skillful Global Ocean Emulation and the Role of Correlation-Aware Loss | score=102.86 ---
 Skillful Global Ocean Emulation and the Role of Correlation-Aware Loss
 Abstract
 Machine learning emulators have shown extraordinary skill in forecasting atmospheric states, and their application to global ocean dynamics offers similar promise. Here, we adapt the GraphCast architecture into a dedicated ocean-only emulator, driven by prescribed atmospheric conditions, for medium-range predictions. The emulator is trained on NOAA’s UFS-Replay dataset. Using a hour time step, single initial condition, and without using autoregressive training, we produce an emulator that provides skillful forecasts for day lead times. We further demonstrate the use of Mahalanobis distance as loss that improves the forecast skill compared to the Mean Squared Error loss by explicitly accounting for the correlations between tendencies of the target variables. Using spatial correlation analysis of the forecasted fields, we also show that the proposed correlation-aware loss acts as a statistical-dynamical regularizer for the slow, correlated dynamics of the global oceans, offering a better background forecast for downstream tasks like data assimilation.

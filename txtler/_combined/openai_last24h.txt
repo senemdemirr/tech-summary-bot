@@ -1,0 +1,20 @@
+--- openai | Making ChatGPT better for clinicians | score=44.49 ---
+OpenAI makes ChatGPT for Clinicians free for verified U.S. physicians, nurse practitioners, and pharmacists, supporting clinical care, documentation, and research.
+
+KAYNAK : https://openai.com/index/making-chatgpt-better-for-clinicians
+
+--- openai | Speeding up agentic workflows with WebSockets in the Responses API | score=42.86 ---
+A deep dive into the Codex agent loop, showing how WebSockets and connection-scoped caching reduced API overhead and improved model latency.
+
+KAYNAK : https://openai.com/index/speeding-up-agentic-workflows-with-websockets
+
+--- openai | Introducing workspace agents in ChatGPT | score=28.49 ---
+Workspace agents in ChatGPT are Codex-powered agents that automate complex workflows, run in the cloud, and help teams scale work across tools securely.
+
+KAYNAK : https://openai.com/index/introducing-workspace-agents-in-chatgpt
+
+--- openai | Workspace agents | score=27.98 ---
+Learn how to build, use, and scale workspace agents in ChatGPT to automate repeatable workflows, connect tools, and streamline team operations.
+
+KAYNAK : https://openai.com/academy/workspace-agents
+

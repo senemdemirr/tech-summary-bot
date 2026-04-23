@@ -1,4 +1,3 @@
---- mit_ai | AI needs a strong data fabric to deliver business value | score=72.58 ---
 Artificial intelligence is moving quickly in the enterprise, from experimentation to everyday use. Organizations are deploying copilots, agents, and predictive systems across finance, supply chains, human resources, and customer operations. By the end of 2025, half of companies used AI
 in at least three business functions
 , according to a recent survey.
@@ -33,4 +32,3 @@ in their data, with more than two thirds of enterprises seeing improved data acc
 This content was produced by Insights, the custom content arm of MIT Technology Review. It was not written by MIT Technology Review’s editorial staff. It was researched, designed, and written by human writers, editors, analysts, and illustrators. This includes the writing of surveys and collection of data for surveys. AI tools that may have been used were limited to secondary production processes that passed thorough human review.
 
 KAYNAK : https://www.technologyreview.com/2026/04/22/1135295/ai-needs-a-strong-data-fabric-to-deliver-business-value/
-

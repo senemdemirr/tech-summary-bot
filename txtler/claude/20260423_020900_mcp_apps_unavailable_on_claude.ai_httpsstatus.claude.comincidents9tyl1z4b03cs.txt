@@ -1,4 +1,3 @@
---- claude | MCP apps unavailable on Claude.ai | score=59.09 ---
 Apr
 23
 ,
@@ -22,4 +21,3 @@ Identified
 - We have identified an issue impacting the availability of MCP applications on Claude.ai, including desktop and mobile. We are working on a fix and will provide an update as soon as possible.
 
 KAYNAK : https://status.claude.com/incidents/9tyl1z4b03cs
-
