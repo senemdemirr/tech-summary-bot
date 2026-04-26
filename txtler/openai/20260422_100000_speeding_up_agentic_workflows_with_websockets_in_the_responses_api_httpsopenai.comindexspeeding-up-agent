@@ -1,3 +1,0 @@
-A deep dive into the Codex agent loop, showing how WebSockets and connection-scoped caching reduced API overhead and improved model latency.
-
-KAYNAK : https://openai.com/index/speeding-up-agentic-workflows-with-websockets

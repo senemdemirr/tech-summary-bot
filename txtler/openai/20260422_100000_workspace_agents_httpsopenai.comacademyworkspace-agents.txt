@@ -1,3 +1,0 @@
-Learn how to build, use, and scale workspace agents in ChatGPT to automate repeatable workflows, connect tools, and streamline team operations.
-
-KAYNAK : https://openai.com/academy/workspace-agents
