@@ -1,0 +1,134 @@
+Verbal Confidence Saturation in 3–9B Open-Weight Instruction-Tuned LLMs:
+A Pre-Registered Psychometric Validity Screen
+Abstract
+Verbal confidence elicitation is widely used to extract uncertainty estimates from LLMs. We tested whether seven instruction-tuned open-weight models (3–9B parameters, four families) produce verbalised confidence that meets minimal validity criteria for item-level Type-2 discrimination under minimal numeric elicitation with greedy decoding. In a pre-registered study (OSF: https://osf.io/azbvx), 524 TriviaQA items were administered under numeric (0–100) and categorical (10-class) elicitation to eight models at Q5_K_M quantisation on consumer hardware, yielding 8,384 deterministic trials. A psychometric validity screen (Appendix A) was applied to each model–format cell. All seven instruct models were classified Invalid on numeric confidence (H2 confirmed, 7/7 vs. predicted 4/7), with a mean ceiling rate of 91.7% (H1 confirmed). Categorical elicitation did not rescue validity. Instead, it disrupted task performance in six of seven models, producing accuracy below 5% (H4 not confirmed). Token-level logprobability did not usefully predict verbalised confidence under the observed variance regime (H5 confirmed, mean cross-validated ). Within the reasoning-distilled model, reasoning-trace length showed a strong negative partial correlation with confidence (, ), consistent with the Reasoning Contamination Effect. These results do not imply that internal uncertainty representations are absent. They show that minimal verbal elicitation fails to preserve internal signals at the output interface in this model-size regime. Psychometric screening should precede any downstream use of such signals.
+1 Introduction
+Verbal confidence elicitation is widely used to extract uncertainty estimates from large language models (Xiong et al., 2023; Tian et al., 2023; Steyvers and Peters, 2025). The premise is that the verbalised number reflects an internal signal that discriminates correct from incorrect responses. Recent mechanistic work supports this in part. Kumaran et al. (2026) showed that verbal confidence in Gemma 3 27B is computed via cached retrieval at answer-adjacent positions and contains variance not explained by token log-probabilities.
+The practical utility of verbal confidence depends on whether the elicited signal carries item-level information in the deployment context. Three concurrent lines of evidence establish a readout problem. Miao and Ungar (2026) showed that calibration and verbalised confidence are encoded in orthogonal directions in the residual stream. Wang and Stengel-Eskin (2026) documented confidence saturation on TriviaQA and SimpleQA. Seo et al. (2026) identified answer-dependent confidence generation as a driver of overconfidence. Yang (2024) found that verbalised confidence in small open-weight models can be near-independent from accuracy, though this depends strongly on the elicitation method.
+Most calibration work assumes the confidence distribution spans the scale and varies with correctness (Geng et al., 2024; Steyvers et al., 2025). This study tests that assumption directly. We apply a psychometric validity screen to classify model–format combinations as Invalid, Indeterminate, or Valid before any calibration is attempted. The question is not how miscalibrated the signal is, but whether it meets minimal criteria for item-level Type-2 use.
+We treat saturation as a validity failure rather than a calibration failure. A distribution collapsed to the ceiling cannot support item-level discrimination because the ordinal relationships between trials have been lost at elicitation. No post-hoc rescaling can recover what was never emitted.
+This study evaluates default interface behaviour under minimal elicitation with greedy decoding. It does not test the capacity of these models to express uncertainty under structured or scaffolded prompts. A model that fails the screen here may produce a valid signal under a richer elicitation regime. That is a separate empirical question. Validity is a property of the model–probe–task interaction (Cacioli, 2026e; Rust et al., 2021), not an intrinsic property of the model.
+1.1 Hypotheses
+Four confirmatory hypotheses were pre-registered (OSF: https://osf.io/azbvx).
+H1 (saturation prevalence). The mean proportion of trials with numeric confidence across seven instruct models exceeds 60%.
+H2 (validity screening). At least four of seven instruct models are classified Invalid on numeric confidence under the validity protocol (Appendix A).
+H4 (format rescue). Among models classified Invalid under numeric elicitation, at least two are reclassified as non-Invalid under categorical elicitation.
+H5 (logprob–confidence independence). Mean cross-validated of ridge regression predicting verbal confidence from length-normalised logprobability is below 0.20 in both conditions, indicating no usable predictive relationship.
+H3 was retired pre-registration after sanity data showed the base model does not produce verbalised confidence under continuation prompting (see pre-registration §10).
+2 Methods
+2.1 Models
+Eight open-weight LLMs were evaluated, all run as Q5_K_M GGUF quantisations via llama-cpp-python 0.3.16 with Vulkan backend on an AMD RX 7900 GRE 16 GB (Table 1).
+M1 is a base model retained for one exploratory analysis (E-base) comparing logprob distributions between the base and instruct versions of Llama-3-8B. M1 does not contribute to any confirmatory hypothesis.
+2.2 Substrate and design
+524 items from TriviaQA rc.nocontext validation split (Joshi et al., 2017), drawn deterministically with numpy.random.default_rng(seed=42). Design: 8 models 2 conditions (NUM, CAT) 524 items = 8,384 trials. Confirmatory sample: 7 instruct models 2 524 = 7,336 trials. Inference was greedy (temperature = 0), deterministic (seed = 42), with logprobs collected for the top 5 tokens at each position.
+Greedy decoding isolates the model’s maximum-likelihood output. Sampling introduces stochastic variance that conflates confidence-expression behaviour with sampling noise. Many real deployments do not use pure greedy decoding. The findings characterise default interface behaviour, not model capacity.
+2.3 Elicitation conditions
+Numeric (NUM). System prompt: “You are answering trivia questions. After your answer, state your confidence as a percentage from 0 to 100.”
+Categorical (CAT). System prompt: “Classify your confidence into one of the following classes based on how likely the answer above is to be correct (NO REASONING OR EXPLANATION):” followed by a 10-class ordinal scale from “No chance” (0.0–0.1) to “Almost certain” (0.9–1.0).
+M1 used a continuation prompt (Q: {question} / A:) with no confidence elicitation.
+2.4 Validity screening protocol
+Each model–condition cell was screened using a psychometric validity protocol adapted from clinical assessment practice (MMPI-3: Ben-Porath and Tellegen 2020; PAI: Morey 1991). The full protocol is provided in Appendix A. Criterion validity was demonstrated in Cacioli (2026f), where Invalid-classified models showed mean AUROC2 = .357 versus .624 for Valid-classified models ().
+Continuous confidence values are binarised at 0.50, producing a 22 contingency table. Three indices are computed: , , and . A degeneracy pre-check classifies any cell with of binarised responses in a single category as Invalid without further analysis.
+2.5 Analysis plan
+All analyses were pre-registered (OSF: https://osf.io/azbvx, locked 15 April 2026). Cells with parse failure are excluded from confirmatory analyses. Parse failure is treated as missing at random. The MAR assumption is evaluated in E8 and the H1 sensitivity analysis (A8) tests robustness directly.
+2.6 Pre-registration deviations
+One deviation occurred. The original ParquetWriter class inferred its schema from the first flushed batch. When batches contained entirely null values in nullable columns, pyarrow inferred mismatched types. The fix replaced inferred schema with an explicit pyarrow schema. No collection logic, seeds, prompts, parsing, or records were affected.
+3 Results
+3.1 Confirmatory hypotheses
+H1: Saturation prevalence, confirmed. Across the seven instruct models on numeric elicitation, the mean proportion of parse-success trials with confidence was 91.7% (range 72.4–96.8%). All seven exceeded the 60% threshold individually (Figure 1). The sensitivity analysis (A8), coding parse failures as non-variable responses, yielded 92.7%.
+H2: Validity screening, confirmed. All seven instruct models were classified Invalid on numeric confidence, exceeding the pre-registered threshold of . Five models were classified Invalid via the degeneracy criterion ( of binarised responses in a single category) with values ranging from 0.949 to 0.986. Two models (M2, M7) showed complete degeneracy: TRIN = 1.0, , zero low-confidence observations across 500+ trials.
+H4: Format rescue, not confirmed. Zero models were reclassified from Invalid (NUM) to non-Invalid (CAT). Categorical elicitation introduced a different failure mode: task-performance collapse (Table 2).
+The specific 10-class categorical prompt disrupted question-answering behaviour. Models that achieved 59–76% accuracy under NUM dropped to 0.2–4.2% under CAT. Whether simpler categorical formats would avoid this interaction failure is an open question (Yang, 2024).
+H5: Logprob–confidence independence, confirmed. Mean cross-validated was on NUM and 0.03 on CAT, both well below the 0.20 threshold. The negative NUM mean is driven by M5 (), where near-zero confidence variance produces degenerate folds. The median on NUM was 0.06. Token-level logprobability does not usefully predict verbalised confidence under the observed variance regime.
+3.2 Type-2 AUROC2
+Despite universal validity failure on NUM, AUROC2 values were modestly above chance (Figure 2), ranging from 0.527 (M5) to 0.683 (M3). This does not contradict the validity classification. AUROC2 is a ranking metric driven by 3–13% residual non-ceiling responses. A deployment system cannot act on a signal identical for 97% of inputs.
+3.3 Exploratory analyses
+E5: Reasoning contamination probe. Within M8 NUM (), reasoning-trace length showed a negative zero-order Spearman correlation with verbalised confidence (, ). After controlling for item difficulty, the partial correlation remained strong (, ; Figure 3). This is consistent with Miao and Ungar’s (2026) Reasoning Contamination Effect and with a simpler account where difficult items require more tokens and receive lower confidence.
+E3: Item-level sensitivity. Item difficulty correlated with mean confidence across instruct models at (, ). The models carry item-level information. It does not survive the verbalised readout under minimal elicitation.
+E8: MAR plausibility check. Parse failure was higher for correct trials (18.8%) than incorrect (10.1%), indicating the MAR assumption is not strictly met. The A8 sensitivity analysis is consistent with the saturation pattern being conservative (mean ceiling rate increased from 91.7% to 92.7%). Non-random missingness remains a limitation.
+E9: Split-half stability. Validity classifications agreed across random half-splits on 14/14 instruct model–condition cells. 100% agreement at 262 items per split.
+4 Discussion
+4.1 Summary
+Under minimal numeric elicitation with greedy decoding, verbal confidence from seven instruction-tuned open-weight models in the 3–9B range fails to meet minimal validity criteria. Every model was classified Invalid on numeric confidence. A 10-class categorical prompt did not rescue validity. It disrupted task performance. Token-level logprobability did not usefully predict the verbalised signal. These findings hold across four model families and a reasoning-distilled model.
+4.2 Saturation as validity failure
+The descriptive pattern is stark before any protocol is invoked. Six of seven instruct models assigned confidence on more than 87% of parse-success trials. Two models (M2, M7) produced zero low-confidence responses across 500+ trials. The confidence output was a constant. The validity protocol (Appendix A) formalises what the raw distributions already show.
+This is a validity failure, not a calibration failure. The qualification is important: this applies to the elicited readout under these conditions, not to internal representations. E3 confirms that these models carry item-level information correlated with confidence (). The information exists. It does not survive the verbalised readout under minimal elicitation.
+The saturation observed here is not an intrinsic property of 3–9B models. It is a property of the model–probe–task interaction under these conditions. Whether richer elicitation can unlock a valid signal is a separate question.
+4.3 Two failure modes
+The H4 result reveals two distinct failure modes. Saturation failure (NUM): the model produces answers and confidence ratings, but confidence is compressed to the ceiling. in most models. Interaction failure (CAT): the specific 10-class categorical prompt disrupted question-answering behaviour. Models that achieve 59–76% accuracy on NUM dropped to 0.2–4.2% on CAT. This is not evidence that categorical elicitation is inherently flawed. M3 maintained 65.2% accuracy under the same prompt. This particular prompt is poorly tolerated by most models in this size range.
+4.4 AUROC2 and validity
+AUROC2 values on NUM range from 0.527 to 0.683. This does not contradict the Invalid classification. When 87–97% of trials sit at the ceiling, ranking is driven by 3–13% residual responses. The validity indices decompose what AUROC2 aggregates over.
+4.5 Deployment implications
+Any system using verbal confidence from small open-weight instruct models for abstention, routing, or safety decisions under minimal elicitation is building on a degenerate signal. Verbal confidence signals should be screened for validity before calibration or selective prediction metrics are computed. The protocol (Appendix A) requires only the raw confidence outputs and correctness labels already available in any benchmark evaluation.
+4.6 Limitations
+Elicitation regime. One minimal numeric prompt and one 10-class categorical prompt under greedy decoding. Many real deployments do not use pure greedy decoding. Temperature may produce more variable confidence distributions.
+Model scale. 3–9B parameters only. Kumaran et al. (2026) reported graded confidence distributions in Gemma 3 27B.
+Substrate. TriviaQA factual QA only.
+Quantisation. All models at Q5_K_M. Cacioli (2026g) showed AUROC2 is robust to quantisation.
+Categorical prompt. The accuracy collapse may be specific to the 10-class format, its anchor wordings, or the “NO REASONING” instruction.
+5 Pre-registration and data availability
+Pre-registered on OSF (registration: https://osf.io/azbvx, locked 15 April 2026; project: https://osf.io/xgt73). All data, code, and pre-registration document available on OSF and GitHub (https://github.com/synthiumjp/koriat). One deviation is disclosed (§2.6). No hypotheses, thresholds, or decision rules were modified post-registration.
+Appendix A Validity Screening Protocol
+This appendix provides a self-contained specification of the psychometric validity screening protocol. The protocol was developed in Cacioli (2026d), specified as a portable procedure in Cacioli (2026e), and criterion-validated in Cacioli (2026f).
+A.1 Input and binarisation
+The protocol operates on trials with a correctness label and a confidence value. Continuous confidence is binarised at 0.50, producing a 22 contingency table:
+A.2 Degeneracy pre-check
+If the confidence signal has fewer than 3 distinct values or more than 95% of binarised responses fall in a single category, the signal is classified Invalid (degenerate) without further analysis.
+A.3 Validity indices
+. : at most 5% error-detection rate.
+. : majority of correct trials receive low confidence.
+. Positive values indicate directional inversion.
+. Structural indicator; does not trigger Invalid alone.
+= point-biserial correlation. Diagnostic statistic; no classification action.
+A.4 Ordered screening sequence
+-
+1.
+Degeneracy pre-check. If triggered, Invalid.
+-
+2.
+Cell counts. If any cell , Insufficient.
+-
+3.
+TRIN. Report value. If , structural warning.
+-
+4.
+. If with Wilson CI lower bound , Invalid.
+-
+5.
+. If with Wilson CI lower bound , Invalid.
+-
+6.
+RBS. If with CI excluding zero and point , Invalid.
+-
+7.
+. Report value, , 95% CI.
+A.5 Three-tier classification
+Invalid. Clear threshold violation. Signal uninformative.
+Indeterminate. Threshold violated but CI includes valid values. Interpret with caution.
+Valid. No threshold violations. Proceed to substantive analysis.
+References
+- Ben-Porath and Tellegen [2020] Ben-Porath, Y. S. and Tellegen, A. (2020). MMPI-3: Manual for administration, scoring, and interpretation. University of Minnesota Press.
+- Cacioli [2026a] Cacioli, J. P. (2026a). Type-2 signal detection for LLM metacognition. arXiv:2603.14893.
+- Cacioli [2026b] Cacioli, J. P. (2026b). Meta- and M-ratio for LLM metacognition. arXiv:2603.25112.
+- Cacioli [2026c] Cacioli, J. P. (2026c). The metacognitive monitoring battery: A cross-domain benchmark for LLM self-monitoring. arXiv:2604.15702.
+- Cacioli [2026d] Cacioli, J. P. (2026d). Before you interpret the profile: Validity scaling for LLM metacognitive self-report. arXiv:2604.17707.
+- Cacioli [2026e] Cacioli, J. P. (2026e). Screen before you interpret: A portable validity protocol for benchmark-based LLM confidence signals. arXiv:2604.17714.
+- Cacioli [2026f] Cacioli, J. P. (2026f). Concurrent criterion validation of a validity screen for LLM confidence signals via selective prediction. arXiv:2604.17716.
+- Cacioli [2026g] Cacioli, J. P. (2026g). AUROC2 is format-stable; M-ratio is not. arXiv:2604.08976.
+- Geng et al. [2024] Geng, J. et al. (2024). A survey of confidence estimation and calibration in large language models. arXiv:2311.08298.
+- Joshi et al. [2017] Joshi, M., Choi, E., Weld, D. S., and Zettlemoyer, L. (2017). TriviaQA: A large scale distantly supervised challenge dataset for reading comprehension. In Proceedings of ACL.
+- Kim [2026] Kim, S. (2026). Knowing before speaking: In-computation metacognition precedes verbal confidence in large language models. Preprints.org, doi:10.20944/preprints202604.0078.v2.
+- Kumaran et al. [2026] Kumaran, V. et al. (2026). How do LLMs compute verbal confidence? arXiv:2603.17839.
+- Miao and Ungar [2026] Miao, N. and Ungar, L. (2026). Closing the confidence-faithfulness gap. arXiv:2603.25052.
+- Morey [1991] Morey, L. C. (1991). Personality Assessment Inventory professional manual. Psychological Assessment Resources.
+- Rust et al. [2021] Rust, J., Kosinski, M., and Stillwell, D. (2021). Modern Psychometrics (4th ed.). Routledge.
+- Seo et al. [2026] Seo, J. et al. (2026). ADVICE: Answer-dependent verbalized confidence estimation. arXiv:2510.10913.
+- Steyvers and Peters [2025] Steyvers, M. and Peters, M. A. K. (2025). Metacognition and uncertainty communication in humans and large language models. Current Directions in Psychological Science.
+- Steyvers et al. [2025] Steyvers, M., Belem, C., and Smyth, P. (2025). Calibration of LLM confidence. Manuscript.
+- Tian et al. [2023] Tian, K. et al. (2023). Just ask for calibration. arXiv:2305.14975.
+- Wang and Stengel-Eskin [2026] Wang, A. and Stengel-Eskin, E. (2026). Calibrating verbalized confidence with self-generated distractors (DiNCo). arXiv:2509.25532.
+- Xiong et al. [2023] Xiong, M. et al. (2023). Can LLMs express their uncertainty? arXiv:2306.13063.
+- Yang [2024] Yang, Z. (2024). Can LLMs express confidence? The impact of prompt and generation on verbalized confidence. arXiv:2412.14737.
+- Zhao et al. [2026] Zhao, Y. et al. (2026). Wired for overconfidence. arXiv:2604.01457.
+
+KAYNAK : https://arxiv.org/abs/2604.22215

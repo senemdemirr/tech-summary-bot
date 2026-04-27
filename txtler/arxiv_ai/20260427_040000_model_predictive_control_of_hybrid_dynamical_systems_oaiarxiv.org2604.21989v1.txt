@@ -1,0 +1,529 @@
+Model Predictive Control of Hybrid Dynamical Systems
+Abstract
+The problem of controlling hybrid dynamical systems using model predictive control (MPC) is formulated and sufficient conditions for asymptotic stability of a set are provided. Hybrid dynamical systems are modeled in terms of hybrid equations, involving a differential equation and a difference equation with inputs and constraints. The proposed hybrid MPC algorithm uses a suitable prediction and control horizon construction inspired by hybrid time domains. Structural properties of the hybrid optimization problem, its feasible set, and its value function are provided. Checkable conditions to guarantee asymptotic stability of a set are provided. These conditions are given in terms of properties on the stage cost, terminal cost, and the existence of static state-feedback laws, related through a control Lyapunov function condition. Examples illustrate the results throughout the paper.
+I Introduction
+I-A Background and Motivation
+Model Predictive Control (MPC) has established itself as a versatile and powerful feedback strategy for constrained control of dynamic systems, with extensive application across industries. Since its conception as a solution to control problems in emerging industry back in the late 1970s/early 1980s [36, 17], the iterative, optimization-based algorithmic structure of MPC has appealed to practitioners aiming at solving myriad of control problems.111Some of the history of MPC is reported in [28] and [34]. MPC is a receding horizon control scheme that optimizes the selection of the control inputs through the use of a dynamic model of the process to predict the effect of future control actions. Without attempting to survey such a broad literature, MPC schemes for linear and nonlinear systems have undergone substantial development, leading to widespread adoption and rigorous theoretical foundations [35, 11, 21]. Early continuous-time MPC strategies, such as [23, 15], illustrate how continuous-time dynamics can be incorporated into MPC, often through discretization or continuous-time optimization formulations.
+Within the broader context of MPC, the term “hybrid MPC” typically refers to control of systems that feature both continuous and discrete elements, such as logic-based constraints or mixed-valued states and inputs, or that have a discontinuous right-hand side due to the process dynamics or the control algorithm being nonsmooth [25, 12, 11]. A well-known foundational framework for such systems was developed in [9], where the authors propose mixed logical dynamical (MLD) models and corresponding mixed-integer MPC formulations. These methods address discrete modes and logic rules, and have influenced a large body of work on hybrid MPC [8, 7, 11, 12, 25]. However, following [39], the use of the term “hybrid” in this paper aligns better with the definition introduced in the hybrid systems community [43, 5, 19, 40]. These models capture hybrid behavior beyond discrete logic and variables, including impulsive effects, resets, switching, and asynchronous updates, which arise naturally in applications such as networked systems, robotics, and cyber-physical systems.
+Several works have addressed model predictive control for classes of systems exhibiting hybrid behaviors, with emphasis on switched and impulsive dynamics. For example, [27] presents a robust MPC formulation for switched systems under uncertain switching schedules, ensuring constraint satisfaction through conservative design techniques. In [41], MPC schemes for linear impulsive systems, addressing the discrete-time occurrence of impulses and demonstrating stability under specific assumptions, are developed. The work in [33] proposes a general optimization-based control framework for impulsive systems, focusing on trajectory generation and feasibility. In [29], the authors investigate switched nonlinear systems and derive conditions under which MPC guarantees stability assuming an average dwell-time condition. Similarly, [16] studies robust MPC for discrete-time switched systems, considering uncertainties and constraints. As a difference to settings based on MLD models, mixed-valued states and inputs, or nonsmooth dynamics, this paper employs the framework for hybrid control systems in [40], in which a hybrid plant is described by the interaction of continuous-time dynamics and discrete-time transitions governed by a unified set-theoretic formalism. Specifically, a hybrid plant is given by
+where is the state, is the control input, is the flow set, is the flow map, is the jump set, and is the jump map. This formalism encapsulates numerous models of a hybrid nature already studied in the context of MPC, sample-and-hold control [18, 22], event/self-triggered control [42], and switching systems [26], which, very importantly, as stated in [25, Section 2.2.5], “it is bound to influence further research on hybrid MPC.”
+The primary objective of this paper is to lay down the theoretical foundations of a MPC framework for hybrid dynamical systems, with the meaning of “hybrid” as clarified above. In contrast to the aforementioned works, the present approach directly incorporates hybrid time domains and trajectory evolution into the prediction and constraint structure, allowing for general, continuous-time hybrid dynamics beyond piecewise-affine, impulsive, or switched-only systems. Although modern MPC developments, such as economic and dissipativity-based MPC, turnpike phenomena, and formulations without terminal ingredients, offer powerful alternatives in continuous settings, their extension to hybrid systems is nontrivial and remains an open research direction. This paper focuses on transferring and formalizing early MPC principles in the hybrid context, providing a foundation for future integration of these newer techniques.
+I-B Contributions
+Although the concept of applying MPC to hybrid systems has existed in literature for several decades, an MPC framework for hybrid plants of the form (1) is not yet available. This paper provides a comprehensive presentation of hybrid MPC for such systems, and formally introduces the structural conditions and theoretical tools needed to ensure:
+-
+1.
+Appropriate structure and properties of the hybrid prediction horizon;
+- 2.
+- 3.
+- 4.
+-
+5.
+Asymptotic stability of a closed set via hybrid MPC, including special cases when jumps or flows are persistent (Theorem VI.2);
+-
+6.
+Two examples showing in detail how to apply the results.
+The results are illustrated in two examples throughout the paper, one pertaining to control of a bouncing ball and another one about sample-and-hold control. The overall framework was first outlined in the conference paper [1], which informally presents an initial version of the framework presented here but does not include any mathematical result. The conference paper [2] presents a preliminary version of the basic assumptions. These assumptions are relaxed here; in particular, the set to asymptotically stabilize does no longer need to be compact, expanding the applicability of our results to a broader class of stabilization problems (e.g., consensus, tracking, and estimation), and a condition relating the terminal constraint set and the set to asymptotically stabilize is removed (see (O4) in [2]). A result revealing properties of the value function was stated without proof in [2, Lemma 5.4 and Lemma 5.5], but significantly improved here, under weaker assumptions (cf. Lemma V.3 and Lemma V.5) and allowing the stage costs and the terminal cost to be not be positive definite. The latter results can be found in Section V-D and Section V-E, which further extend the relaxations in the conference paper [3] – in fact, only a version of items 2 and 3 in Theorem V.6 are considered therein, which are further relaxed in those sections. Note that [2] and [3] do not include i) any mathematical proofs, ii) the intermediate results required to establish the properties of the value function and asymptotic stability, and iii) the many illustrations via examples, given by two examples revisited throughout the paper multiple times.
+I-C Organization of the Paper
+Section II introduces notation and basic concepts of hybrid systems. Section III presents an overview of hybrid MPC and its main ingredients: the cost functional, the prediction horizon, the constrained optimal control problem, and the recursive implementation of hybrid MPC. The assumptions required for hybrid MPC to be asymptotically stabilizing are presented in Section IV. Section V reveals the main properties of the constrained optimal control problem associated with hybrid MPC. Section V-D characterizes properties guaranteeing positive definiteness of the value function. Section VI formalizes the asymptotic stabilization properties of hybrid MPC. Section VII presents examples to which the main results are applied. Open problems and future work are discussed in Section VIII.
+II Background on Hybrid Control Systems
+Throughout the paper, we use to represent real numbers and its nonnegative subset. The set of nonnegative integers is denoted . The notation indicates is a subset of , not necessarily proper. The 2-norm is denoted . The distance of a vector to a nonempty set is denoted . We denote by the set of all such that for some . The interior and closure of a set are denoted and , respectively. We denote by the standard projection onto such that . A strictly increasing continuous function with is said to be a class- function. An unbounded class- function is said to be a class- function.
+II-A Hybrid Control Systems
+This paper focuses on the control of hybrid plants given as in Section I, where is the state and is the control input. The data of the hybrid plant is given by
+-
+•
+the flow set ;
+-
+•
+the flow map describes the continuous evolution of when belongs to ;
+-
+•
+the jump set ;
+-
+•
+the jump map describes the discrete evolution of when belongs to .
+At times, the data of is explicitly denoted as . Furthermore, when convenient, the input is partitioned as , where collects the components of that affect the flows and the components that affect jumps.
+To simplify the formulation and development of the forthcoming results, the following mild standing assumption on the flow set is imposed.
+Assumption II.1 (Standing Assumption)
+The set is closed.
+In particular, as clarified below, assuming to be closed simplifies the notion of solution pairs. For example, with closed, solutions are defined so that the state trajectory component of each solution stays in the projection of onto over intervals of ordinary time, except potentially at the initial and end times of each such interval. It also simplifies the conditions that the pair needs to satisfy at the initial (hybrid) time.
+Example II.2 (Bouncing Ball Control)
+Consider the hybrid model of a ball bouncing vertically on a horizontal flat surface with height and velocity . When , the motion of the (point-mass) ball is represented by the second order differential equation
+where is the gravitational constant. Impacts with the surface are assumed to occur instantaneously, namely, the compression of the ball at collisions is neglected and the exchange of kinetic energy between the ball and the ground takes zero time. This behavior is conveniently captured by the difference equation
+where is the coefficient of restitution and is a control input that affects the velocity after impacts. Such an instantaneous change occurs when and . In the autonomous case with dissipative jumps (i.e., when and ), asymptotic stability of the origin can be certified using the total energy function
+Although is constant during flows, it decreases at each impact away from the origin. The dynamics can be represented in the form of (1) by incorporating the constraints therein to (2)-(3). This system can be written as a hybrid plant in (1), as follows:
+with and . Note that the flow map is defined on and the jump map is defined on .
+We refer to an input signal and the corresponding state trajectory collectively as a solution pair to . A solution pair is parametrized by , where denotes flow time and is the number of jumps. The domain of , denoted , is a hybrid time domain. A set is a compact hybrid time domain if
+for some and for some finite sequence of times satisfying , where is the ordinary time of the -th jump. Then, is a hybrid time domain if it is the union of a nondecreasing sequence of compact hybrid time domains, namely, is the (possibly infinite) union of compact hybrid time domains with the property that the sequence , , satisfies . The domain of is denoted in a similar fashion. Since the state and input pair needs to satisfy the dynamics imposed by the hybrid plant at the hybrid times for which they are defined, the domain of the input and of the state are assumed to be the same. Under this assumption, for simplicity, we write to denote the hybrid time domain of the pair .
+Definition II.3 (Solution Pair)
+Given a pair of functions and , is said to be a solution pair to (1) if is a hybrid time domain and the following hold:
+-
+(S0)
+,
+-
+(S1)
+For each such that has a nonempty interior,
+-
+(S1.1)
+the function is locally absolutely continuous,
+-
+(S1.2)
+the function is Lebesgue measurable and locally essentially bounded, , and
+-
+(S1.3)
+for almost all ,
+-
+(S1.1)
+-
+(S2)
+For each such that ,
+Remark II.4
+The condition in (SO) assures that the initial condition for the state and for the initial value of input can lead to evolution forward in hybrid time. Since is closed, the condition in (SO) does not involve a closure on . When is not closed, it might be possible to have flow when is on the boundary of the projection of to the state space, as long as belongs to the interior of the projection of to the input space after . The condition in (S1.1) guarantees enough regularity of the state trajectory so that a derivative can be calculated during intervals of flow, at least, almost everywhere. A function that is defined on a hybrid time domain and satisfies (S1.1) is called a hybrid arc. The condition in (S1.2) on the input further assures integrability during flows. A function that is defined on a hybrid time domain and satisfies (S1.2) is called a hybrid input. Closedness of also permits simplifying the two properties in (S1.3), by requiring them to both hold for almost all , rather than requiring that holds for all ’s in the interior of . Note that a solution might belong to both and , in which case either flow or jump might be possible. However, when the input is given, flow intervals and jump times are determined by its hybrid time domain .
+Throughout the paper, the set of solution pairs to starting from the set is denoted . That is, implies . Given a solution pair , is said to be the terminal (hybrid) time of if and for all . A truncation of a solution pair up to some is given by a solution that is equal to with domain given by
+for some nondecreasing sequence , which is said to be the sequence of generalized jump times associated with the truncation . Furthermore, a solution pair is said to be
+-
+•
+maximal if it cannot be further extended;
+-
+•
+complete if is unbounded;
+and to have a
+-
+•
+compact domain if is a compact subset of with a hybrid time domain structure, namely, with a domain equal to for some finite nondecreasing sequence with and .
+In addition, a complete solution pair is said to have
+-
+•
+persistent flows if is unbounded in the direction—that is, there exists no such that for all ;
+-
+•
+persistent jumps if is unbounded in the direction—that is, there exists no such that for all .
+For simplicity, at times we use to denote a solution pair or points in , explicitly making it clear what is meant by saying “solution” or “points” when not clear from context.
+Example II.5 (Bouncing Ball Control (revisited))
+For the bouncing ball with a control input in Example II.2, the amount of ordinary time needed to exhibit an impact (or jump) from any given initial state with is finite. Hence, every complete solution pair to this hybrid plant has persistent jumps. For a complete characterization of its solutions, see [40, Example 2.32] and [19, Example 2.12]. Due to persistence of jumps, the total energy in (4) serves as a Lyapunov function for the bouncing ball system in Example II.2 with [19, Example 3.15].
+Example II.6 (Sample-and-Hold Control)
+Consider a continuous-time control system with state , control input , and dynamics , where is the right-hand side. When the input of the plant is updated periodically using a zero-order hold mechanism (e.g., a digital-to-analog converter), the resulting control system can be written as in (1) by treating as a state component and by introducing a clock variable that updates every seconds. Let be the state and the input of the system capturing the dynamics of the system being controlled as well as the sample-and-hold mechanism updating . In contrast with the continuous-time approach in [18], we capture the dynamics by a hybrid plant as in (1) with the following data:
+-
+•
+the flow map is given by ;
+-
+•
+the flow set is given by ,
+-
+•
+the jump map is given by ;
+-
+•
+the jump set is given by .
+This data accomplishes the following. During flows, the definition of the flow map is such that the timer evolves continuously with a constant rate of one, so as to reproduce ordinary time, remains constant, and evolves according to the dynamics of the continuous-time system being controlled by the constant input . When reaches , which is captured by the definition of the jump set , the definition of the jump map indicates that gets reset to zero and is updated to the value of the input of the hybrid system at the time of the event. At jumps, the state of the system being controlled remains constant, hence the first component of is equal to . Note that the input to the hybrid system is yet to be assigned. In the forthcoming Section VII, the input is assigned by the hybrid MPC algorithm presented in the next section. If the input is given by a continuous-time signal defined for each , complete solution pairs of this system resulting from putting the continuous-time input and the state trajectory on the same hybrid time domain222See [38, 10] for more details. have persistent flows and jumps, as the -th jump occurs at ordinary time , where is the initial condition for the timer . If the input is given only at jump times, the same construction is possible by extending the definition of the input over the intervals of flow, for example, as a piecewise constant signal.
+A hybrid system has solution pairs with unique state trajectories if two inputs that are identical, namely, they are equal during jumps and equal almost everywhere (in time) during flows, lead to the same state trajectory from the same initial condition. To ensure uniqueness for , we impose the following assumption in our forthcoming result establishing asymptotic stability (Theorem VI.2).
+Assumption II.7
+Given the hybrid plant in (1), the constrained differential equation
+has unique state trajectories ; that is, for each , and each pair of inputs and with such that for almost all , and and , the respective solution pairs and have identical state trajectories over their common domain of definition.
+The next result can be obtained using similar steps as in the proof of [19, Proposition 2.11].
+Proposition II.8
+The hybrid control system has unique state trajectories if and only if Assumption II.7 holds.
+Proof:
+Necessity is obvious. For sufficiency, consider two solution pairs and with the same initial condition and domain, where and are equivalent. Since jumps of and occur at the same ordinary time, uniqueness follows from uniqueness during flows (by Assumption II.7) and uniqueness during jumps. ∎
+Remark II.9
+For hybrid dynamical systems with single-valued flow and jump maps and no inputs (i.e., closed hybrid systems), uniqueness of solutions is guaranteed when flows are not possible on the intersection of the flow and jump sets, and the constrained differential equation (8) has unique solutions [19, Proposition 2.11] and [40, Proposition 2.34]. In contrast, Assumption II.7 states that uniqueness during flows is necessary and sufficient for uniqueness of state trajectories. This property is due to the fact that given any two solution pairs and , their jump times are determined by the domain of the input; hence, by Definition II.3, .
+II-B Hybrid Control Systems under Static State-Feedback
+For analysis purposes, we also study the hybrid closed-loop system arising from assigning the input to static state-feedback laws and for the hybrid plant in (1). With this input partition, the resulting hybrid closed-loop system, denoted , is given by
+where
+Similar to in (1), we define solutions to (9) over hybrid time domains via Definition II.3, as follows: a hybrid arc-input pair is said to be a solution pair to (9) generated by the feedback if there exists a solution pair to that satisfies (5) with for all and (6) with for all such that . At times, we say that the component of such solution pair is a state trajectory of (9).
+III Hybrid MPC: Key Elements and Algorithm
+In this section, we introduce the main elements required to formulate an MPC algorithm to asymptotically stabilize the hybrid plant in (1).
+III-A Overview
+In simple words, the algorithm measures the current state of and finds an optimal solution pair to over a finite horizon in hybrid time. The optimization problem consists of minimizing a cost functional, subject to constraints on the terminal time and terminal state. The cost functional assesses the cost of the evolution of the state and of the possible inputs to be applied, both over intervals of flows and at time instances at which jumps occur. The cost functional imposes a cost on the terminal state, relative to a desired target set. This optimization is performed over a hybrid prediction horizon, and the terminal hybrid time is allowed to vary within a set rather than being restricted to a point, as done, for instance, in discrete-time MPC where the optimization involves a fixed prediction horizon. This optimization approach is reminiscent of free end-time optimal control. It is instrumental for MPC for hybrid systems as the hybrid time domain of an optimal solution pair is not known a priori. Each time the state is measured, the algorithm finds an optimal control hybrid input that is applied to until the next measurement, leading to a receding horizon implementation. The initial optimization occurs at the initial time . We refer to this algorithm as hybrid MPC.
+There are three main differences between conventional continuous-time/discrete-time MPC, in their general formulations, and hybrid MPC:
+-
+•
+Since hybrid control systems can have solution pairs from nearby initial conditions with drastically different hybrid time domains, the terminal time has to be allowed to vary within a set. This set is the hybrid prediction horizon introduced above.
+-
+•
+To account for the differences in the hybrid time domains of optimal control hybrid inputs, the optimization times are not assumed to be periodic or known a priori. Instead, with the initial optimization being performed at time , each subsequent optimization hybrid time is selected online and the re-optimization occurs before the current hybrid control input is exhausted.
+-
+•
+Since hybrid plants typically involve timer states, logic variables, and memory states, as Example II.6 illustrates, the problem that hybrid MPC has to solve may be a set stabilization problem rather than a set-point stabilization problem. In fact, the stabilization problem associated with Example II.6 consists of asymptotic stabilizing the state to zero, to some compact set, and to the range .
+It should be noted that the results in this paper do not involve discretization of the differential equation governing the flow of , since the focus is on theoretical properties of MPC for hybrid systems. A discussion about discretization is in the forthcoming Remark III.8.
+In the remainder of this section, we detail the formulation of the key elements involved in the formulation of the constrained optimization problem solved by hybrid MPC.
+III-B Hybrid Prediction Horizon
+To allow for the prediction of state trajectories that may flow or jump without knowing the behavior a priori, we propose a prediction horizon that is a subset of . This set-based generalization of the usual notion of prediction horizon accounts for hybrid time domains and maximizes the set of initial conditions such that the optimal control problem (OCP) associated to hybrid MPC is feasible. We refer to this construction as the hybrid prediction horizon. To motivate it, we revisit Example II.2.
+Example III.1 (Bouncing Ball Control (revisited))
+For the bouncing ball model in Example II.2 (see also Example II.5), any open-loop hybrid input that steers the state to the origin necessarily leads to trajectories with the time between consecutive jumps converging to zero.333Given a complete solution pair to (2)-(3), let be the th jump time, i.e., for all . Then, for all [19, Example 2.12], where , as the flow map does not depend on the input. Consequently, when . The implication of this property is that it would be impossible to asymptotically stabilize the origin of the bouncing ball by hybrid MPC when the associated OCP is restricted to a fixed prediction horizon of the form , no matter how and are chosen. In fact:
+-
+1.
+Since flows are not possible from the origin, given any solution pair with compact domain and terminal time , since there exists such that . As a consequence, prediction horizons of the form with are not suitable for asymptotic stabilization of the origin.
+-
+2.
+If the prediction horizon were to be fixed at for some (that is, ) the OCP associated to hybrid MPC would only allow jumps and, therefore, be unsolvable from any initial condition with nonzero position or with positive velocity—namely, for every initial condition from the set , where and are given in Example II.2. Again, this choice of prediction horizon would prohibit asymptotic stabilization of the origin.
+As highlighted in Example II.5, the notion of a prediction horizon given by a singleton can be overly restrictive and prevent a reasonable formulation of MPC for hybrid systems in the form (1). To maximize feasibility of the OCP, an appropriate selection of the prediction horizon should ensure that it intersects with unbounded hybrid time domains. To this end, we define the hybrid prediction horizon as a set with a specific geometry that overcomes this issue and maximizes feasibility.
+Definition III.2 (Hybrid Prediction Horizon)
+A set is a hybrid prediction horizon if there exists a finite nonincreasing sequence such that , , , and
+This prediction structure guarantees that, if a solution pair “lasts long enough,”444By the ordering induced by the structure of hybrid time domains, the length of elapsed hybrid time is succinctly captured by . then its hybrid time “reaches” —meaning that there exists such that . This property is used to prove recursive feasibility in the forthcoming Section V-A. For instance, the choice with , , and leads to the hybrid prediction horizon , which assures that predictions have either at least second of flow or one jump. This hybrid prediction horizon is depicted in Figure 1.
+Remark III.3 (On Particular Constructions of )
+A natural construction of is one that independently limits the amount of flow and the number of jumps. Similar to discrete time MPC, the parameter denotes the maximum number of jumps allowed in the prediction. To limit the amount of flow allowed, let and define as the flow time bound for prediction. The construction of given by
+Note that the set collects pairs in with no larger than seconds and no larger than jumps, in this way, defining more than one possible hybrid time for prediction. Another sample construction is given by
+which, by properly choosing the parameter , compactly captures prediction horizons allowing for arbitrary (but bounded) amount of flow or number of jumps. In fact, given , the construction of in (11) captures all pairs satisfying
+where and . Then, the set in (11) can be interpreted as the region within satisfying the inequalities. For instance, for , the set collects the points with such that , and so on.
+III-C Terminal Constraint Set and Hybrid Cost Functional
+The terminal constraint set specifies conditions that the state has to satisfy at the end of the hybrid prediction horizon. The set is assumed to be a subset of , which captures the state values from which flow or jump might be possible. Given a solution pair of with compact domain and terminal time , let be the sequence such that
+where . If , then the cost of the solution pair is characterized by the hybrid cost functional defined as
+where is called the flow cost, is called the jump cost, and is called the terminal cost. Note that is a functional as it depends on the solution pair .
+Example III.4 (Bouncing Ball Control (revisited))
+Consider the hybrid model of the bouncing ball with a control input in Example II.2, revisited in Example II.5. Since the input affects only the jumps, the flow cost can only depend on the state . Suppose that the control goal is to asymptotically stabilize the bouncing ball to a given energy level , where the total energy is given by in (4). For this case, the flow cost and the terminal cost can be defined using the energy error captured by . The jump cost can be chosen to depend on both the state and the input. Explicit constructions of these functions are given in Example VII.1 in Section VII.
+III-D Constrained OCP
+With the terminal constraint set and the hybrid prediction horizon defined, the minimization is performed over solution pairs of with initial condition , terminal condition belonging to , and terminal hybrid time belonging to .
+Problem III.5
+Given an initial condition ,
+We say that a solution pair is feasible if it satisfies the constraints of (13) with . A feasible solution may neither be maximal nor complete. If, in addition, minimizes , then it is said to be optimal. The feasible set is the set of all ’s with a feasible . The value function is defined as the infimum over all feasible solution pairs at a given initial condition , i.e.,
+Recall that is the terminal time of and that is the set of solution pairs to in (1) from .
+Remark III.6 (On Explicit Constraints)
+Note that while the flow set and jump set implicitly define mixed state-input constraints, any additional explicit state and input constraints can be embedded in the problem by modifying and of the hybrid plant . For example, the bouncing ball control system in Example II.2 with a maximum height constraint can be captured by redefining the flow set therein, namely, , as for a given maximum height . In fact, additional constraints to be satisfied by the closed-loop system solutions can be incorporated by intersecting the flow set and jump set by sets capturing the new constraints. Similarly, if state and input constraints on the continuous-time control system in Example II.6 must to be satisfied, namely, and for some sets and , then the flow and jump sets given in Example II.6 can be simply intersected by , and the resulting hybrid control system should be used in the optimization. In fact, solutions obtained with hybrid MPC, in order to exist, need to satisfy these constraints for all hybrid times—and if they are complete, these constraints are always satisfied and viable. On the other hand, as already introduced, constraints on the terminal time and on the terminal state are specified explicitly, respectively, by a terminal constraint set and a hybrid prediction horizon set.
+Summarizing, given the hybrid plant data , Problem III.5 depends on the following data:
+-
+•
+The hybrid prediction horizon ;
+-
+•
+The flow cost , jump cost , and terminal cost ;
+-
+•
+The terminal constraint set .
+We refer to these as the data of the hybrid MPC problem and denote it as .
+III-E Receding Horizon Implementation
+We have defined all of the ingredients to formulate a receding horizon implementation of hybrid MPC. At each iteration , the implementation performs the following operations:
+-
+Step 1)
+Measure the current state of the plant ;
+-
+Step 2)
+Solve Problem III.5 to obtain an optimal solution pair from the current state;
+-
+Step 3)
+Apply the optimal input to the plant to generate the state trajectory up to hybrid time ;
+-
+Step 4)
+Go to Step 1.
+The iteration starts from the initial condition , generating the optimal solution pair , which is applied up to , and from where a new optimization problem is solved from , and so on. Note that the hybrid time instances also indicate when the -th optimization solving Problem III.5 is performed. A hybrid control horizon, denoted , with the same structure as the hybrid prediction horizon can be employed to regulate these time instances, in this way controlling the length of the input applied to the plant, within its domain of definition, which can be controlled by the hybrid prediction horizon.
+This implementation generates a solution pair, extending the one in Definition II.3.
+Definition III.7 (Hybrid MPC Solution Pair)
+A solution pair is said to be generated by the hybrid MPC algorithm if there exists a sequence with such that the following hold:
+-
+•
+The sequence is strictly increasing and unbounded.
+-
+•
+For every , there exists an optimal solution pair , in the sense of Definition II.3, such that for every satisfying ,
+To illustrate the implementation above, consider the hybrid prediction horizon is given in (10), with parameters and and a hybrid control horizon with the same structure as the hybrid prediction horizon, parametrized by and . Algorithm 1 below describes, in concrete steps, the solution pair generated by hybrid MPC, as formalized in Definition III.7, for this particular case.555When the jump set is empty, Algorithm 1 simplifies to the standard periodic implementation of continuous-time MPC. Similar observations can be made when the flow set is empty, with recovering the standard “one-step ahead” implementation in discrete-time MPC.
+The receding horizon implementation of hybrid MPC is encoded by the inner while loop (Lines 6-8). The initial optimization occurs at time from the initial state (Lines 1 to 3 set the initial optimization time and the initial condition), and the initial optimal control input is applied until units of ordinary time elapse or jumps occur, whichever happens first (Line 6). Upon any of these conditions, Problem III.5 is solved again to find the new input , which is again applied for units of ordinary time or until jumps occur. This process continues indefinitely, for each element in the input sequence. For the -th entry in this sequence, the portion of the state trajectory from to corresponds to the optimal state trajectory computed at time using input . Note that due to the condition in Line 6, is not necessarily constant as a function of .
+A solution to Problem III.5 obtained using the implementation in Algorithm 1 is depicted in Figure 2. The parameters chosen are , , , and . The optimal control input is applied until , which is two seconds after since the hybrid time domain up to that time includes only one jump. The domain of is shown by the dash-dotted purple line, which extends for four seconds of flow time since and only two jumps occur up to that time. At , Problem III.5 is solved again to find the new optimal control input . The resulting optimal control input has a hybrid time domain that, after being shifted forward in hybrid time by , is indicated by solid blue. Since the hybrid time domain of exhibits two jumps without flow in between, the next “optimization event” occurs at , which is two jumps after the prior optimization time . The resulting optimal control input is then applied until , exactly two seconds after . The domain of , shifted by , is depicted in red line in Figure 2. Combining this sequence of optimal control inputs, the hybrid time domain of the resulting optimal state trajectory is shown in Figure 3 from to .
+Under Definition III.7, an appropriate notion of asymptotic stability is given in Section VI. In general, asymptotic stability can be certified by using the value function , without any assumptions on persistence of jumps or flows [2, Theorem 6.3], provided the cost functions defining have basic positive definiteness properties. With persistence of jumps or flows, these requirements can be relaxed, as detailed in Section VI.
+Remark III.8 (About Discretization)
+Problem III.5 is formulated for the hybrid plant in (1). Note that the flows of are not explicitly discretized in the implementation given in Algorithm 1. Such a discretization can be made explicit by choosing a discretization method for and defining solutions to the resulting system on discretized hybrid time domains—indeed, they are defined over hybrid time domains. Discretization for hybrid systems for the purposed of hybrid MPC are presented in [31], along with a method to solve Problem III.5 with discretized flows; see also [30].
+Remark III.9 (Computing a Solution to Problem III.5)
+Computation of an optimal solution to Problem III.5 is a nontrivial task. In certain cases, Problem III.5 can be solved by converting it into a finite-dimensional nonlinear program. The development of general numerical methods to solve Problem III.5 is the current object of research, and can take the form of the maximum principle—see [32] and the references therein. The approaches in [31] and [30] solve Problem III.5 with discretized flows. They algorithms therein use adaptations of off-the-shelf optimization solvers for mixed-integer nonlinear programs, with potentially large computational times. Note that [4] provide conditions under which the optimal cost can be continuously approximated numerically.
+IV Main Assumptions
+We list the basic assumptions imposed on Problem III.5 to ensure feasibility and certify asymptotic stability of a given closed set of interest. The required assumptions resemble those typically assumed in continuous-time and discrete-time MPC, when generalized to the set stabilization problem.666As mentioned in Section III-A, hybrid systems typically have state variables that do not necessarily converge to equilibria (e.g., timers and logic variables). As such, stability theory for hybrid systems considers sets rather than singletons [19, Ch. 3]. Combined with the hybrid prediction horizon defined in Definition III.2, the forthcoming assumptions guarantee most of the properties required to establish asymptotic stability, with the exception of positive definiteness of the value function, which is studied in depth in the forthcoming Sections V-D and V-E, as it can be achieved in multiple ways.
+The following assumptions assert basic positive definiteness properties and bounds on the cost functions. These properties are used in establishing positive definiteness of the value function and asymptotic stability of the closed-loop system resulting from using hybrid MPC.
+Assumption IV.1
+Given a hybrid plant , a closed set , flow cost , and jump cost ,
+-
+(W1)
+There exists a class- function such that for each .
+-
+(W2)
+There exists a class- function such that for each .
+Assumption IV.2
+Given a closet set , a terminal constraint set , and a terminal cost function , there exists and a class- function such that for each .
+The key stabilizing ingredient of our hybrid MPC algorithm is given by the following familiar CLF-like assumption requiring the existence of a (static) state-feedback pair . Below, forward pre-invariance of means that every maximal closed-loop solution with initial state in is complete and stays in [14, Definition 3.1], and forward completeness of means that for every point there exists a complete solution. A weaker notion of invariance is weak forward invariance, which is used in the next section and simply requires that from each point in , there exists a maximal and complete solution that stays in .
+Assumption IV.3
+Given a hybrid plant , a closet set , flow cost , jump cost , terminal constraint set , and terminal cost , there exists a state-feedback law such that the terminal constraint set is forward pre-invariant and forward complete for the hybrid system in (9). Moreover, the terminal cost is differentiable on an open set containing , and
+The condition during flow in (15) resembles the one the continuous-time MPC literature. Therefore, it is possible to satisfy this condition, at least locally, using standard techniques relying on linearization in the special case when the flow cost and terminal cost are quadratic. The same is possible for the condition at jumps in (15). When (respectively, ) is allowed to be zero, the terminal cost can be viewed as a Lyapunov function with the feedback , provided the trajectories of the hybrid closed-loop system have persistent jumps (respectively, flows).
+Remark IV.4 (About Existence of Solutions)
+Any MPC-type algorithm would only be able to issue a control input when the optimization problem at the current state has a solution. Existence of a solution to Problem III.5 from a feasible initial condition follows directly from [4] under standard regularity conditions,777Though the results in this paper assume that optimal (hence, feasible) solutions exist, for the integral in the hybrid cost functional in (12) to exist, the composition needs to be (Lebesgue) measurable. or from [20]. In particular, the approach in [4] rewrites the problem into the Mayer form
+where with representing the running cost and is an autonomous system arising from the conversion to the Mayer form, and studying its existence of solutions—see [4, Section 6] for examples constructing the Mayer form system . More precisely, [4, Theorem 8] ensures existence of solutions to Problem III.5 from the feasible set when is lower semicontinuous and is closed.
+V Properties of the Optimal Control Problem
+This section presents the properties pertinent to Problem III.5 that are used to show asymptotic stability of .
+V-A Forward Invariance of the Feasible Set
+The initial results are in the same spirit as those in [2], stated in more generality.
+Proposition V.1
+If there exists a state-feedback law such that the terminal constraint set is weakly forward invariant for the hybrid system in (9), then .
+Proof:
+Since for each point in there exists a maximal and complete solution, each trajectory to starting from stays in . The domain of each such trajectory intersects with the prediction horizon , due to the structure of the hybrid prediction horizon in Definition III.2. Hence, belongs to . ∎
+Proposition V.2
+Suppose that there exists a state-feedback law such that the terminal constraint set is forward pre-invariant and forward complete for the hybrid system in (9). Then, each feasible solution pair to satisfies for each .
+Proof:
+The proof relies on the extension of the solution pair from the terminal point by aid of the feedback . That is, we take a solution pair generated by the feedback starting from , where is the terminal time of . That is, we let for all with , and , and observe that is a solution pair to . Then, we consider the solution pair from onwards, which is itself a solution pair, say . We notice that from onwards, stays in the terminal constraint set . Finally, we note that there must exist after time that belongs to the prediction horizon . Hence, the truncation of at time is a feasible solution pair to , since and . ∎
+Proposition V.1 and V.2 show that the terminal constraint set is contained in the feasible set, and recursive feasibility is maintained with the moving horizon implementation, respectively. The conditions in Proposition V.1 and the inequalities in Assumption IV.3 ensure an upper bound on the value function over the terminal constraint set , in terms of the terminal cost .
+V-B Continuity of the Value Function
+Combining the property of established in Proposition V.1 with the bounds obtained in Assumption IV.3 is the first step towards establishing as a Lyapunov function for the hybrid MPC algorithm. The terminal cost upper bounds not only the value function on the terminal constraint set, but also the cost of feasible solutions generated by . To establish this result, we exploit similar techniques to those in the standard MPC literature, see, e.g., [24] and [21, Section 5.3].
+Lemma V.3
+Suppose that Assumption IV.3 holds. Then,
+-
+1.
+and satisfy
+-
+2.
+For each and each feasible solution pair starting from generated by the state-feedback law , and satisfy
+Proof:
+Since Assumption IV.3 holds, Proposition V.1 implies that . Let be a feasible solution to Problem III.5 with and, without loss of generality, let be the terminal time of and be the associated sequence of generalized jump times. Then, using (12),
+Since is forward pre-invariant for , remains in and, by (15),
+Item 2 follows from the definition of in (14) since the value of is the result of minimizing the cost functional over all such feasible solution pairs. Item 1 follows from the fact that the set is forward complete and that the cost obtained by any optimal solution cannot be larger than the cost for the solution generated using . ∎
+Proposition V.4
+Under Assumption IV.3, for each , there exists such that for each satisfying .
+V-C Decreasing Properties of the Value Function
+Next, we show that is upper bounded by a nonincreasing function along optimal trajectories, which decreases during flows (respectively, at jumps) if (respectively, ) satisfies the lower bound in (W1) (respectively, in (W2)). The proof follows the steps used in the standard MPC literature, see, e.g., [24, Section 3.4] and [21, Lemma 5.4].
+Lemma V.5
+Suppose Assumption IV.3 holds. Then, for each optimal solution and each ,
+where is the sequence of generalized jump times of the truncation of up to time .
+Proof:
+Given the optimal solution , we recall the feasible solution pair derived in the proof of Lemma V.2 that starts from . Call this solution pair , and note that after time , corresponds to a solution generated by the feedback , say , where is the terminal time of . Then, observe that as is not optimal. The following holds:
+The bound follows from the fact that starts from and that is not optimal. The equality captures the following fact: the cost of , which is up to , plus the cost of is equal to the cost of up to plus the cost of . By solving for the cost of from this relationship we obtain the equality above. Finally, since , the term is nonpositive by Lemma V.3, leading to the desired result as since is optimal. ∎
+V-D Solution-dependent Conditions for Positive Definiteness of the Value Function
+To ensure that the value function is positive definite and bounded from below by a positive definite function, we start by assuming the existence of a positive definite function such that an appropriate combination of the following conditions holds for every optimal solution pair :
+-
+P1)
+there exist , with such that and
+for all satisfying ;
+-
+P2)
+there exist with such that and
+for all satisfying ;
+-
+P3)
+for some such that ;
+-
+P4)
+, where is the terminal time of ;
+-
+P5)
+There exist an open neighborhood of and a continuous function such that for all such that .
+Section V-E provides sufficient conditions for these properties. Note that P2) implies P1), and that P3) implies P1).
+Theorem V.6
+(Positive Definiteness of the Value Function) Given a hybrid plant as in (1), the data defining Problem III.5, and a closed set , if there exists a positive definite function such that one of the following conditions holds:
+-
+1.
+Every optimal solution pair satisfies P1), and and are positive definite with respect to ;
+-
+2.
+Every optimal solution pair satisfies P2) and is positive definite with respect to ;
+-
+3.
+Every optimal solution pair satisfies P3) and is positive definite with respect to ;
+-
+4.
+Every optimal solution pair satisfies P4) and is positive definite with respect to ;
+- 5.
+- 6.
+- 7.
+then there exists a positive definite function such that the value function satisfies
+for each such that an optimal solution pair exists. Furthermore, the function is class- if the functions and satisfy (W1) and (W2), respectively, and is class-.
+Proof:
+Pick and suppose that there exists an optimal solution pair starting from . Let be the sequence of generalized jump times of , namely, it satisfies . Therefore, we have
+Now, suppose that item 1 holds. Using the fact that and are positive definite with respect to , takes on nonnegative values, the properties of the solution for hybrid times between and coming from item 1 with positive definite function obtained from P1), there exists a positive definite function such that888We use instead of as integration variable to simplify notation.
+When item 2 holds, similarly, using the fact that is positive definite with respect to , the properties in item 2, and the fact that is nonnegative, it follows that there exists a positive definite function such that
+The case when item 3 holds follows similarly. The case when item 4 holds is immediate due to being positive definite, from where there exists a positive definite function satisfying , which is a lower bound for . The cases in items 5, 6, and 7 under conditions P1)-P4) follow directly from combinations of the steps above. The case in item 7 under condition P5) is shown next.
+Let , which is positive from the construction in Definition III.2. With and (assumed to be p.d. without loss of generality) coming from P5), fix such that implies . Define the function as for all . Note that is continuous. This property can be shown via Berge’s maximum theorem [6, Theorem 1.4.16], similar to the proof of Lemma A.1, by showing that the set-valued mapping associating the interval with each is upper and lower semicontinuous.999A set-valued mapping is upper semicontinuous at a point with compact if for any , there exists such that [6, Definition 1.4.1]. It is said to be lower semicontinuous at a point if for any and for any sequence converging to , there exists a sequence with for all , which converges to [6, Definition 1.4.1]. These notions should not be confused with upper and lower semicontinuity of (extended) real-valued functions. Take any . Let be a feasible solution pair from such that . Define the scalar . Observe that for all satisfying , we have ; the converse would imply . Therefore, from the p.d. property of , there exists a p.d. function such that
+and, if there exists so that , then
+for some p.d. function , from the p.d. property of .
+Suppose there exists no that satisfies . Then, because , it must be that , and hence by (20), we have from (12) that . On the other hand, if exists so , then (21) implies . Thus, it follows that
+for all feasible such that . Note that depends continuously on on since depends continuously on on . Moreover, . Now, let be a feasible solution pair from such that . Since can reach no sooner than by flowing, a similar analysis shows that (22) holds with instead of . Combining these bounds with the fact that depends continuously on on and approaches zero as tends to zero, it follows that for every feasible solution pair , where the function is defined as if and if . Consequently, for all . ∎
+Remark V.7
+The solution-dependent conditions in Theorem V.6 guarantees required properties to guarantee positive definiteness of the value function. Conditions P1)-P4) therein relax positive definiteness properties of the stage costs and terminal cost, in particular, to allow for the stage cost for flows or jumps to be zero, which permits the user to not associate a cost to flows or jumps, respectively. For instance, for solution pairs with persistent jumps, item 3 relaxes positive definiteness of the flow cost and terminal cost by assuming a property on optimal solution pairs originating away from – see condition P3). This property guarantees that is away from at a jump time, which ensures that the cost of is nonzero. A similar relaxation is possible for the jump cost , via item 2, through the use of P2). Note that the conditions in item 2 relax those in item 1 by requiring the flow cost to be positive definite when flows are persistent, as captured by P2). A similar comment applies to item 3. Item 7 exploits condition P5) to establish the lower bound, similar to results in the standard MPC literature, at the price of requiring positive definiteness of , , and . Note that P5) implies the existence of a uniform upper bound on the magnitude of the velocity of the state trajectories from nearby , and that is satisfied when is continuous, is compact, and for some closed set and some compact set , which corresponds to the typical assumptions on state and input constraints in the MPC literature.
+Before stating solution-independent sufficient conditions for P1)-P4), we revisit the sample-and-hold control example.
+Example V.8 (Sample-and-Hold Control (revisited))
+Consider the digital control system in Example II.6 and suppose that the function is linear, i.e., for some matrices and . Let . Along the first period of flow, a solution pair is given by and
+Note that the function is continuous and is nonsingular for each . Moreover, regardless of the choice of the horizon , due to the timer dynamics, the sequence defining is such that . Since singular values vary continuously in the matrix entries, there exists such that
+for all . Hence, , and P3) holds with for each .
+V-E Sufficient Conditions for P1-P4
+P1-P4 can be verified via infinitesimal conditions if the flows of satisfy a Lyapunov-like inequality that limit the rate of convergence to and prohibit finite-time convergence, or if appropriate local boundedness conditions hold.
+Proposition V.9
+Given a hybrid plant as in (1), the data defining Problem III.5, and a closed set , suppose that one of the following conditions holds:
+-
+1.
+Given a function that is continuously differentiable101010This condition could as well be formulated for a locally Lipschitz function through the use of the generalized Clarke derivative. on an open set containing , suppose that there exist class- functions and , and constants and such that
+-
+2.
+Suppose that there exist a continuous function and satisfying
+Then, there exists a class- function such that every feasible solution pair to satisfies P2), P3), or P4). Furthermore, if, in addition,
+-
+a)
+is such that
+-
+i)
+there exists s.t. for all ,
+then there exists a class- function such that every feasible solution pair to satisfies P1);
+-
+i)
+- b)
+The proof of Proposition V.9 uses the following lemmas. These lemmas involve the data of and the closed set . Their proofs are in Appendix A.
+Lemma V.10
+Lemma V.11
+We are now ready to present the proof of Proposition V.9.
+Proof:
+If either item 1 or item 2 holds, an application of Lemma V.10 or Lemma V.11 implies that there exists a class- function such that every solution pair to satisfies the following: for each such that , we have for all such that . Take a feasible solution pair . We have the following cases:
+In the case of the time horizon being bounded away from the origin considered in item a).a)i), P1) holds with since each feasible solution pair is such that there exists such that , which, in turn, implies that there exists such that and .
+Finally, P2) or P4) hold under the conditions in b). Without loss of generality, suppose that in (25) is such that there exists such that for all . With coming from (25), let
+which satisfies for all . Continuity of follows via Berge’s maximum theorem [6, Theorem 1.4.16] by showing upper and lower semicontinuity of the set-valued map mapping each to the compact interval . Indeed, lower semicontinuity of the mapping can be verified directly, while upper semicontinuity follows from the fact that the mapping is outer semicontinuous (since its graph is closed relative to [19, Lemma 5.10]) and locally bounded, due to [19, Lemma 5.15]. Let and
+and similarly, for every , let . Note that is continuous, positive definite, upper bounded by , and lower bounded by zero. Hence, there exists a continuous function that is positive definite, increasing, and such that for all . It follows that, for any continuous solution pair to with , satisfying implies . To show this implication, first note that, by definition of , is upper bounded by and that, since is upper bounded by , . Using (25) and the construction of above, we have for all such that . Then, the lower bound on can be obtained by evaluating the latter inequality at , leading to . In other words, is a lower bound on the ordinary time to reach the -disc around from the -disc around via flows, for each . Finally, for every , let , and note that and are continuous, nondecreasing, and positive definite.
+Let be an optimal solution pair and be a sequence such that , with . First, suppose for all . Then, following the same arguments as before, one can deduce that for any and satisfying , we have , due to the fact that the distance of to does not decrease during jumps, in light of (26). Therefore, either there exists such that and every with satisfies , or letting , . In other words, P2) or P4) holds , where
+Next, suppose that there exists such that for every , , but does not necessarily hold for all . Let . If there exists such that , let be the smallest such , otherwise, let . Then,
+for all , and consequently,
+where denotes the -times composition of , e.g., is the identity function and . In addition, if , since is nondecreasing, by (29),
+for all , which, as is increasing, implies that, for all ,
+On the other hand, if , then again by (29),
+Given , let
+Then, if , by (30), for every satisfying . Otherwise, by (31), . Combining this bound with the one in the previous case when for all , it follows that P2) or P4) holds with for all , where is defined in (28). ∎
+Remark V.12
+Example V.13 (Bouncing Ball Control (revisited))
+Consider the data of the bouncing ball system in Example II.2 and the total energy function defined in (4). Following the control goal stated in Example III.4, let
+with for some . This definition of the set corresponds to the limit cycle of the autonomous bouncing ball starting from when . Since is compact and is positive definite (on the domain ), the function satisfies (23) for some and class- functions and , as is continuous. In fact, these functions can be chosen independently of , due to radial unboundedness of . Moreover, for all , so (24) holds with arbitrarily large .
+Unlike item 1 in Proposition V.9, (25) does allow for finite-time convergence to during flows. Existence of a continuous function and satisfying (25) is guaranteed when for a closed set and compact set , provided is compact and is continuous.
+Example V.14 (Sample-And-Hold Control (revisited))
+Given a compact set , we revisit the sample-and-hold control system in Example II.6 with flow and jump sets
+Note that the only difference between these sets and those in Example II.6 is that the state component and the input are restricted to the compact set . Using these sets, we consider the compact set , requiring convergence of and to zero. Item 2 in Proposition V.9 holds as the flow map is affine and does not depend on . We also note that for every , so item b).b)i) holds with as the identity. Item b).b)ii) holds since each solution flows for some nonzero amount of ordinary time. Then, by Proposition V.9, either P2) or P4) hold.
+Example V.15 (Bouncing Ball Control (revisited))
+Given a compact set , consider the data
+This data represents a modification of the bouncing ball system in Examples II.2 and V.13, where the input affects flows instead of jumps. Suppose and, similar to the definition of in (32) for , let
+Item 2 in Proposition V.9 holds by continuity of and compactness of , since is compact. To show that P2) holds, it suffices to note that the jump map is continuous, and tends to infinity in as tends to infinity, and importantly, if and only if . Note that if the point were to be excluded from , this condition would not hold since . Hence, item b).b)i) holds and, by Proposition V.9, either P2) or P4) hold.
+VI Asymptotic Stability
+In this section, we establish asymptotic stability of the set for the closed-loop system resulting from controlling the hybrid plant (1) with our hybrid MPC algorithm. Since such a closed-loop system cannot be written as an autonomous system, we introduce the following asymptotic stability notion (cf. [19, 40]).
+Definition VI.1
+The hybrid MPC algorithm is said to render the set asymptotically stable for if has unique state trajectories and the following hold:
+-
+(E)
+There exists such that for each satisfying , there exists a solution pair generated by the hybrid MPC algorithm starting from .
+-
+(S)
+For each , there exists such that for each solution pair generated by the hybrid MPC algorithm, implies for all .
+-
+(A)
+Each maximal solution pair generated by the hybrid MPC algorithm is complete and satisfies .
+Item (E) in Definition VI.1 implies that, from a neighborhood of , either no solution pair exists or, if , a solution pair can be generated by the hybrid MPC algorithm. For this property to hold, it is clear that a solution to Problem III.5 must exist from those points—see Remark IV.4. While not emphasized in Definition VI.1, note that in general, from any initial condition , there might be infinitely many solution pairs generated by the hybrid MPC algorithm. This is for two reasons. First, the minimizers of the cost functional might be nonunique; that is, given , there may be multiple solution pairs achieving the infimum in (14). Second, assuming that the recursive feasibility property stated in Proposition V.2 holds, the optimal control input computed at optimization time —see Section III-E— can be updated at any (hybrid) time before the domain of ends, that is, at any , as long as .
+Theorem VI.2
+Given a hybrid plant as in (1), the data defining Problem III.5 with having and , and a closed set , suppose that Assumptions II.7, IV.1, IV.2, and IV.3 hold. Furthermore, suppose that there exists a class- function such that the value function in (14) satisfies111111Sufficient conditions for (19) to hold are given in Section V-E. (19) for each and that an optimal solution pair to Problem III.5 exists.121212Sufficient conditions for such existence are given in [4]; see Remark IV.4. Then, the hybrid MPC algorithm renders the set asymptotically stable for the hybrid system if any of the following statements are true:
+Proof:
+The proof proceeds as follows. First, a complete optimal solution with initial condition in a (small enough) neighborhood of the set is constructed by induction. Using properties of established earlier, we show that is a Lyapunov function certifying Lyapunov stability of . Finally, attractivity of is shown using the assumptions in the different items in the statement.
+Using Assumption II.7, Proposition II.8 implies that, for any given input, has unique state trajectories. From Proposition V.1, we have that . Then, pick and note that existence of optimal solutions from implies that, for every satisfying , there exists an optimal solution starting from . Now, the structure of the hybrid prediction horizon in Definition III.2 implies that there exists such that for any . Hence, the terminal time of satisfies . In addition, due to the recursive feasibility property stated in Proposition V.2 and existence of optimal solutions, there exists an optimal solution pair starting from , whose terminal time satisfies . Then, following Definition III.7, the concatenation of and form a solution pair. Specifically, defined as follows is a solution pair to : for every such that ,
+and for every such that and ,
+Setting , the terminal time of is such that . Similarly, can be concatenated with an optimal pair from with terminal satisfying . By induction, the resulting solution pair starts from and constitutes a complete optimal solution generated by the hybrid MPC algorithm.
+Next, we establish that the value function is a Lyapunov function. Since from Proposition V.1, by Assumption IV.2, there exists a class- function, denoted , such that for each satisfying , for some . By assumption, there exists a class- function such that for each such that an optimal solution pair exists. Hence, is positive definite with respect to . Moreover, by Lemma V.5, for each solution pair generated by hybrid MPC, for each . Then, given there exists such that, for each satisfying , each (complete) optimal solution pair constructed as above satisfies α^*(—x(t,j)—_A) ≤J^*(x(t,j))≤J^*(ξ) ≤α_2(—ξ—_A) for each , from where . Hence, is stable in the sense of item (S) in Definition VI.1.
+To prove attractivity, using the complete solution pair generated by hybrid MPC constructed at the beginning of this proof, we show that approaches zero as approaches infinity. First, let and be nonnegative and such that for each and for each , respectively. From the inequality in Lemma V.5, we obtain, for each ,
+where is the sequence of generalized jump times of the truncation of up to time —see (7). Next, we show attractivity when items (AS1)-(AS3) hold, one at a time.
+First, suppose that item (AS1) holds. Then, (34) holds with and for the class- functions and given in item (AS1), via (W1) and (W2). Let
+As for all , since is a class- function, implies . Assuming the opposite, we have for all . By continuity of on obtained from Proposition V.4, and the fact that since is positive definite relative to by assumption, this means that there exists so for all . Let be the sequence of optimization times of . By Lemma V.5, for each ,
+Summing over ’s in and taking limit on each side
+which contradicts as and is finite. Therefore, it follows that , and consequently , which completes the proof.
+Now, suppose item (AS2) is the one that holds. It follows that (34) holds with and for the class- function given in item (AS2) via (W2). With as in (35), we follow the steps of the proof for the case when item (AS1) holds, but in this case, through recursive use of (34), we obtain
+where are the jump times of . Proceeding as above and using that is a class- function, assuming leads to a contradiction showing that .
+The case when item (AS3) holds follows similarly. In this case, the second term in (34) takes the form of a sum of integrals (for each period of flow) with the integrand , where the union of the domains of integration is , and similar arguments apply, for which the fact that is a class- function is used. ∎
+Remark VI.3
+The conditions in Theorem VI.2 involve conditions on the data of the hybrid plant (Assumption II.7), on the data defining Problem III.5 (Assumptions IV.1, IV.2, and IV.3), and on the existence of optimal pairs, which couples both data. The required class- function can be obtained from the results in Sections V-D and V-E. Note that when the hybrid MPC algorithm generates solution pairs with persistent jumps, we do not insist on the flow cost to be positive definite with respect to the distance of the state to the set —similarly when the solution pairs have persistent flows. Persistence of jumps or flows are usually inherited from the open-loop system . For example, for the bouncing ball in Examples II.2 and V.13, every complete solution pair has persistent jumps (see Section I). Consequently, every solution pair generated by the hybrid MPC algorithm has persistent jumps, regardless of the OCP formulation.
+VII Examples
+In this section, we implement the proposed hybrid MPC algorithm in the two examples introduced and revisited throughout the paper. The files used in simulations are available at github.com/HybridSystemsLab/HybridMPC.
+Example VII.1
+We illustrate the implementation of the hybrid MPC algorithm in Algorithm 1 in the bouncing ball control system in Example II.2 with and constraints in defined by a compact set . Using the definition of the total energy in (4), define the set to stabilize as the constant level of energy for some , namely
+where ; see Examples III.4 and V.13. Next, we define the data associated with hybrid MPC (see Section III) so as to satisfy the assumptions in Theorem VI.2.
+The hybrid prediction horizon is chosen as in (10), with and . This set is such that there exists such that for each , from where it follows that item a.i in Proposition V.9 holds.
+The terminal set is chosen as . Pick We define the terminal cost as
+where is defined in Example V.13. By the choice of , is positive definite with respect to . Moreover, Assumption IV.2 holds with radially unbounded and any . From Example V.13 and the properties of , exploiting item 1 and item a in Proposition V.9, we have that P1) holds for each solution to . We denote the function satisfying P1) as .
+To define the hybrid closed-loop system in (9), we proceed as follows. Since the bouncing ball control system does not have inputs that affect the flow map, we choose the state-feedback law as an arbitrary function with its range in . The state-feedback law is defined as
+The resulting maps , and the sets , defining the data of (9) are given by , for each , , and
+for each , respectively.
+Next, we design the flow cost and jump cost so that the CLF condition in Assumption IV.3 holds with and as designed above. To that end, we define the flow cost as
+The jump cost is chosen as follows:
+if , and
+otherwise, for all .
+Next, we check that the CLF conditions in (15) hold. For starters, satisfies (W1) due to radial unboundedness of in , that is, approaches infinity as approaches infinity in . Furthermore, since , it can be shown by direct computation that for all . Now, satisfies (W2) due to the choice of . More specifically, the condition on ensures that the coefficient of the term is positive and is positive definite, in the sense that, for each , is equal to zero if and positive otherwise. It can be shown that for each . In particular, since for each satisfying , and for each ,
+for each satisfying , where we use the fact that and on . On the other hand, given any satisfying , since , we have
+Hence, (15) holds.
+Note that since and satisfy Assumption IV.1, and P1) holds for each solution to , from Theorem V.6 and [4, Section 6.2] we have that there exists a class- function such that the value function in (14) satisfies (19) for each and that an optimal solution pair exists from each such . Furthermore, one can adapt the steps in [19, Example 2.12] to show that is forward pre-invariant for , leading to , which is equal to , implying that every maximal solution to the closed-loop system using hybrid MPC is complete.
+Next, we simulate the bouncing ball controlled by hybrid MPC. The parameters used in the simulation are , , , which leads to , and a prediction horizon of the form (10) with and . Problem III.5 is solved in MATLAB using the fmincon function by converting it into a finite-dimensional nonlinear program, for which we exploit the fact that the total energy —and therefore the flow cost —is invariant during flows (namely, is conserved during flows) and that the state trajectory of the bouncing ball during flows can be written in closed form. The closed-loop system is simulated using the Hybrid Equations Toolbox [37]. After every optimization event, if the predicted state trajectory jumps, the next optimization is triggered at the next jump time; otherwise, the next optimization occurs at the terminal time of the predicted state trajectory. Figure 4 depicts closed-loop state trajectories for the controlled bouncing ball from three initial conditions: 1) , shown in blue, 2) , shown in black, 3) , shown in green. Figure 5 shows the total energy associated with these trajectories. The trajectory from exhibits a jump at since a jump is possible from such initial condition. The hybrid MPC controller injects energy equal to at that jump, and the trajectory converges and stays at the desired level of energy from there on. The trajectory from exhibits a similar behavior, but after the first jump at where . Such “dead beat” convergence property is due to the only constraint on the control input being . The effect of this constraint is visualized in the trajectory from , which has initial energy much larger than and, due to the control input having to be nonnegative, cannot remove energy in one jump.
+Example VII.2 (Sample-and-Hold Control (revisited))
+We synthesize our hybrid MPC algorithm to control the system in Example II.6 using the sample-and-hold paradigm. With the flow and jump sets given in Example II.6, and the compact set and linear plant dynamics defined by in Example V.8, since is such that both and are zero, the control objective for hybrid MPC is to drive the state and the input of to zero asymptotically, and render the set Lyapunov stable. To this end, following the structure of the stage cost used in the linear quadratic regulator, the stage cost for flows is chosen as
+where , , and is a symmetric positive definite matrix that is to be chosen (see below). Assuming that jumps do not accrue cost, the stage cost for jumps is chosen to be the zero function. The terminal cost is chosen as , where , , and is a symmetric positive definite matrix, chosen next.
+The matrices and are chosen as follows. Given matrices and , and the compact set , choose a matrix , a positive definite symmetric matrix , , and such that
+is such that
+and, for each ,
+where and . The choice of stems from the fact that the hybrid closed-loop system resulting from using the state-feedback controller is such that on and that . Then, Assumption IV.3 holds if on , which, since and do not depend on , is guaranteed from (36). Recall that Example V.14 establishes via Proposition V.9 that P2) holds. Then, from item 2 in Theorem V.6, (19) holds.131313Note that Example V.8 establishes that P3) holds with a class- function , but since is the zero function, Theorem V.6 cannot be employed to establish that (19) holds. Note that from the construction of the hybrid plant in Example II.6, every complete solution has persistent flows and (AS3) holds. Since the other assumptions in Theorem VI.2 hold, the hybrid MPC algorithm renders asymptotically stable for in Example II.6.
+Example VII.3 (Thermostat Control)
+The evolution of the temperature of a room controlled by a heater that can either be on or off is given by
+where is the temperature of the room, denotes the effective temperature outside of the room, represents the capacity of the heater, and the logic state represents whether the heater is on or off. When , the heater is on and when , the heater is off. Our goal is to design a control algorithm that steers the temperature to a desired temperature range
+where , where . To facilitate the formulation of the optimization problem, we treat as an additional logic state and incorporate an input, denoted , playing the role of the decision variable for the optimization problem. The resulting system is given as in (1), with state , input , and data given by
+With this data, flows of the plant are allowed when is zero. In this regime, the temperature evolves according to its continuous-time model and remains constant as leads to . At jumps, which are triggered when is equal to one, the update law toggles the value of from to or from to . According to the goal stated above, the set to stabilize is given by the range of desired temperature, namely,
+Next, we define the data associated with hybrid MPC (see Section III) so as to satisfy the assumptions in Theorem VI.2. The hybrid prediction horizon is chosen as in (10), with and . This set is such that there exists such that for each , from where it follows that item a.i in Proposition V.9 holds. The flow cost is defined to penalize the cost of flow when the temperature is not in the desired range, as follows: for each ,
+where penalizes the temperature when larger than the desired maximum, penalizes the temperature when smaller than the desired minimum, and penalizes the on position of the heater when the temperature is larger than the desired maximum. The jump cost also penalizes the temperature when outside the desired range and, in addition, aims at reducing the number of switches of the heater. It is chosen as follows: for each ,
+where penalizes the temperature when larger than the desired maximum, penalizes turning heater on, penalizes temperature variations within the desired range, penalizes turning heater on if within the desired range, and penalizes the temperature when smaller than the desired minimum.
+The terminal constraint set is defined as
+where the sets and are given by
+with
+This construction of constrains the temperature and the heater state to assure stabilizability of the set . The terminal cost function is defined as
+where the terms and penalize being at the “wrong” mode. Picking the feedback as if , and one otherwise, and the feedback as if , and zero otherwise, we obtain the following properties for the variation of along flows and jumps of the hybrid closed-loop system in (9): for every we have that is given by
+and, for every , is equal to
+It follows that, with the choices of and above, Assumption IV.3 holds and that is forward pre-invariant for . From item P5) in Theorem V.6, there exists a class- function such that the value function in (14) satisfies (19) for each . Finally, from [4, Section 6.1], we have that an optimal solution pair exists from each such .
+VIII Conclusion
+This paper formalizes an MPC framework for hybrid dynamical systems. The formulation allows to quantify the cost and predict trajectories over hybrid time domains. Conditions guaranteeing recursive feasibility, positive definiteness of the value function and its decrease along solutions, leading to asymptotic stability of a closed set are proposed. The conditions involve the data of the system and the OCP, leading to checkable design conditions. Future work will focus on the hybrid MPC design to satisfy other dynamical properties of interest, such as safety, temporal logic, and robustness. An add-on to our Hybrid Equations Toolbox (HyEQ) for Matlab/Simulink [37] to compute numerical solutions of Problem III.5 is currently being developed. Employing the results in [13] to relax the conditions for positive definiteness of the value function as suggested by an anonymous reviewer is also part of future work.
+References
+- [1] (2018-08) A model predictive control framework for hybrid systems. In Proceedings of the 6th IFAC Conference on Nonlinear Model Predictive Control (NMPC), Vol. 51, pp. 128–133. Cited by: §I-B.
+- [2] (2019-07) Asymptotically stabilizing model predictive control for hybrid dynamical systems. In Proceedings of the American Control Conference, pp. 3630–3635. Cited by: §I-B, §III-E, §V-A.
+- [3] (2020-07) Model predictive control for hybrid dynamical systems: sufficient conditions for asymptotic stability with persistent flows or jumps. In Proc. Amer. Cont. Conf., pp. 1791–1796. Cited by: §I-B.
+- [4] (2023-03) Regularity of optimal solutions and the optimal cost for hybrid dynamical systems via reachability analysis. Automatica 152. Cited by: Remark III.9, Remark IV.4, Remark IV.4, Example VII.1, Example VII.3, footnote 12.
+- [5] (2002) Impulse differential inclusions: a viability approach to hybrid systems. IEEE Transactions on Automatic Control 47 (1), pp. 2–20. Cited by: §I-A.
+- [6] (2009) Set-valued analysis. Birkhäuser, Basel. Cited by: §A-C, §V-D, §V-E, footnote 9.
+- [7] (2006) Suboptimal explicit receding horizon control with guaranteed stability. Automatica 42 (3), pp. 457–462. Cited by: §I-A.
+- [8] (2002) The explicit linear quadratic regulator for constrained systems. Automatica 38 (1), pp. 3–20. Cited by: §I-A.
+- [9] (1999) Control of systems integrating logic, dynamics, and constraints. Automatica 35 (3), pp. 407–427. Cited by: §I-A.
+- [10] (2019-10) Hybrid dynamical systems with hybrid inputs: definition of solutions and applications to interconnections. International Journal of Robust and Nonlinear Control 30, pp. 5892–5916. Cited by: footnote 2.
+- [11] (2017) Predictive control for linear and hybrid systems. Cambridge University Press. Cited by: §I-A, §I-A.
+- [12] (2010) Model predictive control techniques for hybrid systems. Annual Reviews in Control 34 (1), pp. 21–31. External Links: ISSN 1367-5788 Cited by: §I-A.
+- [13] (2008) Control lyapunov functions and zubov’s method. SIAM Journal on Control and Optimization 47 (1), pp. 301–326. Cited by: §VIII.
+- [14] (2019-06) Forward invariance of sets for hybrid dynamical systems (Part I). IEEE Transactions on Automatic Control 64 (6), pp. 2426–2441. Cited by: §IV.
+- [15] (1998) A quasi-infinite horizon nonlinear model predictive control scheme with guaranteed stability. Automatica 34 (10), pp. 1205–1217. Cited by: §I-A.
+- [16] (2007) Robust model predictive control of discrete-time switched systems. IFAC Proceedings Volumes 40 (14), pp. 208–212. Cited by: §I-A.
+- [17] (1980) Dynamic matrix control – a computer control algorithm. In Joint Aut. Cont. Conf., pp. 72. Cited by: §I-A.
+- [18] (2006) Nonlinear model predictive control: a sampled-data feedback perspective. Ph.D. Thesis, Stuttgart Univ.. Cited by: §I-A, Example II.6.
+- [19] (2012) Hybrid dynamical systems: modeling, stability, and robustness. Princeton University Press, Princeton University Press. External Links: Document Cited by: §A-C, §I-A, §II-A, Example II.5, Remark II.9, §V-E, §VI, Example VII.1, footnote 3, footnote 6.
+- [20] (2019) Existence of optimal controls on hybrid time domains. Nonlinear Analysis: Hybrid Systems 31, pp. 153–165. Cited by: Remark IV.4.
+- [21] (2017) Nonlinear model predictive control. 2nd edition, Springer. Cited by: §I-A, §V-B, §V-C.
+- [22] (2004-06) Model predictive control of continuous-time nonlinear systems with piecewise constant control. IEEE Transactions on Automatic Control 49 (6), pp. 900–906. External Links: Document, ISSN 0018-9286 Cited by: §I-A.
+- [23] (1990) Receding horizon control of nonlinear systems. IEEE Trans. Aut. Cont. 35 (7), pp. 814–824. Cited by: §I-A.
+- [24] (2000) Constrained model predictive control: stability and optimality. Automatica 36 (6), pp. 789–814. Cited by: §V-B, §V-C.
+- [25] (2014) Model predictive control: recent developments and future promise. Automatica 50 (12), pp. 2967–2986. Note: External Links: ISSN 0005-1098 Cited by: §I-A, §I-A.
+- [26] (2005) Predictive control of switched nonlinear systems with scheduled mode transitions. IEEE Trans. Aut. Cont. 50 (11), pp. 1670–1680. Cited by: §I-A.
+- [27] (2008) Robust predictive control of switched systems: satisfying uncertain schedules subject to state and control constraints. International Journal of Adaptive Control and Signal Processing 22 (2), pp. 161–179. Cited by: §I-A.
+- [28] (1999) Model predictive control: past, present and future. Comp. & Chem. Eng. 23 (4-5), pp. 667–682. Cited by: footnote 1.
+- [29] (2012) Model predictive control of switched nonlinear systems under average dwell-time. Journal of Process Control 22 (9), pp. 1702–1710. Cited by: §I-A.
+- [30] (2025) Solving hybrid model predictive control problems via a mixed-integer approach. In Model Predictive Control, pp. 83–109. Cited by: Remark III.8, Remark III.9.
+- [31] (2019-12) A model predictive control framework for asymptotic stabilization of discretized hybrid dynamical systems. In Proceedings of the 2019 IEEE Conference on Decision and Control, pp. 2356 – 2361. Cited by: Remark III.8, Remark III.9.
+- [32] (2017-Sept) On the relation between the minimum principle and dynamic programming for classical and hybrid control systems. IEEE Transactions on Automatic Control 62 (9), pp. 4347–4362. External Links: ISSN 0018-9286 Cited by: Remark III.9.
+- [33] (2015) An optimization-based framework for impulsive control systems. In Developments in Model-Based Optimization and Control: Distributed Control and Industrial Applications, S. Olaru, A. Grancharova, and F. Lobo Pereira (Eds.), pp. 277–300. External Links: ISBN 978-3-319-26687-9 Cited by: §I-A.
+- [34] (2003) A survey of industrial model predictive control technology. Control Engineering Practice 11 (7), pp. 733–764. Cited by: footnote 1.
+- [35] (2009) Model predictive control: theory and design. Nob Hill Pub.. Cited by: §I-A.
+- [36] (1976) Algorithmic control of industrial processes. Proc. of the 4th IFAC Sympo. on Identification and System Parameter Estimation, pp. 1119–1167. Cited by: §I-A.
+- [37] (2013) A toolbox for simulation of hybrid systems in Matlab/Simulink: Hybrid Equations (HyEQ) Toolbox. In Proceedings of Hybrid Systems: Computation and Control Conference, pp. 101–106. External Links: Document, Link Cited by: Example VII.1, §VIII.
+- [38] (2011) Interconnections of hybrid systems: some challenges and recent results. Journal of Nonlinear Systems and Applications 2 (1-2), pp. 111–121. External Links: Document Cited by: footnote 2.
+- [39] (2018-09/2018) Hybrid model predictive control. In Handbook of Model Predictive Control, Birkhäuser, pp. 199–220. External Links: ISSN 978-3-319-77489-3, Document Cited by: §I-A.
+- [40] (2021) Hybrid feedback control. Princeton University Press, Princeton University Press, New Jersey. Cited by: §I-A, §I-A, Example II.5, Remark II.9, §VI.
+- [41] (2015-08) Model predictive control for linear impulsive systems. IEEE Transactions on Automatic Control 60 (8), pp. 2277–2282. External Links: Document, ISSN 0018-9286 Cited by: §I-A.
+- [42] (2007) Event-triggered real-time scheduling of stabilizing control tasks. IEEE Transactions on Automatic Control 52 (9), pp. 1680–1685. Cited by: §I-A.
+- [43] (2000) An introduction to hybrid dynamical systems. LNCIS, Springer. Cited by: §I-A.
+Appendix A Proofs
+A-A Proof of Lemma V.10
+Take such that . Let be a solution pair to with compact hybrid time domain and terminal time ; hence, it is a continuous solution pair with . Suppose . Pick any and the largest interval containing such that and for all . From differentiability of , the bounds in (23) and (24) hold on . Then, since by the choice of , for all , using (23) and (24), we have
+for all , which implies
+for all . Since by the very definition of the interval ,
+for all . Note that this property holds for ’s on any interval such as . At other ’s, . Then, combining the lower bounds on above and the case when gives
+for all . Since and are class- functions and is positive, there exists class- function lower bounding .
+A-B Proof of Lemma V.11
+Without loss of generality, suppose that there exists such that for all . Let be given as in (27), which is continuous. Let and for all , and note that is continuous, positive definite, and lower bounds the ordinary time to reach the -disc around from the -disc around via flows for . Let and for all . Observing that for any continuous solution pair and satisfying , the proof is completed by picking to be any class- function lower bounding both and .
+A-C Upper Semicontinuous Maps
+Lemma A.1
+Let be a continuous function, where is closed. Then, given a compact set , there exists such that
+Moreover, the function given by
+where is the set-valued mapping defined as for all , is upper semicontinuous.
+Proof:
+Take any and let . Since is compact, there exists such that . Hence, is nonempty. Consequently, the infimum of the continuous function on is attained, so (37) holds for some .
+Now, let be such that for all . Then,
+Since , is compact-valued (as is compact and is closed), and is continuous, by Berge’s maximum theorem [6, Theorem 1.4.16], is upper semicontinuous if is upper semicontinuous. To show upper semicontinuity of , let be the set-valued mapping such that for all , and for all . Then, since is upper semicontinuous and is closed for all , by [19, Lemma 5.15], is outer semicontinuous. Moreover, [19, Lemma 5.10] implies that is closed, so is closed. Therefore, is upper semicontinuous, again as a result of Lemmas 5.10 and 5.15 of [19], and consequently, is upper semicontinuous. ∎
+
+KAYNAK : https://arxiv.org/abs/2604.21989

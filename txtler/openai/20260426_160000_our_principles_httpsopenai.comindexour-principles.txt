@@ -1,5 +1,3 @@
---- openai | Our principles | score=38.99 ---
 Our mission is to ensure that AGI benefits all of humanity. Sam Altman shares five principles that guide our work.
 
 KAYNAK : https://openai.com/index/our-principles
-
