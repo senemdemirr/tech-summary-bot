@@ -1,28 +1,4 @@
---- deepmind | Announcing our partnership with the Republic of Korea | score=114.05 ---
-Announcing our partnership with the Republic of Korea
-Using frontier AI to accelerate scientific breakthroughs, push the boundaries of innovation and support local talent.
-Ten years ago, the historic AlphaGo match in Seoul captured the world's imagination and showcased the profound potential of artificial intelligence. Alongside this milestone anniversary, we are taking a significant step forward by announcing a new partnership between Google DeepMind and the Republic of Korea's Ministry of Science and ICT (MSIT).
-We share a vision that AI will play a pivotal role in national economic development. Korea is uniquely positioned for this transformation, reaching a point where AI capabilities are becoming the foundation for future employment and innovation. The nation currently leads the world in AI innovation density and boasts the fastest-growing AI adoption rate among the world's top 30 economies.
-Part of Google DeepMindâs National Partnerships for AI initiative, this collaboration is designed to support Korea's AI strategy, cultivate a thriving AI ecosystem, and accelerate groundbreaking discoveries in critical fields like life sciences, weather and climate.
-Bringing frontier AI models to Koreaâs scientific community
-Koreaâs Ministry of Science and ICT (MSIT) has recently launched the K-Moonshot Missions, an initiative aimed at unlocking step-change improvements in research productivity and addressing national grand challenges.
-Helping make this vision a reality, Google will establish an AI Campus in the Republic of Korea â an AI-focused facility within its Seoul offices.
-The AI Campus will be a hub for Korean academia and research institutions to collaborate with Googleâs world-leading AI experts to accelerate scientific breakthroughs through research and access to our most advanced AI for Science models, programs and events. We will begin by exploring collaborations with research-oriented institutions including Seoul National University (SNU), Korea Advanced Institute of Science and Technology (KAIST) and the Ministryâs three AI Bio Innovation Hubs, leveraging our models in fields such as life sciences, energy, weather and climate, for example:
-- AlphaEvolve - a Gemini-powered coding agent for designing and optimising advanced algorithms. This has shown beneficial impact across many areas in computing and math, and we are seeing similar examples emerge in drug discovery and energy.
-- AlphaGenome - an AI model to help scientists better understand how mutations in human DNA sequences impact a wide range of gene functions, speeding up research on genome biology and helping to improve disease understanding.
-- AlphaFold - already used by more than 85,000 researchers in Korea, we will explore accelerating AI-enabled predictions for proteins, DNA and RNA.
-- AI co-scientist - a multi-agent AI system that acts as a virtual scientific collaborator to help researchers brainstorm and verify hypotheses. This is showing promising benefits in a range of biomedical applications and we look forward to collaborating through joint research exploration and technical advisory to support the Ministryâs AI Scientist Project on ways to best integrate the system.
-- WeatherNext - we will explore collaborations to support Korea's energy and sustainability goals in predicting and analyzing the impacts of extreme weather events and optimizing renewable energy on grids.
-Cultivating AI talent and partnering on safety
-Realizing the full potential of AI requires investing in people and building responsibly. To support the next generation of Korean AI talent, we are opening doors to forge connections with Google DeepMind, including exploring internship opportunities for Korean students. This builds on Googleâs broader commitment to the region, including the recent milestone of providing 50,000 AI Essentials scholarships to help job seekers gain foundational skills.
-Finally, following our Frontier AI Safety Commitments made at the AI Seoul Summit, we will collaborate with the Korean AI Safety Institute (AISI) on research and best practices.
-Building on the AlphaGo legacy
-As we look back on the legacy of AlphaGo, we are incredibly excited for what lies ahead. We look forward to collaborating with the government as they invest in important local AI infrastructure, such as a new National AI for Science Center (NAIS), due to open in May.
-By combining Google DeepMind's frontier AI models with the brilliant scientific minds in Korea, we believe we can unlock scientific discoveries that will benefit society for generations to come.
-
-KAYNAK : https://deepmind.google/blog/announcing-our-partnership-with-the-republic-of-korea/
-
---- arxiv_ai | A general optimization solver based on OP-to-MaxSAT reduction | score=102.24 ---
+--- arxiv_ai | A general optimization solver based on OP-to-MaxSAT reduction | score=102.14 ---
 [2]\fnmHan \surHuang
 [1]\orgdivSchool of Software Engineering, \orgnameSouth China University of Technology, \orgaddress\cityGuangzhou, \postcode510006, \countryChina
 2]\orgdivSchool of Software Engineering, \orgnameSun Yat-sen University, \orgaddress\cityZhuhai, \postcode519082, \countryChina
@@ -313,7 +289,7 @@ This rule generates intermediate Boolean variables and clauses.
 
 KAYNAK : https://arxiv.org/abs/2604.21961
 
---- arxiv_ai | Model Predictive Control of Hybrid Dynamical Systems | score=102.24 ---
+--- arxiv_ai | Model Predictive Control of Hybrid Dynamical Systems | score=102.14 ---
 Model Predictive Control of Hybrid Dynamical Systems
 Abstract
 The problem of controlling hybrid dynamical systems using model predictive control (MPC) is formulated and sufficient conditions for asymptotic stability of a set are provided. Hybrid dynamical systems are modeled in terms of hybrid equations, involving a differential equation and a difference equation with inputs and constraints. The proposed hybrid MPC algorithm uses a suitable prediction and control horizon construction inspired by hybrid time domains. Structural properties of the hybrid optimization problem, its feasible set, and its value function are provided. Checkable conditions to guarantee asymptotic stability of a set are provided. These conditions are given in terms of properties on the stage cost, terminal cost, and the existence of static state-feedback laws, related through a control Lyapunov function condition. Examples illustrate the results throughout the paper.
@@ -844,7 +820,7 @@ Since , is compact-valued (as is compact and is closed), and is continuous, by B
 
 KAYNAK : https://arxiv.org/abs/2604.21989
 
---- arxiv_ai | Optimal Question Selection from a Large Question Bank for Clinical Field Recovery in Conversational Psychiatric Intake | score=102.24 ---
+--- arxiv_ai | Optimal Question Selection from a Large Question Bank for Clinical Field Recovery in Conversational Psychiatric Intake | score=102.14 ---
 :
 \theoremsep
 Optimal Question Selection from a Large Question Bank for Clinical Field Recovery in Conversational Psychiatric Intake
@@ -935,7 +911,7 @@ The source intake forms served as the clinical origin of the question bank and a
 
 KAYNAK : https://arxiv.org/abs/2604.22067
 
---- arxiv_ai | Verbal Confidence Saturation in 3-9B Open-Weight Instruction-Tuned LLMs: A Pre-Registered Psychometric Validity Screen | score=102.24 ---
+--- arxiv_ai | Verbal Confidence Saturation in 3-9B Open-Weight Instruction-Tuned LLMs: A Pre-Registered Psychometric Validity Screen | score=102.14 ---
 Verbal Confidence Saturation in 3–9B Open-Weight Instruction-Tuned LLMs:
 A Pre-Registered Psychometric Validity Screen
 Abstract
@@ -1071,7 +1047,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2604.22215
 
---- arxiv_ai | A Probabilistic Framework for Hierarchical Goal Recognition | score=102.24 ---
+--- arxiv_ai | A Probabilistic Framework for Hierarchical Goal Recognition | score=102.14 ---
 A Probabilistic Framework for Hierarchical Goal Recognition
 Abstract
 Goal recognition aims to infer an agent’s goal from observations of its behaviour. In realistic settings, recognition can benefit from exploiting hierarchical task structure and reasoning under uncertainty. Planning-based goal recognition has made substantial progress over the past decade, but to the best of our knowledge no existing approach jointly integrates hierarchical task structure with probabilistic inference. In this paper, we introduce the first planning-based probabilistic framework for hierarchical goal recognition over Hierarchical Task Networks (HTNs). We instantiate the framework by exploiting an HTN planner with a three-stage generative model for likelihood estimation, yielding posterior distributions over goal hypotheses. Empirical results show improved recognition performance over the existing HTN-based recognizer on HTN benchmarks. Overall, the framework lays a foundation for probabilistic goal recognition grounded in hierarchical planning structure, moving goal recognition toward more practical settings.
@@ -1275,8 +1251,1060 @@ References
 
 KAYNAK : https://arxiv.org/abs/2604.22256
 
---- openai | Our principles | score=38.99 ---
-Our mission is to ensure that AGI benefits all of humanity. Sam Altman shares five principles that guide our work.
+--- huggingface | Adaptive Ultrasound Imaging with Physics-Informed NV-Raw2Insights-US AI | score=100.26 ---
+Adaptive Ultrasound Imaging with Physics-Informed NV-Raw2Insights-US AI
+Introduction
+Ultrasound is one of the most widely used medical imaging modalities due to its safety, real-time capability, portability, and low cost. For decades, ultrasound images have been formed using a hand-engineered reconstruction pipeline that compresses rich raw sensor measurements into a final image while also making simplifying assumptions about physics, including a constant speed of sound throughout the body.
+In the era of AI and foundation models, a natural question emerges: can we move beyond the traditional beamforming pipeline, learn directly from raw ultrasound sensor data, and make use of information that is normally discarded during reconstruction? And if so, what new capabilities does that unlock?
+NVIDIA and researchers from Siemens Healthineers teamed up to find answers to these questions. The result of this work is a reconstruction model we are releasing called NV-Raw2Insights-US.
+Raw2Insights
+At its core, ultrasound is not an image—it’s sound. What clinicians ultimately see on the screen is a reconstructed picture built from millions of tiny echoes returning from the body. But in that reconstruction process, much of the original signal—the richness of how sound actually moved through tissue—is simplified or lost.
+Our approach starts earlier. Instead of working from finished images, NV-Raw2Insights-US learns directly from the raw signals captured by the ultrasound probe—the closest representation of how sound truly interacts with the body. This allows the model to “listen” more carefully and understand how each patient uniquely shapes those sound waves. Our vision is to enable end-to-end AI for ultrasound imaging and this is the first step towards that vision. We call this class of models Raw2Insights.
+In this first Raw2Insights application we estimate speed of sound for adaptive image focusing. The result is a system that can generate a personalized map of sound speed for each patient—and use it to correct the image in real time. What once required complex, time-consuming computation is now performed in a single AI pass. This is the shift from raw ultrasound channel data to actionable insight: an AI system that doesn’t just process ultrasound images, but actively understands and adapts to the physics of each individual patient.
+Deployment
+Typically raw ultrasound channel data is not easily accessible on clinical grade ultrasound scanners due to its high-bandwidth. Holoscan Sensor Bridge (HSB), is an open source FPGA IP developed by NVIDIA that allows high-bandwidth low latency data transfer to the GPU via (RDMA over Converged Ethernet). An Altera Agilex-7 FPGA development kit paired with NVIDIA Holoscan Sensor Bridge enables raw ultrasound channel data streaming from an ACUSON Sequoia ultrasound scanner’s DisplayPort outputs. We call this technology Data over DisplayPort. The NVIDIA HSB then packetizes the data and transmits it over Ethernet to NVIDIA IGX for data collection and AI inference. This demonstrates how modern high-performance computational capacity can be integrated with existing scanner architectures using high-bandwidth DisplayPort outputs.
+We deploy NV-Raw2Insights-US using NVIDIA Holoscan, an edge AI sensor processing platform designed for high-performance, real-time workloads on systems such as NVIDIA IGX Thor and NVIDIA DGX Spark.
+Once the data is in GPU memory, NV-Raw2Insights-US runs accelerated inference on a Blackwell-class GPU, producing a patient-specific sound-speed estimate. This estimate is streamed back to the ultrasound scanner, enabling improved focus in the live imaging stream.
+System Capabilities
+This demonstration architecture provides flexibility across both development and deployment:
+Software-Only Integration: NVIDIA acceleration of existing medical devices is possible with software-only modifications using Data over DisplayPort.
+Software-Defined Ultrasound: This software-defined approach enables continuous improvement through software updates.
+Modular Expansion: With raw ultrasound channel data already in GPU memory, new AI models can be integrated seamlessly.
+Closing Perspective
+By shifting ultrasound intelligence from traditional algorithms to an AI-driven Raw2Insights pipeline, we unlock a scalable path to AI-native imaging. Learning directly from raw ultrasound channel data rather than reconstructed images, NV-Raw2Insights-US reduces errors introduced by traditional assumptions and effectively adapts imaging for each patient.
+This architecture not only improves image clarity today, but also establishes a modular foundation for the next generation of AI-powered diagnostic systems. You can get started developing on top of NV-Raw2Insights-US here ( GitHub / Model Weights / Dataset).
+References
+- "Ultrasound Autofocusing: Common Midpoint Phase Error Optimization via Differentiable Beamforming," IEEE Transactions on Medical Imaging, Vol. 45, Issue 2, Feb. 2026. https://ieeexplore.ieee.org/document/11154013
+- "Investigating Pulse-Echo Sound Speed Estimation in Breast Ultrasound with Deep Learning," arXiv:2302.03064, 2023. https://arxiv.org/abs/2302.03064
+- NVIDIA Holoscan SDK Documentation, https://developer.nvidia.com/holoscan-sdk
+Acknowledgement
+This project was conducted in close collaboration with Siemens-Healthineers, we are appreciative of their support, including the direct collaboration of Ismayil Guracar and Rickard Loftman of the AI & Advanced Platforms group.
+This technology is under investigational development and not cleared for or available for sale in the U.S. or other countries. Its future availability cannot be guaranteed.
 
-KAYNAK : https://openai.com/index/our-principles
+KAYNAK : https://huggingface.co/blog/nvidia/raw2insights-adaptive-ultrasound-imaging
+
+--- dotnet | Combining API versioning with OpenAPI in .NET 10 applications | score=93.98 ---
+This is a guest blog from
+Sander ten Brinke
+, a Microsoft MVP and Senior Software Engineer, with a passion for building scalable and maintainable applications.
+A lot has changed for ASP.NET Core when it comes to building APIs over the last couple of years. The introduction of Minimal APIs, alongside controllers, has made it easier than ever to get started with building APIs, with .NET 10’s support for
+built-in request validation
+making it an even stronger contender.
+Even though building APIs has become easier, one aspect that remains crucial is API versioning. Proper versioning ensures that your API can evolve without breaking existing clients. API versioning has always been supported thanks to libraries like
+Asp.Versioning
+. But with the
+release
+of
+Microsoft.AspNetCore.OpenApi
+, Microsoft’s own OpenAPI library for ASP.NET Core, implementing versioning has changed — especially if you want an officially supported approach.
+Microsoft’s package sets up OpenAPI with versioning in mind (due to the URL being
+/openapi/v1.json
+by default), but ASP.NET Core doesn’t come with extensive built-in API versioning support. Since the release of
+Microsoft.AspNetCore.OpenApi
+in .NET 9, there have been a lot of questions online about how to integrate versioning without having to write a lot of custom code, duplicate OpenAPI and versioning definitions, and more.
+In this post, we’ll walk through how to implement API versioning in .NET 10 applications — covering both controllers and Minimal APIs — while keeping your OpenAPI documentation accurate and up to date for each version. We’ll take the officially supported approach, keeping duplicate code and configuration to a minimum.
+We’ll start with implementing API versioning without OpenAPI, and then we’ll integrate OpenAPI into our versioned API setup, showing how to generate separate OpenAPI documents for each API version. Finally, we’ll add
+SwaggerUI
+support using
+Swashbuckle.AspNetCore.SwaggerUI
+and
+Scalar
+support with
+Scalar.AspNetCore
+to visualize our versioned API documentation and discuss how to maintain it as your API evolves. By presenting API versioning in a step-based approach, it becomes clear what code changes each step requires.
+To do this, we’ll use the
+brand new
+Asp.Versioning
+v10
+package, also known as ASP.NET API Versioning, which is the first version to officially support both .NET 10 and the new built-in OpenAPI support, making the integration cleaner and simpler than ever before.
+The importance of API versioning
+But first, let’s make sure we understand the importance of API versioning. If you already understand API versioning, you can skip ahead to the next sections.
+API versioning is essential for maintaining backward compatibility as your API evolves. It allows you to introduce new features, fix bugs, and make changes without disrupting existing clients. There are several strategies for versioning APIs, including:
+URL Path Versioning (e.g.,
+/api/v1/resource
+)
+Query String Versioning (e.g.,
+/api/resource?version=1.0
+)
+Header Versioning (e.g.,
+X-API-Version: 1.0
+)
+Media Type Versioning (e.g.,
+Accept: application/json; v=1.0
+)
+This is less common in ASP.NET Core applications due to the need for custom media type formatters, but it is still a valid and widely-used approach in the industry. GitHub is a well-known example of an API that uses media type versioning.
+The examples above use a
+v
+prefix with either a major version number or a major-minor version number. However, there are other versioning formats you can use, such as date-based versioning (e.g.,
+2026-03-01
+), status-based versioning (e.g.,
+v1-beta
+), and more. The versioning format is entirely up to you, and choosing the right versioning strategy depends on your specific use case and client requirements.
+While you could implement API versioning yourself, using a library like
+Asp.Versioning
+simplifies the process significantly, providing built-in support for various versioning strategies and seamless integration with ASP.NET Core.
+Note
+This post focuses on
+Asp.Versioning v10.0.0
+, the first release to
+officially
+support both ASP.NET Core 10 and the new built-in OpenAPI library. The prior stable version,
+Asp.Versioning v8.x.x
+, will work with .NET 10 via implicit roll-forward, but v10 is purpose-built for the new OpenAPI integration and brings improvements and bug fixes — so it’s the recommended choice for .NET 10 applications.
+We’ll look at how to set this up in both Minimal APIs and controllers in a bit. First, let’s explore why OpenAPI is important in this context.
+About the code samples
+All complete code samples in this post are formatted as
+file-based apps
+, a feature introduced in C# 14 and .NET 10 that lets you run .NET applications from a single
+.cs
+file — no project file required! Copy any complete sample to a
+.cs
+file and run it with
+dotnet <filename>.cs
+. The
+#:sdk
+and
+#:package
+directives at the top of each sample automatically configure the required SDK and NuGet packages. Make sure you have the
+.NET 10 SDK
+installed!
+The changes to OpenAPI in .NET 9 and 10
+Since .NET 9,
+Microsoft.AspNetCore.OpenApi
+has become the default way to generate OpenAPI documentation for ASP.NET Core applications, replacing
+Swashbuckle.AspNetCore
+. Setting it up is straightforward, and it seems geared for versioning out of the box, as the URL for accessing the OpenAPI document includes a version segment by default:
+/openapi/v1.json
+.
+Note about OpenAPI tools
+While Swashbuckle and NSwag are still viable and widely-used options for OpenAPI documentation in .NET, this post focuses on the newer built-in OpenAPI support.
+If you haven’t set up OpenAPI in your .NET 9/10 application yet, here’s a quick example of how to do it:
+#:property PublishAot=false
+#:sdk Microsoft.NET.Sdk.Web
+#:package Microsoft.AspNetCore.OpenApi@10.0.4
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddOpenApi();
+var app = builder.Build();
+// This sets up the OpenAPI endpoint at /openapi/v1/openapi.json
+// If you'd prefer YAML, you can change the URL to end up with .yaml instead
+app.MapOpenApi();
+app.MapGet("/users", () =>
+{
+var users = new List<UserDto>
+{
+new(1, "Ada Lovelace", "ada@example.com"),
+new(2, "Grace Hopper", "grace@example.com"),
+new(3, "Conner Pilot", "copilot@example.com"),
+};
+return TypedResults.Ok<List<UserDto>>(users);
+})
+.WithName("GetUsers");
+app.Run();
+record UserDto(int Id, string Name, string Email);
+{
+"openapi": "3.1.1",
+"info": {
+"title": "UsersApi | v1",
+"version": "1.0.0"
+},
+"servers": [
+{
+"url": "http://localhost:5055/"
+}
+],
+"paths": {
+"/users": {
+"get": {
+"tags": ["UsersApi"],
+"operationId": "GetUsers",
+"responses": {
+"200": {
+"description": "OK",
+"content": {
+"application/json": {
+"schema": {
+"type": "array",
+"items": {
+"$ref": "#/components/schemas/UserDto"
+}
+}
+}
+}
+}
+}
+}
+}
+},
+"components": {
+"schemas": {
+"UserDto": {
+"required": ["id", "name", "email"],
+"type": "object",
+"properties": {
+"id": {
+"pattern": "^-?(?:0|[1-9]\\d*)$",
+"type": ["integer", "string"],
+"format": "int32"
+},
+"name": {
+"type": "string"
+},
+"email": {
+"type": "string"
+}
+}
+}
+}
+},
+"tags": [
+{
+"name": "UsersApi"
+}
+]
+}
+You can also customize the OpenAPI document by using transformers and enrich your operations by using
+TypedResults
+. To learn about this and other approaches, check out the official documentation for
+Microsoft.AspNetCore.OpenApi
+.
+An introduction to API versioning with Asp.Versioning
+Before we dive into the specifics of how to set up API versioning with OpenAPI in .NET 10, let’s briefly introduce the
+Asp.Versioning
+library.
+This library provides a comprehensive solution for API versioning in ASP.NET Core applications, supporting various versioning strategies and seamless integration with both Minimal APIs and controllers.
+It has been widely adopted in the .NET community, having 800 million downloads with all packages combined!
+Asp.Versioning
+is a collection of several libraries that you can use to add versioning for controllers, Minimal APIs, OData, and more. In this post, we’ll focus only on controllers and Minimal APIs, which require the following packages:
+API Type
+Required Packages (.NET 10+)
+Controllers
+Asp.Versioning.Mvc
+Asp.Versioning.Mvc.ApiExplorer
+Minimal APIs
+Asp.Versioning.Http
+Asp.Versioning.Mvc.ApiExplorer
+The library has an interesting history, being part of the .NET Foundation and developed by
+Chris Martinez
+while he worked at Microsoft.
+Note
+Looking for the source code? All of the code in this post, and more, can be found in my
+sample repository on GitHub
+. For more samples, check out
+Asp.Versioning’s official samples
+.
+To demonstrate how to set up API versioning in .NET 10, let’s create a simple sample application that includes a minimal amount of code required to get started. This will use query string versioning for the sake of simplicity, but you can easily swap to another strategy if you prefer, which will be
+covered later
+.
+API versioning for controllers
+Controllers use the
+Asp.Versioning.Mvc
+package, which provides a set of attributes and conventions to define API versions.
+You can specify the version for each controller or action using attributes like
+[ApiVersion("1.0")]
+and
+[ApiVersion("2.0")]
+.
+First, you have to set up the required services:
+#:property PublishAot=false
+#:sdk Microsoft.NET.Sdk.Web
+#:package Asp.Versioning.Mvc@10.0.0
+using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers();
+builder.Services.AddApiVersioning()
+.AddMvc();
+var app = builder.Build();
+app.MapControllers();
+app.Run();
+// For a file-based app, controller classes go below app.Run()
+// (see the next code snippet)
+Then you need to add the versioning attributes to your controllers. A solid approach is to have one controller per version:
+[ApiController]
+[Route("api/users")]
+[ApiVersion("1.0")]
+public class UsersV1Controller : ControllerBase
+{
+[HttpGet]
+public ActionResult<UserV1[]> Get()
+{
+return Ok(new[]
+{
+new UserV1(1, "John Doe"),
+new UserV1(2, "Alice Dewett"),
+});
+}
+}
+[ApiController]
+[Route("api/users")]
+[ApiVersion("2.0")]
+public class UsersV2Controller : ControllerBase
+{
+[HttpGet]
+public ActionResult<UserV2[]> Get()
+{
+return Ok(new[]
+{
+new UserV2(1, "John Doe", new DateOnly(1990, 1, 1)),
+new UserV2(2, "Alice Dewett", new DateOnly(1992, 2, 2)),
+});
+}
+}
+public record UserV1(int Id, string Name);
+public record UserV2(int Id, string Name, DateOnly BirthDate);
+Asp.Versioning supports query string versioning by default. You can now reach these endpoints by going to
+api/users?api-version=1.0
+for the first version, and
+api/users?api-version=2.0
+for the second version!
+API versioning for Minimal APIs
+Minimal APIs use the
+Asp.Versioning.Http
+package instead of
+Asp.Versioning.Mvc
+. This package provides extension methods to define API versions directly on the route groups. Before you do that, though, you’ll need to call
+NewVersionedApi
+to create a new API versioning group, which will allow you to define multiple versions in the route group.
+#:property PublishAot=false
+#:sdk Microsoft.NET.Sdk.Web
+#:package Asp.Versioning.Http@10.0.0
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddApiVersioning();
+var app = builder.Build();
+var usersApi = app.NewVersionedApi("Users");
+var usersv1 = usersApi.MapGroup("api/users").HasApiVersion("1.0");
+var usersv2 = usersApi.MapGroup("api/users").HasApiVersion("2.0");
+usersv1.MapGet("", () => TypedResults.Ok(new[]
+{
+new UserV1(1, "John Doe"),
+new UserV1(2, "Alice Dewett"),
+}));
+usersv2.MapGet("", () => TypedResults.Ok(new[]
+{
+new UserV2(1, "John Doe", new DateOnly(1990, 1, 1)),
+new UserV2(2, "Alice Dewett", new DateOnly(1992, 2, 2)),
+}));
+app.Run();
+record UserV1(int Id, string Name);
+record UserV2(int Id, string Name, DateOnly BirthDate);
+Just like with controllers, you can reach these endpoints by going to
+api/users?api-version=1.0
+for the first version, and
+api/users?api-version=2.0
+for the second version!
+How to organize your API versions?
+Adding all the API groups and versions in the
+Program.cs
+file can quickly become unmanageable as your API grows. I really like the approach from one of
+Asp.Versioning
+‘s
+example projects
+, which keeps
+Program.cs
+focused and easy to scan.
+app.MapUsers().ToV1().ToV2().ToV3();
+app.MapScores().ToV1().ToV2().ToV3();
+Here,
+MapUsers()
+and
+MapScores()
+are extension methods that call
+app.NewVersionedApi()
+, and
+ToV1()
+,
+ToV2()
+, etc. are extension methods that define the versioned route groups and endpoints. This way, you can keep your
+Program.cs
+file clean and organized, and you can easily find and manage your API versions.
+For controller-based projects,
+Asp.Versioning
+supports convention-based versioning such as Version by .NET Namespace.
+See
+the documentation
+and
+example in the repo
+for more information.
+Changing the versioning strategy
+In the examples above, we used query string versioning for simplicity, but
+Asp.Versioning
+supports various versioning strategies, and you can easily switch between them by configuring the API versioning options. Let’s take a look at implementing URL and header versioning.
+URL versioning
+To swap to URL versioning, you need to change
+AddApiVersioning
+:
+builder.Services.AddApiVersioning(options =>
+{
+// API versioning by URL segment (api/v1/users)
+options.ApiVersionReader = new UrlSegmentApiVersionReader();
+});
+Now, you can use
+api/v1/users
+in the URL to go to the first version of the API, and
+api/v2/users
+to go to the second version!
+URL versioning is a popular choice as it makes the versioning explicit in the URL, making it very easy to use and see what version you’re calling.
+However, it does mean clients need to update their URLs when a new version is released. Another downside is that it isn’t “truly” RESTful, as the URL should represent the resource, which, even though it is a different version, is still the same resource, and thus the URL should ideally not change. That said, this is a common and widely accepted approach to versioning, and it works well in many scenarios, so it’s a good option to consider.
+Header versioning
+If you want to use header versioning, you can change the setup to this:
+builder.Services.AddApiVersioning(options =>
+{
+// API versioning by header (X-API-Version: 1.0)
+options.ApiVersionReader = new HeaderApiVersionReader("X-API-Version");
+});
+Header, query string, and media type versioning are more RESTful, as the URL represents the resource, and the version is specified in the header, query string, or content type. This allows clients to call the same URL regardless of the version, and simply specify the version they want to use in the header, query string, or content type.
+This approach, just like query string versioning, does lead to a scenario of a user potentially forgetting to specify the version. To deal with this, you can set a default API version, which will be used when no version is specified. This can be done by setting the
+DefaultApiVersion
+property in the API versioning options:
+builder.Services.AddApiVersioning(options =>
+{
+// Set the default API version to 1.0 explicitly
+// This is already set to 1.0 by default, but shown here for demonstration
+options.DefaultApiVersion = new ApiVersion(1, 0);
+// If the user does not specify a version, you can let the API use the default version
+// This is disabled by default.
+// Enabling this feature is a trade-off between convenience and explicitness.
+// Changing the default version could break clients that aren't using versioning.
+// Consider your API's audience and usage patterns when deciding to enable this.
+options.AssumeDefaultVersionWhenUnspecified = true;
+});
+It’s also possible to combine multiple versioning strategies, for example allowing clients to use either query or header versioning,
+which can be useful for supporting different types of clients. To do this, you can use the
+ApiVersionReader.Combine
+method:
+builder.Services.AddApiVersioning(options =>
+{
+options.ApiVersionReader = ApiVersionReader.Combine(
+new QueryStringApiVersionReader("api-version"),
+new HeaderApiVersionReader("X-API-Version")
+);
+});
+And now that you understand the basics of API versioning, it’s time to put OpenAPI and API versioning together! Keep in mind that there are many more features to explore in
+Asp.Versioning
+, so make sure to check out
+the official documentation
+and the
+samples
+!
+Combining API versioning with OpenAPI in .NET 10
+Note
+Asp.Versioning.OpenApi
+v10.0.0-rc.1 is currently in Release Candidate. See the
+release notes
+for details.
+This section will also cover both controllers and Minimal APIs. As discussed at the beginning of this post,
+Asp.Versioning
+v10.0.0 introduces a
+new
+package that can be used to integrate API versioning with OpenAPI in a clean and simple way, without having to write a lot of custom code or duplicate configuration:
+Asp.Versioning.OpenApi
+. This package is required for both controllers and Minimal APIs, and it provides a set of extension methods to generate OpenAPI documentation for each API version.
+We’ll update the samples we created in the previous sections to include OpenAPI documentation for each version of the API with the query string versioning strategy. We’ll also focus on one document per version, which is the recommended approach for versioning your OpenAPI documentation, as it allows clients to easily access the documentation for the specific version of the API they are using, without having to filter through a single document that contains all versions.
+Setting up API versioning with OpenAPI for controllers
+Combining OpenAPI with API versioning for controllers requires the following changes to the setup:
+You must call
+AddApiExplorer
+after
+AddApiVersioning
+to ensure that the API versioning information is included in the OpenAPI document.
+The API Explorer is ASP.NET Core’s built-in service for discovering and describing the API endpoints in your application. By adding it after
+AddApiVersioning
+, you ensure that the versioning information is included in the API descriptions, which is crucial for generating accurate OpenAPI documentation.
+You must call
+AddOpenApi
+from the
+Asp.Versioning
+namespace after activating API versioning to ensure that you use the correct variant of
+AddOpenApi
+that integrates with API versioning.
+We call
+WithDocumentPerVersion()
+after
+MapOpenApi()
+to generate a separate OpenAPI document for each API version, preventing us from having to manually call
+AddOpenApi()
+multiple times for each version, which can lead to maintenance issues when having to update both Controller attributes and OpenAPI configuration when adding new versions.
+#:property PublishAot=false
+#:sdk Microsoft.NET.Sdk.Web
+#:package Asp.Versioning.Mvc@10.0.0
+#:package Asp.Versioning.Mvc.ApiExplorer@10.0.0
+#:package Asp.Versioning.OpenApi@10.0.0-rc.1
+using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers();
+// We don't need to customize the API versioning options for this example as we are using query string versioning.
+builder.Services.AddApiVersioning()
+.AddApiExplorer(options =>
+{
+// Calling "AddApiExplorer" is required for OpenAPI versioning to work correctly.
+// Without this, the generated OpenAPI documents will not be versioned.
+// GroupNameFormat specifies the format of the API version.
+// Without this, versioning will use the literal group names. In our case, that would be 1.0.
+// For compatibility with the "default" /openapi/v1.json behavior from Microsoft.AspNetCore.OpenApi, we use v'VVV' so we can retrieve it using v1.json.
+// See https://github.com/dotnet/aspnet-api-versioning/wiki/Version-Format#custom-api-version-format-strings for more information about formatting API versions.
+options.GroupNameFormat = "'v'VVV";
+})
+.AddMvc()
+// You must call "AddOpenApi" after "AddApiVersioning" to ensure you use Asp.Versioning's variant.
+// This variant of "AddOpenApi" is required to properly integrate with API versioning and generate versioned OpenAPI documents.
+// You can call an overload of "AddOpenApi" to customize the OpenAPI generation, just like you would with Microsoft.AspNetCore.OpenApi's "AddOpenApi".
+.AddOpenApi();
+var app = builder.Build();
+// WithDocumentPerVersion() is an extension method provided by the Asp.Versioning.OpenApi package.
+// It configures the OpenAPI endpoint to generate a separate document for each API version.
+// This allows clients to retrieve documentation specific to the version of the API they are using.
+// This approach is preferable compared to having to call "services.AddOpenApi()" multiple times for each version, which can lead to maintenance issues and potential misconfigurations when adding new versions.
+app.MapOpenApi().WithDocumentPerVersion();
+app.MapControllers();
+app.Run();
+// For a file-based app, paste the controller classes from
+// the "API versioning for controllers" section below app.Run()
+You can now retrieve your versioned OpenAPI documents at
+/openapi/v1.json
+and
+/openapi/v2.json
+for the first and second version of the API, respectively!
+Setting up API versioning with OpenAPI for Minimal APIs
+Next up, Minimal APIs! Luckily, the code is the exact same as for controllers, except for the fact that we do not need to call
+AddMvc
+. In case you do want to see it:
+#:property PublishAot=false
+#:sdk Microsoft.NET.Sdk.Web
+#:package Asp.Versioning.Http@10.0.0
+#:package Asp.Versioning.Mvc.ApiExplorer@10.0.0
+#:package Asp.Versioning.OpenApi@10.0.0-rc.1
+using Asp.Versioning;
+var builder = WebApplication.CreateBuilder(args);
+// We don't need to customize the API versioning options for this example as we are using query string versioning.
+builder.Services.AddApiVersioning()
+.AddApiExplorer(options =>
+{
+// Calling "AddApiExplorer" is required for OpenAPI versioning to work correctly.
+// Without this, the generated OpenAPI documents will not be versioned.
+// GroupNameFormat specifies the format of the API version.
+// Without this, versioning will use the literal group names. In our case, that would be 1.0.
+// For compatibility with the "default" /openapi/v1.json behavior from Microsoft.AspNetCore.OpenApi, we use v'VVV' so we can retrieve it using v1.json.
+// See https://github.com/dotnet/aspnet-api-versioning/wiki/Version-Format#custom-api-version-format-strings for more information about formatting API versions.
+options.GroupNameFormat = "'v'VVV";
+})
+// You must call "AddOpenApi" after "AddApiVersioning" to ensure you use Asp.Versioning's variant.
+// This variant of "AddOpenApi" is required to properly integrate with API versioning and generate versioned OpenAPI documents.
+// You can call an overload of "AddOpenApi" to customize the OpenAPI generation, just like you would with Microsoft.AspNetCore.OpenApi's "AddOpenApi".
+.AddOpenApi();
+var app = builder.Build();
+// WithDocumentPerVersion() is an extension method provided by the Asp.Versioning.OpenApi package.
+// It configures the OpenAPI endpoint to generate a separate document for each API version.
+// This allows clients to retrieve documentation specific to the version of the API they are using.
+// This approach is preferable compared to having to call "services.AddOpenApi()" multiple times for each version, which can lead to maintenance issues and potential misconfigurations when adding new versions.
+app.MapOpenApi().WithDocumentPerVersion();
+// Paste the API endpoints and records from the "API versioning for Minimal APIs" section here,
+// then add `app.Run();` at the end.
+Now you know how to set up API versioning with OpenAPI for both controllers and Minimal APIs in .NET 10!
+Adding SwaggerUI and Scalar support for versioned APIs
+Now that we have our versioned OpenAPI documents, we can add support for visualizing them using tools like
+SwaggerUI
+and
+Scalar
+. Both of these tools allow you to visualize your API documentation in a user-friendly way, making it easier for developers to understand and interact with your API.
+SwaggerUI used to be included by default in ASP.NET Core applications thanks to
+Swashbuckle.AspNetCore
+, a NuGet package included in ASP.NET Core project templates. This is no longer the case since ASP.NET Core 9 with the introduction of
+Microsoft.AspNetCore.OpenApi
+.
+Scalar is a newer tool that provides a more modern and customizable interface for visualizing OpenAPI documentation, and it can be added to your project using the
+Scalar.AspNetCore
+NuGet package. Performance-wise, Scalar is more efficient than SwaggerUI, but both tools are great options for visualizing your API documentation, and the choice between them depends on your specific needs and preferences.
+Adding SwaggerUI support
+To add
+SwaggerUI
+support for your versioned APIs, you can use the
+Swashbuckle.AspNetCore.SwaggerUI
+package, which provides middleware to serve the SwaggerUI interface. Unlike the full
+Swashbuckle.AspNetCore
+package, this only includes the UI component and does not include OpenAPI document generation, as we are using
+Microsoft.AspNetCore.OpenApi
+for that. You can configure this package to point to your versioned OpenAPI documents, allowing developers to easily explore and test your API endpoints.
+The setup required is the same for both controllers and Minimal APIs. We’ll cover the setup for Minimal APIs, but the same code can be used for controllers as well.
+#:property PublishAot=false
+#:sdk Microsoft.NET.Sdk.Web
+#:package Asp.Versioning.Http@10.0.0
+#:package Asp.Versioning.Mvc.ApiExplorer@10.0.0
+#:package Asp.Versioning.OpenApi@10.0.0-rc.1
+#:package Swashbuckle.AspNetCore.SwaggerUI@10.1.4
+using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddApiVersioning()
+.AddApiExplorer(options =>
+{
+options.GroupNameFormat = "'v'VVV";
+})
+.AddOpenApi();
+var app = builder.Build();
+app.MapOpenApi().WithDocumentPerVersion();
+// Paste the API endpoints and records from the "API versioning for Minimal APIs" section here
+// UseSwaggerUI MUST come after MapOpenApi() and the API endpoint definitions.
+app.UseSwaggerUI(options =>
+{
+// We reverse the list of API versions so the newest version is rendered first
+foreach (var description in app.DescribeApiVersions().Reverse())
+{
+options.SwaggerEndpoint(
+$"/openapi/{description.GroupName}.json",
+description.GroupName.ToUpperInvariant());
+}
+});
+app.Run();
+We’ve now added SwaggerUI support by calling
+app.UseSwaggerUI()
+and configuring it to point to our versioned OpenAPI documents, based on the API versions described in our application, which we retrieve using
+app.DescribeApiVersions()
+. We can visit the SwaggerUI interface at
+/swagger
+to explore and test our API endpoints!
+Figure:
+SwaggerUI with versioned API documentation
+Adding Scalar support
+Next, we can add
+Scalar
+support for our versioned APIs using the
+Scalar.AspNetCore
+package. This package provides middleware to serve the Scalar interface, which can be configured to point to your versioned OpenAPI documents, similar to how we set up SwaggerUI.
+Again, the setup is the same for both controllers and Minimal APIs. We’ll cover the setup for Minimal APIs, but the same code can be used for controllers as well.
+#:property PublishAot=false
+#:sdk Microsoft.NET.Sdk.Web
+#:package Asp.Versioning.Http@10.0.0
+#:package Asp.Versioning.Mvc.ApiExplorer@10.0.0
+#:package Asp.Versioning.OpenApi@10.0.0-rc.1
+#:package Scalar.AspNetCore@2.13.0
+using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
+using Scalar.AspNetCore;
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddApiVersioning()
+.AddApiExplorer(options =>
+{
+options.GroupNameFormat = "'v'VVV";
+})
+.AddOpenApi();
+var app = builder.Build();
+app.MapOpenApi().WithDocumentPerVersion();
+// Paste the API endpoints and records from the "API versioning for Minimal APIs" section here
+// MapScalarApiReference sets up the Scalar UI at /scalar
+// AddDocuments registers all known API versions so Scalar shows a dropdown to switch between them.
+// You can enrich your OpenAPI document with Scalar specific integrations if you wish.
+// To learn more: https://scalar.com/products/api-references/integrations/aspnetcore/openapi-extensions
+app.MapScalarApiReference(options =>
+{
+var descriptions = app.DescribeApiVersions();
+for (var i = 0; i < descriptions.Count; i++)
+{
+var description = descriptions[i];
+var isDefault = i == descriptions.Count - 1;
+// isDefault is used to mark the default API version in Scalar.
+// This decides which version is selected by default when users visit the Scalar UI.
+options.AddDocument(description.GroupName, description.GroupName, isDefault: isDefault);
+}
+});
+app.Run();
+With
+app.MapScalarApiReference()
+, we register Scalar and feed it the same versioned documents via
+app.DescribeApiVersions()
+. Visit
+/scalar
+to browse and test your endpoints. Scalar is also highly configurable — select
+Configure
+in the top-right corner to tweak the theme, layout, and more.
+Figure:
+Scalar with versioned API documentation
+Can't decide between SwaggerUI and Scalar?
+If you’re having trouble deciding between SwaggerUI and Scalar, you can actually use both! Both tools can be configured to point to your versioned OpenAPI documents, allowing developers to choose their preferred interface for exploring and testing your API endpoints. You can set up SwaggerUI at
+/swagger
+and Scalar at
+/scalar
+, giving developers the flexibility to use the tool they are most comfortable with.
+We now have a complete setup for API versioning with OpenAPI in .NET 10, along with support for visualizing our API documentation using both SwaggerUI and Scalar!
+Migrating from Asp.Versioning v8 to v10
+You might encounter some breaking changes during the migration process, just like I did.
+This commit
+highlights some of the changes I had to make to get my sample application working with the new version. The most significant change is that the
+Asp.Versioning.OpenApi
+package is now required for both controllers and Minimal APIs, and that
+AddOpenApi()
+must be called from the
+Asp.Versioning
+namespace instead of the
+Microsoft.AspNetCore
+namespace, after activating API versioning.
+During this migration, I actually found a bug in the new version of
+Asp.Versioning
+that caused the OpenAPI document to not generate correctly for Minimal APIs, so I
+created a PR for this
+. For more information about changes between versions, check out the changes from v8 to v10 in
+my sample repository
+and
+the official documentation
+for
+Asp.Versioning
+!
+How Asp.Versioning v10 improves the setup of API versioning
+This post has covered the new way of setting up API versioning with OpenAPI in .NET 10 using
+Asp.Versioning
+v10.0.0. It also made claims that this new approach reduces duplicate code and makes it easier to set up.
+To understand what I mean by this, let’s compare the new approach to how you would set up API versioning with OpenAPI in
+Asp.Versioning
+v8.x.x:
+Asp.Versioning v8.x.x:
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddOpenApi("v1");
+builder.Services.AddOpenApi("v2");
+builder.Services.AddApiVersioning()
+.AddApiExplorer(options =>
+{
+options.GroupNameFormat = "'v'VVV";
+});
+var app = builder.Build();
+// Code for the API endpoints using app.NewVersionedApi() can be placed here.
+app.MapOpenApi();
+Asp.Versioning v10.x.x:
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddApiVersioning()
+.AddApiExplorer(options =>
+{
+options.GroupNameFormat = "'v'VVV";
+})
+.AddOpenApi();
+var app = builder.Build();
+// Code for the API endpoints using app.NewVersionedApi() can be placed here.
+app.MapOpenApi().WithDocumentPerVersion();
+The main differences are that in the new version, you only need to call
+AddOpenApi()
+once, instead of having to call
+AddOpenApi()
+multiple times for each version. This reduces duplicate code between your API endpoints where you already define your API versions. A combination of Asp.Versioning’s
+AddOpenApi()
+and
+WithDocumentPerVersion()
+achieves this behavior.
+However, this is just the beginning. When you consider SwaggerUI/Scalar, tools many people use in their API development process, a lot more work was needed for Asp.Versioning v8 to get these tools working with versioned OpenAPI documents. Several OpenAPI transformers were needed to manually add the versioning information to the OpenAPI document. You can see
+the code that was needed to get SwaggerUI working with versioned OpenAPI documents using Asp.Versioning v8
+. These workarounds are no longer necessary as this is now included in Asp.Versioning v10.
+Adding API linting to your versioned OpenAPI documents
+We’ve covered API versioning, integration with OpenAPI, and how to visualize your versioned API documentation using SwaggerUI and Scalar. What’s next? Well, you can add API linting to your versioned OpenAPI documents to ensure that they adhere to best practices and organizational standards. This can be done using tools like:
+Spectral
+oasdiff
+or other OpenAPI diffing tools, like
+openapi-diff
+or
+openapi-changes
+.
+Spectral
+is a powerful tool for linting your OpenAPI documents. By defining custom rules — or using community-built ones — you can enforce consistency across your API development process. This turns your “guidelines” into
+enforceable rules
+, which can be a game-changer for teams looking to maintain high-quality APIs.
+You can, for example, add custom rules for validating that all APIs implement API versioning in a specific way. If a team forgets to add API versioning, Spectral can catch this during the pull request review process, preventing unversioned APIs from being released.
+Next, there’s tooling like
+oasdiff
+, which allows you to compare different versions of your OpenAPI documents to identify changes, additions, or removals in your API. This is especially useful to detect unintended breaking changes between API versions, notifying the developer to introduce a new API version instead of breaking the existing one.
+By integrating
+oasdiff
+into your CI/CD pipeline, you can let the pull request review process fail once a breaking change is detected, and instruct the contributor to use API versioning instead!
+Finishing up
+I hope you enjoyed this post! Whenever I had to implement API versioning with OpenAPI in .NET in the past, I often got caught up in the intricacies, so I’m glad I was able to write a setup that works for modern projects, and I hope you found it useful, too! If you have any questions or feedback, feel free to reach out or leave a comment below. Happy coding!
+ASP.NET Core Community Standup
+Catch the recent interview on the ASP.NET Core Community Standup:
+Combining API Versioning with OpenAPI
+:
+Author
+:
+Sander ten Brinke
+is a Microsoft MVP and Senior Software Engineer, with a passion for building scalable and maintainable applications. With over 10 years of experience in the industry, he has worked on a wide range of projects, from small startups to large enterprises. He focuses on .NET and Azure, but his interests extend beyond these technologies too, and he enjoys sharing his knowledge through blogging, speaking at conferences, and contributing to open source software, like some of the OpenAPI features he added to ASP.NET Core 10!
+The post
+Combining API versioning with OpenAPI in .NET 10 applications
+appeared first on
+.NET Blog
+.
+
+KAYNAK : https://devblogs.microsoft.com/dotnet/api-versioning-in-dotnet-10-applications/
+
+--- mit_ai | Rebuilding the data stack for AI | score=81.28 ---
+Artificial intelligence may be dominating boardroom agendas, but many enterprises are discovering that the biggest obstacle to meaningful adoption is the state of their data. While consumer-facing AI tools have dazzled users with speed and ease, enterprise leaders are discovering that deploying AI at scale requires something far less glamorous but far more consequential: data infrastructure that is unified, governed, and fit for purpose.
+That gap between AI ambition and enterprise readiness is becoming one of the defining challenges of this next phase of digital transformation. As Bavesh Patel, senior vice president of Databricks, puts it, “the quality of that AI and how effective that AI is, is really dependent on information in your organization.” Yet in many companies, that information remains fragmented across legacy systems, siloed applications, and disconnected formats, making it nearly impossible for AI systems to generate trustworthy, context-rich outputs.
+“Really, the big competitive differentiator for most organizations is their own data and then their third-party data that they can add to it,” says Patel.
+For enterprise AI to deliver value, data must be consolidated into open formats, governed with precision, and made accessible across functions. Without that foundation, businesses risk “terrible AI,” as Patel bluntly describes it. That means moving beyond siloed SaaS platforms and disconnected dashboards toward a unified, open data architecture capable of combining structured and unstructured data, preserving real-time context, and enforcing rigorous access controls. When the groundwork is laid correctly, organizations can move toward measurable outcomes, unlocking efficiencies, automating complex workflows, and even launching entirely new lines of business.
+That value focus is critical, says Rajan Padmanabhan, unit technology officer at Infosys, especially as enterprises seek precision in the outputs driving business decisions. Rather than treating AI initiatives as isolated innovation projects, leading companies are tying AI deployment directly to business metrics, using governance frameworks to determine what delivers results and what should be abandoned quickly.
+“We see this big opportunity just with AI literacy with business users, where they’re very eager to understand how they should be thinking about AI,” adds Patel. “What does AI mean when you peel the covers? What are the pieces and the building blocks that you need to put in place, both from a technology and a training and an enablement standpoint?”
+The possibilities ahead are substantial. As AI agents evolve from copilots into autonomous operators capable of managing workflows and transactions, the organizations that win will be those that build the right foundation now.
+“What we are seeing as a new way of thinking is moving from a system of execution or a system of engagement to a system of action,” notes  Padmanabhan. “That is the new way we see the road ahead.”
+The future of AI in the enterprise will be determined by whether businesses can turn fragmented information into a strategic asset capable of powering both smarter decisions and entirely new ways of operating.
+This episode of Business Lab is produced in partnership with Infosys Topaz.
+Full Transcript:
+Megan Tatum:
+From MIT Technology Review, I’m Megan Tatum, and this is Business Lab, the show that helps business leaders make sense of new technologies coming out of the lab and into the marketplace.
+This episode is produced in partnership with Infosys Topaz.
+Now, recent advancements in AI may have unlocked some compelling new industrial applications, but a reliance on inadequate data models means that many enterprises are hitting a brick wall. AI and agentic AI in particular place a whole new set of demands on data. The technology requires greater access, context, and guardrails to operate effectively. Existing data models often fall short. They’re too fragmented or siloed. Data itself often lacks quality. To bridge the gap, they require an AI-ready upgrade.
+Two words for you: data reconfigured.
+My guest today, are Bavesh Patel, senior vice president for Go-to-Market at Databricks, and Rajan Padmanabhan, unit technology officer for data analytics and AI at Infosys.
+Welcome, Bavesh and Rajan.
+Rajan Padmanabhan:
+Thank you. Thanks for having us.
+Bavesh Patel:
+Thanks for having us.
+Megan:
+Fantastic. Thank you both so much for joining us today. Bavesh, if I could come to you first, when we talk about AI-ready data, what exactly do we mean? What new demands does AI place on data, and how does this impact the way it needs to be structured and used?
+Bavesh:
+Yeah. Great question. Appreciate you hosting us today. I think that obviously the whole world is enamored with AI because of all of the power that we can all see as users. AI is now democratized across hundreds of millions of users. And when we think about enterprises and businesses using AI, the quality of that AI and how effective that AI is really dependent on information in your organization, and that’s data. And what we found is that most enterprises, their data is kind of locked away in these different applications and different systems. And it’s very difficult to get a good view of, what is all my data? How trustworthy is it? How recent and fresh is it? And all of that is being injected into the AI. Unless you have a proper understanding of your data, the ability to ensure that it’s data that’s accurate and that can be used so that the AI can take advantage of it, you’re actually going to end up having terrible AI.
+We see a lot of customers spend time on cleansing their data, organizing their data, making sure it’s access controlled correctly, and that tends to be the fuel of good AI.
+Megan:
+Yeah. It’s such a foundational thing, isn’t it? But it can be missed, I think, quite easily. Rajan, what difference can having AI-ready data really make for enterprises as they unlock that full potential of AI and its applications?
+Rajan:
+First and foremost, thanks for having us. It’s a pleasure. I think in continuation of what Bavesh talked about, see, data and AI is pretty synonymous. And similarly, the consumer AI and enterprise AI and enterprise agentic AI are different because first and foremost, the business needs to have the context. That context from your enterprise information, which is not only structured, both structured and unstructured and user-generated contents and all forms of data is going to be very, very critical to really get the context right, and really get any model that you pick. That’s where the platforms like Databricks really help with the plethora of models or whether you want to build your own models or whether you want to ground the model based on your data. That is going to be very, very critical. That is where getting the data for AI is going to be very, very critical.
+The third critical part, and this actually will be one of the roadblocks for adoption of AI. That’s why if you see the AI adoption on the consumer side is skyrocketing, but on the enterprise side, the enterprises are struggling is primarily around the precision of their output, because you are taking a business decisions where you are taking a buy decision, you are taking a sell decision, or you are trying to recommend something, recommend the content. It could be 20 different use cases. For that, the precision is going to be very critical. We are seeing our customers, the successful customers, definitely for the precision to be more than 92% is not aspiration, that is a must-have. If you have that, definitely being that AI data is going to be the entrepreneur right now for that.
+Megan:
+And I suppose if we’ve outlined there how critical this is, where should enterprises start then, professional perhaps, the level, what are the foundations when it comes to building an AI-ready data model?
+Bavesh:
+Yeah. And I think Rajan hit the nail on the head. I mean, enterprises are grappling with a different set of problems than consumer AI. The first thing is that you’ve got to get a handle on your data. As I mentioned, a lot of the data is locked in. Ensuring that you have ability to put your data in a place where you can understand the holistic view of as much of your data as possible. That kind of starts with putting your data in open formats. A lot of the valuable data today in an organization is locked away in some proprietary SaaS app or some system, and all the datasets aren’t connected together to form that context. The first step is to really do an analysis of what is your data estate? What are the critical pieces of data that need to be put into a place where you can start to understand them and how they’re connected to one another?
+Thinking about how do you set up your data catalog, thinking about how do the relationships between the data assets work, putting data governance around it, that seems to be the first step. And if you think about how ChatGPT was built, it took all the data on the internet and then aggregated it, synthesized it, and then built these transformer models, while enterprises, they don’t really have a handle of all their data within the organization. That’s the first foundation that you really want to think about. The second thing is that you don’t want to just go ad hoc, go and do random AI projects. You really need to be thinking about business value. A lot of our customers are looking at AI much more strategically in that they want to be able to get projects on the board with wins and then generate business value.
+Building an AI value roadmap, which is connected to how well your data is organized, those two things seem to be foundational to how do you launch AI successfully in your organization.
+Megan:
+That value piece is so important, isn’t it? And as I understand it, Infosys and Databricks have worked closely together to guide organizations through this transformation. I wondered, can you share some examples of the impact you’ve seen enterprises you’ve worked with, Rajan, what difference has it made to the ways in which they can integrate more sophisticated AI and agentic AI applications?
+Rajan:
+Well, that’s a very, very good question. What both Databricks and Infosys has done is we have come up with, a kind of a framework first. First and foremost, it all needs to start with the value. One of the largest food products company where we collaborated together, what we have done is we have applied this framework. The framework consists of six different things. First and foremost, very critical is the value management, which Bavesh touched upon. We have worked together to come up with a 3M measurement framework, what we call adaptability, business value, and then responsible. You can’t just go and do a garage project. It has to be measurable. It should be responsible, follow all those things. That is going to be very critical. And we helped this client to prioritize, which will give them the most value for money, the investments that they are making.
+The second critical part here is it is not like most of the enterprises today are not everybody’s AI-born companies. Most of them were born during analog
+days;
+most of them were born in digital days. There are companies which are applying AI for modernization, because a lot of your historical information, which is actually helping you to build that long-term context. And that is where we have worked closely with some of the native tools of Databricks, like Lakebridge or the AI assistants that are there, and then create composable services on top of it to help the clients unlock the value bringing into Databricks. And then the second part where we help the client is exactly to the point, the readying of data. Now you brought in the data, now you have to bring both the structured, unstructured, analytical and all these aspects.
+And that is where the third layer, we closely work with the Databricks, which is part of leveraging all the great capabilities within the Databricks, be it Unity Catalog, be it the open formats, or be it the gateways and other aspects. We were able to make the data available for this client. What has really helped our client, the third part, is Agent Bricks, which is one of the differentiatiors. It gives you the flavor for the enterprise. That is where we have closely worked, and we built some of our industry-specific agents, be it CPG, be it energy, be it FS. And for this client, what we have done is we have taken some of those CPG-specific use cases. Either it could be on the HR space or the procurement space or on the marketing space. And this has really helped our client be able to build a business capability surrounding this and unlock eight to nine use cases, we call it as a products, agentic AI products, which can really drive more value for them, solving the real business problems.
+And this kind of a comprehensive set of frameworks plus set of suites of services, plus our solution assets, Infosys solution assets, as well asunlocking the value from Databricks has really helped these clients. And we see similar patents for a lot of these successful engagements where we were able to continuously drive the value by applying this framework actually.
+Megan:
+Right. Sounds like it made a real material difference. Rajan mentioned a few of the tools in Databricks catalog there, Bavesh. I know you’ve recently worked to launch an operational database for AI agents and apps. I wonder how does a platform like that help organizations in this journey? What makes it different from some of the other platforms out there right now?
+Bavesh:
+Databricks has come to market with a new offering called Lakebase, which is really an OLTP database where you can build your AI apps. And if you think about it, there’s really two main types of data in an enterprise. There’s all the historical data, which is all the things that have happened, and that’s really what your analytics is based on. You have an old app system where you have put all your historical data and Databricks has come to market with what we call the Lakehouse, which is essentially a data warehouse with all of your data that is not operational in nature. It’s historical data. And I think that Lakehouse concept is really pushing forward with AI because a lot of our customers have thousands of users within their business and they need to get data. And what they’ve done is they’ve actually gone down the BI route, which is really building a dashboard or a report.
+Most organizations have had thousands of these dashboards and reports proliferate across the organization and then they need to be customized. It just takes a long time for users inside of the business to actually get access to the data. AI now is really making that a lot easier from just the analytics perspective where we can now democratize access to the data, which has really been the holy grail for most data teams. They really want to get out of the way and just give the right data to the right people inside of the business with the right access.
+With a product like Genie at Databricks, you can just use English language or whatever your language is to ask questions of the data. And it’ll give you back data that answers your questions in context. It’ll give you not just what ChatGPT will give you, which is information about a topic that’s on the internet, but it will actually tell you, “Well, why did my sales numbers not reflect what I expected in the month of April?”
+It’ll give you some root cause analysis based on your enterprise data. Genie is going to be one of these things that’s really important where it’s going to truly kind of democratize data inside of the business. That’s kind of this OLAP world, which is what the Lakehouse is. More recently, we’ve come to market with what we call the Lakebase, which is the OLTP world. What we’re finding is that agents are now being deployed in these organizations, and those agents need a place to keep all of their orchestration, all of the context of what’s happening in that particular workflow. On the one hand, you’ve got users just asking questions. On the other hand, the next chapter is going to be around automating an entire business process. If you’re taking a function like generating a campaign in marketing, right? There are a lot of tools you use and a lot of steps you use.
+An agent can come in and really automate a lot of that. But on the back end of that agent, you’re going to need to stand up a real-time database to keep track of all the things that the agent is doing. That’s what Databricks has brought to market, which is this OLTP Lakebase solution. The innovation that we have brought to market is that it’s a modern kind of Postgres database where we have separated the compute and storage, very much like what we did with the data Lakehouse with the data warehouse. But on the Lakebase, the data is on one copy inside of your cloud storage, and then the compute is separated and it’s serverless. You can do things like branching and you can start up the OLTP database really quickly. What we found is that agents are actually starting these Lakebases because they can very quickly go start one up, keep it running, put it down when it needs to, make a copy of it.
+Agents are doing this, then they need the velocity, they need a cost-effective solution. And the beauty of all this is when you take the OLTP, which is all around the Lakebase and the real time, and you take the OLAP, you now have one system for all your data. You don’t have to copy the data around, you don’t have to manage all the permissions, you can set the context against it. We see these AI apps being really the future of how businesses run, where they’re going to take away all of the bottlenecks that humans are having to do repetitive work and automate these using LLMs and all these new technologies. We want to be the default for powering all that because we believe that our Lakebase technology is going to be faster, cheaper, and more secure for an AI database.
+Megan:
+Sounds like a real game changer. And we’ve touched on this a couple of times already, I mean, this idea of value. We know that engaging the commercial value of investments into AI is really high on the priorities right now for senior leaders. How important is this value measure piece when it comes to creating AI-ready data systems, Rajan? How can organizations ensure they’re monitoring what is delivering and what isn’t?
+Rajan:
+This is the paramount importance and most of the successful AI implementations or agentic AI implementations really required this value measurement. I’ll just extend the client example that I talked about, the large food products company, the global products company, to explain this question. I just want to create a metaphor. When the initial digital world came, we have a lot of these analytics primarily around defining those performance management KPIs, fact-based decisioning and other things were evolving over a period of time. Typically, a lot of these metrics are going to be very critical for them to measure how a function, how a business is doing. On a similar line for the value measurement, if I take the same example of the client, what is very critical for an organization is actually to map your outcome that you are expecting.
+Iin this case, how do I optimize my spend on direct and indirect purchases? So by applying AI, I would like to identify the areas where I can optimize the spend. That means one of the critical measures that you have is, what is your indirect expense classification and what spends you have been classified and how much you are able to reduce by bringing in this. Establishing these measures and the metrics is going to be very, very critical. And once you establish these base metrics and the measurement, and the beauty of it is some of these metrics, to just extend what Bavesh was talking about, the capabilities that Databricks gives you, like metrics view, features, tools, and other things would actually help you to translate those AI telemetries, business telemetries that is coming from your applications into a measurable metrics in terms of an outcome, which you can actually measure using the Genie room for value management measurement.
+Then what happens is two things that you can take, the use case, the products that as I said for this client, the products that we build either on the procurement side or on the marketing research side, if you find there is a value either because of VAC, they identify that they’re able to optimize or it is able to reachability, what is the reach, you can either accelerate that use case and further fine tune that product to expand it. Or there are, if you find it is not really driving the value or I’m not able to see the value that it is going to deliver, you can very well do a fast failure method rather than trying to make it work, you can understand and then you can take a call to pivot it to something else different.
+There are three aspects here. What we see from our experience, not only with this client across some of our other clients from industrial manufacturing or FS or in the energy, is by setting up this metrics-driven valuation method upfront and then leveraging the capabilities to establish, transform these telemetries, signals into a measurement, what we call an AI compass room so that you really measure the business stakeholders, whether it is coming from a marketing office or whether it is coming from supply chain office or whether it is coming from a CFO office where they can say, “Hey, this is what it is intended to do, this is what the current measurement, and this is where it’s failing that can help them to pivot.” And this will actually drive and democratize AI, all the agent decay across the enterprise, and that really drives the value.
+This is going to be one of the critical part that enterprise needs to do it. And that is where the six part framework that I talked about, applying that framework like value office, applying the ready for AI, applying the transformation fabric. Then the third part is the governance, which is going to be the entrepreneur of this. Then running your operations, not based on SLA, based on the experience level agreements and business metrics for you to continually measure, bringing all these six layers is going to be very critical. That’s when we see the organizations are very successful, and some of our proven examples exactly do the same that this is going to be very critical for organizations from a measurement standpoint.
+Megan:
+Lots of tangible ways there that you can actually gauge value here. And you touched on governance and the impact of AI on governance is another huge talking point among senior leaders and interactions with data are a core part of that. To what extent is having the right governance and security protocols an integral part of having AI-ready data? To Bavesh, what scenarios do these systems need to handle? What does that mean for data models?
+Bavesh:
+This is becoming kind of the prerequisite to deploying a successful AI project. I think MIT produced a report that said 95% of these new AI projects fail to actually generate business value. A big reason for that is you can go and prototype and stand up and vibe code a pilot, but when you’re actually moving a workload into production, you realize that governance becomes so critical.
+So what do we really mean by governance? I think the first thing is getting your data in order, like I said, in open formats. Most companies realize now that the way they engage with their customers, the way they develop a drug, the way they approve a person for a credit limit increase, all of that enterprise information is actually their competitive advantage. Because you can go and use a frontier model like ChatGPT or Claude that everybody has access to.
+Really the big competitive differentiator for most organizations is their own data and then their third-party data that they can add to it. Getting your data into an open format so you can understand your data and understanding your data is where governance comes in. Because when you think about governance, you really want to be able to find the data.
+If I’m an end user or if I’m building an AI product, I want to know what data’s available to me. Can I trust the data? How fresh is the data? Is it coming from my analytics world or do I need a real-time system like a OLTP system? I need to find the data. I also need to make sure that access is controlled in a way that doesn’t cause any huge headaches from my organization. This becomes critical. If I have a whole bunch of PDFs that have purchase orders in them, who actually has access to all that data?
+In a clinical trial, for example, in healthcare, you really want to ensure that people across trials don’t have visibility to patient data. Maybe the model that was used to build that was running across trial. Who has access to all the data? Who has access to only parts of the data? You really have to think about this. We also look at semantics of the data. Rajan brought this up right at the beginning of this, which is what is the context? How do we think about the metrics and all the things that the business users know in their head? We need to start codifying that somewhere. We have a product at Databricks called Unity Catalog where you can do the discovery, the access and the business semantics. You also want to share the data.
+And in the world of agents, what we see is something called agent sprawl. In a very short order, just like how SaaS applications became very prevalent within any organization where they really solved a business problem. You go to a line of business and you say, “I need to be able to do credit underwriting” or “I am doing a prior authorization use case or pick thousands of use cases.” There’s a SaaS app for that. Much like that, there’s going to be this world in which agents are going to come into play, and most organizations are going to have lots of agents running all the time, but the reality of it is that how did that agent perform? What was the feedback loop from the user? What was the cost of running that workload and is it going up dramatically? And if you don’t have a way to monitor, to understand, and trace all the questions and answers and responses at scale, you’re going to find yourself in a big pickle. This actually could hurt your organization because users will be very confused about what to do.
+When you look at governance, most organizations are recognizing that they have to start to understand what is it that they have put in place from a systems, from a process, from a tooling standpoint, focus on one use case, build out the governance for that, but build it in a way that’s going to allow you to become repeatable. AI is not going to be about one use case or two use cases. It’s whoever builds the flywheel of building many use cases in a safe, secure way, in a cost-effective way that’s driving a business outcome. If you don’t apply governance, it’s going to be very hard.
+At Databricks, we made a big bet on governance four or five years ago. This is one of the main reasons our company’s growing right now because we can ensure that there’s quality data that’s going into all of your AI. You can use things like Genie and you can use things like Agent Bricks and you can build apps using Lakebase. None of that really works without governance. It’s really what we call the brain inside of Databricks.
+Most of our customers spend a lot of time inside of Unity Catalog. And the great news is that AI is helping governance get set up much more quickly. We have a customer that three years ago, they were trying to get all of the data assets across all their domains from the customer, from the loyalty app, from the e-commerce engine. They had to go and map out all this data assets. AI is now doing a lot of their work for them. The human in the loop is just checking things.
+We’ve made this much easier with AI. We always think about AI as a business use case and an outcome, which I think is going to be where the biggest value is. But at Databricks, we’re using AI inside of our platform to make it much easier to operate and to make it much easier to provide all the right things for your business. This is a super critical part of how we plan to innovate as AI takes fruition in the market.
+Megan:
+And Rajan, Bavesh touched on this a little bit there, but does the integration of Agentic AI add another layer of complexity here too? What new consideration around governance does that raise?
+Rajan:
+That’s a very, very valid question. I would like to take a metaphor to really explain. We are getting into the world of self-driving cars, robotaxis, and other things. While that takes us to the autonomous world, but still there are rules that you need to adhere to when you are driving on a road. The reason I’m bringing this metaphor is because what is actually required is actually adhering to the rules and different topographies, different things, depends upon where you are driving is going to be very, very critical. The complexity that agents are going to add is basically how you operate with those constraints.
+For example, as a UTO, I can do 10 things, but say if I cannot approve a discount for more than 70% or I cannot give something as a bonus for someone because that is a part of the CFO, which an agent should be aware of.
+That is one aspect, applying the constraints around it and making sure that the agents are adhering to the constraints. The second set of complexity that it builds is the tools to access. As a business, in today’s world, when you define a process, certain processes need a certain set of tools to really actionize it. There are certain entitlements, only people entitled to do certain things based on their identity, based on the need or the situation need, you need to govern. The third is information sharing. While MCP and other aspects are great, UCP and other aspects are great, but one critical thing is what you need to share, what you don’t need to share. And those are the critical considerations.
+The last part is learning and relearning. Sometimes when you learn good things, you should keep something. Sometimes it is better for you to completely remove it and reevaluate in a newer way, relearn it in a newer way. These are all the critical things that are required. On the similar line for agents, it is going to be paramount, because when you are operating agents for an enterprise, you need to know, learn, and adhere to certain compliance related rules, business related constraints, and then the entitlement identity, and then sharing whatever that apply to a physical human will also start applying to an agent. That is where this is going to be very critical. This requires a new set of operating systems. That doesn’t really mean now get out of a new thing. That is where I’m just interpreting how Bavesh touched upon the Unity Catalog.
+The best part that which we see and some of our clients that which are implementing is extending the Unity Catalog and the capabilities like now you can catalog the tools, catalog the MCP as well as catalog these agents, and then govern those agents based on the constraints, ground them based on the constraints.
+It’s going to be very, very critical. Doing it not later, but starting that as part of your strategy and enforcing this as one of the critical dimensions of when you measure the value is also going to be very critical for an organization. It is like making sure that not only building the autonomous car, but as well as making sure that the car drives as per the rules of the road, not going rogue.
+Megan:
+Lots to think about there. Fascinating stuff. Thank you. Just to close, with a quick look ahead, we all know the pace of development in AI and Agentic AI is so rapid. For those organizations that can prioritize AI-ready data now, what are the most compelling use cases for the technology that you can see coming to the fore in the next few years, Bavesh?
+Bavesh:
+I think the excitement level is at its peak. We’ve seen so much investment in AI. I think the reason why there’s a lot of excitement is because you can look at the early adopters and you can see massive amounts of gains that these organizations are seeing. The one thing I will tell you is that the companies that there’s really three categories and the companies that I think are doing well, a lot of them started out with just copilots and things that are just giving people quick answers. Think about it as making an individual productive. That is the first phase. And the ROI on that has been somewhat questionable. With something like Genie, it makes it a lot more effective because it’s actually on your data and your data is contextualized in your organization. I think that’s one level of area that we’re going to see a lot of innovation. We’ll see most organizations just start to get the right information to the right person at the right time. And that has been a dream for a lot of organizations.
+The second one is around automating entire business processes. We see functions within marketing, like I described earlier, or whether you’re going through a process of rebates for a company. There’s a whole bunch of steps involved where you have to go into three different apps and export data from Excel and put it over here. There’s thousands of people doing very laborious, monotonous, repeatable work. These agents are really going to help get an immense amount of not only productivity for the business process, but it’s just going to make things faster. Processes that took weeks are now going to take days. Processes that took days are going to take hours and minutes now.
+One trend we’ve seen is that the AI world is so dynamic. In a world where you got lots of different players, you want to think about first principles, what are the foundations? You want to think about owning your data, making sure you have a handle on your structured and unstructured data. You want to put governance on that. But the other thing that you want to make sure that you don’t do is lock yourself in.
+Today, if you think about it, Gemini is really good with multimodal. Anytime you have pictures or videos or things like that, Gemini just is super good. Whereas if you’re writing code, Claude is really good. If you’re just doing certain types of questions around introspection, ChatGPT is really good. What you really want is an open data platform where you can build your open AI on multiple clouds, which is what we built at Databricks.
+I think that’ll help with the second piece, which is you can pick and choose because when you build these agents, you don’t have to be locked into just one. You should be picking the best quality and the best security and the best ROI and cost for a particular workload. One workload may use multiple of these models, and they might be even specific industry models. You need a system and a platform that can really handle this complexity.
+I think the third category is business reimagination. A lot of people talk about this where, yes, you’re going to go and take the data and make it available and give everybody access to the data. You’re going to make existing processes much more efficient. But the third thing is there’s going to be brand new things that come out of it.
+We have a very large customer who’s a bank and they have built a product that they didn’t have a year ago. Essentially, it’s machine learning and LLMs helping treasury departments forecast what their balances are going to be because they have more data at their fingertips. Historically, it took a long time for the data to get to the bankers. They were not able to really predict what a balance would be for a treasury department. Think about this for a big enterprise company, they have now built a brand new data AI solution that they’re monetizing and it’s generated hundreds of millions of dollars in the first six months. We’re seeing brand new lines of business open up and that is going to be really exciting because that’s where a lot of the transformation is going to happen. There’s going to be productivity. There’s going to be kind of automation at the business process level. Then there’s going to be these big new things that we didn’t even imagine that people are going to come up with.
+We are actually seeing the early signals of this in every industry. We see retailers getting data at the hourly and the minute level so that they can integrate much more closely with their supply chains. We’re seeing much more targeted customer 360-degree use cases where as retailers or as consumers, we get annoyed by ads, but now it’s so contextualized and you have so much information about what really matters to your target customer, you’re giving them value added kind of information and that’s engaging them more. There’s a whole bunch of innovation happening with agentic commerce and things like concierge and virtualized shopping.
+You look at any industry, there’s definitely new ways of doing things. This is what’s really exciting about AI, but you really have to not get too far ahead without thinking about what are the foundational things. You mentioned this earlier, which is open data platform, making sure you have governance correctly, making sure you think about your historical analytical data and your application data that’s going to be real time, having a good foundation to build on, that’s going to allow you to scale and move more quickly and compete in this new world.
+We’re very excited about what we’re seeing with our customers and what they’re building. And honestly, that’s the best part about being in my role at Databricks, which is our teams really go to customers and say, “What are the outcomes you’re driving?” The early signals have been super positive. We’re seeing companies that get serious about all the foundational elements and really are methodical about building really outcome-based AI solutions, that 5% of projects that are being successful, those are wildly successful. That’s why we’re growing as a company because once you get a good project under your belt, that gets visibility within executives.
+The last thing is that historically, a lot of tech has been in the IT department. You get the business designing how they want to go to market and how they’re going to compete and what products and services they want to offer. IT was the enabler and in many cases became the cost center and was relegated to rationalizing the portfolio of spend and tools.
+But now we’re seeing the business kind of take the lead with AI where they want to understand, they want to know, “Hey, what can I be doing now that was not possible before?” We see this big opportunity just with AI literacy with business users where they’re very eager to understand how they should be thinking about AI. What does AI mean when you peel the covers? What are the pieces and the building blocks that you need to put in place, both from a technology and a training and an enablement standpoint? We’re spending a lot of time with executives helping them along this journey. We definitely see a lot of amazing opportunities ahead.
+Megan:
+Yeah. So much innovation going on. And finally, how about yourself, Rajan? What on the horizon is exciting you the most?
+Rajan:
+I think Bavesh covered quite a bit, but I think the way I’m seeing is today predominantly we are talking about labor shift. That means unlocking the potential of human or shifting the current way of working to the new way of working with the more efficiency game. It’s predominantly more of an efficiency game. I think that is what we are seeing now and the majority of the successful use cases around the labor shift. But what is pretty promising is the two kinds of shift, the business shifts.
+What we are seeing as a new way of thinking or the new thing that is coming up is moving from system of execution or a system of engagement to system of action. That is the new way we see the road ahead. That is where some of the points that I touched upon. The business wants to have access to it, but how does it really make the real difference for it?
+One classical example that I could clearly see which we have implemented for one of our customers primarily in the manufacturing space, is around the lifecycle of creation of a product and then publishing the content around the product in line with their different B2B marketplaces. Some of those, you are not just talking about recommending, creating, but actually you are able to reimagine this process, which used to involve five different departments, now can be done much faster, but at the same time gives you that veracity in terms of the decisioning that you are able to do and as far as how you’re able to actionize. That is the second thing which we are seeing.
+The third part I think is also going to be is the way how the commerce has evolved. There is also not beyond that agentic commerce, but I think what we are seeing is that agent to agent commerce, agent to human commerce and agent to agent payments, agent to human payments, and then the content monetization.
+These are the new set of business opportunities like building new business agentic products. It could be for family techs, it could be for on the consumer side, or it could be on the industrial technology side. These are going to be what I’m calling the economy shift, labor shift, business shift, because that is going to bring a new set of system of actions, moving them from the system of executions or the typical SaaS application with the bolt-on agentic, the so called agentic application. That is going to be a major transformation, and we are underway. But on the technology side, what is very critical for entrepreneuring is in today’s world you have data, analytical data, operational data, and then there is intelligence, there are different facets of it.
+I think both this analytical core and operational core is going to really come into one. That’s why we are so gung-ho about the releases of Lakebase and other things because that is the way the future is going to drive. When they are really thinking about being ready for AI technology use cases, they should really think, how do you really create this unified core for the newer world?
+The second part is people have to reimagine today, if I take SAP as an example, you do hundreds of edge applications, business applications needed to integrate another thing. Typically, we create sprawl of these integrations. One technology use case, people can say, “Hey, how do I really create a domain-based service mesh on top of this unified core and how do I make it more agentic integration ready?” That is one of the technology use cases that we are advising to the client.
+I think now with a lot of the new areas that are coming around SAP, BDC with the Databricks, and this zero-based integration, that makes them rethink the way they need to integrate, the way they need to do things.
+The third part, I think from a technology investment and technology, the use cases that most come for the technology that I would talk about is don’t just talk about now. This is the time that you have to, the way you own the people, the FTEs for your organizations. Agents are going to be your new FTEs.
+That means that some of the new technology paradigm is going to be you will end up creating these co-intellects within your organization. That means you need to invest on what we call this agentic grid, where it becomes like a unified agentic fabric where every other agents can really collaborate and integrate and building on top of the same, the unified operational analytical core, the unified agentic integration on top of it, which is going to create a new set of experiences, agentic experiences rather than the traditional experiences or conversational experiences.
+Then the new collaboration methods are going to be some of the critical aspects from a technology side that people have to really think from a technology standpoint. To start with, I would say you start looking at it from a data standpoint, building that unified core, building that unified integration and building that collaboration layer for both sharing and collaborating with intelligence as well as the agentic collaboration all governed under single umbrella. That is going to be the one critical use case which no one will feel bad about, and they are going to get really a 100X of their investments out of it.
+Megan:
+Certainly no shortage of exciting developments on the horizon. Thank you both so much for that conversation. That was Bavesh Patel, senior vice president for Go-to-Market at Databricks and Rajan Padmanabhan, unit technology officer for data analytics and AI at Infosys, whom I spoke with from Brighton, England.
+That’s it for this episode of Business Lab. I’m your host, Megan Tatum. I’m a contributing editor and host for Insights, the custom publishing division of MIT Technology Review. We were founded in 1899 at the Massachusetts Institute of Technology, and you can find us in print, on the web and at events each year around the world. For more information about us and the show, please check out our website at technologyreview.com.
+This show is available wherever you get your podcasts, and if you enjoyed this episode, we hope you’ll take a moment to rate and review us. Business Lab is a production of MIT Technology Review, and this episode was produced by Giro Studios. Thanks for listening.
+This content was produced by Insights, the custom content arm of MIT Technology Review. It was not written by MIT Technology Review’s editorial staff. It was researched, designed, and written by human writers, editors, analysts, and illustrators. This includes the writing of surveys and collection of data for surveys. AI tools that may have been used were limited to secondary production processes that passed thorough human review.
+
+KAYNAK : https://www.technologyreview.com/2026/04/27/1136322/rebuilding-the-data-stack-for-ai/
+
+--- mit_ai | Elon Musk and Sam Altman are going to court over OpenAI’s future | score=79.71 ---
+After a yearslong legal feud, Elon Musk and OpenAI CEO Sam Altman are heading to trial this week in Northern California in a case that could have sweeping consequences. Ahead of OpenAI’s highly anticipated IPO, the court could rule on whether the company is allowed to exist as a for-profit enterprise and might even oust its current executive leadership, including Altman.
+Musk is suing OpenAI, alleging that Altman and OpenAI president Greg Brockman deceived him into bankrolling the company in its early days by
+promising
+to maintain it as a nonprofit dedicated to developing AI that benefits humanity, only to later
+restructure
+the company to operate a for-profit subsidiary. Musk cofounded OpenAI with Altman and others in 2015, but he left in 2018 after a bitter power struggle.
+Musk is seeking as much as
+$134 billion
+in damages from OpenAI and Microsoft, one of OpenAI’s biggest financial backers. He is also asking the court to remove Altman and Brockman from their roles and to restore OpenAI as a nonprofit. Musk has asked the court to award any damages to
+OpenAI’s nonprofit
+rather than to him personally.
+Nine jurors will deliver an advisory verdict, a non-binding recommendation, to guide the judge in deciding Musk’s claims against Altman. Musk, Altman, and Brockman will take the stand. Former OpenAI chief scientist Ilya Sutskever, former OpenAI CTO Mira Murati, and Microsoft CEO Satya Nadella are also expected to testify. Cringey texts, raw diary entries, and endless scheming behind the founding and growth of OpenAI are expected to come to light.
+In an industry enveloped in secrecy, the trial will be a rare opportunity for the public to look behind the curtain and find out what’s going on in the companies creating the most transformative technology ever built.
+What are they fighting about?
+When OpenAI was originally founded as a nonprofit, backed by a $38 million donation from Musk, the company
+vowed
+to create open-source technology for the public’s benefit, unconstrained by a need to generate financial returns. But over the years, the company began to believe that intensifying competition could make it dangerous to share how it develops its AI models and that a nonprofit structure could not raise enough money to keep building AI. (
+MIT Technology Review
+was first to report
+on
+OpenAI’s internal conflicts
+around its mission.)
+The court has already
+found
+that in 2017 Altman and Brockman wanted to establish a for-profit arm, while Musk proposed merging OpenAI with his electric-car company, Tesla. When Musk threatened to stop funding, Altman and Brockman told him that they were committed to keeping the company a nonprofit. Musk alleges that they pursued plans to pivot to a for-profit without informing him.
+According
+to OpenAI, Musk agreed that the company needed a for-profit entity and even wanted to be its CEO.
+But even if Musk proves he was duped by Altman and Brockman, he may not have standing in the first place to sue them for restructuring the company to operate a for-profit subsidiary. Some legal scholars are puzzled over why the judge allowed him to bring this claim. “The idea that Elon Musk can sue because he was a donor or used to be on the board is pretty puzzling,” says Jill Horwitz, a law professor who studies nonprofit law at Northwestern University. “Typically, it’s up to the attorneys general to bring such a claim to enforce the charitable purposes. And that’s already happened.”
+In October 2025, state attorneys general of California, where OpenAI is headquartered, and Delaware, where OpenAI is incorporated,
+struck a deal
+with OpenAI to approve its new corporate structure on a
+series of conditions
+. For example, a safety and security committee at the nonprofit would review safety-related decisions made by the for-profit subsidiary. Critics of the restructuring, including Musk, AI safety advocates, and civil society groups, have tried to
+stop
+it.
+California’s attorney general has
+declined
+to join Musk’s lawsuit, saying that the office did not see how his action serves the public interest.
+Still, whether the deal holds OpenAI to its nonprofit mission is an open question. “Elon Musk should have to show … what the deficiencies are in what’s been agreed to by OpenAI with the attorneys general,” says Rose Chan Loui, the director of the UCLA School of Law’s philanthropy and nonprofit program. Even with the terms in place, holding OpenAI to them depends on “how much they can enforce it and how much transparency they get into OpenAI’s work.”
+More importantly, legal experts say the case is being considered under the wrong body of law. Musk argues that Altman and Brockman breached OpenAI’s charitable trust by creating a closed-source, for-profit subsidiary. As a result, the court has been analyzing the claim under the
+law of trusts
+. “But OpenAI is not a trust. OpenAI is a corporation. And so really they should be looking at … the
+law of charitable nonprofit organizations
+,” says Chan Loui.
+What’s on the line?
+Despite all the legal muddiness, the outcome of the trial could upend the AI race. Any one of the remedies that Musk seeks could
+cripple
+OpenAI as it races to
+go public
+by the end of the year. OpenAI, which is valued at over $850 billion, has described the litigation with Musk as
+a potential risk
+to its business. Musk’s rival company xAI, which makes the chatbot Grok, is expected to go public as a part of his rocket company SpaceX as early as June. If Musk prevails, xAI, which in combination with SpaceX is valued at
+$1.25 trillion
+, could get a big advantage in the AI race.
+And the trial has helped expose the bitter schism between Musk and the company he once helped to found. An OpenAI spokesperson referred
+MIT Technology Review
+to a
+post
+on X: “This lawsuit has always been a baseless and jealous bid to derail a competitor.” Although Musk’s lawyers did not immediately respond to a request for comment, he has
+posted
+on X that “Scam Altman lies as easily as he breathes.”
+MIT Technology Review will have ongoing coverage of Musk v. Altman until its conclusion. Follow
+@techreview
+or
+@michelletomkim
+on X or
+@michelletomkim
+on Bluesky for up-to-the-minute reporting.
+
+KAYNAK : https://www.technologyreview.com/2026/04/27/1136466/elon-musk-and-sam-altman-are-going-to-court-over-openais-future/
+
+--- mit_ai | The missing step between hype and profit | score=76.82 ---
+This story originally appeared in The Algorithm, our weekly newsletter on AI. To get stories like this in your inbox first,
+sign up here
+.
+In February, I picked up a flyer at an
+anti-AI march in London
+. I can’t say for sure whether or not its writers meant to riff on South Park’s underpants gnomes. But if they did, they nailed it: “Step 1: Grow a digital super mind,” it read. “Step 2: ? Step 3: ?”
+Produced by Pause AI, an international activist group that co-organized the protest, it ended with this plea to the reader: “Pause AI until we know what the hell Step 2 is.”
+In the
+South Park
+episode “Gnomes,” which first aired in 1998, Kenny, Kyle, Cartman, and Stan discover a community of gnomes that sneak out at night to steal underpants from dressers. Why? The gnomes present their pitch deck. “Phase 1: Collect underpants. Phase 2: ? Phase 3: Profit.”
+The gnomes’ business plan has since become one of the
+greats among internet memes
+, used to satirize everything from startup strategies to policy proposals. Memelord in chief Elon Musk once
+invoked it in a talk
+about how he planned to fund a mission to Mars. Right now, it captures the state of AI. Companies have built the tech (Step 1) and promised transformation (Step 3). How they get there is still a big question mark.
+As far as Pause AI is concerned, Step 2 must involve some kind of regulation. But exactly what it will call for and who will enforce it are up for debate.
+AI boosters, on the other hand, are convinced that Step 3 is salvation and tend to glaze over the middle bit. They see us racing toward sunny uplands on the back of an “economically transformative technology,” as OpenAI’s chief scientist, Jakub Pachocki, put it to me a few weeks ago. They know where they want to go—more or less: It’s hazy up there and still some way off. But everyone’s taking a different route. Will they all make it? Will anyone?
+For every big claim about the future, there is a more sober assessment of how the rubber meets the road—one that quells the hype. Consider two recent studies. One, from Anthropic,
+predicted what types of jobs are going to be most affected by LLMs
+. (A takeaway: Managers, architects, and people in the media should prepare for change; groundskeepers, construction workers, and those in hospitality, not so much.) But their predictions are really just guesses, based on what kinds of tasks LLMs seem to be good at rather than how they really perform in the workplace.
+Another study, put out in February by researchers at Mercor, an AI hiring startup,
+tested several AI agents powered by top-tier models
+from OpenAI, Anthropic, and Google DeepMind on 480 workplace tasks frequently carried out by human bankers, consultants, and lawyers. Every agent they tested failed to complete most of its duties.
+Why is there such wide disagreement? There are a number of factors. For a start, it’s crucial to consider who is making the claims (and why). Anthropic has skin in the game. What’s more, most of the people telling us that something big is about to happen have reached that conclusion largely on the basis of how fast AI coding tools are getting. But not all tasks can be hacked with coding. Other studies have found that LLMs are bad at making strategic judgment calls, for example.
+What’s more, when they’re deployed, the tools aren’t just dropped into a cleanroom. They need to work in places contaminated with people and existing workflows. And sometimes adding AI will make things worse. Sure, maybe those workflows need to be torn up and refashioned around the new technology for it to achieve transformative status, but that will take time (and guts).
+That big hole? It’s right where Step 2 should be. The lack of agreement on exactly what’s about to happen—and how—creates an information vacuum that gets filled by the latest wild claim of the week, evidence be damned. We’re so unmoored from any real understanding of what’s coming and how it will be deployed that a single social media post can (and does) shake markets.
+We need fewer guesses and more evidence. But that’s going to require transparency from the model makers, coordination between researchers and businesses, and
+new ways to evaluate this technology
+that tell us what really happens when it’s rolled out in the real world.
+The tech industry (and with it the world’s economy) rests on the held-out promise that AI really will be transformative. But that is not yet a sure bet. Next time you hear bold claims about the future, remember that most businesses are still figuring out what to do with their underpants.
+
+KAYNAK : https://www.technologyreview.com/2026/04/27/1136456/the-missing-step-between-hype-and-profit/
+
+--- openai | OpenAI available at FedRAMP Moderate | score=50.31 ---
+OpenAI is available at FedRAMP Moderate authorization for ChatGPT Enterprise and the OpenAI API, enabling secure AI adoption for U.S. federal agencies.
+
+KAYNAK : https://openai.com/index/openai-available-at-fedramp-moderate
+
+--- google_ai | Join the new AI Agents Vibe Coding Course from Google and Kaggle | score=44.34 ---
+Join the new AI Agents Vibe Coding Course from Google and Kaggle
+Last November, we launched our first 5-Day AI Agents Intensive Course with Kaggle, reaching over 1.5 million learners. By popular demand, we’re bringing it back from June 15-19, 2026 — now with updated content, new speakers and a hands-on capstone project, all at no cost to registrants.
+This five-day online course dives deep into building powerful AI agents from foundational concepts to production-ready systems, especially with vibe coding. You’ll explore vibe coding workflows, where natural language becomes the primary programming interface, and learn how to create “10x agents” by integrating tools and APIs. Each day combines conceptual deep dives with hands-on examples. By the end, you’ll be ready to design, build and deploy robust agent systems — culminating in a capstone project that brings your ideas to life.
+You can register for the course on our website.
+
+KAYNAK : https://blog.google/innovation-and-ai/technology/developers-tools/kaggle-genai-intensive-course-vibe-coding-june-2026/
+
+--- claude | Elevated billing related errors on Claude.ai | score=38.03 ---
+Apr
+27
+,
+15:18
+UTC
+Resolved
+- This incident has been resolved.
+Apr
+27
+,
+14:11
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/mct55f8gxb7k
+
+--- nextjs | v16.3.0-canary.4 | score=38.02 ---
+We read every piece of feedback, and take your input very seriously.
+To see all available qualifiers, see our documentation.
+ae61573
+There was an error while loading. Please reload this page.
+v16.3.0-canary.4
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.4
+
+--- nextjs | v16.3.0-canary.3 | score=29.47 ---
+We read every piece of feedback, and take your input very seriously.
+To see all available qualifiers, see our documentation.
+458b0db
+There was an error while loading. Please reload this page.
+v16.3.0-canary.3
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.3
 

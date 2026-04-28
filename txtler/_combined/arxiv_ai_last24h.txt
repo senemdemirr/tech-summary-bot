@@ -1,4 +1,4 @@
---- arxiv_ai | A general optimization solver based on OP-to-MaxSAT reduction | score=102.24 ---
+--- arxiv_ai | A general optimization solver based on OP-to-MaxSAT reduction | score=102.14 ---
 [2]\fnmHan \surHuang
 [1]\orgdivSchool of Software Engineering, \orgnameSouth China University of Technology, \orgaddress\cityGuangzhou, \postcode510006, \countryChina
 2]\orgdivSchool of Software Engineering, \orgnameSun Yat-sen University, \orgaddress\cityZhuhai, \postcode519082, \countryChina
@@ -289,7 +289,7 @@ This rule generates intermediate Boolean variables and clauses.
 
 KAYNAK : https://arxiv.org/abs/2604.21961
 
---- arxiv_ai | Model Predictive Control of Hybrid Dynamical Systems | score=102.24 ---
+--- arxiv_ai | Model Predictive Control of Hybrid Dynamical Systems | score=102.14 ---
 Model Predictive Control of Hybrid Dynamical Systems
 Abstract
 The problem of controlling hybrid dynamical systems using model predictive control (MPC) is formulated and sufficient conditions for asymptotic stability of a set are provided. Hybrid dynamical systems are modeled in terms of hybrid equations, involving a differential equation and a difference equation with inputs and constraints. The proposed hybrid MPC algorithm uses a suitable prediction and control horizon construction inspired by hybrid time domains. Structural properties of the hybrid optimization problem, its feasible set, and its value function are provided. Checkable conditions to guarantee asymptotic stability of a set are provided. These conditions are given in terms of properties on the stage cost, terminal cost, and the existence of static state-feedback laws, related through a control Lyapunov function condition. Examples illustrate the results throughout the paper.
@@ -820,7 +820,7 @@ Since , is compact-valued (as is compact and is closed), and is continuous, by B
 
 KAYNAK : https://arxiv.org/abs/2604.21989
 
---- arxiv_ai | Optimal Question Selection from a Large Question Bank for Clinical Field Recovery in Conversational Psychiatric Intake | score=102.24 ---
+--- arxiv_ai | Optimal Question Selection from a Large Question Bank for Clinical Field Recovery in Conversational Psychiatric Intake | score=102.14 ---
 :
 \theoremsep
 Optimal Question Selection from a Large Question Bank for Clinical Field Recovery in Conversational Psychiatric Intake
@@ -911,7 +911,7 @@ The source intake forms served as the clinical origin of the question bank and a
 
 KAYNAK : https://arxiv.org/abs/2604.22067
 
---- arxiv_ai | Verbal Confidence Saturation in 3-9B Open-Weight Instruction-Tuned LLMs: A Pre-Registered Psychometric Validity Screen | score=102.24 ---
+--- arxiv_ai | Verbal Confidence Saturation in 3-9B Open-Weight Instruction-Tuned LLMs: A Pre-Registered Psychometric Validity Screen | score=102.14 ---
 Verbal Confidence Saturation in 3–9B Open-Weight Instruction-Tuned LLMs:
 A Pre-Registered Psychometric Validity Screen
 Abstract
@@ -1047,7 +1047,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2604.22215
 
---- arxiv_ai | A Probabilistic Framework for Hierarchical Goal Recognition | score=102.24 ---
+--- arxiv_ai | A Probabilistic Framework for Hierarchical Goal Recognition | score=102.14 ---
 A Probabilistic Framework for Hierarchical Goal Recognition
 Abstract
 Goal recognition aims to infer an agent’s goal from observations of its behaviour. In realistic settings, recognition can benefit from exploiting hierarchical task structure and reasoning under uncertainty. Planning-based goal recognition has made substantial progress over the past decade, but to the best of our knowledge no existing approach jointly integrates hierarchical task structure with probabilistic inference. In this paper, we introduce the first planning-based probabilistic framework for hierarchical goal recognition over Hierarchical Task Networks (HTNs). We instantiate the framework by exploiting an HTN planner with a three-stage generative model for likelihood estimation, yielding posterior distributions over goal hypotheses. Empirical results show improved recognition performance over the existing HTN-based recognizer on HTN benchmarks. Overall, the framework lays a foundation for probabilistic goal recognition grounded in hierarchical planning structure, moving goal recognition toward more practical settings.

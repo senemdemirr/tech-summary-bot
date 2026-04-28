@@ -1,4 +1,3 @@
---- huggingface | Adaptive Ultrasound Imaging with Physics-Informed NV-Raw2Insights-US AI | score=100.26 ---
 Adaptive Ultrasound Imaging with Physics-Informed NV-Raw2Insights-US AI
 Introduction
 Ultrasound is one of the most widely used medical imaging modalities due to its safety, real-time capability, portability, and low cost. For decades, ultrasound images have been formed using a hand-engineered reconstruction pipeline that compresses rich raw sensor measurements into a final image while also making simplifying assumptions about physics, including a constant speed of sound throughout the body.
@@ -29,4 +28,3 @@ This project was conducted in close collaboration with Siemens-Healthineers, we 
 This technology is under investigational development and not cleared for or available for sale in the U.S. or other countries. Its future availability cannot be guaranteed.
 
 KAYNAK : https://huggingface.co/blog/nvidia/raw2insights-adaptive-ultrasound-imaging
-

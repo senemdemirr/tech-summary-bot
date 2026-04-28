@@ -1,4 +1,3 @@
---- dotnet | Combining API versioning with OpenAPI in .NET 10 applications | score=93.98 ---
 This is a guest blog from
 Sander ten Brinke
 , a Microsoft MVP and Senior Software Engineer, with a passion for building scalable and maintainable applications.
@@ -743,4 +742,3 @@ appeared first on
 .
 
 KAYNAK : https://devblogs.microsoft.com/dotnet/api-versioning-in-dotnet-10-applications/
-

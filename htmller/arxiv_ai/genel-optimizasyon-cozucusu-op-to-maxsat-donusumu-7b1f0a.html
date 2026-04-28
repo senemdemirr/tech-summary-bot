@@ -1,30 +1,31 @@
 <div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
   <h1>Genel Optimizasyon Çözücüsü: OP-to-MaxSAT Dönüşümü</h1>
-  <p>Optimizasyon problemleri, mühendislikten ekonomiye, bilimsel hesaplamalardan çeşitli alanlara kadar geniş bir yelpazede temel bir rol oynar. Ancak, mevcut algoritmalar genellikle belirli problem türleri için tasarlanmış olup, çoklu optimizasyon problemlerini çözme konusunda sınırlı bir genel geçerliliğe sahiptir. Bu sınırlılığı aşmak için, OP-to-MaxSAT dönüşümü adını verdiğimiz otomatik bir dönüşüm yöntemi ve bu dönüşüm üzerine kurulu bir genel optimizasyon çözücüsü (GORED) öneriyoruz.</p>
-  <p>GORED, çeşitli optimizasyon problemlerini MaxSAT örneklerine indirerek ve bu örnekleri en son teknoloji MaxSAT çözücüsü kullanarak çözerek birleştirir. GORED'in genel geçerliliği ve çözüm kalitesi, 11 farklı optimizasyon problem türünde 136 örnek üzerinde yapılan deneylerle doğrulanmıştır. Sonuçlar, GORED'in geniş bir optimizasyon problem yelpazesini başarıyla çözdüğünü ve mevcut yöntemlerle karşılaştırılabilir kalitede çözümler sunduğunu göstermektedir.</p>
+  <p>Optimizasyon problemleri, mühendislik, ekonomi ve bilimsel hesaplama gibi çeşitli alanlarda temel bir rol oynar. Ancak mevcut algoritmalar genellikle belirli problem türleri için tasarlanmış olup, çok çeşitli optimizasyon problemlerini çözmede sınırlı genellik sergiler. Bu sınırlamaları aşmak için, OP-to-MaxSAT dönüşümü adı verilen otomatik bir indirgeme yöntemi ve bu dönüşüme dayalı genel bir optimizasyon çözücüsü (GORED) öneriyoruz.</p>
+  <p>GORED, optimizasyon problemlerini MaxSAT örneklerine indirerek ve bunları en gelişmiş MaxSAT çözücüsü kullanarak çözerek, çeşitli optimizasyon problemlerinin çözümünü birleştirir. Bu çalışma, optimizasyon çözücülerinin paradigmasını, her problem türü için özel algoritmalar tasarlamaktan, çeşitli problemler için tek bir algoritma kullanmaya kaydırarak, bu tek algoritmadaki ilerlemelerin çeşitli alanlardaki optimizasyon problemlerinde ilerlemeyi yönlendirebileceği bir ortam yaratır.</p>
   
   <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
-  <p>Bu çalışma, optimizasyon çözücülerinin paradigmasını, her problem türü için özel algoritmalar tasarlamaktan, çeşitli problemler için tek bir algoritma kullanmaya kaydırıyor. Bu değişim, bir algoritmadaki ilerlemelerin farklı problem türlerinde genel bir iyileşme sağlamasına olanak tanır. Otomatik dönüşümün tanıtılması, optimizasyon teknolojilerinin geliştirilmesi ve uygulanması için yeni bir çerçeve sunar.</p>
+  <p>Bu makale, optimizasyon problemlerinin çözümünde bir devrim niteliğinde olan OP-to-MaxSAT dönüşümünü tanıtmaktadır. Bu yöntem, çeşitli alanlarda karşılaşılan karmaşık optimizasyon problemlerini çözmek için genel bir yaklaşım sunar. Mevcut yöntemlerin genellikle belirli problem türlerine odaklandığı göz önüne alındığında, bu genel yaklaşım, optimizasyon teknolojilerinin geliştirilmesi ve uygulanmasında önemli bir adım olarak kabul edilebilir.</p>
   
   <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
-  <p>GORED, optimizasyon problemlerini MaxSAT örneklerine dönüştürerek çalışır. Bu süreç, problemin kısıt yapısını analiz ederek ve önerilen dönüşüm kurallarını uygulayarak otomatikleştirilir. Dönüşüm sürecinin zaman karmaşıklığı polinomik olup, hem verimliliği hem de genel geçerliliği garanti eder. Bu yaklaşım, problem türüne özgü algoritmalar geliştirmek yerine, tek bir algoritmanın çeşitli optimizasyon problemlerini çözmesini sağlar.</p>
+  <p>GORED, optimizasyon problemlerini MaxSAT örneklerine indirerek çalışır. Bu süreç, optimizasyon problemlerinin kısıt yapılarını analiz eder ve önerilen indirgeme kurallarını uygulayarak manuel müdahaleye gerek kalmadan indirgeme işlemini otomatikleştirir. İndirgeme işleminin zaman karmaşıklığı polinomik olup, bu da hem verimliliği hem de genelliği sağlar.</p>
+  <p>GORED, 11 farklı optimizasyon problemi üzerinde test edilmiştir. Deneysel sonuçlar, GORED'in mevcut yöntemlerle karşılaştırılabilir çözüm kalitesi sağladığını göstermektedir. Bu, OP-to-MaxSAT dönüşümünün otomatik olarak orijinal optimizasyon problemini bir MaxSAT örneğine dönüştürmesi ve ardından bir MaxSAT çözücüsü kullanarak çözmesi sayesinde mümkün olmaktadır.</p>
   
   <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
-  <p>GORED, mühendislik, ulaşım, endüstriyel üretim gibi birçok alanda kullanılan optimizasyon problemlerini çözmek için etkili bir araç sunar. Bu yöntem, optimizasyon problemlerinin çözümünde manuel müdahaleyi azaltarak, çapraz alan entegrasyonunu ve optimizasyon tekniklerinin uygulamasını teşvik eder.</p>
+  <p>GORED, mühendislik, endüstriyel üretim ve ulaşım gibi çeşitli alanlarda çalışan araştırmacı ve uygulayıcılar için büyük bir potansiyele sahiptir. Çeşitli optimizasyon problemlerini çözmek için genel bir araç olarak hizmet eder ve bu da manuel müdahale gereksinimini azaltır. Bu, optimizasyon problemlerinin çözümünde daha hızlı ve daha verimli bir yaklaşım sunar.</p>
   
   <h2>Kısa Özet</h2>
   <ul>
-    <li>GORED, optimizasyon problemlerini MaxSAT örneklerine dönüştürerek çözer.</li>
-    <li>Otomatik dönüşüm, manuel müdahaleyi en aza indirir ve genel geçerliliği artırır.</li>
-    <li>Deneyler, GORED'in geniş bir problem yelpazesinde etkili olduğunu göstermektedir.</li>
-    <li>GORED, mevcut yöntemlerle karşılaştırılabilir çözüm kalitesi sunar.</li>
-    <li>Bu yaklaşım, optimizasyon çözücülerinin tasarımında yeni bir paradigma sunar.</li>
+    <li>GORED, OP-to-MaxSAT dönüşümü ile genel bir optimizasyon çözücüsü sunar.</li>
+    <li>Optimizasyon problemlerini MaxSAT örneklerine indirerek çözüm sağlar.</li>
+    <li>Çeşitli alanlardan 11 farklı optimizasyon problemi üzerinde test edilmiştir.</li>
+    <li>Mevcut yöntemlerle karşılaştırılabilir çözüm kalitesi sunar.</li>
+    <li>Polinomik zaman karmaşıklığı ile verimlilik ve genellik sağlar.</li>
   </ul>
   
-  <p>Metin, eğitmenler ve bakış açısı gibi konularda detay vermiyor.</p>
+  <p>Metin, eğitmenler ve bakış açıları gibi konularda detay vermiyor.</p>
   
   <h2>Kapanış</h2>
-  <p>GORED, optimizasyon problemlerinin çözümünde önemli bir ilerleme sunarak, çeşitli problem türlerini çözmek için tek bir algoritma kullanma imkanı tanır. Bu yaklaşım, optimizasyon çözücülerinin tasarımında yeni bir paradigma oluşturarak, geniş bir problem yelpazesinde ilerleme kaydetmeyi mümkün kılar.</p>
+  <p>GORED, optimizasyon problemlerinin çözümünde yeni bir paradigma sunarak, çeşitli problem türlerini tek bir algoritma ile çözme olanağı sağlar. Bu yaklaşım, optimizasyon teknolojilerinin daha geniş bir alanda uygulanmasına olanak tanır ve bu alandaki araştırmalar için yeni ufuklar açar.</p>
   
   <h2>Kaynak</h2>
   <p>Detaylı okumak için: <a href="https://arxiv.org/abs/2604.21961" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2604.21961</a></p>
