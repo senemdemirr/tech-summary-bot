@@ -1,0 +1,140 @@
+Created 10 years ago,
+SkiaSharp
+has long been the backbone of cross-platform 2D graphics in .NET. It powers graphics rendering across mobile, desktop, web, and server targets with consistent, high-quality output using the
+open-source Skia engine
+. SkiaSharp gives .NET developers the tools to draw text, geometries, and images with pixel-perfect fidelity wherever their apps run. SkiaSharp’s cross-platform bindings are important to Microsoft for various .NET platforms like .NET MAUI, as well as rendering consistent UI on key technologies like WebAssembly and WinUI 3. Its continued evolution and long-term maintenance are strategically important to the broader .NET ecosystem.
+Today, we’re announcing a major milestone for SkiaSharp.
+SkiaSharp 4.0 Preview 1
+is here.
+Our goal is to align SkiaSharp with updates and features that come with a new Skia engine and more modern API. Over two years worth of Skia updates are coming to SkiaSharp with this release. Thank you to all contributors that made this release happen.
+Get SkiaSharp 4.0 Preview 1
+Please try out the preview and give us feedback by filing an issue on our repository
+github.com/mono/SkiaSharp
+.
+We’re also excited to see
+Uno Platform
+step up into a co-maintainer role with us on SkiaSharp. Uno Platform
+has been collaborating with us
+on .NET, bringing in the latest Android bindings, contributing to AOT, Wasm, and more. They will co-maintain SkiaSharp alongside the .NET team going forward, helping keep cross-platform graphics rendering accessible to all .NET developers in a timely way.
+We’ll celebrate this collaboration and SkiaSharp 4.0 release on June 30 together at
+Uno Platform’s Focus on SkiaSharp online event
+. Save the date!
+What’s New in SkiaSharp 4.0 Preview 1
+SkiaSharp 4.0 is a major upgrade. Under the hood, the Skia graphics engine has been updated with years of upstream improvements including rendering quality, codec, and performance gains that benefit every SkiaSharp app automatically, without any code changes required.
+Here’s what’s available in the first preview:
+A Better Engine
+SkiaSharp 4.0 ships with Skia milestone 147 – two and a half years and 28 milestones of upstream rendering, quality, and security improvements that benefit your apps automatically:
+Sharper downscaled images
+– mipmap sharpening is now on by default.
+Automatic photo orientation
+– image codecs now respect Exif rotation metadata.
+Improved large image handling
+– oversized bitmaps automatically tile to fit GPU texture limits.
+More accurate colors
+– transfer functions for Rec.709, HLG, and PQ corrected to match industry standards.
+Incremental performance gains
+– rendering operations across the board are modestly faster, with specific improvements to noise shaders and canvas operations.
+Security hardened
+– modern compiler mitigations enabled across all platforms, and all bundled native dependencies updated with security fixes.
+New Capabilities
+Here’s what’s new in Preview 1, with more on the way in upcoming previews:
+Variable fonts
+– full OpenType variable font axis control across SkiaSharp and HarfBuzz. Query axes, set positions, and create typeface variants for weight, width, slant, or custom axes.
+Color font palettes
+– switch between OpenType CPAL palettes for emoji and icon fonts, or override individual glyph colors.
+SKPathBuilder
+– the modern way to construct paths.
+SKPath
+is now immutable under the hood, with
+SKPathBuilder
+providing the familiar
+MoveTo
+/
+LineTo
+/
+CubicTo
+API plus shape factories. Existing
+SKPath
+methods remain available for backward compatibility.
+Linux Bionic and Tizen 64-bit
+– new native build targets for Android-based Linux systems and Samsung Tizen x64/arm64 devices.
+Read the Release Notes, Try out the Preview
+Read the full release notes for all the details:
+SkiaSharp 4.0 Preview 1 Release Notes
+.
+Try SkiaSharp 4.0 Preview 1
+and tell us what you think.
+Whether you’re building data visualization tools, custom UI, game surfaces, or anything in between, please try the preview releases, contribute, and give us feedback at
+github.com/mono/SkiaSharp
+to help us on our journey to a solid SkiaSharp 4.0 release.
+SkiaSharp 4.0 Roadmap & Interactive Gallery
+We plan on releasing SkiaSharp 4.0 previews often as we move toward release candidate to final release this summer. This will give commercial vendors, partner teams, and the community time to evaluate and give us feedback.
+You can see our roadmap and the work we have ahead here:
+SkiaSharp v4 Release Tracking
+.
+A new website and interactive gallery is also in the works to help you get started and showcase what you can do with SkiaSharp. We’re building it as a Blazor WebAssembly app with live, interactive demos, from shader playgrounds and path effects to variable fonts and image filters. Check out the early preview at
+mono.github.io/SkiaSharp
+.
+There’s also a live SkiaSharp playground,
+SkiaFiddle powered by Uno Platform
+, that you can use to test out your SkiaSharp code interactively.
+A New Partner: Uno Platform Joins as Co-Maintainer
+SkiaSharp is important to Uno Platform. They have built their cross-platform rendering pipeline on SkiaSharp, making them one of the most active and invested stakeholders in the project’s health.
+Uno Platform will co-maintain SkiaSharp
+in partnership with the .NET team at Microsoft. This will move SkiaSharp forward at a more rapid pace, with a healthy SkiaSharp-loving community invited to engage and contribute. Read all about
+Uno Platform’s commitment to SkiaSharp on their blog
+.
+Uno Platform engineers have already made significant contributions to SkiaSharp 4.0:
+Skia engine bumps
+(
+#3560
+,
+#3702
+) – Major engine upgrades bringing SkiaSharp up to the latest Skia.
+Variable font support
+(
+#3703
+) – Full variable font API for SkiaSharp and HarfBuzzSharp.
+Android typeface crash fix
+(
+#3730
+) – The critical Android API 36 startup fix.
+Cross-platform generator tooling
+(
+#3714
+) – Made the binding generator work on Linux, enabling broader contributor access.
+Uno Platform WebAssembly gallery
+(
+#3758
+) – An interactive gallery showcasing SkiaSharp via Uno Platform’s WebAssembly renderer.
+Formalizing that relationship as co-maintainers means:
+Better stability
+– more eyes on the codebase, faster triage, and higher confidence in releases
+Improved update cadence
+– contributions from teams actively shipping SkiaSharp-dependent products
+Lower barrier to contribute
+– streamlined processes make it easier for the broader .NET community to participate
+For .NET developers who depend on SkiaSharp in production, this is good news: the library now has multi-organizational momentum behind it that matches its importance to the ecosystem.
+Join the Celebration: SkiaSharp Live Event
+To mark this release, Uno Platform is hosting a live event with .NET team members dedicated entirely to all things SkiaSharp.
+Date:
+June 30th, 11am – 3pm ET
+Where to Watch:
+Uno Platform channels on YouTube, X (Twitter), and LinkedIn
+.NET Foundation YouTube
+Event details:
+platform.uno/skiasharp
+Come for the demos, stay for the deep dives! The event will cover what’s new in 4.0, what the new co-maintenance model means in practice, and what’s ahead for SkiaSharp in the .NET ecosystem.
+We encourage you to
+try out the preview
+and give us feedback by filing an issue on our repository
+github.com/mono/SkiaSharp
+.
+Have fun and happy SkiaSharp-ing!
+The post
+Welcome to SkiaSharp 4.0 Preview 1
+appeared first on
+.NET Blog
+.
+
+KAYNAK : https://devblogs.microsoft.com/dotnet/welcome-to-skia-sharp-40-preview1/

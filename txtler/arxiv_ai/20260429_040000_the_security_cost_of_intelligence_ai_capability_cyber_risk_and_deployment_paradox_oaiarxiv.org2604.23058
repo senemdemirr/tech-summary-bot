@@ -1,0 +1,505 @@
+The Security Cost of Intelligence:
+AI Capability, Cyber Risk, and Deployment Paradox
+Abstract
+Firms are deploying more capable AI systems, but organizational controls often have not kept pace. These systems can generate greater productivity gains, but high-value uses require broader authority exposure—data access, workflow integration, and delegated authority—when governance controls have not yet decoupled capability from authority exposure. We develop an analytical model in which a firm jointly chooses AI deployment and cybersecurity investment under this governance-capability gap. The central result shows a deployment paradox: in high-loss environments, better AI can lead a firm to deploy less when capability is deployed through broader authority exposure under weak governance. Optimal deployment also falls below the no-risk benchmark, and this shortfall widens with breach-loss magnitude and with the authority exposure attached to more capable systems. Governance investment that reduces breach-loss magnitude shrinks the paradox region itself, while breach externalities expand the range of environments in which deployment is socially constrained. Governance maturity is therefore not merely a constraint on AI adoption. It is a condition that shapes whether capability improvements translate into productive deployment.
+Keywords: artificial intelligence, AI deployment, organizational cybersecurity, cyber risk, deployment paradox
+1 Introduction
+In many current enterprise deployments, governance maturity has not kept pace with operational integration. High-value uses of capable AI systems often require broad data access, workflow integration, and delegated authority. We use the term authority exposure to refer to this bundle of access, workflow reach, and delegated action rights. When governance controls cannot limit the authority exposure attached to these systems, more capable deployments can become harder to contain. In November 2025, Anthropic disclosed a large-scale AI-orchestrated cyber espionage campaign in which a jailbroken Claude Code agent automated major stages of attack execution (Anthropic 2025). The same organizational features that make AI productive—deep data access, cross-system integration, and autonomous decision-making—can also expand the attack surface and increase breach consequences when governance has not kept pace (Kumar et al. 2020, Microsoft 2024). Among organizations that reported AI-related security incidents, 97% lacked proper AI access controls (IBM Security 2025). A 2026 survey by the Cloud Security Alliance found that 74% of organizations give AI agents more privileges than necessary, 79% report agents creating hard-to-monitor access pathways, and only 22% apply access-control frameworks consistently (Cloud Security Alliance 2026).
+These findings do not mean that AI capability and operational authority are inherently inseparable. In principle, the two can be decoupled: organizations can grant AI systems access only to the data and decision rights each task requires, rather than broad default permissions—an approach known in cybersecurity practice as Zero Trust architecture and least-privilege design (Rose et al. 2020). Yet they suggest that governance maturity has not kept pace with capability advancement. We call this misalignment the governance-capability gap. By governance, we mean the organizational controls that shape what a deployed AI system can access and do—access controls, data segmentation, privilege boundaries, and containment design that limit how far a breach can propagate. These controls, rather than cybersecurity spending alone, shape how safely capable AI can be deployed and how costly the gap becomes when governance lags.
+Indeed, this gap carries a direct economic cost. The average cost of a data breach reached $4.88 million in 2024 (IBM Security 2024). In sectors with high breach costs, such as healthcare and financial services, the AI systems that promise substantial productivity gains are often deployed with broad authority and deep data access—environments in which the gap can leave firms especially exposed.
+The IS literature examines how firms deploy AI as part of digital transformation and shows that realizing AI’s value requires organizational governance that differs from traditional IT (Bharadwaj et al. 2013, Vial 2019, Collins et al. 2021, Holmström 2022, Lin and Maruping 2025). Research on organizational cybersecurity demonstrates that IT investment, governance arrangements, and organizational complexity shape breach outcomes (Li et al. 2023, Liu et al. 2020, Durcikova et al. 2024, Tanriverdi et al. 2025). What remains less developed across these streams is a clear model of how the governance-capability gap reshapes firms’ deployment incentives and affects whether capability improvements help or hurt deployment.
+We address this question by jointly modeling AI deployment and cybersecurity investment under the governance-capability gap. The key premise is not that AI capability mechanically causes greater breach damage. Rather, some high-value uses of more capable AI require greater authority exposure. When governance controls have not matured enough to separate capability from that exposure, the authority attached to capable systems increases the damage that can follow from compromise. We refer to this organizational condition as capability–damage bundling. Throughout the paper, this term refers to capability-linked authority exposure under governance lag, not to a direct technological effect of capability on damage.
+This bundling defines the model’s scope. We do not claim that capability and authority exposure always move together. The IBM and CSA surveys are consistent with this condition, but they do not directly identify capability–authority co-variation (IBM Security 2025, Cloud Security Alliance 2026). We therefore study a specific setting: firms deploy more capable AI with greater authority exposure before governance controls have matured. In this setting, capability improvements can increase the damage that follows from compromise. Firms can weaken or eliminate the condition through data segmentation, least-privilege architecture, access-control maturation, and containment design.
+Our central result shows a deployment paradox. In high-loss environments, an improvement in AI capability can reduce, rather than increase, optimal deployment when that capability is deployed with greater authority exposure. More capable AI raises productivity (Brynjolfsson et al. 2023, Acemoglu 2024). Yet under capability–damage bundling it also raises the security burden attached to deployment. When the marginal increase in the expected security burden exceeds the marginal productivity gain, the firm rationally deploys less. The paradox is therefore not that cyber risk lowers deployment. It is that, after the firm optimally adjusts security investment, an improvement in AI capability can still reduce optimal deployment.
+The mechanism has two components. Broader deployment expands the attack surface and increases the defensive expenditure needed to sustain a given security posture. Greater capability increases the damage conditional on compromise only when capability is bundled with greater authority exposure. In sufficiently high-loss environments, these security effects can dominate the productivity effect over an economically relevant range of capability levels. The paradox then resolves either when capability becomes high enough for productivity to dominate again, or when governance investment reduces the loss environment that the firm faces.
+The model generates three further implications. Optimal deployment lies below the productivity-maximizing benchmark by a security discount that grows with both breach-loss magnitude and capability. Governance investments that reduce breach-loss magnitude shrink the paradox region itself. Breach externalities expand the social paradox region by increasing the loss environment relevant for welfare. The result also identifies its own boundary condition: when governance investment decouples capability from authority exposure, or when the loss environment is sufficiently mild, the standard monotone relationship between capability and deployment is restored.
+We contribute to IS research in three ways. First, to the literature on AI deployment and digital transformation, we show a new comparative-static possibility under organizational risk (Bharadwaj et al. 2013, Vial 2019, Collins et al. 2021, Holmström 2022, Lin and Maruping 2025). Existing models imply that better AI weakly increases deployment (Acemoglu and Restrepo 2022, Agrawal et al. 2018, 2019). Our model shows that this monotonicity breaks down when governance maturity lags capability advancement: capability improvements can also raise the security burden of deployment when they are implemented with greater authority exposure under the governance gap.
+Second, we endogenize the firm’s cyber risk environment through its technology choice. This connects IS research on organizational cybersecurity (Li et al. 2023, Liu et al. 2020, Durcikova et al. 2024, Tanriverdi et al. 2025) to AI deployment decisions. In the canonical framework of Gordon and Loeb (2002), breach risk is exogenous. Here, AI deployment under the gap determines both attack surface and breach consequences, creating a feedback loop that prior models do not capture.
+Third, we characterize the deployment implications of the governance-capability gap as a structural organizational condition. We show that once the gap creates capability–damage bundling, capability improvements can increase the deployment-related security burden faster than productivity gains, generating a deployment paradox. The core comparative static does not require a unique micro-foundation for the gap. It requires a weaker condition: under governance lag, more capable deployments carry greater authority exposure. By isolating this condition, the model clarifies when stronger AI expands deployment and when it can instead make deployment less attractive.
+2 Related Literature
+This work builds on three streams of research.
+AI Deployment and Digital Transformation.
+The IS literature has examined digital business strategy, digital transformation, and the organizational conditions that shape AI deployment (Bharadwaj et al. 2013, Vial 2019, Collins et al. 2021, Holmström 2022). Realizing AI’s value requires more than technical adoption; it demands complementary changes in governance structures, workflow redesign, and capability development (Lin and Maruping 2025). Our model builds on this work by showing how the governance-capability gap can reverse the usual relationship between capability and deployment. When governance lags, more capable systems can become more costly to integrate deeply because they require stronger containment and access-control safeguards.
+Analytical models of AI deployment have generally predicted that stronger capability increases deployment value (Acemoglu and Restrepo 2022, Agrawal et al. 2018, 2019). Our model departs from this prediction. Under the gap, many high-value AI deployments create value by being deeply embedded in workflows and granted broader decision rights—yet these same features can also amplify breach damage. The model identifies conditions under which this tension produces a sign reversal.
+Organizational Cybersecurity.
+IS research shows that cybersecurity outcomes depend on IT investment, governance arrangements, organizational empowerment, and structural complexity (Li et al. 2023, Liu et al. 2020, Durcikova et al. 2024, Tanriverdi et al. 2025). For example, Tanriverdi et al. (2025) find that enterprise-wide data analytics platforms can reduce complexity and improve security outcomes, while Liu et al. (2020) show that centralized IT decision-making lowers breach likelihood. These studies highlight how organizational design shapes the security consequences of technology deployment. Related analytical work in information security has also examined how firms evaluate security investment under economic tradeoffs, using both decision-theoretic and game-theoretic approaches to characterize optimal protection choices (Gordon and Loeb 2002, Cavusoglu et al. 2004, 2008). More broadly, the economics of privacy and information security emphasizes that data exposure can create substantial organizational and social costs (Acquisti et al. 2016).
+We take a different approach. Under gap conditions, the firm’s deployment decision itself jointly determines both the attack surface and the consequences of a breach. Unlike Gordon and Loeb (2002), where vulnerability is treated as exogenous, our formulation makes both the attack-surface term and the breach-loss magnitude term endogenous to the firm’s technology choice under the governance-capability gap. The central contrast is not only that risk becomes endogenous. A capability improvement can reverse the deployment comparative static when technology choice jointly changes exposure and conditional loss.
+Dual-Use AI and Governance.
+AI simultaneously expands capability and introduces new organizational risk (Choi et al. 2025, Hendrycks et al. 2023). Related IS work emphasizes that managers must actively govern AI deployment (Berente et al. 2021). Our model offers a tractable explanation of why governance can become a binding constraint: when maturity lags capability, the same improvement that raises productivity can also increase the security burden when it is implemented with greater authority exposure. In high-loss environments, this dynamic can make frontier AI deployment value-reducing and identifies governance investment as one mechanism for realizing AI’s productive value.
+Taken together, these streams explain how firms obtain value from AI, how organizational design shapes cybersecurity outcomes, and how firms choose security investment under economic tradeoffs. They say less about settings in which the technology choice itself changes the firm’s cyber risk environment. Our model focuses on this case. Under the governance-capability gap, AI deployment determines both the attack surface and the conditional loss environment through authority exposure. This authority-exposure linkage generates a comparative static that prior frameworks do not typically predict: stronger capability can reduce, rather than increase, optimal deployment.
+3 Model
+This section formalizes the firm’s joint deployment and security problem. The firm chooses AI deployment and security investment . The environment is characterized by AI capability , conditional breach-loss magnitude , and complementary organizational readiness . The governance-capability gap enters through an authority-exposure index , which links capability to conditional breach damage when governance has not decoupled capability from operational exposure.
+3.1 Setup
+Consider a firm deciding how deeply to deploy AI and how much to invest in cybersecurity. Not all AI deployment carries the same security implications. Narrow, siloed tools—operating on restricted data without cross-system authority—add little to cyber exposure. The key tension is the governance-capability gap: high-value uses of more capable AI are often implemented with broader authority exposure than governance controls can safely contain, because access-control and containment maturity has not kept pace. Under this condition, capability can be associated with greater authority exposure in practice, and we refer to this linkage as capability–damage bundling.
+Two margins of the firm’s security problem.
+We distinguish two margins. Security investment is a within-period flow: monitoring, threat detection, incident response, and access-control enforcement that reduces breach probability given the current deployment level. Governance maturity determines : the inherited architecture of access controls, data segmentation, privilege boundaries, and containment design that governs how much damage a successful breach can cause. The governance-capability gap refers to the slow adjustment of this second margin relative to the pace of capability advancement.
+Conceptual map of the model’s parameters.
+The model has four key parameters. captures deployment scope—the organizational breadth over which AI is integrated. indexes AI capability level—the productive power of each deployed unit. The governance gap links this capability to operational exposure, denoted by an authority-exposure index , which summarizes the operational exposure attached to a deployed system of capability . captures conditional breach loss magnitude—residual loss severity given compromise, reflecting containment quality, data segmentation, and regulatory liability. In the baseline model, we treat as exogenous to isolate how AI capability affects deployment under a given security environment; Section 3.2 and Appendix S.2 discuss this interpretation in more detail.
+captures complementary organizational readiness—productivity gains from process standardization, workflow redesign, and organizational learning that raise deployment value without expanding the damage channel.
+The – distinction matters for strategy. -raising investments work on the productivity side; -reducing investments work on the security side. Both improve performance, but through different channels.
+Formalizing capability–damage bundling.
+The model’s central organizational condition is that high-value uses of more capable AI may require greater operational exposure when governance lags capability. We formalize this condition as follows.
+Assumption 1 (Capability-Linked Authority Exposure under Governance Lag).
+Under the governance-capability gap, high-value deployment of more capable AI systems requires greater authority exposure. Let denote the authority-exposure index associated with capability , with . The baseline model sets , so conditional breach damage takes the tractable form .
+Assumption 1 is a scope condition, not an empirical regularity claimed to hold for all AI systems. The monotonicity of defines the class of deployments studied here: settings in which firms pursue the productive value of more capable AI by embedding the system more deeply into organizational workflows. When governance decouples capability from authority exposure, the relevant case approaches , and the deployment paradox weakens or disappears. This boundary condition also gives the mechanism empirical content: the model predicts no deployment paradox in settings where capability improvements do not carry greater authority exposure. The condition alone does not imply the deployment paradox. The sign reversal arises only when the marginal increase in the exposure-linked security burden exceeds the marginal productivity gain over some capability range.
+A useful way to interpret the baseline loss function is through this authority-exposure index. Conditional breach damage can be written as . The baseline normalization does not mean that technical capability itself mechanically causes damage. It means that, in the organizational environments studied here, higher-capability deployments are implemented with greater operational exposure unless governance controls decouple the two. Appendix O sets and shows how the paradox changes as the elasticity of authority exposure with respect to capability varies.
+The firm’s problem.
+The firm chooses two instruments: AI deployment level (; deployment scope) and security investment (; defensive expenditure). The firm’s profit is:
+Deployment enters through two channels: it raises both breach probability (via the attack-surface term ) and breach damage (via the propagation-scale term ).111The model focuses on incremental cyber risk from AI deployment. Baseline non-AI risk is treated as exogenous and separable, standard in security economics, to isolate how the gap shapes the firm’s marginal security environment. By convention, for all , so that zero deployment yields zero incremental breach probability. Profit should be interpreted as expected present value over the focal decision horizon: current deployment benefits, current defensive expenditure, and the discounted expected loss from future breach consequences are all summarized in the single-period objective.
+The joint optimization of reflects the standard treatment in security economics. Gordon and Loeb (2002)—the canonical framework our model extends—jointly optimizes security investment and breach probability as a single integrated decision; we follow that convention and additionally allow the technology choice to endogenize the cyber risk environment. The simultaneity also reflects observed enterprise practice: security architecture reviews, access-control scoping, and deployment planning are integrated into AI adoption rather than treated sequentially (IBM Security 2025, Cloud Security Alliance 2026). The ex ante framing captures this integration—the firm anticipates breach probability and damage conditional on its chosen before committing to it.
+3.2 AI Productivity
+The term captures the net productivity benefit of AI deployment. It has three components.
+Capability-driven value ().
+captures the capability level of each deployed AI unit. Higher generates greater value through prediction, automation, and decision support (Brynjolfsson et al. 2023, Acemoglu 2024). The model separates this productivity effect from the authority-exposure channel in Assumption 1: capability raises productivity directly, and it raises conditional breach damage only when deployed with broader authority exposure under governance lag.
+Complementary organizational readiness ().
+captures the productivity gains from process standardization, workflow integration, and organizational learning (Lee et al. 2022). These investments improve deployment value without expanding the damage channel, because they do not co-vary with authority exposure under the gap. This is why enters productivity but not the loss function. A richer specification could allow limited spillover from into the damage channel; this changes the location of the paradox region but does not overturn the core sign-reversal result (Appendix N).
+Convex deployment cost ().
+The quadratic term captures the convex organizational costs of workflow redesign, integration friction, and coordination overhead; we normalize the scaling parameter to 1 without loss of generality, as rescaling is absorbed into the units of . Without cybersecurity concerns, the firm would choose . The deployment variable is interpreted as a deployment-intensity index rather than a literal share bounded between 0 and 1; the quadratic term ensures that gross AI productivity is eventually offset by coordination and integration frictions.
+The exogeneity of .
+We treat as exogenous because it represents the firm’s inherited breach-loss environment rather than a contemporaneous choice. Security investment is a within-period flow: the firm adjusts it in response to current deployment and exposure conditions, reducing breach probability through monitoring, detection, and incident response. moves more slowly. It reflects accumulated segmentation architecture, privilege design, containment quality, and propagation boundaries—features built up over years of prior investment that do not adjust one-for-one with current security spending. Governance restructuring faces sharply rising costs: tightening containment architecture becomes disproportionately expensive at the margin. Even a forward-looking firm cannot close the gap overnight. We therefore study the within-period problem in which the firm chooses and taking as given. Accordingly, should be interpreted as the firm’s ex ante expected conditional breach-loss environment at the time of the deployment decision, not as a realized breach outcome known with certainty.
+This abstraction isolates a within-period question: given the inherited loss environment a firm currently faces, how do deployment and security investment respond? Appendix S.2 shows that when governance restructuring entails convex organizational costs, a firm with a positive incentive to reduce may rationally leave a residual gap in equilibrium—what we term rational security debt. Comparative statics with respect to should therefore be read as comparisons across inherited governance environments, or as the long-run effect of prior governance investment that shifts the loss environment before the deployment decision. In either interpretation, closing the gap shrinks the paradox region and raises optimal deployment.222 should be read as a reduced-form index with both industry-level and firm-level components. The calibration in Section 5 uses industry-level breach-cost data, capturing the former. The discussion in Section 7 emphasizes the latter: over longer horizons, firms can reduce through investments in containment quality, data segmentation, and post-breach propagation control.
+3.3 Attack Surface and Breach Probability
+gives the probability of successful compromise over the AI-enabled incremental exposure margin, holding baseline non-AI security fixed, and is modeled as a standard Tullock contest function (Gordon and Loeb 2002, Tullock 1980). Under the baseline Tullock form, it can also be interpreted as the fraction of AI-attributable exposure left undefended. As deployment deepens under the gap, each additional AI agent, API connection, and autonomous workflow creates a new potential entry point, so the attack surface expands with .333We adopt the baseline Tullock form () for tractability. Section 4.5 and Appendix P show that under —when governance failures allow superlinear attack-surface growth—the attack-surface channel can additionally strengthen sign reversal locally under interior feasibility. In the contest formulation, and enter as dimensionless, normalized intensities of exposure and defense rather than raw physical or monetary units. Their ratio therefore captures the relative balance between the attack surface created by deployment and the defensive coverage allocated against it.
+3.4 Breach Damage
+Let denote the authority-exposure index attached to a deployed system of capability under governance lag. Conditional breach damage can be written as . The baseline model sets , yielding
+This expression represents reduced-form incremental breach damage under the gap. is the conditional breach loss magnitude—reflecting containment quality, data segmentation, and regulatory liability. Broader deployment () increases propagation scale. Capability affects damage only through the authority exposure attached to deployment under Assumption 1. By contrast, investments associated with raise productivity without expanding the damage channel.444 governs only the loss channel ; the breach-probability channel is modeled separately.
+3.5 Expected Security Loss
+The expected-loss formulation follows standard practice in security economics. A risk-averse firm would additionally penalize variance in breach outcomes, which would widen the paradox region further. The expected-value approach therefore provides a lower bound on the security cost facing organizations with standard risk preferences.
+The paper focuses on the deployment problem in environments where positive AI deployment remains economically relevant. The condition formalizes this boundary. When it fails, breach-loss magnitude is so severe relative to complementary organizational readiness that the firm optimally shuts down AI deployment altogether (). That is a straightforward corner solution, not the sign-reversal paradox that is the paper’s focus.
+An asterisk denotes an optimal value throughout: , , and refer to the firm’s optimal deployment, defensive expenditure, and equilibrium breach probability, respectively.
+Assumption 2 (Positive Deployment).
+, ensuring for all .
+The condition defines the economic boundary for positive deployment: a firm with higher organizational readiness can sustain positive deployment under a wider range of loss environments, while a firm facing very high breach-loss magnitude may find even modest AI deployment unprofitable. Assumption 2 excludes only the extreme case in which the gap is so severe that no deployment is worthwhile at any capability level.
+When , this condition ensures the global minimum of , attained at , remains strictly positive: (Appendix A). When , is increasing in throughout and the positive-deployment condition is automatically satisfied.
+When , the firm invests in security (); when , . The boundary separates these regimes.
+4 Analysis
+4.1 Optimal Security Investment
+Lemma 1 (Optimal Security Investment).
+For a given deployment level :
+Proof.
+Evaluating at yields . If , the marginal benefit of defense never exceeds its cost, so the non-negativity constraint binds and . Economically, this is the case in which the combined effect of capability and breach-loss magnitude is too small to justify dedicated defensive expenditure.
+If , setting the first-order condition yields
+Because , strict concavity in confirms this is a unique global maximum. See Appendix B for the complete derivation. ∎
+The formula has a direct operational reading. For each unit of AI deployed, the firm must commit units of defensive expenditure at the interior optimum. This multiplier rises with both breach-loss magnitude and capability : under gap conditions, more capable systems require more defense per unit of deployment to hold breach probability constant. A firm upgrading from to therefore faces a higher per-unit defense burden even before the productivity gain materializes. When , the expected marginal benefit of AI-specific defense falls below its cost, and the firm allocates zero to that margin.
+4.2 Breach Probability Under Optimal Defense
+Lemma 2 (Equilibrium Breach Probability).
+Under optimal security investment,
+In neither regime does depend on .
+Proof.
+Corner: If , then , so . At this corner, the AI-attributable incremental exposure margin is left fully undefended.
+Interior: If , substituting into gives:
+In both regimes cancels, so is independent of deployment. See Appendix C for the complete derivation. ∎
+When , the corner solution requires careful interpretation. It does not mean that the firm suffers a firm-wide breach with certainty. Rather, measures exposure over the AI-attributable incremental margin. At the corner, the firm assigns no defensive effort to that margin while baseline non-AI security remains fixed. Thus, means full exposure of the incremental AI-specific margin, not certainty of a firm-wide breach. The corner solution reflects an economic decision: when the marginal cost of defense exceeds the expected benefit from reducing breach probability over the AI-enabled margin, no investment in AI-specific defense is worthwhile. At the boundary , both expressions yield .555 in the corner and in the interior; this does not affect the smoothness of or , which are at (Proposition 2).
+The independence of from under reflects an endogenous organizational response. As deployment expands the attack surface, a rational firm scales its defensive expenditure proportionally, so the probability effect cancels in equilibrium. Deployment therefore does not create an additional comparative-static effect through equilibrium breach probability.
+What deeper deployment changes is the security burden required to sustain that probability. Specifically, the firm must bear both the defense bill and the residual damage . The sign reversal in Proposition 3 therefore arises from the authority-exposure-amplified security burden, not from an increase in equilibrium breach probability itself. Section 4.5 shows that when , the attack-surface channel can additionally reinforce this effect.
+4.3 Reduced-Form Profit and Optimal Deployment
+Lemma 3 (Reduced-Form Profit).
+Proof.
+Proposition 1 (Optimal AI Deployment).
+Under Assumption 2:
+with for all . Both expressions coincide at .
+Proof.
+Lemma 3 shows that once the firm chooses defensive spending optimally within a given regime, its remaining decision is how broadly to deploy AI (). In each regime, the firm therefore chooses by weighing the marginal productivity gain from broader deployment against the marginal security burden implied by that regime. In the corner regime, where AI-specific defense is not yet worthwhile, deployment rises with complementary organizational readiness and rises with capability only when the loss environment is sufficiently mild. In the interior regime, the firm continues to broaden deployment only if the added productivity from greater capability exceeds the combined burden of residual breach damage and defensive expenditure. The two regime-specific expressions connect smoothly at the boundary because the firm changes its response rule once defense becomes worthwhile, not because deployment jumps discontinuously.
+4.4 Main Results
+Proposition 2 (Security Discount).
+Let . The security discount is
+is continuously differentiable at , increasing in and , and independent of .
+Proof.
+From the firm’s perspective, the security discount is the wedge between what it would deploy if cyber risk were irrelevant and what it can justify once the governance-capability gap is taken into account. As capability advances, the firm’s no-risk deployment benchmark rises, but so does the amount of deployment withheld because the security burden also grows. The discount is therefore not a fixed cost of adopting AI. It is an endogenous gap between the firm’s no-risk deployment benchmark and its economically sustainable deployment under the current loss environment. Figure A2 in Appendix R visualizes this security discount, and Table A1 summarizes the interior comparative statics for deployment, defense, breach probability, and firm value.
+Remark 1.
+The security discount widens as capability advances. Stronger AI therefore raises the firm’s no-risk deployment benchmark and, at the same time, increases the amount of deployment withheld under the gap. Investments that reduce become more valuable as capability advances because they narrow this wedge.
+Proposition 3 (Deployment Paradox).
+Suppose . Under capability–damage bundling,
+If : (i) optimal deployment is strictly decreasing in capability for all ; (ii) strictly increasing for ; (iii) the global minimum is attained at . If : for all , and no paradox arises.
+Proof.
+This sign reversal is not an artifact of the square-root form in the baseline interior solution. Appendix O and Appendix Q show that related sign-reversal regions can arise under generalized damage and productivity functions whenever the exposure-linked security burden grows sufficiently strongly relative to the marginal productivity gain.
+Remark 2.
+The deployment paradox is a rational organizational response to the gap, not an irrationality or misperception. In the corner regime, each capability increment adds to deployment when . In the interior regime, gross productivity grows linearly with while the expected security burden scales with ; the turning point at marks where the linear productivity channel begins to dominate. The paradox resolves either when capability crosses , or when -reducing governance investment lowers below 1 (Proposition 4). The boundary marks where defensive investment becomes worthwhile, not where the paradox emerges or resolves.
+The mechanism also has a straightforward cross-industry interpretation. Firms facing the same capability improvement can respond differently depending on their loss environment. In a high-loss environment, a more capable system is deployed with broader authority exposure under the gap, so the damage amplification from capability growth can outpace the productivity gain over an intermediate range. The firm then responds by reducing its deployment footprint. In a milder loss environment, by contrast, the same capability improvement raises deployment because the productivity channel continues to dominate. The paradox is therefore not that the AI system is undesirable in absolute terms; it is that the firm’s current controls may be unable to safely contain what the more capable system can reach.
+Proposition 4 (Effect of Governance Maturity on Deployment).
+A reduction in , reflecting governance investment that closes the gap, increases optimal deployment:
+Both are strictly negative; both yield at .
+Proof.
+This comparative static has a direct managerial interpretation. A reduction in does not simply lower expected breach losses holding deployment fixed. It also relaxes the security burden that constrains how broadly the firm can use capable AI in the first place. Governance investments that improve containment, segmentation, and privilege design can therefore operate as enabling investments rather than as separate compliance costs. By reducing the loss environment the firm faces, they convert more of AI’s technical capability into economically viable deployment. Figure A1 in Appendix R illustrates this comparative static by plotting optimal deployment as the loss environment changes.
+Remark 3.
+Reducing below 1 eliminates the paradox region entirely: for all once . Closing the gap therefore does more than increase deployment at the margin. It restores the standard monotone relationship between capability and deployment by moving the firm out of the paradox regime altogether.
+4.5 Attack-Surface Channel Under Severe Governance Failure
+The baseline specification is intentionally conservative. In this case, the attack-surface channel cancels in equilibrium because the firm can offset a broader attack surface by scaling defense proportionally with deployment. The paradox therefore operates through the damage channel: more capable AI raises conditional breach severity under the gap. This subsection relaxes that proportional-offset property. Formally, consider with . Under this specification, increases in , so optimal defense can no longer fully offset superlinear attack-surface growth. The attack-surface channel then begins to reinforce the baseline damage-channel mechanism. A local sign-reversal condition via the implicit function theorem is:
+This is a local result under interior feasibility, not a global theorem. Appendix P provides the full derivation via the implicit function theorem.
+Asymmetric attacker advantage.
+The specification also has a natural interpretation in terms of attacker–defender asymmetry. In practice, adversaries can probe many entry points simultaneously while the defender must allocate resources across all of them; a single successful intrusion suffices for the attacker, while the defender must protect every node. This structural asymmetry means that the effective attack-surface elasticity the defender faces may exceed one—each additional AI-enabled entry point is harder to defend proportionally than the last, because the attacker can concentrate effort while the defender cannot. Under , this asymmetry is partially captured: the condition becomes easier to satisfy as grows, reflecting the compounding difficulty of defending an expanding surface against a concentrated adversary.
+The baseline should therefore be read as a conservative benchmark for isolating the damage-channel mechanism; can additionally strengthen sign reversal locally under interior feasibility.
+4.6 Endogenous Capability Choice: When Firms Rationally Reject Frontier AI
+The main model treats as exogenous. However, the gap also shapes capability selection: under gap conditions, deploying a more capable system widens the damage channel, while retaining a legacy system limits exposure. The same high-gap environments that generate the deployment paradox can also distort capability choice itself. A firm may rationally reject a frontier upgrade, and that rejection can persist even after the local paradox in deployment has ended because firm value has not yet recovered.
+Suppose the firm faces a discrete choice between legacy and frontier . Let denote the firm’s choice of capability level. Substituting into the reduced-form profit of Lemma 3 yields ; we therefore define firm value as .
+Proposition 5 (Endogenous Capability Choice).
+Under Assumption 2:
+-
+1.
+If : is weakly increasing for all . The firm weakly prefers the higher-capability endpoint .
+-
+2.
+If : is U-shaped with global minimum at . A firm choosing from always selects an endpoint:
+-
+(a)
+Both in the paradox region (): strictly decreasing; firm rejects the frontier upgrade.
+-
+(b)
+Frontier beyond the turning point (): the firm upgrades if and only if . When both systems lie in the interior regime (), this reduces to
+or, equivalently given ,
+When the legacy system lies in the corner regime (), and the upgrade condition must be evaluated directly.
+-
+(a)
+Proof.
+We derive from Lemma 3: in each regime, profit is at the optimum , giving . For , Proposition 3 gives , so is weakly increasing. For , computing in each regime shows that is strictly decreasing on and strictly increasing on , with continuity at (Appendix A). The U-shape forces a boundary solution on . When both systems lie in the interior regime, the upgrade condition reduces to , or equivalently, given , . See Appendix I for the complete derivation, including the feasible-set threshold. ∎
+Because is U-shaped with a unique interior minimum at , no interior optimum exists; the firm’s capability choice necessarily collapses to a boundary solution, making the discrete legacy-versus-frontier framing the mathematically exact representation of the organizational choice. Since , the deployment paradox carries directly into capability selection: within the gap region, a frontier upgrade simultaneously reduces both optimal deployment and firm value.
+This result changes the interpretation of frontier AI adoption. The firm’s choice is no longer simply whether a more capable system is technologically superior. It is whether the firm’s current governance environment can support that capability without eroding value. Under weak governance, the frontier system may expand what the technology can do while still reducing the level at which the firm can profitably deploy it. Capability choice therefore becomes inseparable from the firm’s current governance environment.
+We define the sandboxing trap as the situation in which a firm rationally retains a legacy AI system rather than adopting a frontier upgrade because the governance-capability gap makes the upgrade lower firm value than the legacy option.
+Remark 4.
+The sandboxing trap arises because the firm’s value function remains below the legacy benchmark even after the frontier system has moved beyond the local paradox boundary. Once , an additional capability increment again raises deployment at the margin, but the cumulative damage incurred over the paradox region can still leave total firm value below that of the legacy system. The resulting attachment to legacy capability is therefore structural rather than behavioral: it reflects the firm’s current governance environment, not switching costs or inertia.666Note that this result characterizes a single firm’s optimal capability choice absent competitive pressure. In markets where rivals close the gap and adopt frontier capability, competitive dynamics may induce firms to adopt frontier systems even when in the single-firm benchmark. Such dynamics could weaken rational rejection and increase aggregate cyber exposure, a possibility we discuss in Section 7.
+4.7 Social Welfare, Externalities, and the Expanded Paradox
+The preceding analysis takes the firm’s perspective. AI breaches, however, rarely stay inside the firm. A compromised AI agent with cross-system authority can propagate damage to customers, partners, and critical infrastructure—consequences the firm does not fully bear. This matters because the paradox depends on the loss environment the firm takes into account when choosing deployment. Once part of that loss falls on outsiders, the firm’s private assessment understates the social burden of deploying capable AI.
+We capture these breach externalities with , so that total social damage from a breach is .
+First-Best (Joint Control). To characterize the social benchmark, consider a social planner that jointly chooses deployment and defense to maximize . Note that already accounts for the private loss , so subtracting yields total social damage —there is no double-counting. This is equivalent to the firm’s problem with replaced by .
+Proposition 6 (First-Best Social Optimum).
+Proof.
+This result sharpens the interpretation of the paradox. The private firm can already deploy less than the no-risk benchmark in high-gap environments. Once externalities are added, however, the same firm may still deploy more than is socially optimal because it does not bear the full downside of a breach. The relevant comparison therefore changes: the issue is no longer only how far deployment falls short of the no-risk benchmark, but also how far private deployment remains above the social optimum.
+Second-Best (Deployment Regulation Only). To characterize the constrained social benchmark, consider a regulator that sets deployment while the firm continues to choose privately.
+Proposition 7 (Second-Best Social Optimum).
+Proof.
+The regulator anticipates from Lemma 1 and substitutes into . In each regime, reduces to a concave quadratic in (SOC ), and the FOC yields the stated expression. The regime threshold is invariant to the regulator’s choice of : the regulator scales the level of but cannot shift which regime the firm occupies. See Appendix K for the complete derivation. ∎
+This second-best result arises because the regulator can restrict deployment but cannot directly control the firm’s defensive response. As a result, the social adjustment must rely more heavily on deployment reduction.
+Proposition 8 (Externalities and the Social Paradox Region).
+Let and suppose the private positive-deployment condition holds. Define and . Then:
+-
+1.
+Social deployment is weakly below private deployment:
+-
+2.
+The first-best paradox region is weakly wider than the private paradox region. In the corner regime, the condition is . In the interior regime, it is .
+-
+3.
+The second-best paradox region is weakly wider than the private paradox region. In the interior regime, it is .
+-
+4.
+There exist parameter values for which a firm is outside the private paradox region but inside the social paradox region.
+Proof.
+See Appendix L. ∎
+This result extends the paradox from a private deployment problem to a social governance problem. Once external breach losses are taken into account, the social planner assigns greater weight to the security burden of capable AI than the private firm does. The relevant policy issue is therefore not simply whether deployment should be restricted. It is whether policy can reduce the loss environment that makes deployment socially costly in the first place. Deployment limits arise as a second-best response when the regulator cannot directly improve or induce the firm’s defensive and containment choices. Figure A3 in Appendix R illustrates how breach externalities widen the paradox region relative to the private benchmark.
+5 Numerical Illustration
+The numerical exercises illustrate how the model’s comparative statics operate under ordinal variation in breach-loss magnitude. They do not estimate industry-specific AI deployment levels. The exercise has three purposes. First, it maps industry breach-cost differences into relative values of . Second, it distinguishes industries that admit a paradox region from industries that are inside that region at a given capability level. Third, it connects the continuous deployment result to the discrete capability-upgrade decision in Proposition 5. Direct measurement of capability–authority co-variation is not currently feasible at scale: no existing dataset records how broadly AI systems are granted operational authority as a function of their capability. The numerical values should therefore be read as internally consistent parameterizations of the model, not as estimates of observed AI deployment.
+Ordinal calibration of breach-loss magnitude. We set , , and calibrate using IBM’s 2024 breach cost data (IBM Security 2024). We normalize the global average breach cost ($4.88M) to and scale industries relative to that benchmark. We use the three highest-cost industries in the IBM ranking that map naturally into our setting—Healthcare, Financial Services, and Industrial—together with Retail as a lower-cost benchmark (Table 2). This calibration preserves relative breach-loss severity across industries. It does not treat any dollar value as the economic source of the paradox.
+The global average breach cost serves only as a scaling benchmark. The numerical location of each threshold depends on the normalization of productivity and loss scales. The substantive result is the existence of a nonempty region in which the exposure-linked security burden rises faster than the productivity gain, not the numerical value of any particular boundary. Under this normalization, marks whether an industry admits a private paradox region somewhere in capability space. This condition is distinct from whether the industry is currently inside that region at a given capability level. The active paradox condition is . Thus, is necessary for a private paradox region to exist, but it is not sufficient for the paradox to be active at every .
+At the illustrative capability level , Retail () does not admit a private paradox region. Industrial () and Financial Services () admit paradox regions, but they have already passed their turning points and therefore exhibit no active paradox at . Healthcare () lies at the turning point. The cross-industry comparison therefore identifies which industries admit a paradox region and which are active at the illustrative capability level, not which industries are paradox-prone at every capability level.
+Endogenous capability choice. Table 3 illustrates Proposition 5 under the same ordinal calibration, using and a discrete upgrade from a legacy system () to a frontier system (). The table shows that the same comparative pattern carries over. Low-gap parameterizations adopt the frontier upgrade because the productivity gain dominates the additional security burden, whereas high-gap parameterizations reject it because the security burden grows too strongly under current governance conditions.
+Baseline cross-industry comparison. Table 4 reports the model’s private-optimum predictions at across the four industry parameterizations. At this capability level all four industries lie in the interior regime (). The table also shows the economic magnitude of the security discount: although all industries share the same no-risk benchmark , optimal deployment varies sharply with , from 2.62 in Retail to 1.00 in Healthcare.
+Tracing the paradox over capability levels. Table 5 traces optimal deployment over a range of capability levels. The paradox is not a level effect but a slope effect: in industries with , deployment initially falls as capability rises, then bottoms out at , and rises thereafter. Bold entries mark the active paradox region (); daggers mark the corner regime ().
+Visualizing the U-shaped deployment paths. Figure 1 shows the graphical counterpart to Table 5. The U-shape arises because the security burden dominates early in the capability trajectory but attenuates once capability advances far enough relative to .
+From private to social deployment. Table 6 shows how the same industries are reclassified once breach externalities are introduced under the Second-Best case.
+6 Robustness Checks
+This section examines whether the deployment paradox depends on the baseline functional forms. The baseline model uses a Tullock contest function , a proportional authority-exposure specification that implies , and a linear capability-productivity term . The extensions vary one component at a time to show that the mechanism does not rely on a knife-edge specification.
+6.1 Role of Complementary Organizational Readiness
+Complementary organizational readiness shifts deployment levels but does not drive the paradox boundary in the baseline model. In Proposition 3, the sign of depends on and , not on . Thus higher raises the level of and firm value, but it does not change the turning point under the baseline specification. Figure 2 illustrates this level shift for across four values of .
+Allowing to partially enter the damage channel changes this boundary but does not eliminate the mechanism. Appendix N gives the corresponding condition.
+6.2 Generalized Authority Exposure and Damage
+Appendix O generalizes the authority-exposure index to , . When , capability is fully decoupled from operational exposure, and the deployment paradox disappears. When , sign reversal can arise over a nonempty parameter region whenever the exposure-induced increase in the security burden exceeds the marginal productivity gain. The baseline case represents one transparent specification of a more general authority-exposure mechanism.
+6.3 Generalized Breach Probability
+Appendix P generalizes the breach probability to , . The baseline case is conservative because optimal defense scales proportionally with deployment. When , the attack-surface channel can reinforce the baseline damage-channel mechanism locally under interior feasibility.
+6.4 Generalized Productivity Function
+Appendix Q replaces the baseline productivity term with , where . Sign reversal arises when the marginal security burden from capability exceeds the marginal productivity gain. The condition changes with , but the economic logic does not. Stronger capability-productivity elasticity narrows the paradox region; stronger capability-damage exposure widens it.
+6.5 Parameter Space
+Figure 3 maps optimal deployment across the space. The paradox region appears over a broad range, not a knife-edge point.
+7 Discussion
+7.1 Industry Heterogeneity and Testable Predictions
+Corollary 1 (Industry Sorting).
+Industries sort into three regimes. First, when , no deployment paradox arises. Second, when and , the firm lies in the paradox region and optimal deployment decreases with capability. Third, when and , the paradox no longer holds and optimal deployment is weakly increasing in capability.
+Standard capability-driven models predict that better AI weakly increases deployment across industries. Our model instead predicts a sign reversal that depends on the firm’s conditional breach-loss environment. This yields a natural difference-in-slopes test. One can regress industry- or firm-level AI deployment intensity on capability advances, interacted with proxies for conditional breach loss magnitude such as breach-cost ratios, downstream propagation potential, or regulatory-liability measures. The model predicts a negative interaction in the paradox region and a positive interaction outside it.
+A related empirical challenge concerns the operationalization of capability and authority. In the model, captures capability, while the governance gap links capability to operational exposure. Natural proxies can include system autonomy, data-access breadth, task consequentiality, and authority scope—dimensions partly reflected in risk-classification frameworks such as the NIST AI Risk Management Framework and the EU AI Act (National Institute of Standards and Technology 2023, European Parliament and Council of the European Union 2024).
+The model also shows heterogeneity among firms with access to similar frontier systems. Once breach externalities are taken into account, private deployment can exceed the social optimum even in sectors that lie outside the private paradox region. These implications suggest three empirical patterns: capability improvements should increase deployment less, or reduce deployment, in high-loss sectors; this response should weaken among firms with stronger governance controls; and weak-governance firms may retain legacy systems or restrict frontier systems to sandboxed use cases. Testing these patterns requires separate measures of AI capability, authority exposure, and governance maturity. The prediction is falsifiable. If high-loss firms with weak authority decoupling show monotone increases in AI deployment as capability improves, with no reduction or flattening over the predicted range, the deployment paradox would not describe that setting. Empirically, the relevant test would combine variation in breach-loss environments with firm-level measures of authority exposure or governance maturity, such as access-control maturity, segmentation quality, or privilege-audit outcomes.
+7.2 Sources of the Governance-Capability Gap
+The model does not require a unique micro-foundation for why the governance-capability gap arises. Several organizational frictions can create this linkage. Firms may find it costly to redesign segmentation and privilege boundaries. Operating units may resist access restrictions that slow workflow integration. Managers may also find it difficult to audit the authority granted to rapidly evolving AI systems. These sources differ, but they have the same implication for the model: they allow capability to expand faster than governance controls can contain it.
+7.3 Managerial and Policy Implications
+Managerial implications.
+The model separates productivity-side investments from security-side investments. Workflow redesign, data governance, process standardization, and organizational learning raise deployment value, but they need not reduce conditional breach-loss magnitude. By contrast, containment quality, data segmentation, and least-privilege architecture lower the loss environment, but they need not create productivity gains by themselves.
+This distinction gives managers a diagnostic use for the security discount. A large discount indicates that governance maturity is constraining AI value. In such environments, reducing breach-loss magnitude may increase economically viable deployment more than further capability expansion.
+The same logic applies to capability upgrades. A firm in the sandboxing trap—where frontier deployment is value-reducing under current governance conditions—may gain more from reducing breach-loss magnitude than from adopting a more capable system. Governance investment that precedes capability advancement expands the range of productive deployment.
+Policy implications.
+The model does not imply that deployment restrictions are the preferred policy instrument. Deployment-only regulation appears as a second-best response when policy cannot directly change the firm’s defense and containment environment.
+Policies that reduce conditional breach damage target the mechanism that creates the paradox. Segmentation requirements, least-privilege rules, containment standards, controls on lateral movement, and auditable authority boundaries reduce the damage that follows from compromise. These policies differ from generic security-spending mandates. Spending mandates can increase current defensive effort, which corresponds to in the model. They do not necessarily reduce post-breach propagation, which corresponds to .
+Deployment caps, use-based restrictions, or high-risk deployment tiers are therefore fallback instruments. A more direct policy design pairs broader deployment permissions with governance conditions, such as data segmentation, least-privilege access, incident containment, and authority logging.
+7.4 Limitations and Future Research
+Our study has limitations, which also suggest opportunities for future research. First, the model is static. We treat as given within a single-period deployment problem and solve for optimal deployment at a contemporaneous capability level . This abstraction does not capture the joint evolution of capability, defense, and governance over time, but it isolates the cross-sectional tradeoff a firm faces at a given capability-governance configuration. Appendix S.1 sketches the broader dynamic logic by showing how governance adjustment and capability growth jointly shift the paradox boundary. Appendix S.2 shows that a residual gap can remain privately rational when governance restructuring is costly. A full dynamic extension could endogenize governance investment, allow firms to trade off current deployment against future reductions in , and characterize repeated re-optimization as capability and governance co-evolve.
+Second, the baseline abstracts from several within-firm complexities. Security investment is modeled as generic defense and therefore does not capture the possibility that broader AI deployment itself improves monitoring or response. Relatedly, the model does not allow AI capability to improve governance efficiency—for instance, through AI-powered anomaly detection, automated access-control enforcement, or continuous compliance monitoring—which would create a countervailing channel in which higher partially reduces . These omitted channels matter because they determine whether capability only amplifies exposure or can also help contain it. Richer models could therefore examine defensive-AI complementarities and AI-assisted governance maturation more explicitly.
+Third, the attacker is passive. The model therefore captures how the firm’s own deployment and defense choices shape cyber risk, but not how adversaries strategically respond to more capable or more broadly deployed AI. Appendix S.3 sketches this direction. If attacker capability also scaled with , the paradox region could widen because more capable AI would become a more attractive and potentially more exploitable target. A fuller extension would model strategic interaction between firm and attacker directly.
+Fourth, is a single deployment index, whereas firms in practice allocate AI across applications with different authority, exposure, and breach-loss profiles. Appendix S.4 sketches a heterogeneous-applications extension in which firms allocate deployment across high-authority and low-authority uses. Such a framework could show how firms substitute toward lower-authority applications even when aggregate deployment declines under the governance-capability gap.
+Finally, the baseline model focuses on the firm’s deployment problem in isolation and therefore abstracts from strategic interaction across firms. An industry-equilibrium extension could examine whether competitive pressure leads firms to collectively over-deploy into the paradox region, eroding industry-wide value while leaving aggregate cyber exposure elevated. Such a setting would further clarify when sector-level governance standards are socially valuable.
+8 Conclusion
+This paper identifies a condition under which stronger AI capability can reduce rather than expand economically viable deployment. When governance lags capability, more capable systems can carry greater authority exposure, causing the security burden of deployment to rise faster than the productivity gain. The model and its results have clear boundaries: they do not capture dynamic learning, strategic attackers, heterogeneous applications, or competitive pressure across firms. Despite these limitations, the paper shows that the value of AI capability depends on the organizational conditions under which firms deploy it. When governance decouples capability from authority exposure, capability improvements again support broader deployment.
+References
+- Tasks, automation, and the rise in US wage inequality. Econometrica 90 (5), pp. 1973–2016. Cited by: §1, §2.
+- The simple macroeconomics of AI. NBER Working Paper (32487). Cited by: §1, §3.2.
+- The economics of privacy. Journal of Economic Literature 54 (2), pp. 442–492. Cited by: §2.
+- Prediction machines: the simple economics of artificial intelligence. Harvard Business Review Press, Boston. Cited by: §1, §2.
+- Exploring the impact of artificial intelligence: prediction versus judgment. Information Economics and Policy 47, pp. 1–6. Cited by: §1, §2.
+- Disrupting the first reported AI-orchestrated cyber espionage campaign. Technical report Anthropic. Note: Threat Intelligence Report. Campaign designated GTG-1002; detected September 2025; disclosed November 13, 2025 External Links: Link Cited by: §1.
+- Bundling information goods: pricing, profits, and efficiency. Management Science 45 (12), pp. 1613–1630. Cited by: §2.
+- Managing artificial intelligence. MIS Quarterly 45 (3), pp. 1433–1450. External Links: Document Cited by: §2.
+- Digital business strategy: toward a next generation of insights. MIS Quarterly 37 (2), pp. 471–482. External Links: Document Cited by: §1, §1, §2.
+- Quantum economic advantage. Management Science 69 (2), pp. 1116–1126. Cited by: §2.
+- Generative AI at work. NBER Working Paper (31161). Cited by: §1, §3.2.
+- A model for evaluating it security investments. Communications of the ACM 47 (7), pp. 87–92. Cited by: §2.
+- Decision-theoretic and game-theoretic approaches to it security investment. Journal of Management Information Systems 25 (2), pp. 281–304. Cited by: §2.
+- The dual edges of AI: advancing knowledge while reducing diversity. PNAS Nexus 4 (5), pp. pgaf138. Cited by: §2.
+- Software as a service: implications for investment in software quality. Management Science 53 (10), pp. 1547–1560. Cited by: §2.
+- State of AI agents security. Technical report Cloud Security Alliance. Note: Accessed April 2026 External Links: Link Cited by: §1, §1, §3.1.
+- Artificial intelligence in information systems research: a systematic literature review and research agenda. International Journal of Information Management 60, pp. 102383. External Links: Document Cited by: §1, §1, §2.
+- United we stand, divided we fall: an autogenic perspective on empowering cybersecurity in organizations. MIS Quarterly 48 (4), pp. 1503–1536. Cited by: §1, §1, §2.
+- Regulation (EU) 2024/1689 of the European Parliament and of the Council laying down harmonised rules on artificial intelligence (Artificial Intelligence Act). Technical report Technical Report L 2024/1689, Official Journal of the European Union. Cited by: §7.1.
+- The economics of information security investment. ACM Transactions on Information and System Security 5 (4), pp. 438–457. Cited by: §1, §2, §2, §3.1, §3.3.
+- An overview of catastrophic AI risks. arXiv preprint arXiv:2306.12001. Cited by: §2.
+- From AI to digital transformation: the AI readiness framework. Business Horizons 65 (3), pp. 329–339. Cited by: §1, §1, §2.
+- Cost of a data breach report 2024. Technical report IBM Corporation. External Links: Link Cited by: §1, §5.
+- Cost of a data breach report 2025. Technical report IBM Corporation. External Links: Link Cited by: §1, §1, §3.1.
+- Adversarial machine learning—industry perspectives. In Proceedings of the IEEE Symposium on Security and Privacy, pp. 1–18. Cited by: §1.
+- When does AI pay off? AI-adoption intensity, complementary investments, and R&D strategy. Technovation 118, pp. 102590. Cited by: §3.2.
+- Where is IT in information security? the interrelationship among IT investment, security awareness, and data breaches. MIS Quarterly 47 (1), pp. 317–342. External Links: Document Cited by: §1, §1, §2.
+- Organizing for AI innovation: insights from an empirical exploration of U.S. patents. MIS Quarterly 49 (3), pp. 1095–1122. External Links: Document Cited by: §1, §1, §2.
+- Centralized IT decision making and cybersecurity breaches: evidence from U.S. higher education institutions. Journal of Management Information Systems 37 (3), pp. 758–787. External Links: Document Cited by: §1, §1, §2.
+- Microsoft digital defense report 2024. Technical report Microsoft Corporation. Cited by: §1.
+- Artificial intelligence risk management framework (AI RMF 1.0). Technical report Technical Report AI 100-1, NIST. Cited by: §7.1.
+- Zero trust architecture. NIST Special Publication Technical Report 800-207, National Institute of Standards and Technology. External Links: Document Cited by: §1.
+- Taming complexity in the cybersecurity of multihospital systems: the role of enterprise-wide data analytics platforms. MIS Quarterly 49 (1), pp. 243–274. Cited by: §1, §1, §2.
+- Efficient rent seeking. In Toward a Theory of the Rent-Seeking Society, pp. 97–112. Cited by: §3.3.
+- Understanding digital transformation: a review and a research agenda. The Journal of Strategic Information Systems 28 (2), pp. 118–144. External Links: Document Cited by: §1, §1, §2.
+Appendix A Global Solution and Boundary Behavior
+Define and . Under Assumption 2, in the corner regime and in the interior regime.
+At : and ( continuity). In the interior regime: ; minimum at with . When the U-shape spans both regimes; when , is increasing throughout. enters only as an additive constant; all comparative statics are invariant to .
+Positivity across regimes.
+Under Assumption 2, for all . When : is increasing throughout and . When : at the interior minimum . The corner regime bounds satisfy and by AM–GM applied to . Hence globally.
+Appendix B Proof of Lemma 1: Optimal Security Investment
+Proof.
+For a given deployment level , differentiate the profit function with respect to :
+Evaluating at the boundary gives
+Thus, when , the marginal benefit of AI-specific defense never exceeds its marginal cost, so the non-negativity constraint binds and . Economically, this is the case in which the combined effect of capability and breach-loss magnitude is too small to justify dedicated defensive expenditure.
+When , setting the first-order condition equal to zero yields
+Because
+the objective is strictly concave in , so this solution is the unique global maximum. Therefore,
+This expression has a direct operational reading: once defense becomes worthwhile, it scales in direct proportion to deployment , and the per-unit defensive burden rises with both breach-loss magnitude and capability. ∎
+Appendix C Proof of Lemma 2: Equilibrium Breach Probability
+Proof.
+By Lemma 1, the firm’s optimal defense rule is already available in closed form. This proof simply substitutes that rule into the breach-probability function
+If , then , so
+At this corner, the AI-attributable incremental exposure margin is left fully undefended.
+If , then , so
+In both regimes, cancels out, so
+This cancellation is economically important. Under the baseline Tullock form, a broader AI footprint does not mechanically raise equilibrium breach probability because a rational firm scales defense in step with deployment. Deployment therefore changes the cost of maintaining security, not the equilibrium breach probability itself. ∎
+Appendix D Proof of Lemma 3: Reduced-Form Profit
+Proof.
+Lemma 1 gives the firm’s optimal defense rule, and Lemma 2 gives the associated equilibrium breach probability. This proof combines those two objects and substitutes them into (1) to obtain profit as a function of deployment alone.
+Corner regime (). From Lemmas 1–2, we have and . Hence expected security loss is
+Substituting into (1) gives
+Intuitively, capability still raises productivity in this regime, but the firm undertakes no additional defense, so expected breach losses reduce the net marginal value of capability to .
+Interior regime (). From Lemmas 1–2,
+Expected security loss becomes
+Substituting into (1),
+Intuitively, in this regime the firm bears the security cost of deployment through two channels: residual breach damage and defensive expenditure. Together, these imply a total security-related deduction of in reduced form. Equivalently, the linear coefficient on deployment is , so its derivative with respect to capability is . When , the security burden rises faster than the productivity gain, generating the deployment paradox.
+Therefore,
+The reduced-form profit makes the tradeoff transparent: higher capability increases gross value, but under the governance gap it also increases the security-related cost of deployment. ∎
+Appendix E Proof of Proposition 1: Optimal AI Deployment
+Proof.
+Lemma 3 shows that once the firm chooses defensive spending optimally within a given regime, its remaining decision is how broadly to deploy AI (). In each regime, the firm therefore chooses by weighing the marginal productivity gain from broader deployment against the marginal security burden implied by that regime. This yields a single first-order condition for optimal deployment in each regime, and the two regime-specific expressions connect smoothly at the boundary.
+Corner regime (). From Lemma 3,
+The first-order condition is
+Because , the objective is strictly concave in , so this is the unique global maximum. Economically, this expression has a clear organizational interpretation. In the corner regime, the firm does not find it worthwhile to invest in AI-specific defense, so its remaining choice is how broadly to deploy AI () given the expected breach burden it must bear. Complementary organizational readiness, captured by , always pushes deployment upward because it raises the value of broader adoption without amplifying breach damage. Capability , by contrast, expands deployment only when the loss environment is sufficiently mild. Its marginal effect in this regime is : when , the productivity gain from greater capability dominates and the firm broadens deployment; when , greater capability instead makes deployment less attractive even before defensive investment becomes worthwhile, because each increment of capability raises expected breach loss more than it raises productivity. Under Assumption 2 (), throughout the corner region.
+Interior regime (). From Lemma 3,
+The first-order condition is
+Again , so this is the unique global maximum. This expression has a direct operational reading: the firm’s productive capacity is reduced by a security burden , capturing both residual breach damage and defensive expenditure once AI-specific defense becomes worthwhile. The term reflects the firm’s ability to offset part of the breach-loss burden through defense: without defense, that burden would be rather than . Under Assumption 2, (Appendix A), so interior deployment remains strictly positive even at the paradox trough.
+Regime continuity at . At the boundary, the corner expression gives
+while the interior expression gives
+The two expressions coincide, confirming that optimal deployment is continuous across regimes. Thus, the regime shift at appears not as a jump in deployment, but as a change in slope: once AI-specific defense becomes worthwhile, the firm’s response function continues smoothly but becomes steeper or flatter depending on the regime. ∎
+Appendix F Proof of Proposition 2: Security Discount
+Proof.
+Proposition 1 already characterizes in closed form in both regimes, so the security discount follows by direct subtraction from the no-risk benchmark .
+Corner regime (). From Proposition 1, . Therefore,
+Economically, in this regime the firm makes no AI-specific defensive investment, so the entire expected breach damage shows up as a reduction in deployment relative to the no-risk benchmark. The discount therefore rises linearly with both capability and breach-loss magnitude.
+Interior regime (). From Proposition 1, . Therefore,
+Here the firm is now paying twice: once for residual breach damage after defense, and once for the defensive expenditure itself. That is why the discount takes the square-root form rather than the linear form of the corner regime—defensive investment blunts the damage channel but introduces its own cost.
+Continuity and smoothness at . At the boundary, the corner expression yields , while the interior expression yields . The two values coincide.
+For the first derivative, the corner expression gives , while the interior expression gives
+At , the interior derivative equals , matching the corner derivative. So is continuously differentiable across the regime boundary, even though its functional form changes. This matters economically: the security discount does not jump when the firm starts investing in defense; it only shifts from linear to concave growth, reflecting the firm’s ability to partially absorb the damage through defensive expenditure.
+Monotonicity and -independence. In the corner regime, and . In the interior regime, and . In both regimes, the discount grows with and , and is independent of because enters and additively and cancels in the difference. The security discount therefore measures the pure gap-induced wedge between productive and realized deployment, isolated from complementary organizational-readiness effects. ∎
+Appendix G Proof of Proposition 3: Deployment Paradox
+Proof.
+By Proposition 1, optimal deployment is already available in closed form in both regimes. The proof therefore reduces to differentiating with respect to capability and studying the sign of the derivative.
+Corner regime (). From Proposition 1,
+so
+This is strictly negative if and only if . Thus, in the corner regime, capability reduces deployment whenever breach-loss magnitude is high enough.
+Interior regime (). From Proposition 1,
+so
+This derivative is negative if and only if , zero at , and positive for . The turning point is therefore economically meaningful: below it, the security burden created by additional capability dominates the productivity gain; above it, the productivity channel dominates again.
+Now suppose . The corner paradox region is defined by together with , which holds on . The interior paradox region is defined by and , which holds on . Since when , these two intervals adjoin, yielding the full paradox region . At , attains its global minimum
+If , then in the corner regime , and in the interior regime
+So for all , and no paradox arises. The paradox therefore requires a sufficiently severe loss environment; it is not a generic feature of better AI. ∎
+Appendix H Proof of Proposition 4: Effect of Governance Maturity on Deployment
+Proof.
+The proof follows by direct differentiation of from Proposition 1 with respect to in each regime. is the model’s index of inherited breach-loss magnitude, so reducing corresponds to closing the governance-capability gap through improvements in containment quality, data segmentation, or access-control architecture.
+Corner regime (). From ,
+Economically, in this regime the firm makes no AI-specific defensive investment, so any reduction in translates one-for-one into a reduction of expected breach damage per unit of deployment. Each unit of capability therefore gains units of deployment space from a unit reduction in : higher-capability firms benefit more from governance investment than lower-capability ones.
+Interior regime (). From ,
+Once AI-specific defense becomes worthwhile, the marginal effect of governance investment is attenuated by the firm’s own defensive response: reducing also reduces the per-unit defensive burden , so part of the gain is absorbed on the defense margin rather than showing up directly in deployment. That is why the interior derivative takes the form rather than the linear form of the corner regime.
+Continuity at . At the regime boundary, the corner derivative equals , while the interior derivative equals . The two expressions coincide, so is continuous across regimes.
+Overall implication. In both regimes, , so closing the governance-capability gap raises optimal deployment. The magnitude depends on the current regime—proportional to in the corner regime, and to in the interior regime—but the sign is unambiguous. Governance investment and AI deployment are therefore complements, not substitutes: the firm captures a larger deployment response from governance investment precisely when its capability is high, which is also when the security discount is largest (Proposition 2). ∎
+Appendix I Proof of Proposition 5: Endogenous Capability Choice
+Proof.
+The proof characterizes the global shape of the firm’s value function and then compares the two endpoints and . The key object is the mapping from capability choice into optimal deployment, because firm value is pinned down by the deployment rule.
+Let denote the firm’s chosen capability. From Lemma 3, the reduced-form profit in each regime takes the form
+where is the regime-specific linear coefficient. Since the optimal deployment is , substituting back yields
+Thus, capability affects firm value only through its effect on the optimal deployment scale.
+Differentiating with respect to gives
+Under Assumption 2, , so the sign of is the same as the sign of . The value comparison therefore reduces to the comparative static for deployment.
+If , Proposition 3 gives for all . Hence is weakly increasing, and the firm weakly prefers the frontier system. In low-gap environments, stronger capability therefore preserves the standard monotone adoption logic.
+If , Proposition 3 implies that for , equals zero at , and is positive for . Therefore is strictly decreasing on and strictly increasing on , with a unique global minimum at . The maximizer over any interval must therefore occur at an endpoint. This is the sense in which weak governance can make higher capability locally value-reducing before the value function recovers.
+When both and lie in the interior regime (), the firm upgrades if and only if , equivalently . Using
+this condition becomes
+Rearranging,
+Using
+and dividing by , we obtain
+Equivalently, given ,
+Thus the effective threshold over the feasible set is
+When , the second term is zero, so the upgrade condition is automatically satisfied for any feasible . This threshold identifies how far the frontier system must move beyond the relevant loss environment before the firm prefers the upgrade again.
+When the legacy system lies in the corner regime (), its value is
+and the upgrade condition must be evaluated directly. ∎
+Appendix J Proof of Proposition 6: First-Best Social Optimum
+Proof.
+This proof reuses the private problem almost entirely. Once the social planner internalizes the externality, the firm’s loss environment is scaled from to , so the first-best problem is a direct analogue of the private benchmark with that substitution.
+The social planner jointly maximizes
+over . Since the firm’s objective already includes the private loss term , the planner’s objective can be written as
+This is structurally identical to the firm’s problem in (1), except that is replaced everywhere by . Thus, the first-best planner behaves as if the effective loss environment were more severe than the firm perceives privately.
+Applying Proposition 1 with this substitution yields
+The operator is needed because internalizing the externality can push the planner to the corner solution even when the private optimum remains positive. Socially optimal deployment is therefore weakly below private deployment even before comparing regime boundaries. ∎
+Appendix K Proof of Proposition 7: Second-Best Social Optimum
+Proof.
+Unlike the first-best planner, the second-best regulator controls deployment but does not control the defense margin directly. The firm therefore continues to choose defense according to Lemma 1, and the regulator takes that private response as given when choosing deployment. Substituting the firm’s privately optimal defense choice into social welfare yields
+Corner regime (). From Lemmas 1–2, we have and . Hence
+This is a concave quadratic in , so the first-order condition yields
+Interior regime (). From Lemmas 1–2,
+Substituting into gives
+Again this is a concave quadratic in , so the first-order condition yields
+Intuitively, once the regulator is limited to deployment control alone, it must use to manage both the firm’s private security burden and the external harm that the firm does not internalize. In the corner regime, this scales up the private loss term by the factor . In the interior regime, the firm’s private defense choice already implies a reduced-form security deduction of , and the externality adds a further . That is why the reduced-form linear coefficient becomes .
+Combining the two regimes and imposing non-negativity gives
+The regime threshold remains because the regulator controls deployment but not the firm’s defense rule. Regulation can change the level of deployment, but it cannot change the condition under which the firm finds defensive expenditure worthwhile. This is why deployment regulation is blunter than joint control. ∎
+Appendix L Proof of Proposition 8: Externalities and the Social Paradox Region
+Proof.
+Let and . Define the private security discount function
+Then the private optimum can be written as
+where Assumption 2 ensures that this expression is strictly positive.
+The first-best planner internalizes the full social loss. Its problem is equivalent to the private problem with replaced by . Therefore,
+The second-best regulator controls deployment but not the firm’s defense choice. The firm therefore chooses defense using the private threshold . Define the second-best social security discount as
+Then
+Part 1: Ordering of private, first-best, and second-best deployment. Because is increasing and , we have
+It follows that
+so
+It remains to show that . It is sufficient to show that
+for all .
+First suppose . Then . If , then , so the two are equal. If , then
+Let . Since
+we have .
+Now suppose . Then
+while
+Hence
+Thus for all , which implies
+Together, these inequalities prove
+The inequalities are weak because the max operator can bind. For example, if both unconstrained social optima are negative, then . When the relevant social optima are interior, the inequalities become strict whenever the corresponding discount inequality is strict.
+Part 2: First-best paradox conditions. The first-best optimum is the private optimum with replaced by . In the first-best corner regime, , and
+Therefore,
+The first-best corner-regime paradox condition is
+or equivalently
+In the first-best interior regime, , and
+Thus
+The first-best interior-regime paradox condition is therefore
+Part 3: Second-best paradox conditions. In the second-best case, the firm still chooses defense using the private threshold . In the corner regime, , and
+Therefore,
+The second-best corner-regime paradox condition is
+In the second-best interior regime, , and
+Thus
+The second-best interior-regime paradox condition is therefore
+Part 4: Expansion relative to the private paradox region. The private interior paradox condition is . The first-best interior threshold is , and the second-best interior threshold is
+Because ,
+and
+Thus the social paradox regions are weakly wider than the private paradox region.
+There also exist parameter values such that
+or
+For such values, the firm is outside the private paradox region but inside the social paradox region. This proves that externalities can convert a privately normal capability response into a socially paradoxical one. ∎
+Appendix M Interpretation of the Damage Channel
+The baseline reflects the gap: co-varies with authority exposure because governance has not constrained the combination. See Assumption 1 for the formal statement. -type organizational readiness investments raise productivity without expanding the damage channel, because they do not co-vary with authority exposure under gap conditions. Appendix N shows the paradox is robust to partial inclusion of in the damage channel.
+Appendix N Complementary Organizational Readiness in the Damage Channel
+The baseline model assumes that complementary organizational readiness raises productivity but does not expand conditional breach damage. This section relaxes that separation. Suppose
+The parameter captures the extent to which readiness-enhancing investments also expand operational exposure.
+The optimal deployment expression becomes
+In the interior regime,
+Thus the paradox condition becomes
+The baseline case gives . Allowing to enter the damage channel shifts the boundary, but it does not remove the mechanism. For any given with , the paradox continues to hold for
+Thus partial exposure spillovers from organizational readiness narrow the paradox region but do not overturn the result whenever the spillover is sufficiently limited.
+Appendix O Generalized Authority Exposure and Breach Damage
+The baseline model uses the normalization . This appendix relaxes that normalization by setting
+so that conditional breach damage becomes
+The parameter captures the elasticity of authority exposure, and therefore conditional breach damage, with respect to capability. The baseline model sets .
+Given this damage function, optimal deployment becomes
+In the corner regime, the derivative with respect to capability is
+Thus sign reversal occurs in the corner regime when
+In the interior regime, the derivative is
+Thus sign reversal occurs in the interior regime when
+Equivalently, for , this condition can be written as
+with the direction interpreted through the preceding derivative condition. For , the interior derivative is
+so sign reversal occurs when .
+These expressions show that the paradox does not depend on treating authority exposure and capability as identical. It requires a sufficiently strong capability-linked exposure channel over the relevant parameter region. When , capability has no effect on authority exposure or conditional breach damage. The derivative in both regimes is then nonnegative, and the deployment paradox disappears.
+Appendix P Generalized Breach Probability and the Attack-Surface Channel
+We generalize the breach-probability function to
+The baseline case is . This appendix studies how superlinear attack-surface growth changes local deployment incentives under interior feasibility. The goal is not to establish a global theorem for all probability forms, but to show that once breach probability grows more than proportionally with deployment, the attack-surface channel can reinforce the paradox.
+Under this specification, expected security loss becomes
+The firm’s objective is therefore
+For a given , differentiate with respect to :
+The interior first-order condition implies
+so
+and thus
+Substituting this expression into the generalized breach-probability function yields
+For , is increasing in : the firm can no longer fully offset superlinear attack-surface growth through proportionate defense.
+Substituting and back into profit gives the reduced-form objective
+The first-order condition for deployment is
+To study the local comparative static with respect to capability, apply the implicit function theorem:
+Under interior concavity, the sign of is governed by the sign of , where
+Hence a local sign-reversal condition is
+equivalently,
+This condition nests the baseline case. When , it reduces to
+which is exactly the interior paradox condition in Proposition 3. For , the additional factor makes the inequality easier to satisfy as deployment expands. The baseline should therefore be read as a conservative benchmark: once governance failures make attack-surface growth superlinear, the attack-surface channel can reinforce the paradox locally.
+Appendix Q Generalized Capability Productivity
+We generalize the productivity term from to , where . The firm’s objective becomes
+The damage channel remains , so this extension varies only the productivity side of the model.
+The optimal deployment level is
+In the corner regime,
+Thus sign reversal occurs when
+In the interior regime,
+Thus sign reversal occurs when
+At , this reduces to
+which is the baseline interior paradox condition.
+This extension shows how the paradox depends on the relative curvature of the productivity and damage channels. Stronger productivity scaling narrows the paradox region. Stronger loss exposure widens it. The baseline model therefore captures the transparent case in which both channels scale linearly with capability before optimal defense is chosen.
+Appendix R Comparative Statics
+Appendix S Extensions
+S.1 Governance Adjustment and the Paradox Region
+When capability improvements are not matched by governance investment, the paradox region persists over a wider range of conditions. By contrast, when governance investment reduces , the paradox region narrows and the negative capability–deployment relationship weakens. Industries that improve governance maturity alongside capability adoption should therefore experience an earlier exit from the paradox region.
+Remark 5 (Governance Adjustment and Boundary Conditions).
+Consider an extension in which capability improvement is accompanied by governance investment that reduces . The paradox region is defined by . Any force that raises or lowers moves the firm toward the standard monotone relationship. Three cases apply: (1) Governance-led adjustment: paradox region shrinks because governance investment lowers . (2) Capability-led adjustment: paradox region shrinks because capability rises beyond the threshold. (3) Limited governance adjustment: if remains high, the paradox region remains broader. A richer dynamic optimization is beyond the scope of the current paper.
+S.2 Endogenous Governance and Rational Security Debt
+A natural critique of the baseline model is that firms suffering from the deployment paradox should immediately invest to eliminate the governance gap. We show here that when governance restructuring entails convex organizational costs, a residual gap may optimally persist.
+Suppose the firm inherits and can invest to achieve , at convex cost , where captures institutional friction. The firm maximizes , where denotes the maximized baseline profit. At an interior optimum, the FOC is . By the envelope theorem applied to the interior-regime profit , the marginal value of reducing is:
+Substituting the optimal defense gives , which simplifies (15) to:
+This holds in the interior regime (); in the corner regime (), and an analogous calculation yields , confirming the marginal benefit of reducing is strictly positive across both regimes.
+Whenever the solution is interior, the optimal governance investment satisfies:
+Remark 6 (Rational Accumulation of Security Debt).
+As , and . By continuity, if the inherited environment initially lies in the paradox region—that is, if —there exists a threshold such that for all : the firm remains in the paradox region despite having a positive incentive to reduce . The persistence of the governance-capability gap is therefore a structural consequence of convex organizational friction, not managerial myopia. From (17), external interventions that reduce adjustment frictions or require minimum governance investment—such as governance subsidies or segmentation standards—can raise effective governance investment and endogenously contract the paradox region, consistent with the -reducing policy channel discussed in Section 7.
+S.3 Strategic Attacker
+If attacker capability scales with , breach risk becomes more sensitive to AI deployment and capability, further tightening the paradox region. The baseline likely understates the paradox in such environments, but a game-theoretic treatment is left for future work.
+S.4 Heterogeneous AI Applications
+With high-authority () and low-authority () AI, high-gap firms would shift portfolios toward lower-authority applications as increases within the paradox region—substituting toward AI uses outside the gap even as aggregate deployment declines.
+
+KAYNAK : https://arxiv.org/abs/2604.23058

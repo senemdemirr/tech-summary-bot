@@ -1,4 +1,3 @@
---- huggingface | Introducing NVIDIA Nemotron 3 Nano Omni: Long-Context Multimodal Intelligence for Documents, Audio and Video Agents | score=90.00 ---
 Introducing NVIDIA Nemotron 3 Nano Omni: Long-Context Multimodal Intelligence for Documents, Audio and Video Agents
 - NVIDIA Nemotron 3 Nano Omni is a new omni-modal understanding model built for real-world document analysis, multiple image reasoning, automatic speech recognition, long audio-video understanding, agentic computer use, and general reasoning.
 - It extends the Nemotron multimodal line from a strong vision-language system to a broader text + image + video + audio model.
@@ -162,4 +161,3 @@ References
 - Megatron Energon. GitHub: https://github.com/NVIDIA/Megatron-Energon
 
 KAYNAK : https://huggingface.co/blog/nvidia/nemotron-3-nano-omni-multimodal-intelligence
-

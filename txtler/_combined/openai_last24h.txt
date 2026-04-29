@@ -1,5 +1,0 @@
---- openai | OpenAI available at FedRAMP Moderate | score=50.31 ---
-OpenAI is available at FedRAMP Moderate authorization for ChatGPT Enterprise and the OpenAI API, enabling secure AI adoption for U.S. federal agencies.
-
-KAYNAK : https://openai.com/index/openai-available-at-fedramp-moderate
-

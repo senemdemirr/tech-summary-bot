@@ -1,8 +1,5 @@
---- google_ai | Join the new AI Agents Vibe Coding Course from Google and Kaggle | score=44.34 ---
-Join the new AI Agents Vibe Coding Course from Google and Kaggle
-Last November, we launched our first 5-Day AI Agents Intensive Course with Kaggle, reaching over 1.5 million learners. By popular demand, we’re bringing it back from June 15-19, 2026 — now with updated content, new speakers and a hands-on capstone project, all at no cost to registrants.
-This five-day online course dives deep into building powerful AI agents from foundational concepts to production-ready systems, especially with vibe coding. You’ll explore vibe coding workflows, where natural language becomes the primary programming interface, and learn how to create “10x agents” by integrating tools and APIs. Each day combines conceptual deep dives with hands-on examples. By the end, you’ll be ready to design, build and deploy robust agent systems — culminating in a capstone project that brings your ideas to life.
-You can register for the course on our website.
+--- google_ai | Celebrating 20 years of Google Translate: Fun facts, tips and new features to try | score=42.57 ---
+Google’s sharing 20 fun facts to celebrate Google Translate turning 20, from its roots as a 2006 AI experiment to supporting almost 250 languages today.
 
-KAYNAK : https://blog.google/innovation-and-ai/technology/developers-tools/kaggle-genai-intensive-course-vibe-coding-june-2026/
+KAYNAK : https://blog.google/products-and-platforms/products/translate/fun-facts-google-translate-20-years/
 
