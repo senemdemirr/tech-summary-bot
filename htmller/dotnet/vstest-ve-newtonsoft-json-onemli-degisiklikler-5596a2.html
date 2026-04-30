@@ -1,0 +1,32 @@
+<div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
+  <h1>VSTest ve Newtonsoft.Json: Önemli Değişiklikler</h1>
+  <p>Yazılım geliştirme dünyasında, kullanılan kütüphanelerin ve araçların güncellenmesi, güvenlik ve performans açısından kritik öneme sahiptir. .NET 11 Preview 4 ve Visual Studio 18.8 ile birlikte, VSTest platformu önemli bir değişikliğe gidiyor. Artık Newtonsoft.Json'a bağımlı olmayacak ve bunun yerine System.Text.Json ve JSONite kullanılacak.</p>
+  <p>Bu değişiklik, hem servis hem de güvenlik açısından önemli bir adım olarak değerlendiriliyor. Çoğu proje için herhangi bir aksiyon gerekmese de, bazı projeler belirgin bir derleme veya test hatasıyla karşılaşabilir. Bu durumda, basit bir PackageReference eklemesiyle sorun çözülebilir.</p>
+  
+  <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
+  <p>VSTest, yıllardır .NET SDK ve Visual Studio'nun bir parçası olarak Newtonsoft.Json'u kullanıyordu. Ancak, 13.0.0 sürümünün altındaki tüm versiyonlar artık NuGet.org üzerinde güvenlik açığı olarak işaretlendi. Bu nedenle, bağımlılığı kaldırmak, gelecekteki güvenlik uyarılarından kaçınmak için önemli bir adım olarak görülüyor. Bu değişiklik, daha geniş bir stratejinin parçası olarak .NET SDK'dan Newtonsoft.Json'un tamamen çıkarılmasını hedefliyor.</p>
+  
+  <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
+  <p>VSTest'in kablo formatı değişmiyor; mesajlar, hangi JSON kütüphanesinin kullanıldığına bakılmaksızın aynı şekilde serileştiriliyor. Eski test sunucuları, güncellenmiş platformla uyumlu olmaya devam ediyor ve serileştirme performansı aynı veya daha iyi durumda.</p>
+  <p>Çoğu test projesi bu değişiklikten etkilenmeyecek. Özellikle, Newtonsoft.Json kullanmayan projeler veya bu kütüphaneyi normal bir PackageReference olarak referans alan projeler etkilenmeyecek. xUnit ve NUnit projeleri de bu değişiklikten etkilenmeyecek.</p>
+  
+  <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
+  <p>Bu değişiklikten etkilenecek projeler, genellikle Newtonsoft.Json türlerini kullanıp, paketi doğrudan referans almayan projeler olacak. Bu tür projelerde, derleme hatası veya çalışma zamanı hatasıyla karşılaşılabilir. Çözüm olarak, Newtonsoft.Json paketinin eklenmesi veya mevcut referansların güncellenmesi öneriliyor.</p>
+  
+  <h2>Kısa Özet</h2>
+  <ul>
+    <li>VSTest artık Newtonsoft.Json'a bağımlı değil, System.Text.Json ve JSONite kullanacak.</li>
+    <li>Değişiklik, güvenlik ve servis iyileştirmesi amacıyla yapılıyor.</li>
+    <li>Çoğu proje bu değişiklikten etkilenmeyecek.</li>
+    <li>Etkilenen projeler, basit bir PackageReference eklemesiyle sorunlarını çözebilir.</li>
+    <li>Eski test sunucuları ve serileştirme performansı değişiklikten etkilenmiyor.</li>
+  </ul>
+  
+  <p>Metin, şu konularda detay vermiyor: Eğitmenler ve bakış açısı, sınırlamalar ve belirsizlikler.</p>
+  
+  <h2>Kapanış</h2>
+  <p>VSTest'in Newtonsoft.Json bağımlılığını kaldırması, güvenlik ve performans açısından önemli bir adım olarak öne çıkıyor. Bu değişiklik, geliştiricilere daha güvenli ve verimli bir test ortamı sunmayı hedefliyor. Herhangi bir sorunla karşılaşan projeler, basit bir güncelleme ile bu değişikliklere uyum sağlayabilir.</p>
+  
+  <h2>Kaynak</h2>
+  <p>Detaylı okumak için: <a href="https://devblogs.microsoft.com/dotnet/vs-test-is-removing-its-newtonsoft-json-dependency/" target="_blank" rel="noopener noreferrer">https://devblogs.microsoft.com/dotnet/vs-test-is-removing-its-newtonsoft-json-dependency/</a></p>
+</div>

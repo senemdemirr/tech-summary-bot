@@ -1,100 +1,50 @@
---- claude | Claude.ai unavailable and elevated errors on the API | score=60.08 ---
+--- claude | claude.ai and API unavailable | score=51.92 ---
 Apr
-28
+30
 ,
-19:15
+01:51
 UTC
 Resolved
 - This incident has been resolved.
 Apr
-28
+30
 ,
-18:59
-UTC
-Monitoring
-- We are seeing success rates across all services return to normal, and are monitoring closely to prevent any further issues. Impact occurred from 17:34–18:52 UTC.
-Apr
-28
-,
-18:33
-UTC
-Update
-- We are continuing to work to resolve the issues preventing users from accessing Claude.ai, and causing elevated authentication errors for requests to the API and Claude Code.
-Apr
-28
-,
-17:51
-UTC
-Identified
-- We have identified an issue resulting in elevated errors on the Anthropic API, as well as issues accessing Claude.ai, including log-in paths for Claude Code. We are working to resolve these issues, and will provide an update as soon as possible.
-Apr
-28
-,
-17:41
-UTC
-Investigating
-- We are investigating an issue preventing users from reaching Claude.ai, and will provide an update as soon as possible.
-
-KAYNAK : https://status.claude.com/incidents/9l93x2ht4s5w
-
---- claude | Elevated errors on Claude Opus 4.7 | score=39.72 ---
-Apr
-29
-,
-00:00
-UTC
-Resolved
-- The incident is now resolved. The impact was between 16:25 PT / 23:25 UTC and 16:33 PT / 23:33 UTC.
-Apr
-28
-,
-23:33
-UTC
-Investigating
-- We are currently investigating this issue.
-
-KAYNAK : https://status.claude.com/incidents/lryjwwy0q9pl
-
---- claude | Elevated errors on Claude Haiku 4.5 | score=29.07 ---
-Apr
-28
-,
-12:45
-UTC
-Resolved
-- The incident has now been resolved. The elevated error rate for Haiku 4.5 was between 4:53 PT / 11:53 UTC and 5:36 PT / 12:44 UTC.
-Apr
-28
-,
-12:38
+01:34
 UTC
 Monitoring
 - A fix has been implemented and we are monitoring the results.
 Apr
-28
+30
 ,
-12:24
+01:20
 UTC
 Investigating
 - We are currently investigating this issue.
 
-KAYNAK : https://status.claude.com/incidents/c20m4lbfd6pm
+KAYNAK : https://status.claude.com/incidents/2gf1jpyty350
 
---- claude | Elevated errors on Claude Sonnet 4.5 | score=25.52 ---
+--- claude | Elevated errors on Claude Haiku 4.5 | score=29.76 ---
 Apr
-28
+29
 ,
-13:50
+14:14
 UTC
 Resolved
-- The incident has now been resolved. The timeline for the elevated errors was 6:22 PT / 13:22 UTC -> 6:39 PT / 13:39 UTC.
+- The incident is resolved. The elevated error rate was between 05:37 PT / 12:37 UTC and 06:58 PT / 13:37 UTC.
 Apr
-28
+29
 ,
-13:29
+14:01
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+Apr
+29
+,
+13:47
 UTC
 Investigating
 - We are currently investigating this issue.
 
-KAYNAK : https://status.claude.com/incidents/x1y91zcb2rp2
+KAYNAK : https://status.claude.com/incidents/3yxsctr39y3j
 

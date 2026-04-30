@@ -1,0 +1,3 @@
+How goblin outputs spread in AI models: timeline, root cause, and fixes behind personality-driven quirks in GPT-5 behavior.
+
+KAYNAK : https://openai.com/index/where-the-goblins-came-from
