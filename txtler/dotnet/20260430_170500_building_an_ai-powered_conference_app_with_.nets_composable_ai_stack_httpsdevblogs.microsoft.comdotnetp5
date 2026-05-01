@@ -1,4 +1,3 @@
---- dotnet | Building an AI-Powered Conference App with .NET’s Composable AI Stack | score=80.75 ---
 Building AI features into .NET applications often means stitching together models, vector databases, ingestion pipelines, and agent frameworks from different ecosystems. Each one has its own patterns, its own client libraries, and its own breaking changes when the next version ships. We’ve been working on a set of composable, extensible building blocks that give you stable abstractions across all of these concerns.
 We’re excited to walk you through how we used them together. For a session at MVP Summit, we built an interactive conference assistant called ConferencePulse. It runs live polls, answers audience questions in real time, generates insights from engagement data, and summarizes the session when it wraps up. We built the app using the exact technologies we were there to present:
 Microsoft.Extensions.AI
@@ -402,4 +401,3 @@ appeared first on
 .
 
 KAYNAK : https://devblogs.microsoft.com/dotnet/building-ai-conference-app-dotnet-composable-stack/
-

@@ -1,0 +1,23 @@
+Misc Changes
+[test] Preserve Playwright traces on every failure:
+#93366
+[ci] Add support for private preview builds:
+#93375
+Fix deploy tests crashing under AI coding assistants:
+#93394
+Remove leftover Turbopack manifests:
+#93398
+[ci]: remove PR creation from deploy test workflow:
+#93400
+Credits
+Huge thanks to
+@eps1lon
+,
+@unstubbable
+,
+@timneutkens
+, and
+@ztanner
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.7

@@ -1,4 +1,3 @@
---- claude | Elevated errors on Claude Haiku 4.5 | score=32.74 ---
 Apr
 30
 ,
@@ -15,4 +14,3 @@ Investigating
 - We are currently investigating this issue.
 
 KAYNAK : https://status.claude.com/incidents/dv9r688vqt8s
-

@@ -1,4 +1,3 @@
---- deepmind | Enabling a new model for healthcare with AI co-clinician | score=94.78 ---
 Enabling a new model for healthcare with AI co-clinician
 Health systems worldwide are striving for better outcomes, lower costs, and an improved experience for both patients and clinicians. However, progress is constrained by a global shortage of clinical experts, with the World Health Organization predicting a shortfall of more than 10 million health workers by 2030.
 While AI is often seen as the key to bridging this gap, it has not yet been able to fully meet the needs of clinicians and patients. That's why, today, we are announcing our AI co-clinician research initiative, to explore how AI could better amplify doctorsâ expertise and deliver higher quality care to patients.
@@ -30,4 +29,3 @@ We thank our many collaborators for their invaluable contributions, including Al
 Thanks to James Manyika and Demis Hassabis for their insightful guidance and support throughout the research process.
 
 KAYNAK : https://deepmind.google/blog/ai-co-clinician/
-
