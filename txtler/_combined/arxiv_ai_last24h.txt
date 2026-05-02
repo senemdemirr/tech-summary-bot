@@ -1,4 +1,4 @@
---- arxiv_ai | AblateCell: A Reproduce-then-Ablate Agent for Virtual Cell Repositories | score=102.97 ---
+--- arxiv_ai | AblateCell: A Reproduce-then-Ablate Agent for Virtual Cell Repositories | score=103.51 ---
 0.19216 0.33333 0.74902A0.17255 0.29804 0.69804b0.15686 0.26667 0.65098l0.14118 0.23529 0.60392a0.12549 0.20392 0.55686t0.10588 0.16863 0.50588e0.0902 0.13725 0.45882C0.07451 0.10588 0.41176e0.0549 0.07059 0.36078l0.03922 0.03922 0.31373l\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:: A Reproduce-then-Ablate Agent for Virtual Cell Repositories
 Abstract
 Systematic ablations are essential to attribute performance gains in AI Virtual Cells, yet they are rarely performed because biological repositories are under-standardized and tightly coupled to domain-specific data and formats. While recent coding agents can translate ideas into implementations, they typically stop at producing code and lack a verifier that can reproduce strong baselines and rigorously test which components truly matter. We introduce AblateCell, a reproduce-then-ablate agent for virtual cell repositories that closes this verification gap. AblateCell first reproduces reported baselines end-to-end by auto-configuring environments, resolving dependency and data issues, and rerunning official evaluations while emitting verifiable artifacts. It then conducts closed-loop ablation by generating a graph of isolated repository mutations and adaptively selecting experiments under a reward that trades off performance impact and execution cost. Evaluated on three single-cell perturbation prediction repositories (CPA, GEARS, BioLORD), AblateCell achieves 88.9% (+29.9% to human expert) end-to-end workflow success and 93.3% (+53.3% to heuristic) accuracy in recovering ground-truth critical components. These results enable scalable, repository-grounded verification and attribution directly on biological codebases.
@@ -364,7 +364,7 @@ These failures highlight that semantically meaningful ablations can still introd
 
 KAYNAK : https://arxiv.org/abs/2604.19606
 
---- arxiv_ai | Optimal Stop-Loss and Take-Profit Parameterization for Autonomous Trading Agent Swarm | score=102.75 ---
+--- arxiv_ai | Optimal Stop-Loss and Take-Profit Parameterization for Autonomous Trading Agent Swarm | score=103.29 ---
 Optimal Stop-Loss and Take-Profit Parameterization for Autonomous Trading Agent Swarm
 Abstract
 Autonomous crypto trading systems often spend most of their design effort on finding entries, while exits are left to fixed rules that are rarely tested in a systematic way. This paper examines whether better stop-loss and take-profit settings can improve the performance of an autonomous trading agent swarm. Using more than 900 historical trades, we replay each trade under many alternative exit policies and compare results against the existing production setup. The study finds that exit design matters meaningfully: stronger configurations improve risk-adjusted performance and generally favor tighter loss limits, earlier profit capture, and closer trailing protection. The paper also discusses a key evaluation challenge: a purely chronological split was initially used, but the newest trades fell into an unusual war-driven market period that sharply distorted test results. To reduce the influence of that single episode, the main comparison was run on randomized data, with the drawbacks of doing so acknowledged explicitly. Overall, the paper presents a practical framework for tuning exit logic in a more disciplined and transparent way.
@@ -414,7 +414,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2604.27150
 
---- arxiv_ai | TIO-SHACL: Comprehensive SHACL validation for TMF Intent Ontologies | score=102.75 ---
+--- arxiv_ai | TIO-SHACL: Comprehensive SHACL validation for TMF Intent Ontologies | score=103.29 ---
 11email: {jean.martins, leonid.mokrushin, marin.orlic}@ericsson.com
 TIO-SHACL: Comprehensive SHACL validation for TMF Intent Ontologies
 Abstract
@@ -530,7 +530,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2604.27359
 
---- arxiv_ai | Generative structure search for efficient and diverse discovery of molecular and crystal structures | score=102.75 ---
+--- arxiv_ai | Generative structure search for efficient and diverse discovery of molecular and crystal structures | score=103.29 ---
 [2]\fnmChang \surLiu
 [1]\fnmMing \surZhang
 [2,4]\fnmZiheng \surLu
@@ -611,7 +611,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2604.27636
 
---- arxiv_ai | Consumer Attitudes Towards AI in Digital Health: A Mixed-Methods Survey in Australia | score=102.75 ---
+--- arxiv_ai | Consumer Attitudes Towards AI in Digital Health: A Mixed-Methods Survey in Australia | score=103.29 ---
 [1]\fnmRashina \surHoda
 [1]\orgdivFaculty of Information Technology, \orgnameMonash University, \orgaddress\streetWellington Rd, \cityClayton, \postcode3800, \stateVIC, \countryAustralia
 2]\orgnameDigital Health CRC, \orgaddress\streetGeorge Street, \citySydney, \postcode2000, \stateNSW, \countryAustralia

@@ -1,4 +1,4 @@
---- arxiv_ai | AblateCell: A Reproduce-then-Ablate Agent for Virtual Cell Repositories | score=102.97 ---
+--- arxiv_ai | AblateCell: A Reproduce-then-Ablate Agent for Virtual Cell Repositories | score=103.51 ---
 0.19216 0.33333 0.74902A0.17255 0.29804 0.69804b0.15686 0.26667 0.65098l0.14118 0.23529 0.60392a0.12549 0.20392 0.55686t0.10588 0.16863 0.50588e0.0902 0.13725 0.45882C0.07451 0.10588 0.41176e0.0549 0.07059 0.36078l0.03922 0.03922 0.31373l\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:\__color_backend_reset:: A Reproduce-then-Ablate Agent for Virtual Cell Repositories
 Abstract
 Systematic ablations are essential to attribute performance gains in AI Virtual Cells, yet they are rarely performed because biological repositories are under-standardized and tightly coupled to domain-specific data and formats. While recent coding agents can translate ideas into implementations, they typically stop at producing code and lack a verifier that can reproduce strong baselines and rigorously test which components truly matter. We introduce AblateCell, a reproduce-then-ablate agent for virtual cell repositories that closes this verification gap. AblateCell first reproduces reported baselines end-to-end by auto-configuring environments, resolving dependency and data issues, and rerunning official evaluations while emitting verifiable artifacts. It then conducts closed-loop ablation by generating a graph of isolated repository mutations and adaptively selecting experiments under a reward that trades off performance impact and execution cost. Evaluated on three single-cell perturbation prediction repositories (CPA, GEARS, BioLORD), AblateCell achieves 88.9% (+29.9% to human expert) end-to-end workflow success and 93.3% (+53.3% to heuristic) accuracy in recovering ground-truth critical components. These results enable scalable, repository-grounded verification and attribution directly on biological codebases.
@@ -364,7 +364,7 @@ These failures highlight that semantically meaningful ablations can still introd
 
 KAYNAK : https://arxiv.org/abs/2604.19606
 
---- arxiv_ai | Optimal Stop-Loss and Take-Profit Parameterization for Autonomous Trading Agent Swarm | score=102.75 ---
+--- arxiv_ai | Optimal Stop-Loss and Take-Profit Parameterization for Autonomous Trading Agent Swarm | score=103.29 ---
 Optimal Stop-Loss and Take-Profit Parameterization for Autonomous Trading Agent Swarm
 Abstract
 Autonomous crypto trading systems often spend most of their design effort on finding entries, while exits are left to fixed rules that are rarely tested in a systematic way. This paper examines whether better stop-loss and take-profit settings can improve the performance of an autonomous trading agent swarm. Using more than 900 historical trades, we replay each trade under many alternative exit policies and compare results against the existing production setup. The study finds that exit design matters meaningfully: stronger configurations improve risk-adjusted performance and generally favor tighter loss limits, earlier profit capture, and closer trailing protection. The paper also discusses a key evaluation challenge: a purely chronological split was initially used, but the newest trades fell into an unusual war-driven market period that sharply distorted test results. To reduce the influence of that single episode, the main comparison was run on randomized data, with the drawbacks of doing so acknowledged explicitly. Overall, the paper presents a practical framework for tuning exit logic in a more disciplined and transparent way.
@@ -414,7 +414,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2604.27150
 
---- arxiv_ai | TIO-SHACL: Comprehensive SHACL validation for TMF Intent Ontologies | score=102.75 ---
+--- arxiv_ai | TIO-SHACL: Comprehensive SHACL validation for TMF Intent Ontologies | score=103.29 ---
 11email: {jean.martins, leonid.mokrushin, marin.orlic}@ericsson.com
 TIO-SHACL: Comprehensive SHACL validation for TMF Intent Ontologies
 Abstract
@@ -530,7 +530,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2604.27359
 
---- arxiv_ai | Generative structure search for efficient and diverse discovery of molecular and crystal structures | score=102.75 ---
+--- arxiv_ai | Generative structure search for efficient and diverse discovery of molecular and crystal structures | score=103.29 ---
 [2]\fnmChang \surLiu
 [1]\fnmMing \surZhang
 [2,4]\fnmZiheng \surLu
@@ -611,7 +611,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2604.27636
 
---- arxiv_ai | Consumer Attitudes Towards AI in Digital Health: A Mixed-Methods Survey in Australia | score=102.75 ---
+--- arxiv_ai | Consumer Attitudes Towards AI in Digital Health: A Mixed-Methods Survey in Australia | score=103.29 ---
 [1]\fnmRashina \surHoda
 [1]\orgdivFaculty of Information Technology, \orgnameMonash University, \orgaddress\streetWellington Rd, \cityClayton, \postcode3800, \stateVIC, \countryAustralia
 2]\orgnameDigital Health CRC, \orgaddress\streetGeorge Street, \citySydney, \postcode2000, \stateNSW, \countryAustralia
@@ -855,612 +855,162 @@ References
 
 KAYNAK : https://arxiv.org/abs/2604.27744
 
---- deepmind | Enabling a new model for healthcare with AI co-clinician | score=94.78 ---
-Enabling a new model for healthcare with AI co-clinician
-Health systems worldwide are striving for better outcomes, lower costs, and an improved experience for both patients and clinicians. However, progress is constrained by a global shortage of clinical experts, with the World Health Organization predicting a shortfall of more than 10 million health workers by 2030.
-While AI is often seen as the key to bridging this gap, it has not yet been able to fully meet the needs of clinicians and patients. That's why, today, we are announcing our AI co-clinician research initiative, to explore how AI could better amplify doctorsâ expertise and deliver higher quality care to patients.
-At Google DeepMind, our journey in medical AI has evolved from mastering examination-style tests of medical knowledge with MedPaLM, to matching physician performance in text-based simulated medical consultations with AMIE, including in real-world feasibility trial settings. We also have a long history of studying how clinicians and AI systems might work together.
-We hypothesize that the next evolution of healthcare delivery will entail âtriadic careâ where AI agents can help patients in their care journeys under the clinical authority of their physician. Medicine has always been a team sport, and AI agents can bring more teammates onto the field: extending clinicians' reach while ensuring they retain judgment and control.
-This serves as the foundation of our AI co-clinician research initiative: AI designed to function as a collaborative member of the care team that interacts with patients under expert clinical supervision. We designed and evaluated AI co-clinician in both clinician and patient-facing settings. Addressing both perspectives is key for AI to enhance the quality, cost, availability and experience of care delivery.
-Augmenting clinicians with AI co-clinician
-For a physician, a tool is useful only if it is trustworthy and factually grounded. We therefore researched how well AI co-clinician might support clinicians by surfacing high-quality evidence.
-In collaboration with academic physicians, we adapted the "NOHARM" framework to test our AI for "errors of commission" (incorrect information) and "errors of omission" (failure to surface critical information).
-In head-to-head blind evaluations, physicians consistently preferred AI co-clinicianâs responses to leading evidence synthesis tools. In objective analysis of 98 realistic primary care queries, our system recorded zero critical errors in 97 cases, improving over two AI systems widely used by physicians.
-Beyond reliable synthesis of clinical evidence, AI systems should answer queries about medications and therapeutic interventions with the precision that doctors demand. This is a difficult task for AI yet remains underexplored. To address this gap, we evaluated AI co-clinician on the OpenFDA set of RxQA questions, a challenging benchmark designed to assess complex medication knowledge and reasoning. We saw significant progress in navigating these tests, surpassing other frontier AI systems especially when questions were posed in the open-ended way theyâre asked in real care. The findings underscore the potential for advanced AI to provide helpful assistance as clinicians navigate the increasingly data-intensive requirements of care planning and management.
-Researching AI co-clinicianâs real time multimodal capabilities in telemedical settings
-Beyond assistive clinician-facing settings, we are also investigating how AI co-clinician performs within patient-facing research contexts. Expert clinical assessment traditionally includes subtle visual and auditory cues, such as observing a patientâs gait, the nuances of respiratory patterns, or the appearance of skin changes. While prior studies (including our work with Beth Israel Deaconess Medical Center) demonstrated value in AI text-chats before a doctorâs appointment, restricting interactions to text fundamentally constrains the clinical value of AI. Medicine isnât just text; it requires eyes, ears and a voice.
-This is why we are exploring the potential for real-time multimodal AI as an assistive component of the care team. Building on the capabilities of Gemini and Project Astra, we tested the capabilities of AI co-clinician to use live audio and video to engage with patients, simulating telemedical calls where capable AI could one day support better diagnosis and management under expert supervision. Further details regarding our methodology and results are available in our technical report: âTowards Conversational Medical AI with Eyes, Ears and a Voiceâ
-Working with academic physicians at Harvard and Stanford, we designed a randomized simulation study with 20 synthetic clinical scenarios and 10 physician "patient-actors". The agent demonstrated new capabilities beyond text-only systems, such as guiding patients through complex physical examinations in real time. For example, it successfully corrected a patient's inhaler technique and guided shoulder maneuvers to identify a rotator cuff injury.
-While there is frequent discussion regarding AIâs potential to match or exceed human clinical performance, these high-fidelity simulations more rigorously evaluate that premise. We assessed over 140 aspects of consultation skill and found that expert physicians performed better than the AI system overall, particularly in identifying "red flags" and guiding critical physical examinations. This finding suggests these systems are currently best used as supportive tools for practitioners rather than replacements for clinical judgment. At the same time, our work highlights the significant progress in AIâs capabilities: AI co-clinician performed at a level comparable to or exceeding primary care physicians (PCPs) in 68 of the 140 assessed areas. The results underscore extensive promise and flag specific areas where further research can most impactfully advance medical AI.
-Below you can see the research team role-playing as hypothetical patients in this telemedical setting with the AI co-clinician, highlighting the systemâs potential capabilities and limitations.
-Engineering trust with safeguards for clinical-grade AI
-The transition and deployment of AI into clinical environments requires uncompromising architectural and operational safeguards. In our research on simulations of patient-facing telemedical conversations, AI co-clinician uses a dual-agent architecture: a "Planner" module continuously monitors the conversation, verifying that the "Talker" agent stays within safe clinical boundaries.
-Similarly, to meet doctorsâ needs AI co-clinician prioritizes clinical-grade evidence, performing verification and citation checking for retrieval. The evaluations we report above were constructed by physicians to mirror a range of their real-world evidence needs, formulating questions from hypothetical scenarios for rigorously evaluating AIâs capabilities.
-Research collaborations for rigorous real-world evaluation of AI co-clinician
-To further develop and assess AI co-clinician, we are currently advancing a phased approach with academic and research collaborators across globally diverse healthcare settings including in the US, India, Australia, New Zealand, Singapore and UAE.
-As we progress through these evaluation phases, we will further our research in more geos including mission-aligned healthcare organizations and academic medical centers. Our goal is to ensure that medical AI is developed and deployed responsibly in line with applicable standards, supporting better health worldwide.
-Note: Our research collaborations are not, at this stage, intended for use in the diagnosis, cure, mitigation, treatment, or prevention of disease, or to provide medical advice.
-Acknowledgements
-We are grateful to our research partners at Harvard Medical School and Stanford Medicine and the many medical centers and care organizations engaging in further trusted tester evaluations with our team. This project involved collaborations with many teams at Google DeepMind, Google Research, Google Cloud and Google for Health and we thank our team mates for insightful discussions and contributions.
-In particular, AI co-clinician would not have been possible without the core research and engineering efforts of Aniruddh Raghu, Arthur Chen, Charlie Taylor, CJ Park, David Stutz, Devora Berlowitz, Doug Fritz, Dylan Slack, Eliseo Papa, Jack Chen, JD Velasquez, Jing Rong Lim, Katya Tregubova, Kelvin Guu, Meet Shah, Richard Green, Ryutaro Tanno, Sukhdeep Singh, Victoria Johnston, Adam Rodman.
-We thank our many collaborators for their invaluable contributions, including Ali Eslami, Aliya Rysbeck, Andy Song, Anil Palepu, Anna Cupani, Bakul Patel, Bibo Xu, Brett Hatfield, David Wu, Ed Chi, Emma Cooney, Erica Oppenheimer, Erwan Rolland, Euan A. Ashley, Francesca Pietra, Rebeca Santamaria-Fernadez, Gordon Turner, Gregory Wayne, Hannah Gladman, Irene Teinemaa, Jack O'Sullivan, Jacob Koshy, Jan Freyberg, Jason Gusdorf, Joelle Wilson, Katherine Tong, Juraj Gottweis, Michael Howell, Mili Sanwalka, Pavel Dubov, Pete Clardy, Peter Brodeur, Rachelle Sico, SiWai Man, Sumanth Dahathri, Taylan Cemgil, Tim Strother, Uchechi Okereke, Valentin Lievin, Vishnu Ravi, Yana Lunts, Yun Liu, Simon Staffell, Rachel Teo, Adriana Fernandez Lara, Armin Senoner, Danielle Breen, Paula Tesch, Leen Verburgh, Dimple Vijaykumar, Juanita Bawagan, Muinat Abdul, Mariana Montes and Rob Ashley. Feature videos were produced by Christopher Godfree, Matt Mager, Emma Moxhay and Simon Waldron.
-Thanks to James Manyika and Demis Hassabis for their insightful guidance and support throughout the research process.
-
-KAYNAK : https://deepmind.google/blog/ai-co-clinician/
-
---- mit_ai | This startup’s new mechanistic interpretability tool lets you debug LLMs | score=85.36 ---
-The San Francisco–based startup Goodfire just released a new tool, called Silico, that lets researchers and engineers peer inside an AI model and adjust its parameters—the
-settings that determine a model’s behavior
-—during training. This could give model makers more fine-grained control over how this technology is built than was once thought possible.
-Goodfire claims Silico is the first off-the-shelf tool of its kind that can help developers debug all stages of the development process, from building a data set to training a model.
-The company says its mission is to make building AI models less like alchemy and more like a science. Sure, LLMs like ChatGPT and Gemini can do amazing things. But nobody knows exactly how or why they work, and that can make it hard to fix their flaws or block unwanted behaviors.
-“We saw this widening gap between how well models were understood and just how widely they were being deployed,” Goodfire’s CEO, Eric Ho, tells
+--- mit_ai | Musk v. Altman week 1: Elon Musk says he was duped, warns AI could kill us all, and admits that xAI distills OpenAI’s models | score=81.04 ---
+In the first week of the landmark trial between Elon Musk and OpenAI, Musk took the stand in a crisp black suit and tie and argued that OpenAI CEO Sam Altman and president Greg Brockman had deceived him into bankrolling the company. Along the way, he warned that AI could destroy us all and sat through revelations that he had poached OpenAI employees for his own companies. He even confessed, to some audible gasps in the courtroom, that his own AI company, xAI, which makes the chatbot Grok, uses OpenAI’s models to train its own.
+The federal courthouse in Oakland, California, was packed with armies of lawyers carrying boxes of exhibits, journalists typing away at their laptops, and a handful of concerned OpenAI employees. Outside, protesters lined the streets,
+carrying signs
+urging people to quit ChatGPT, boycott Tesla, or both. Musk looked calm and comfortable, slipping in the occasional quip in his distinct South African accent. But he also was full of remorse.
+“I was a fool who provided them free funding to create a startup,” Musk told the jury. He said when he cofounded OpenAI in 2015 with Altman and Brockman, he was donating to a nonprofit developing AI for the benefit of humanity, not to make the executives rich. “I gave them $38 million of essentially free funding, which they then used to create what would become an $800 billion company,” he said.
+Musk is asking the court to remove Altman and Brockman from their roles and to unwind the
+restructuring
+that allowed OpenAI to operate a for-profit subsidiary. The outcome of the trial could upend OpenAI’s race toward an IPO at a valuation approaching $1 trillion. Meanwhile, xAI is expected to go public as a part of Musk’s rocket company SpaceX as early as June, at a target valuation of
+$1.75 trillion
+.
+This week’s testimony revolved around a central question of the trial: why Musk is suing OpenAI. Musk argued he was trying to save OpenAI’s mission to develop AI safely by restoring the company to its original nonprofit structure. OpenAI’s lawyer, William Savitt, who once represented Musk and his electric-car company Tesla, countered that Musk was “never committed to OpenAI being a nonprofit” and instead was suing to undermine his competitor.
+Who is the steward of AI safety?
+During his direct examination early in the week, Musk painted himself as a longtime advocate of AI safety. He said he cofounded OpenAI to create a “counterbalance to Google,” which was leading the AI race at the time. He said that when he asked Google cofounder Larry Page what happens if AI tries to wipe out humanity, Page told him, “That will be fine as long as artificial intelligence survives.”
+“The worst-case scenario is a
+Terminator
+situation where AI kills us all,” Musk later told the jury.
+Savitt stood at the lectern and argued that Musk was not a “paladin of safety and regulation.” As he cross-examined Musk in his sharp, surgical cadence, Savitt pointed out that xAI sued the state of Colorado in April over an AI law designed to prevent algorithmic discrimination.
+Musk’s lawyer, Steven Molo, sprang to his feet to object. He asked the judge if he, too, could weigh in on ChatGPT’s safety record.
+The lawyers then entered a heated debate about who was the true guardian of AI safety.
+The sparring continued the next morning. “We all could die as a result of artificial intelligence!” said Molo, suggesting that OpenAI could not be trusted to build AI safely.
+“Despite these risks, your client is creating a company that’s in the exact space,” Judge Yvonne Gonzalez Rogers said sternly, referring to xAI. “I suspect there’s plenty of people who don’t want to put the future of humanity in Mr. Musk’s hands.”
+When the lawyers began talking over each other, the judge snapped. “This is not a trial on whether or not artificial intelligence has damaged humanity,” she said.
+When did Musk think he was being duped?
+As Savitt continued to cross-examine Musk, he pressed on the idea that Musk had never been committed to keeping OpenAI a nonprofit. He also claimed that Musk waited too long to sue OpenAI, filing after the statute of limitations ran out.
+Musk explained why he sued in 2024 rather than earlier, describing “three phases” in his views of OpenAI. In phase one, he was “enthusiastically supportive” of the company.” In phase two, “I started to lose confidence that they were telling me the truth,” he said. In phase three, “I’m sure they’re looting the nonprofit.”
+In 2017, Musk and other OpenAI cofounders discussed creating a for-profit subsidiary to raise enough capital to build artificial general intelligence—powerful AI that can compete with humans on most cognitive tasks. Musk wanted a majority interest in the subsidiary and the right to choose a majority of the board members. He also pitched having Tesla acquire OpenAI. (He left OpenAI in 2018.)
+“I was not opposed to there being a small for-profit that provides funding to the nonprofit,” he told the jury, “as long as the tail didn’t wag the dog.”
+But it was only in late 2022, Musk testified, that he “lost trust in Altman” and his commitment to keeping the company a nonprofit. The key moment came, he said, when he learned that Microsoft would invest $10 billion in OpenAI.
+“I texted Sam Altman, ‘What the hell is going on? This is a bait and switch,’” he told the jury. Microsoft would give $10 billion only if it expected “a very big financial return,” he said.
+Is Musk just trying to kill competition?
+But Savitt argued that Musk was really suing to undermine OpenAI as a competitor to his empire of tech companies. While he was on the board of OpenAI, Musk was also running Tesla and his brain-implant company, Neuralink. He founded xAI in 2023.
+Savitt pulled up an email that Musk had sent to a Tesla vice president in 2017 after hiring Andrej Karpathy, a founding member of OpenAI, to work at Tesla.“The OpenAI guys are gonna want to kill me. But it had to be done,” he wrote.
+When asked about it, Musk was flustered. He claimed Karpathy had already decided to leave OpenAI when he recruited him to work at Tesla. “I believe it’s a free world,” he said.
+Savitt pulled up another email that Musk sent to a cofounder at Neuralink in 2017. He wrote that they could “hire independently or directly from OpenAI.” When pressed about it, he sounded frazzled. “It’s a free country,” he said. “I can’t restrict their ability to hire people from other companies.”
+Savitt also pointed out that Tesla, SpaceX, Neuralink, and X were socially beneficial for-profit companies, like OpenAI. He stressed that xAI was also a closed-source, for-profit company.
+But Musk claimed that xAI was not a real competitor to OpenAI. “We’re not currently tracking to reach AGI first,” he told the jury.
+In fact, Musk admitted that xAI uses OpenAI’s technology. In response to Savitt’s relentless questioning, he said xAI “partly” distills OpenAI’s models. Some people in the courtroom gasped.
+Distillation is a technique where a smaller AI model is trained to mimic the behavior of larger, more capable models, so it can run faster and more cheaply while performing nearly as well. But OpenAI and other AI companies have pushed back against the practice. In February, OpenAI
+accused
+the Chinese AI company DeepSeek of distilling its AI models. In August 2025,
+Wired
+reported that Anthropic had
+blocked
+OpenAI’s access to Claude for violating the company’s terms of service, which prohibit, among other things, reverse-engineering its services and building competing products.
+“It is standard practice to use other AIs to validate your AI,” argued Musk.
+Next week, Stuart Russell, a computer scientist at UC Berkeley, will testify about AI safety. Brockman, who has been taking notes during Musk’s testimony, will also testify.
+This story is part of
 MIT Technology Review
-in an exclusive chat ahead of Silico’s release. “I think the dominant feeling in every single major frontier lab today is that you just need more scale, more compute, more data, and then you get AGI [artificial general intelligence] and nothing else matters. And we’re saying no, there’s a better way.”
-Goodfire is one of a small handful of companies, including industry leaders Anthropic, OpenAI, and Google DeepMind, pioneering a technique known as mechanistic interpretability, which aims to
-understand what goes on inside an AI model
-when it carries out a task by mapping its neurons and the pathways between them. (
+’s ongoing coverage of the
+Musk v. Altman
+trial. Follow
+@techreview
+or
+@michelletomkim
+on X for up-to-the-minute reporting.
+
+KAYNAK : https://www.technologyreview.com/2026/05/01/1136800/musk-v-altman-week-1-musk-says-he-was-duped-warns-ai-could-kill-us-all-and-admits-that-xai-distills-openais-models/
+
+--- mit_ai | Operationalizing AI for Scale and Sovereignty | score=75.93 ---
+Companies are taking control of their own data to tailor AI for their needs. The challenge lies in balancing ownership with the safe, trusted flow of high‑quality data needed to power reliable insights. This conversation from MIT Technology Review’s EmTech AI conference examines how AI factories unlock new levels of scale, sustainability, and governance—positioning data control as a strategic imperative for governments and enterprises.
+About the speakers
+Chris Davidson, Vice President, HPC & AI Customer Solutions, HPE
+Chris Davidson is Vice President of HPC & AI Customer Solutions at Hewlett Packard Enterprise. He leads HPE’s global strategy for AI Factory solutions and Sovereign AI, working with governments, enterprises, and research institutions to build secure, scalable national- and enterprise-grade AI capabilities.
+He also directs Product Management and Performance Engineering across HPE’s HPC and AI portfolio, including large-model training platforms and Cray exascale systems. His teams define product strategy, performance architecture, and deployment models that position HPE at the forefront of high-performance and AI computing.
+During his nine years at HPE, Chris has led key initiatives across Performance Engineering, AI Cloud, and Professional Services, shaping how HPE delivers optimized, cloud-native, and globally deployed high-performance systems. He previously held technical and leadership roles in the biotech and medical diagnostics sectors.
+Chris holds an M.B.A. in Entrepreneurship and Finance and a B.S. in Biology from Loyola University Chicago.
+Arjun Shankar, Division Director, National Center for Computational Science, Oak Ridge National Laboratory
+Mallikarjun (Arjun) Shankar is the Division Director for the National Center for Computational Science at the Oak Ridge National Laboratory. His research focuses on the interdisciplinary bridge between computer science and large-scale scientific discovery campaigns that rely on scalable computing and data science. He is a joint faculty appointee at the University of Tennessee’s Bredesen Center, a senior member of the IEEE and a senior member of the ACM.
+
+KAYNAK : https://www.technologyreview.com/2026/05/01/1136772/operationalizing-ai-for-scale-and-sovereignty/
+
+--- mit_ai | Cyber-Insecurity in the AI Era | score=75.61 ---
+Cybersecurity was already under strain before AI entered the stack. Now, as AI expands the attack surface and adds new complexity, the limits of legacy approaches are becoming harder to ignore. This session from MIT Technology Review’s EmTech AI conference explores why security must be rethought with AI at its core, not layered on after the fact.
+About the speaker
+Tarique Mustafa, Cofounder, CEO, and CTO, GC Cybersecurity
+Tarique Mustafa is Cofounder and CEO/CTO of two AI-powered cybersecurity companies: GCCybersecurity, Inc. and its data compliance spinout, Chorology, Inc. A prolific inventor and internationally recognized authority in knowledge representation, inference calculus, and AI planning, Tarique has spent his career applying autonomously collaborative AI to solve complex, ultra-high-scale challenges across cybersecurity, data security, and compliance — with deep expertise spanning Data Classification, DLP, and DSPM industries. His groundbreaking innovations and multiple USPTO patents have earned him global recognition, including frequent invitations to deliver keynote addresses at prestigious international security conferences and forums.
+At GCCybersecurity, Tarique architected the core AI algorithms powering the company’s 4th and 5th generation fully autonomous data leak protection and exfiltration platform — among the most advanced platform of its kind. Prior to founding GCCybersecurity and Chorology, he served as founding CEO/CTO of NexTier Networks, a Silicon Valley provider of award-winning Data Leak Prevention solutions. With over 20 years of technical leadership experience, Tarique has held senior roles at Symantec, DHL Airways IT, MCI WorldCom, EDS, Andes Networks, and Nevis Networks, where he served as Principal Architect and built industry-leading security products leveraging next-generation security monitoring, event correlation, IDS/IPS, and SSL/IPSec technologies.
+Tarique holds multiple approved and pending patents with the USPTO and has authored numerous research publications spanning Information & Data Security, Computer & Network Security, Software Architecture, Database Technologies, and Artificial Intelligence. A recipient of the prestigious Rotary International Scholarship for doctoral studies in Computer Science at the University of Southern California (USC), Tarique also holds master’s degrees in engineering and computer science from USC, and a bachelor’s degree in mechanical engineering from NED University of Engineering & Technology.
+
+KAYNAK : https://www.technologyreview.com/2026/05/01/1136779/cyber-insecurity-in-the-ai-era/
+
+--- mit_ai | A new US phone network for Christians aims to block porn and gender-related content | score=69.59 ---
+A new US-wide cell phone network marketed to Christians is set to launch next week. It blocks porn, which experts in network security say marks the first time a US cell plan has used network-level blocking for such content that can’t be turned off even by adult account owners. It’s also rolling out a filter on sexual content aimed at blocking material related to gender and trans issues, which will be optional but turned on by default across all plans.
+The network, which is currently being tested ahead of its May 5 launch date, will be run by Radiant Mobile, a newly launched mobile virtual network operator (MVNO). These operators don’t own cell towers but buy bandwidth from the big providers (in this case, T-Mobile) and sell to specific demographics (President Trump announced his own MVNO last year called Trump Mobile; CREDOMobile sends donations to progressive causes).
+“We are going to create—and we think we have every right to do so—an environment that is Jesus-centric, that is void of pornography, void of LGBT, void of trans,” Radiant Mobile’s founder, Paul Fisher, told
 MIT Technology Review
-picked
-mechanistic interpretability
-as one of its 10 Breakthrough Technologies of 2026.)
-Goodfire wants to use this approach not only to audit models—that is, studying those that have already been trained—but to help design them in the first place.
-“We want to remove the trial and error and turn training models into precision engineering,” says Ho. “And that means exposing the knobs and dials so that you can actually use them during the training process.”
-Goodfire has already used its techniques and tools to tweak the behaviors of LLMs—for example,
-reducing the number of hallucinations they produce
-. With Silico, the company is now packaging up many of those in-house techniques and shipping them as a product.
-The tool uses agents to automate much of the complex work. “Agents are now strong enough to do a lot of the interpretability work that we were doing using humans,” says Ho. “That was kind of the gap that needed to be bridged before this was actually a viable platform that customers could use themselves.”
-Leonard Bereska, a researcher at the University of Amsterdam who has worked on mechanistic interpretability, thinks Silico looks like a useful tool. But he pushes back on Goodfire’s loftier aspirations. “In reality, they are adding precision to the alchemy,” he says. “Calling it engineering makes it sound more principled than it is.”
-Mapping models
-Silico lets you zoom in on specific parts of a trained model, such as individual neurons or groups of neurons, and run experiments to see what those neurons do. (Assuming you have access to the model’s inner workings. Most people won’t be able to use Silico to poke around inside ChatGPT or Gemini, but you can use it to look at the parameters inside many open-source models.) You can then check what inputs make different neurons fire, and trace pathways upstream and downstream of a neuron to see how other neurons affect it and how it affects other neurons in turn.
-For example, Goodfire found one neuron inside the open-source model Qwen 3 that was associated with the so-called trolley problem. Activating this neuron changed the model’s responses, making it frame its outputs as explicit moral dilemmas. “When this neuron’s active, all sorts of weird things happen,” says Ho.
-Pinpointing the source of odd behavior like this is now pretty standard practice. But Goodfire wants to make it easier to adjust that behavior. Using Silico, developers can now adjust the parameters connected to individual neurons to boost or suppress certain behaviors.
-In another example, Goodfire researchers asked a model whether a company should disclose that its AI behaves deceptively in 0.3% of cases, affecting 200 million users. The model said no, citing the negative business impact of such a disclosure.
-By looking inside the model, the researchers found that boosting neurons that were found to be associated with transparency and disclosure flipped the answer from no to yes nine out of 10 times. “The model already had the ethical reasoning circuitry, but it was being outweighed by the commercial risk assessment,” says Ho.
-Tweaking the values of a model in this way is just one approach. Silico can also help steer the training process by filtering out certain training data to avoid setting unwanted values for certain parameters in the first place.
-For example, many models will tell you that
-9.11 is greater than 9.9
-. Looking inside a model to see what’s going on might reveal that it is being influenced by neurons associated with the Bible, in which verse 9.9 comes before 9.11, or by code repositories where consecutive updates are numbered 9.9, 9.10, 9.11 and so on. Using this information, the model can be retrained to make it avoid its “Bible” neurons when doing math.
-By releasing Silico, Goodfire wants to put techniques previously available to a few top labs into the hands of smaller firms and research teams that want to build their own model or adapt an open-source one. The tool will be available for a fee determined on a case-by-case basis according to customers’ requirements (Goodfire declined to give specific pricing details).
-“If we can make training models a lot more like building software, there’s no reason why there can’t be many more companies designing models that fit their needs,” says Ho.
-Bereska agrees that tools like Silico could help firms build more trustworthy models. These techniques could be essential for safety-critical applications in health care and finance, he says.
-“Frontier labs already have internal interpretability teams,” he adds. “Silico arms the next tier of companies, where the value is not having to hire interpretability researchers.”
+. A representative for T-Mobile did not comment on whether these content blocks violate any of its policies. In a statement, the representative added that T-Mobile does not have a direct relationship with Radiant Mobile but instead works through the MVNO manager CompaxDigital.
+Fisher says he’s recruited a mix of Christian influencers to advertise the plan and has also done outreach to thousands of churches around the country, offering a way to have Radiant donate a portion of congregants’ $30-per-month subscription fee to their church. Fisher has ambitions to market it beyond the US in other countries with significant Christian populations, like South Korea and Mexico.
+At least
+one
+piece of Radiant’s pitch will sound familiar: the idea that the internet is awash in toxic sludge. It’s powered by content and algorithms that are making us more sad, hateful, and detached. A number of efforts aim to fix that, including contentious age verification laws and a coming wave of lawsuits alleging that social media companies knowingly got young users hooked on their platforms.
+Fisher is pursuing the nuclear option. He says Radiant is working with the Israeli cybersecurity company Allot to block categories of content, such as material about violence or self-harm. Some categories are banned by default and cannot be allowed even for adult users.
+This includes pornography. Chris Klimis, a minister in Orlando who was recruited to be the company’s chief operating officer, says part of the reason he got involved was to offer Christians a real way to “do something” about what he sees as a pornography crisis in the faith. He was appalled by a recent
+survey
+showing that 67% of pastors have a “personal history” with porn use. And he worries his six children will come across porn on their devices, even if only inadvertently.
+“We’ve got to figure out some way to close the door to the digital space,” he says. “That’s what we’re trying to do.”
+The technology to do this blocking is a blunt instrument: Allot groups website domains into more than a hundred categories, which include pornography but also violence, malware, gaming, and in Radiant Mobile’s case “sects,” which includes websites about Satanism. If one of its users tries to visit a website that belongs to a blocked category, the page won’t load. That’s harsher than app-based content blockers like
+Covenant Eyes
+, a Christian porn-quitting app that sends notifications to your friends or family if you slip up; those can be worked around or deleted.
+“Blocking in the network is certainly not new,” says David Choffnes, a computer science professor and executive director of Northeastern University’s Cybersecurity and Privacy Institute. Such blocking is the backbone of censorship efforts by authoritarian governments, for example. But there are more benign ways it’s used too. US telecoms block particular domains known to be spreading malware and offer
+optional
+network-level controls to block adult content on kids’ phones. What is new is a US cell plan instituting network-level blocks that can’t be removed, even by adults.
+The trouble is that most websites don’t fit neatly into one category, leaving Fisher with enormous and subjective control over which are allowed or banned. This is most apparent in his effort to block content related to gender identity.
+Anthony Re, a sales director at Allot, says the company does not have a category specific to gender but that “LGBT content” tends to fall into its sexuality category, which is described on Radiant Mobile’s website as “sites that provide information on sex, sex and teenagers, and sexual education, without pornographic content.” This category is blocked by default for all phones, a setting that can be changed by adult account owners.
+But if a news site starts hosting enough gender-related content, Fisher might not just label it as “press,” which is allowed, but also “sexuality,” thus blocking the whole domain to any phone with that category blocked.
+Fisher illustrates the subjectivity of such decisions with a recent example involving Yale University. Its general website, www.yale.edu, is categorized by Allot as education. “But they have a subsection of one of their websites that’s totally focused on, you know, trans equality,” Fisher says, referring to
+lgbtq.yale.edu
+. Because it’s a distinct domain, Radiant Mobile is able to place it in the sexuality category and block it.
+Yale’s main website remains unblocked, for now. “If we see [the LGBTQ content] on the front pages consistently of Yale University, we’ll block them too,” Fisher says.
+Managing website block lists is a professional pivot for Fisher, who spent his career not in telecoms but in fashion; he was an
+agent
+for supermodels like Naomi Campbell and members of the Hilton and Getty families, and he later
+hosted
+a reality show in which he found people in rehab facilities and homeless shelters and tried to turn them into models. He ultimately left the industry and now says he regrets the role he played in it: “Am I proud that I spent 35 years creating star models or star influencers? Not at all.”
+Last year, his friend and fellow fashion mogul Bernt Ullmann suggested he look at what Ryan Reynolds had built with his cell network Mint Mobile: It made buying a cell plan feel less like dealing with a utility and more like choosing a brand, and it had been
+acquired
+by T-Mobile in 2023 for $1.3 billion. Fisher liked the business model but didn’t have an audience in mind. Then came a late-night revelation. “God is talking to me,” Fisher recalls. “Do something in the faith-based industry.” He set out to build the first cell network that would let in only content deemed compatible with Christianity.
+Fisher says the company has received $17.5 million in investment from Compax Ventures, part of the company serving as the technical middleman between Radiant and T-Mobile. Roger Bringmann, a vice president at Nvidia, is Radiant Mobile’s lead investor and silent partner (Bringmann recently
+funded
+a new complex at Austin Christian University in Texas, which bills itself as “the university for Christian entrepreneurs”).
+To fill the gap left by all the sites being blocked, the company intends to offer access to a library of religious content, including AI-generated
+Bible
+videos
+. It plans to use characters like Cinderella, Tinker Bell, and others (it has obtained rights from the entertainment and media company Elf Labs, which has been
+amassing
+rights to hundreds of children’s characters). “Those characters were originally constructed with a conservative perspective,” Klimis says. They’ll be used in AI-generated content alongside testimonials and devotionals.
+Choffnes has technical doubts that the plan’s firewall will be as effective as promised, not least because “it’s really hard to come up with a list of every website you think is problematic.” But beyond that, he sees the internet, frustrating as it can be, as better open than closed. “I do believe in an open internet,” he says. “I also believe that a lot of the internet is toxic, but I don’t believe that this sledgehammer approach of blocking content is the right answer.”
 
-KAYNAK : https://www.technologyreview.com/2026/04/30/1136721/this-startups-new-mechanistic-interpretability-tool-lets-you-debug-llms/
+KAYNAK : https://www.technologyreview.com/2026/05/01/1136739/a-new-t-mobile-network-for-christians-aims-to-block-porn-and-gender-related-content/
 
---- dotnet | Building an AI-Powered Conference App with .NET’s Composable AI Stack | score=80.75 ---
-Building AI features into .NET applications often means stitching together models, vector databases, ingestion pipelines, and agent frameworks from different ecosystems. Each one has its own patterns, its own client libraries, and its own breaking changes when the next version ships. We’ve been working on a set of composable, extensible building blocks that give you stable abstractions across all of these concerns.
-We’re excited to walk you through how we used them together. For a session at MVP Summit, we built an interactive conference assistant called ConferencePulse. It runs live polls, answers audience questions in real time, generates insights from engagement data, and summarizes the session when it wraps up. We built the app using the exact technologies we were there to present:
-Microsoft.Extensions.AI
-,
-Microsoft.Extensions.DataIngestion
-,
-Microsoft.Extensions.VectorData
-, Model Context Protocol (MCP), and Microsoft Agent Framework.
-This post walks through the app and shows how each building block fits.
-What we built
-ConferencePulse is a Blazor Server app for live conference sessions. Attendees scan a QR code, join the session, and interact with the presenter through polls and Q&A. On the backend, AI powers several features:
-Live polls
-that the AI generates based on session content. Attendees vote and results appear in real time.
-Audience Q&A
-where AI answers questions using a RAG pipeline that pulls from the session knowledge base, Microsoft Learn docs, and GitHub wiki content.
-Auto-generated insights
-that surface patterns in poll results and audience questions as they come in.
-Session summary
-that runs when the presenter ends the session. Multiple AI agents analyze polls, questions, and insights concurrently, then merge their findings.
-We wanted an interactive session, not a slide deck. We wanted polls and audience insights. And we wanted to automate the preparation: point the app at a GitHub repo, and it downloads the markdown, processes it through a pipeline, and builds a searchable knowledge base. Polls, talking points, and Q&A answers are all grounded in that content.
-The app runs on .NET 10, Blazor Server, and Aspire. Five projects cover the stack:
-src/
-├── ConferenceAssistant.Web/          ← Blazor Server (UI + orchestration)
-├── ConferenceAssistant.Core/         ← Models, interfaces, session state
-├── ConferenceAssistant.Ingestion/    ← Data ingestion pipeline + vector search
-├── ConferenceAssistant.Agents/       ← AI agents, workflows, tools
-├── ConferenceAssistant.Mcp/          ← MCP server tools + MCP client
-└── ConferenceAssistant.AppHost/      ← .NET Aspire (Qdrant, PostgreSQL, Azure OpenAI)
-Now let’s walk through the building blocks.
-Microsoft.Extensions.AI: one interface, any provider
-Microsoft.Extensions.AI
-gives you
-IChatClient
-, a unified abstraction that works with OpenAI, Azure OpenAI, Ollama, Foundry Local, and other providers. Every AI call in ConferencePulse goes through a single middleware pipeline.
-var openaiBuilder = builder.AddAzureOpenAIClient("openai");
-openaiBuilder.AddChatClient("chat")
-.UseFunctionInvocation()
-.UseOpenTelemetry()
-.UseLogging();
-openaiBuilder.AddEmbeddingGenerator("embedding");
-That’s it. Six lines. If you’ve worked with ASP.NET Core middleware, this pattern will feel familiar. Each
-.Use*()
-call wraps the inner client with additional behavior.
-UseFunctionInvocation()
-handles tool-call loops.
-UseOpenTelemetry()
-traces every call.
-UseLogging()
-captures request/response pairs.
-Want to swap Azure OpenAI for Ollama? Change the inner client. The middleware stays the same.
-This matters because
-IChatClient
-shows up everywhere in the app. Poll generation, Q&A, insights, ingestion enrichment, and multi-agent workflows all share this pipeline. You register it once and use it throughout.
-DataIngestion + VectorData: the knowledge layer
-AI models need context to give useful answers.
-Microsoft.Extensions.DataIngestion
-provides a pipeline for processing documents into searchable chunks.
-Microsoft.Extensions.VectorData
-provides a provider-agnostic abstraction over vector stores.
-When ConferencePulse imports content from a GitHub repo, it runs the files through an ingestion pipeline:
-IngestionDocumentReader reader = new MarkdownReader();
-var tokenizer = TiktokenTokenizer.CreateForModel("gpt-4o");
-var chunkerOptions = new IngestionChunkerOptions(tokenizer)
-{
-MaxTokensPerChunk = 500,
-OverlapTokens = 50
-};
-IngestionChunker<string> chunker = new HeaderChunker(chunkerOptions);
-var enricherOptions = new EnricherOptions(_chatClient) { LoggerFactory = _loggerFactory };
-using var writer = new VectorStoreWriter<string>(
-_searchService.VectorStore,
-dimensionCount: 1536,
-new VectorStoreWriterOptions
-{
-CollectionName = "conference_knowledge",
-IncrementalIngestion = true
-});
-using IngestionPipeline<string> pipeline = new(
-reader, chunker, writer, new IngestionPipelineOptions(), _loggerFactory)
-{
-ChunkProcessors =
-{
-new SummaryEnricher(enricherOptions),
-new KeywordEnricher(enricherOptions, ReadOnlySpan<string>.Empty),
-frontMatterProcessor
-}
-};
-The pipeline reads markdown, chunks it by headers, enriches each chunk with AI-generated summaries and keywords, then embeds and stores the results in Qdrant. Each step is a pluggable component. You can swap
-MarkdownReader
-for a PDF reader,
-HeaderChunker
-for a fixed-size chunker, or Qdrant for Azure AI Search. The pipeline composition stays the same.
-Notice that
-SummaryEnricher
-and
-KeywordEnricher
-both take
-EnricherOptions(_chatClient)
-. They use the same
-IChatClient
-from the previous section. AI enriching its own context. The summary enricher generates a concise description of each chunk, and the keyword enricher extracts searchable terms. Both improve retrieval quality later.
-On the query side,
-Microsoft.Extensions.VectorData
-gives you
-VectorStoreCollection
-for semantic search over any backend:
-var results = collection.SearchAsync(query, topK);
-await foreach (var result in results)
-{
-var content = result.Record["content"] as string;
-// Use the content...
-}
-Similar to how you can swap database providers in EF Core, you can swap vector store providers here. Qdrant today, Azure AI Search tomorrow. Same API.
-ConferencePulse also ingests data in real time as the session progresses. Poll responses, audience questions, Q&A pairs, and AI-generated insights all go into the knowledge base:
-public async Task<int> IngestResponseAsync(
-string pollId, string topicId, string question,
-Dictionary<string, int> results, List<string>? otherResponses = null)
-{
-var sb = new StringBuilder();
-sb.AppendLine($"Poll: {question}");
-sb.AppendLine("Results:");
-var total = results.Values.Sum();
-foreach (var (option, count) in results)
-{
-var percentage = total > 0 ? (count * 100.0 / total).ToString("F1") : "0";
-sb.AppendLine($"  - {option}: {count} votes ({percentage}%)");
-}
-await _searchService.UpsertAsync(sb.ToString(), source: "response", documentId: $"response-{pollId}");
-return 1;
-}
-By the end of a session, the knowledge base contains the original imported content, every poll result, every audience question, and every AI-generated insight.
-IChatClient with tools: choosing the right level of complexity
-One of the design principles we followed: use the simplest approach that gets the job done.
-IChatClient
-with tools handles a lot of scenarios before you need a dedicated agent framework. At the same time, when orchestration gets complex, a framework earns its place. The key is choosing the right tool.
-ConferencePulse has three AI-powered features at different levels of complexity. All three use the same
-IChatClient
-.
-Insight generation: a single call
-When a poll closes, ConferencePulse generates an insight. The implementation is a single
-GetResponseAsync
-call:
-var response = await chatClient.GetResponseAsync(
-[
-new(ChatRole.System,
-"You are a conference analytics assistant generating real-time insights from audience data."),
-new(ChatRole.User, prompt)  // prompt contains the poll results
-]);
-var content = response.Text?.Trim();
-if (!string.IsNullOrWhiteSpace(content))
-{
-ctx.AddInsight(new Insight
-{
-TopicId = poll.TopicId,
-PollId = pollId,
-Content = content,
-Type = InsightType.PollAnalysis
-});
-}
-No tools, no framework. A prompt with poll results as context, and the middleware pipeline handles telemetry and logging.
-Poll generation: IChatClient with tools
-Generating a poll needs more context. The AI checks the current topic, looks at what’s been covered, and creates something relevant. That means tools:
-public class PollGenerationWorkflow(IChatClient chatClient, AgentTools tools)
-{
-public async Task<string> ExecuteAsync(string topicId)
-{
-var options = new ChatOptions
-{
-Tools = [tools.GetCurrentTopic, tools.SearchKnowledge,
-tools.GetAudienceQuestions, tools.GetAllPollResults,
-tools.GetAllInsights, tools.CreatePoll]
-};
-var messages = new List<ChatMessage>
-{
-new(ChatRole.System, AgentDefinitions.SurveyArchitectInstructions),
-new(ChatRole.User, $"Generate an engaging poll for topic: {topicId}...")
-};
-var response = await chatClient.GetResponseAsync(messages, options);
-return response.Text ?? "Unable to generate poll.";
-}
-}
-Each tool is a strongly-typed
-AITool
-property created from a C# method:
-public class AgentTools
-{
-public AITool SearchKnowledge { get; }
-public AITool GetCurrentTopic { get; }
-public AITool CreatePoll { get; }
-// ...
-public AgentTools(IPollService pollService, ISemanticSearchService searchService, ...)
-{
-SearchKnowledge = AIFunctionFactory.Create(SearchKnowledgeCore,
-new AIFunctionFactoryOptions
-{
-Name = nameof(SearchKnowledge),
-Description = "Search the session knowledge base for content related to the query"
-});
-// ...
-}
-}
-The model decides it needs context, calls
-GetCurrentTopic
-and
-SearchKnowledge
-, then generates a poll and calls
-CreatePoll
-to save it. The
-UseFunctionInvocation()
-middleware handles the tool loop automatically.
-Q&A answering: RAG across multiple sources
-The Q&A service brings multiple building blocks together. When an audience member asks a question, the app searches the local knowledge base, queries Microsoft Learn docs via MCP, and asks DeepWiki about relevant GitHub repos via MCP. Then it synthesizes an answer:
-// 1. Search local knowledge base
-var searchResults = await searchService.SearchAsync(questionText, topK: 5);
-var localContext = string.Join("\n\n---\n\n",
-searchResults.Select(r => r.Content).Where(c => !string.IsNullOrWhiteSpace(c)));
-// 2. Search Microsoft Learn for documentation context (via MCP)
-var docsContext = await mcpClient.SearchDocsAsync(questionText);
-// 3. Ask DeepWiki about relevant .NET repos (via MCP)
-var deepWikiContext = await mcpClient.AskDeepWikiAsync("dotnet/extensions", questionText);
-VectorData for local search, MCP for external context,
-IChatClient
-for generation.
-Now let’s look at how MCP works.
-MCP: consuming and providing context
-Model Context Protocol is a standard for AI applications to discover and use external tools and context. Similar to how HTTP lets any client talk to any server, MCP lets any AI app connect to any context provider using the same protocol.
-ConferencePulse uses MCP in both directions.
-As a consumer
-The
-McpContentClient
-connects to two MCP servers at startup: Microsoft Learn and DeepWiki.
-public async Task InitializeAsync(CancellationToken ct = default)
-{
-var learnTransport = new HttpClientTransport(new HttpClientTransportOptions
-{
-Endpoint = new Uri("https://learn.microsoft.com/api/mcp"),
-TransportMode = HttpTransportMode.StreamableHttp
-}, loggerFactory);
-_learnClient = await McpClient.CreateAsync(learnTransport, null, loggerFactory, ct);
-var deepWikiTransport = new HttpClientTransport(new HttpClientTransportOptions
-{
-Endpoint = new Uri("https://mcp.deepwiki.com/mcp"),
-TransportMode = HttpTransportMode.StreamableHttp
-}, loggerFactory);
-_deepWikiClient = await McpClient.CreateAsync(deepWikiTransport, null, loggerFactory, ct);
-}
-Once connected, calling a tool on any MCP server uses the same pattern:
-var result = await _learnClient.CallToolAsync(
-"microsoft_docs_search",
-new Dictionary<string, object?> { ["query"] = query },
-cancellationToken: ct);
-Any server that speaks MCP works with this client code.
-As a provider
-ConferencePulse is also an MCP server. Any MCP-compatible client (GitHub Copilot, Claude, a custom tool) can connect and query session data.
-[McpServerToolType]
-public class ConferenceTools
-{
-[McpServerTool(Name = "get_session_status", ReadOnly = true),
-Description("Returns the current conference session status.")]
-public static string GetSessionStatus(ISessionService sessionService)
-{
-var session = sessionService.CurrentSession;
-if (session is null) return "No active conference session.";
-// ... build status string
-}
-[McpServerTool(Name = "search_session_knowledge", ReadOnly = true),
-Description("Searches the session knowledge base for relevant content.")]
-public static async Task<string> SearchSessionKnowledge(
-ISemanticSearchService searchService,
-[Description("The search query.")] string query,
-[Description("Max results. Defaults to 5.")] int maxResults = 5)
-{
-var results = await searchService.SearchAsync(query, maxResults);
-// ... format results
-}
-}
-Registration takes a few lines in
-Program.cs
-:
-builder.Services
-.AddMcpServer(options => { options.ServerInfo = new() { Name = "ConferencePulse", Version = "1.0.0" }; })
-.WithToolsFromAssembly(typeof(ConferenceTools).Assembly)
-.WithHttpTransport();
-app.MapMcp("/mcp");
-The app consumes external knowledge to answer questions and provides its own data for external tools. Same protocol in both directions.
-Microsoft Agent Framework: multi-agent orchestration
-For most of ConferencePulse’s features,
-IChatClient
-with tools was the right choice. But the session summary needed something more: three specialized agents running concurrently, each with scoped tools, feeding their results into a synthesis step. That’s where Microsoft Agent Framework comes in.
-public class SessionSummaryWorkflow(IChatClient chatClient, AgentTools tools)
-{
-public async Task<string> ExecuteAsync()
-{
-ChatClientAgent pollAnalyst = new(chatClient,
-name: "PollAnalyst",
-description: "Analyzes poll results and trends",
-instructions: "You are a poll analyst. Use GetAllPollResults to retrieve every poll...",
-tools: [tools.GetAllPollResults]);
-ChatClientAgent questionAnalyst = new(chatClient,
-name: "QuestionAnalyst",
-description: "Analyzes audience questions and themes",
-instructions: "You are an audience question analyst...",
-tools: [tools.GetAudienceQuestions]);
-ChatClientAgent insightAnalyst = new(chatClient,
-name: "InsightAnalyst",
-description: "Analyzes generated insights and knowledge patterns",
-instructions: "You are an insight analyst...",
-tools: [tools.GetAllInsights, tools.SearchKnowledge]);
-Each
-ChatClientAgent
-wraps the same
-IChatClient
-. The agents get scoped tools (PollAnalyst only sees poll data, QuestionAnalyst only sees questions) and specialized instructions.
-The orchestration uses
-AgentWorkflowBuilder.BuildConcurrent
-for the fan-out, then
-WorkflowBuilder
-to compose the full pipeline:
-// Fan-out: three analysts run concurrently
-var analysisWorkflow = AgentWorkflowBuilder.BuildConcurrent(
-[pollAnalyst, questionAnalyst, insightAnalyst],
-MergeAgentOutputs);
-// Fan-in: synthesizer merges all findings
-ChatClientAgent synthesizer = new(chatClient,
-name: "Synthesizer",
-instructions: "Synthesize the analyses into one cohesive session summary...");
-// Compose: concurrent analysis → sequential synthesis
-var analysisExec = new SubworkflowBinding(analysisWorkflow, "Analysis");
-ExecutorBinding synthExec = synthesizer;
-var composedWorkflow = new WorkflowBuilder(analysisExec)
-.WithName("SessionSummaryPipeline")
-.BindExecutor(synthExec)
-.AddEdge(analysisExec, synthExec)
-.WithOutputFrom([synthExec])
-.Build();
-var run = await InProcessExecution.Default.RunAsync(
-composedWorkflow,
-"Analyze the conference session data and provide your specialized findings.");
-Compare this with the poll generation workflow from earlier, which is about 10 lines using
-IChatClient
-and tools. The session summary is about 40 lines because it genuinely needs concurrent agents with scoped tools and a synthesis step.
-In ConferencePulse, the Agent Framework was the right choice for exactly one workflow. Everything else worked well with
-IChatClient
-directly. Both approaches use the same underlying abstraction.
-How the building blocks fit together
-During the MVP Summit session, attendees interacted with features powered by different layers of the stack:
-Feature
-Powered by
-Polls
-IChatClient
-+ tools (MEAI)
-Knowledge grounding
-IngestionPipeline
-+
-VectorStoreWriter
-Q&A answers
-VectorData
-+
-IChatClient
-+ MCP
-Auto-generated insights
-IChatClient
-(single call)
-Session summary
-Microsoft Agent Framework (fan-out/fan-in)
-Observability
-UseOpenTelemetry()
-+ Aspire Dashboard
-Infrastructure
-Aspire: Qdrant + PostgreSQL + Azure OpenAI
-Each building block handles one concern and composes with the others.
-IChatClient
-shows up inside the ingestion enrichers, inside the agent tools, inside the MCP-augmented Q&A, and inside the Agent Framework’s
-ChatClientAgent
-. You learn it once and use it everywhere.
-Providers will change and models will evolve. The building blocks give you a stable layer to build on, and you swap implementations underneath without rewriting application code.
-Get started
-We’re excited to see what you build with these building blocks.
-Try ConferencePulse
-:
-the source is on GitHub
-. Clone it, run
-aspire run
-, and see the full stack in action.
-Learn more
-about the individual libraries:
-Microsoft.Extensions.AI
-Microsoft.Extensions.VectorData
-Microsoft.Extensions.DataIngestion
-Model Context Protocol in .NET
-Microsoft Agent Framework
-Give us feedback
-: file an issue in any of the repos or catch us on the
-.NET Community Standup
-.
-Now that you’ve seen how these building blocks compose, give them a try and let us know what you think.
-The post
-Building an AI-Powered Conference App with .NET’s Composable AI Stack
-appeared first on
-.NET Blog
-.
-
-KAYNAK : https://devblogs.microsoft.com/dotnet/building-ai-conference-app-dotnet-composable-stack/
-
---- nextjs | v16.3.0-canary.6 | score=55.77 ---
+--- nextjs | v16.3.0-canary.8 | score=47.68 ---
 Core Changes
-Honor the route-level
-expire
-value with blocking revalidation:
-#93211
-Turbopack: add
-experimental.turbopackWorkerAssetPrefix
-to keep Workers same-origin when
-assetPrefix
-is a CDN:
-#93271
-chore: bump postcss to 8.5.10:
-#93288
-Enable server HMR for metadata routes (manifest.ts, robots.ts, etc.):
-#93110
-[next/image] Only fire
-onError
-once:
-#93209
-fix: handling of falsey values in error boundaries:
-#93134
-Update upload trace url:
-#93350
-enable validateRSCRequestHeaders by default:
-#93367
-Deprecate edge runtime:
-#93369
-Only log partytown setup error once:
-#93378
+Revert "Revert "Node.js streams: Add forkpoint for prerenderToStream"":
+#93376
+Fix streaming in draft mode for cache components:
+#93417
 Misc Changes
-turbo-tasks: precompute trait-impl vtables at compile time:
-#93092
-Report OS memory pressure in TurboMalloc and trace samples:
-#93333
-Speed up native postinstall script:
-#93312
-Turbopack: remove unused module references:
-#93335
-Turbopack: remove ModuleResolveResultItem::OutputAsset:
-#93349
-[test] Suppress build when preparing next for cache hits:
-#93355
-[test] Fix broken terminal output:
-#93357
-Turbopack: delete unused turbo-static crate:
-#93324
-fix a snapshot encoding error that could happen under concurrent mutation and snapshotting:
-#92658
-Update 05-server-and-client-components.mdx:
-#93374
-docs: clarify rendering flow in Server/Client interleaving example:
-#93381
-[test] Stop building fresh packages for every test:
-#93380
+trace-server: shrink_to_fit LazySortedVec after sorting:
+#93361
+feat(metadata): support non-standard directives in robots.ts via
+other
+:
+#93206
+[turbo-trace-server] optimize loading even more:
+#93332
 Credits
 Huge thanks to
-@mmastrac
-,
-@unstubbable
-,
-@GuinsooRocky
-,
 @sokra
 ,
-@eps1lon
-,
-@mischnic
-,
-@maximecolin
+@timneutkens
 ,
 @lukesandberg
-,
-@wbinnssmith
-,
-@lubieowoce
-,
-@timneutkens
-,
-@ztanner
-,
-@zana-abdi2002
 , and
-@icyJoseph
+@samselikoff
 for helping!
 
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.6
-
---- nextjs | v16.3.0-canary.7 | score=53.56 ---
-Misc Changes
-[test] Preserve Playwright traces on every failure:
-#93366
-[ci] Add support for private preview builds:
-#93375
-Fix deploy tests crashing under AI coding assistants:
-#93394
-Remove leftover Turbopack manifests:
-#93398
-[ci]: remove PR creation from deploy test workflow:
-#93400
-Credits
-Huge thanks to
-@eps1lon
-,
-@unstubbable
-,
-@timneutkens
-, and
-@ztanner
-for helping!
-
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.7
-
---- claude | Elevated errors on Claude Haiku 4.5 | score=32.74 ---
-Apr
-30
-,
-14:01
-UTC
-Resolved
-- The incident has been resolved. Error rates were elevated between 5:20 PT / 12:48 PT and 6:48 PT / 13:48 PT.
-Apr
-30
-,
-13:10
-UTC
-Investigating
-- We are currently investigating this issue.
-
-KAYNAK : https://status.claude.com/incidents/dv9r688vqt8s
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.8
 
