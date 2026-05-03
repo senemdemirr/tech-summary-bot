@@ -1,28 +1,13 @@
---- nextjs | v16.3.0-canary.8 | score=47.68 ---
-Core Changes
-Revert "Revert "Node.js streams: Add forkpoint for prerenderToStream"":
-#93376
-Fix streaming in draft mode for cache components:
-#93417
+--- nextjs | v16.3.0-canary.9 | score=41.18 ---
 Misc Changes
-trace-server: shrink_to_fit LazySortedVec after sorting:
-#93361
-feat(metadata): support non-standard directives in robots.ts via
-other
-:
-#93206
-[turbo-trace-server] optimize loading even more:
-#93332
+Drop once_cell from all direct crate deps:
+#93095
+Replace Lazy static lookups with phf::Map:
+#93096
 Credits
 Huge thanks to
-@sokra
-,
-@timneutkens
-,
-@lukesandberg
-, and
-@samselikoff
+@mmastrac
 for helping!
 
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.8
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.9
 

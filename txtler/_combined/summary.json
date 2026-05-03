@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-05-02T08:43:00.432514+00:00",
-  "cutoff_utc": "2026-05-01T08:43:00.432514+00:00",
+  "generated_at_utc": "2026-05-03T08:55:54.412991+00:00",
+  "cutoff_utc": "2026-05-02T08:55:54.412991+00:00",
   "max_keep_per_site": 5,
   "all_combined": "txtler/_combined/all_last24h.txt",
   "sites": {
@@ -78,16 +78,16 @@
     },
     "arxiv_ai": {
       "feed": "https://rss.arxiv.org/rss/cs.AI",
-      "saved_initial_count": 322,
-      "kept_after_top5": 5,
-      "removed_due_to_top5": 317,
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
+      "removed_due_to_top5": 0,
       "site_folder": "txtler/arxiv_ai",
       "site_combined": "txtler/_combined/arxiv_ai_last24h.txt"
     },
     "mit_ai": {
       "feed": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
-      "saved_initial_count": 4,
-      "kept_after_top5": 4,
+      "saved_initial_count": 0,
+      "kept_after_top5": 0,
       "removed_due_to_top5": 0,
       "site_folder": "txtler/mit_ai",
       "site_combined": "txtler/_combined/mit_ai_last24h.txt"

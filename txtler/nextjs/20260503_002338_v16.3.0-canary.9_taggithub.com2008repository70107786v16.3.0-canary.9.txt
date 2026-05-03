@@ -1,4 +1,3 @@
---- nextjs | v16.3.0-canary.9 | score=41.18 ---
 Misc Changes
 Drop once_cell from all direct crate deps:
 #93095
@@ -10,4 +9,3 @@ Huge thanks to
 for helping!
 
 KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.9
-
