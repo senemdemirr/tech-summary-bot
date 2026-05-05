@@ -1,4 +1,11 @@
---- claude | Elevated errors on Claude Opus 4.5 | score=68.43 ---
+--- claude | Elevated errors on Claude Opus 4.5 | score=29.16 ---
+May
+4
+,
+09:49
+UTC
+Resolved
+- This incident has been resolved.
 May
 4
 ,
@@ -36,4 +43,54 @@ Investigating
 - We are currently investigating this issue.
 
 KAYNAK : https://status.claude.com/incidents/zxv1xv501678
+
+--- claude | Elevated errors on Claude Opus 4.5 and Sonnet 4.5 | score=28.33 ---
+May
+4
+,
+14:45
+UTC
+Resolved
+- This incident has been resolved.
+May
+4
+,
+14:27
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+May
+4
+,
+14:08
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+May
+4
+,
+13:59
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/77j6yv8kc0vn
+
+--- claude | Elevated errors on Claude Opus 4.7 | score=25.15 ---
+May
+4
+,
+14:33
+UTC
+Resolved
+- This incident has been resolved.
+May
+4
+,
+14:07
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+
+KAYNAK : https://status.claude.com/incidents/89vbl7qk5dqp
 

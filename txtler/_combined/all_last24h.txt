@@ -1,4 +1,31 @@
---- arxiv_ai | Linking Behaviour and Perception to Evaluate Meaningful Human Control over Partially Automated Driving | score=102.43 ---
+--- mit_ai | A blueprint for using AI to strengthen democracy | score=109.44 ---
+Every few centuries, changes in how information moves reshape how societies govern themselves. The printing press spread vernacular literacy, helping give rise to the Reformation and, eventually, representative government. The telegraph made it possible to administer vast nations like the US, accelerating the growth of the modern bureaucratic state. Broadcast media created shared national audiences, which in turn fueled mass democracy.
+We are now in the early stages of another such shift. Faster than many realize, AI is becoming the primary interface through which we form beliefs and participate in democratic self-governance. If left unchecked, this shift could further strain America’s already fragile institutions. But it could also help address long-standing problems, like lagging civic engagement and deepening polarization. What happens next depends on design choices that are already being made, whether we know it or not.
+Start with what might be called the epistemic layer—how we come to know things. People are increasingly relying on AI to know what is true, what is happening, and whom to trust. Search is already substantially AI-mediated. The next generation of AI assistants will synthesize information, frame it, and present it with authority. For a growing number of people, asking an AI will become the default way to form views on a candidate, a policy, or a public figure. Whoever controls what these models say therefore has increasing influence over what people believe.
+Technology has always shaped the way citizens interact with information. But a new problem will soon arise in the form of personal AI agents, which can change not only how people receive information but how they act on it. These systems will conduct research, draft communications, highlight causes, and lobby on a user’s behalf. They will inform decisions such as how to vote on a ballot measure, which organizations are worth supporting, or how to respond to a government notice. They will, in a meaningful sense, begin to mediate the relationship between individuals and the institutions that govern them.
+We’ve already seen with social media what happens when algorithms optimize for engagement over understanding. Platforms do not need to have an explicit political agenda to produce polarization and radicalization. An agent that knows your preferences and your anxieties—one shaped to keep you engaged—poses the same risks. And in this case the risks may be even more difficult to detect, because an agent presents itself as your advocate. It speaks for you, acts on your behalf, and may earn trust precisely through that intimacy.
+Now zoom out to the collective. AI agents and humans could soon participate in the same forums, where it may be impossible to tell them apart. Even if every individual AI agent were well-designed and aligned with its user’s interests, the interactions of millions of agents could produce outcomes that no individual wanted or chose.
+For example, research
+shows that agents displaying no individual bias can still generate collective biases at scale. And setting aside what agents do to each other, there is what they do for their users. A public sphere in which everyone has a personalized agent attuned to their existing views is not, in aggregate, a public sphere at all. It is a collection of private worlds, each internally coherent but collectively inhospitable to the kind of shared deliberation that democracy requires.
+Taken together, these three transformations—in how we know, how we act, and how we engage in collective governance—amount to a fundamental change in the texture of citizenship. In the near future, people will form their political views through AI filters, exercise their civic agency through AI agents, and participate in institutions and public discussions that are themselves shaped by the interactions of millions of such agents.
+Today’s democracy is not ready for this. Our institutions were designed for a world in which power was exercised visibly, information traveled slowly enough to be contested, and reality felt more shared, if imperfectly. All of this was already fraying long before generative AI arrived. And yet this need not be a story of decline. Avoiding that outcome requires us to design for something better.
+On the informational layer, AI companies must ramp up existing efforts to ensure that models’ outputs are truthful. They should also explore some promising early findings that AI models can
+help reduce polarization
+. A recent
+field evaluation
+of AI-generated fact checks on X found that people with a variety of political viewpoints deemed AI-written notes more helpful than human-written ones. The paper is yet to be peer-reviewed, but that is a potentially revolutionary finding: AI-assisted fact-checking may be able to achieve the kind of cross-partisan credibility that has eluded most manual human efforts. Greater understanding of and transparency about how models make these assertions and prioritize sources in the process could help build further public trust.
+On the agentic layer, we need ways to evaluate whether AI agents faithfully represent their users. An agent must never have an agenda of its own or misrepresent its user’s views—a technically daunting requirement in domains where users may have not explicitly stated any preferences. But faithful representation also cannot become an accessory to motivated reasoning. An agent that refuses to present uncomfortable information, that shields its user from ever questioning prior beliefs or fails to adjust to a change of heart, is not acting in the person’s best interest.
+Finally, on the institutional level, policymakers should hurry to harness AI’s potential to make governance more responsive and legitimate. Several states and localities are already using AI-mediated platforms to conduct democratic deliberation at scale, building on
+research
+showing that AI mediators can help citizens find common ground. As agents become increasingly common participants in public input processes—and there is already evidence that
+bots are skewing those processes
+—identity verification for both humans and their agentic proxies must be built in from the start.
+What is needed is a new generation of democratic infrastructure, technological and institutional, built for the world that is actually here. Failing to design for democratic outcomes, in a domain this consequential, means designing for something else. And the history of unaccountable power does not leave much room for optimism about what that something else tends to be.
+Andrew Sorota and Josh Hendler lead work on AI and democracy at the Office of Eric Schmidt.
+
+KAYNAK : https://www.technologyreview.com/2026/05/05/1136843/ai-democracy-blueprint/
+
+--- arxiv_ai | Linking Behaviour and Perception to Evaluate Meaningful Human Control over Partially Automated Driving | score=102.72 ---
 Linking Behaviour and Perception to Evaluate Meaningful Human Control over Partially Automated Driving
 Abstract
 Partial driving automation creates a tension: drivers remain legally responsible for vehicle behaviour, yet their active control is significantly reduced. This reduction undermines the engagement and sense of agency needed to intervene safely. Meaningful human control (MHC) has been proposed as a normative framework to address this tension. However, empirical methods for evaluating whether existing systems actually provide MHC remain underdeveloped. In this study, we investigated the extent to which drivers experience MHC when interacting with partially automated driving systems. Twenty-four drivers completed a simulator study involving silent automation failures under two modes - haptic shared control (HSC) and traded control (TC). We derived behavioural metrics from telemetry data, subjective perception scores from post-trial surveys and used them to test hypothesised relations between them derived from the properties of systems under MHC. The confirmatory analysis showed a significant negative correlation between the perception of the automated vehicle (AV) understanding the driver and conflict in steering torques. An exploratory analysis also revealed a surprising positive correlation between reaction times and the perception of sufficient control. Qualitative feedback from open-ended post-experiment questionnaires revealed that mismatches in intentions between the driver and automation, lack of safety, and resistance to driver inputs contribute to the reduction of perceived MHC, while subtle haptic guidance aligned with driver intent had a positive effect. These findings suggest that future designs should prioritise effortless driver interventions, transparent communication of automation intent, and context-sensitive authority allocation to strengthen meaningful human control in partially automated driving.
@@ -202,7 +229,7 @@ This research was funded by the TU Delft AI Initiative and Indonesia Endowment F
 
 KAYNAK : https://arxiv.org/abs/2605.00556
 
---- arxiv_ai | Directed Social Regard: Surfacing Targeted Advocacy, Opposition, Aid, Harms, and Victimization in Online Media | score=102.43 ---
+--- arxiv_ai | Directed Social Regard: Surfacing Targeted Advocacy, Opposition, Aid, Harms, and Victimization in Online Media | score=102.72 ---
 [1]\fnmScott \surFriedman
 [1]\orgnameSIFT, \orgaddress\street319 N 1st Ave, \cityMinneapolis, \postcode55401, \stateMN, \countryUSA
 2]\orgdivDepartment of Computer & Information Science & Engineering, \orgnameUniversity of Florida, \orgaddress\street432 Newell Drive, \cityGainesville, \postcode32611, \stateFL, \countryUSA
@@ -353,7 +380,7 @@ The online media used for annotation, training, and validation (Table 3) is comp
 
 KAYNAK : https://arxiv.org/abs/2605.00776
 
---- arxiv_ai | AI Inference as Relocatable Electricity Demand: A Latency-Constrained Energy-Geography Framework | score=102.43 ---
+--- arxiv_ai | AI Inference as Relocatable Electricity Demand: A Latency-Constrained Energy-Geography Framework | score=102.72 ---
 AI Inference as Relocatable Electricity Demand:
 A Latency-Constrained Energy-Geography Framework
 Abstract
@@ -1022,7 +1049,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2604.27855
 
---- arxiv_ai | Smart Ensemble Learning Framework for Predicting Groundwater Heavy Metal Pollution | score=102.20 ---
+--- arxiv_ai | Smart Ensemble Learning Framework for Predicting Groundwater Heavy Metal Pollution | score=102.49 ---
 2022
 [1]\fnmG. Y. \surAfrifa
 1]\orgdivGhana Space Science and Technology Institute, \orgnameGhana Atomic Energy Commission, \orgaddress \postcodeP. O. Box LG 80, \stateAccra, \countryGhana
@@ -1338,7 +1365,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2605.00056
 
---- arxiv_ai | Smart Profit-Aware Crop Advisory System: Kisan AI | score=102.20 ---
+--- arxiv_ai | Smart Profit-Aware Crop Advisory System: Kisan AI | score=102.49 ---
 VIT-AP University, Amaravati, Andhra Pradesh, India
 11email: d.dwibedy@vitap.ac.in
 avyay.22bce9292@vitapstudent.ac.in
@@ -1457,7 +1484,441 @@ References
 
 KAYNAK : https://arxiv.org/abs/2605.00133
 
---- claude | Elevated errors on Claude Opus 4.5 | score=68.43 ---
+--- google_ai | The latest AI news we announced in April 2026 | score=94.41 ---
+The latest AI news we announced in April 2026
+For more than 20 years, we’ve invested in machine learning and AI research, tools and infrastructure to build products that make everyday life better for more people. Teams across Google are working on ways to unlock AI’s benefits in fields as wide-ranging as healthcare, crisis response and education. To keep you posted on our progress, we're doing a regular roundup of Google's most recent AI news.
+Here’s a look back at some of our AI announcements from April.
+April 2026 was a huge month for AI at Google. Cloud Next ‘26 was all about helping businesses make the most of agentic AI with new releases like the Gemini Enterprise Agent Platform and our eighth-generation TPUs — two specialized chips designed for the agentic era. We also released Gemma 4 (byte for byte the most capable open model), Deep Research Max for advanced data analysis and the new Learn Mode in Colab, which transforms Gemini into your personal coding tutor. These new tools and features can help with everything from stronger and more energy efficient enterprises to helping students reach their full potential.
+See the big announcements from Cloud Next ‘26. Agentic technology is revolutionizing how people and organizations work. At Cloud Next ‘26, more than 32,000 attendees saw us make over 260 announcements to help businesses grow in this new, agentic era.
+Sundar Pichai shared progress for the agentic Gemini era. Google Cloud has incredible momentum, with nearly 75% of Cloud customers already using Google Cloud AI, and 330 organizations processing over a trillion tokens each in just the past year. Here, Google CEO Sundar Pichai shared the investments and innovation behind it all.
+Gemini Enterprise Agent Platform lets organizations build and manage their AI agents. This platform allows organizations to build and govern autonomous agents for agentic workflows where AI can manage complex, multi-step business processes.
+Google Cloud and Wiz are redefining security for the AI era. We shared how we help organizations adapt and thrive as they harness the potential of AI while defending against new threats.
+Our latest TPUs are built to power supercomputing with more efficiency. Powering the agentic era, our eighth-generation TPUs are designed specifically for the massive compute demands of agentic AI while maintaining a focus on energy efficiency in our data centers. By customizing and co-designing silicon with hardware, we can deliver dramatically more power efficiency and absolute performance.
+Google Vids now lets everyone generate videos at no cost. Anyone with a Google account can now generate up to 10 videos a month with our easy-to-use AI-powered video editing suite Google Vids at no cost. It’s a game-changer for anyone from students to small business owners, who can now produce professional-quality video content — without a big budget.
+Deep Research Max can conduct high-level research tasks for you. This represents a step-change for autonomous agents. Deep Research Max is designed to handle high-level research tasks independently, significantly reducing the "grunt work" involved in deep-dive data synthesis.
+Flow Sessions artists shared creative tips for bringing personal stories to life. From embracing unexpected surprises to leaning deeply into personal storytelling, artists from diverse disciplines shared tips for how to use Flow to create compelling videos.
+Gemma 4 brings you byte for byte the most capable open model. Built for advanced reasoning and agentic workflows, Gemma 4 delivers an unprecedented level of intelligence-per-parameter. It builds on incredible community momentum: Since the launch of our first generation, developers have downloaded Gemma over 500 million times.
+Google Colab now has Learn Mode, your personal coding tutor. This feature explains the “why” and the “how” through step-by-step guidance rather than just writing code for you. Powered by Custom Instructions, your notebook saves your tailored AI preferences directly, so your personalized tutor travels with it whenever you share your work.
+Google AI Studio lets you vibe code with your Google AI subscription. Google AI Pro and Ultra subscribers now get increased usage limits in Google AI Studio. Plus, we launched a new AI Agents Vibe Coding Course from Google and Kaggle. Registration is now open for the June 2026 course that teaches people how to use AI agents to build software without getting bogged down in syntax.
+Gemini makes test prep accessible to more students around the world. The latest example is support for the TOEIC, an English exam considered particularly important in Korea. With Gemini, you can now prepare for the TOEIC exam with reading comprehension quizzes that include personalized feedback.
+Google Translate marks 20 years of breaking language barriers. From its beginning as an AI experiment in 2006 to the 1 billion users who now translate around 1 trillion words every single month, Translate has come a long way in two decades. To celebrate Translate’s 20th anniversary, we shared some fun facts and things to try, including the launch of one of our most requested features: a new “pronunciation practice” tool on Android.
+Some of the most commonly translated phrases are about gratitude, connection and love. In April, and like many months over 20 years, the most commonly translated phrase on Google Translate was: “Thank you.”
+Google.org and Johnson & Johnson Foundation launch a rural healthcare initiative. With a $10 million commitment, Google.org and the Johnson & Johnson Foundation will bring AI training to rural U.S. healthcare workers to ensure vital medical breakthroughs aren't just limited to big-city hospitals.
+Fitbit's personal health coach is now even more personalized. The update makes the health coach even more intuitive, using Gemini to analyze biometrics and provide tailored advice that feels human.
+
+KAYNAK : https://blog.google/innovation-and-ai/technology/ai/google-ai-updates-april-2026/
+
+--- dotnet | Microsoft Agent Framework – Building Blocks for AI Part 3 | score=91.53 ---
+Welcome back to the building blocks for AI in .NET series! In
+part one
+, we explored Microsoft Extensions for AI (MEAI) and how it provides a unified interface for working with large language models. In
+part two
+, we dove into Microsoft.Extensions.VectorData and how it brings semantic search and RAG patterns to .NET. Today, we’re exploring the third building block: the
+Microsoft Agent Framework
+.
+Up to this point, we’ve been building the foundation. MEAI gave us a universal way to talk to models, and VectorData gave us the ability to store and search knowledge. But what if you want an AI that can
+do things
+? Not just answer questions, but take actions, use tools, remember context across conversations, and coordinate with other agents to solve complex problems? That’s where agents come in.
+What is an AI agent?
+An AI agent is more than a chatbot. A chatbot receives input, passes it to a model, and returns the output. An agent, on the other hand, has
+autonomy
+. It can reason about a task, decide which tools to use, call those tools, evaluate the results, and decide what to do next. It can accomplish all this without forcing you to write explicit step-by-step instructions for every scenario.
+Think of it this way: if MEAI is like having a conversation with a colleague, an agent is like handing that colleague a to-do list and letting them figure out how to get it done. They might search for information, run calculations, check the weather, look up a database and use whatever tools you’ve made available to them.
+The
+Microsoft Agent Framework
+provides a production-ready SDK for building these intelligent agents in .NET (and other languages like Python, though we’ll focus on C# here). It achieved its
+1.0 release
+in April 2026 and supports everything from simple single-agent scenarios to complex multi-agent workflows with graph-based orchestration.
+Your first agent
+Let’s start simple. If you’ve used MEAI and/or read
+Part 1
+, the Agent Framework will feel familiar because it builds directly on top of
+IChatClient
+. Create a console app, then install the agent framework:
+dotnet add package Microsoft.Agents.AI
+Here’s all it takes to create an agent (
+01_hello_agent
+):
+using Azure.AI.OpenAI;
+using Azure.Identity;
+using Microsoft.Agents.AI;
+var endpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT")
+?? throw new InvalidOperationException("AZURE_OPENAI_ENDPOINT is not set.");
+var deploymentName = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT_NAME")
+?? "gpt-5.4-mini";
+AIAgent agent = new AzureOpenAIClient(
+new Uri(endpoint),
+new DefaultAzureCredential())
+.GetChatClient(deploymentName)
+.AsAIAgent(
+instructions: "You are good at telling jokes.",
+name: "Joker");
+Console.WriteLine(await agent.RunAsync("Tell me a joke about a pirate."));
+Notice the
+.AsAIAgent()
+extension method. Just like
+.AsIChatClient()
+bridges a provider’s SDK to the MEAI abstraction,
+.AsAIAgent()
+takes that a step further and wraps it in an agent that can manage sessions, tools, and memory. This works with multiple providers, including Azure OpenAI, OpenAI, GitHub Models, Microsoft Foundry, or even local models via Foundry Local or Ollama.
+The agent also supports streaming out of the box:
+await foreach (var update in agent.RunStreamingAsync("Tell me a joke about a pirate."))
+{
+Console.Write(update);
+}
+Giving your agent tools
+A joke-telling agent is fun, but agents become truly powerful when you give them tools. Tools are simply functions that the model can decide to call based on the user’s request. The Agent Framework uses the same
+AIFunctionFactory
+from MEAI, so if you’ve already defined tools for your chat client, they work here too.
+Here’s an agent with a weather tool (
+02_add_tools
+):
+using System.ComponentModel;
+using Microsoft.Agents.AI;
+using Microsoft.Extensions.AI;
+[Description("Get the weather for a given location.")]
+static string GetWeather(
+[Description("The location to get the weather for.")] string location)
+=> $"The weather in {location} is cloudy with a high of 15°C.";
+AIAgent agent = new AzureOpenAIClient(
+new Uri(endpoint),
+new DefaultAzureCredential())
+.GetChatClient(deploymentName)
+.AsAIAgent(
+instructions: "You are a helpful assistant",
+tools: [AIFunctionFactory.Create(GetWeather)]);
+Console.WriteLine(await agent.RunAsync("What is the weather like in Amsterdam?"));
+When the user asks about the weather, the agent doesn’t just guess but recognizes that it has a
+GetWeather
+tool available, calls it with the appropriate parameter, and uses the result to formulate its response. You didn’t have to write any “if the user asks about weather, call this function” logic. The model figures it out.
+The
+Description
+attributes are important. They tell the model what the tool does and what each parameter means, which helps it decide when and how to use the tool. Think of them as the tool’s instruction manual for the AI.
+Multi-turn conversations with sessions
+Real conversations don’t happen in a single exchange. Users ask follow-up questions, provide additional context, and expect the agent to remember what was discussed. The Agent Framework handles this with
+AgentSession
+(
+03_multi_turn
+):
+AgentSession session = await agent.CreateSessionAsync();
+Console.WriteLine(
+await agent.RunAsync("Tell me a joke about a pirate.", session));
+Console.WriteLine(
+await agent.RunAsync(
+"Now add some emojis to the joke and tell it in the voice of a pirate's parrot.",
+session));
+The session preserves the conversation history between calls. When the user asks to “add some emojis to the joke,” the agent knows which joke is being referenced because the session maintains that context.
+Sessions can also be serialized and deserialized, which is essential for production scenarios where your agent runs in a stateless service:
+// Save the session state
+JsonElement sessionState = await agent.SerializeSessionAsync(session);
+// Later, restore it
+var restoredSession = await agent.DeserializeSessionAsync(sessionState);
+Console.WriteLine(
+await agent.RunAsync("What were we just talking about?", restoredSession));
+Teaching your agent to remember
+Sessions preserve conversation history, but what about longer-term memory? What if you want your agent to remember facts about the user across sessions — their name, preferences, or previous interactions?
+The Agent Framework provides
+AIContextProvider
+, a mechanism for injecting contextual information into the agent’s workflow. Here’s a simplified version of the memory sample (
+04_memory
+) that extracts and remembers user information:
+internal sealed class UserInfoMemory : AIContextProvider
+{
+private readonly ProviderSessionState<UserInfo> _sessionState;
+private readonly IChatClient _chatClient;
+public UserInfoMemory(IChatClient chatClient)
+{
+_sessionState = new ProviderSessionState<UserInfo>(
+_ => new UserInfo(),
+GetType().Name);
+_chatClient = chatClient;
+}
+protected override async ValueTask StoreAIContextAsync(
+InvokedContext context,
+CancellationToken cancellationToken = default)
+{
+var userInfo = _sessionState.GetOrInitializeState(context.Session);
+if (userInfo.UserName is null
+&& context.RequestMessages.Any(x => x.Role == ChatRole.User))
+{
+var result = await _chatClient.GetResponseAsync<UserInfo>(
+context.RequestMessages,
+new ChatOptions()
+{
+Instructions =
+"Extract the user's name from the message if present."
+},
+cancellationToken: cancellationToken);
+userInfo.UserName ??= result.Result.UserName;
+}
+_sessionState.SaveState(context.Session, userInfo);
+}
+protected override ValueTask<AIContext> ProvideAIContextAsync(
+InvokingContext context,
+CancellationToken cancellationToken = default)
+{
+var userInfo = _sessionState.GetOrInitializeState(context.Session);
+var instructions = userInfo.UserName is null
+? "Ask the user for their name."
+: $"The user's name is {userInfo.UserName}.";
+return new ValueTask<AIContext>(
+new AIContext { Instructions = instructions });
+}
+}
+The
+AIContextProvider
+has two key methods:
+StoreAIContextAsync
+runs
+after
+each interaction and is the agent’s opportunity to learn from what just happened — in this case, extracting the user’s name from the conversation.
+ProvideAIContextAsync
+runs
+before
+each interaction and supplies additional context to the agent — here, either telling the agent the user’s name or instructing it to ask for one.
+Wire it up when creating the agent:
+AIAgent agent = chatClient.AsAIAgent(new ChatClientAgentOptions()
+{
+ChatOptions = new()
+{
+Instructions = "You are a friendly assistant. Always address the user by their name."
+},
+AIContextProviders = [new UserInfoMemory(chatClient.AsIChatClient())]
+});
+This pattern is powerful because it separates
+what the agent remembers
+from
+how the agent converses
+. You can stack multiple context providers — one for user preferences, another for recent interactions, and a third that pulls relevant documents from your VectorData store.
+Workflows: orchestrating multiple agents
+Single agents are useful, but many real-world problems benefit from breaking the work across multiple specialized agents. The Agent Framework provides a graph-based workflow system where you connect
+executors
+(processing units) with
+edges
+(data flow paths).
+Here’s a simple workflow that chains two text processors together (
+05_first_workflow
+):
+using Microsoft.Agents.AI.Workflows;
+Func<string, string> uppercaseFunc = s => s.ToUpperInvariant();
+var uppercase = uppercaseFunc.BindAsExecutor("UppercaseExecutor");
+var reverse = new ReverseTextExecutor();
+WorkflowBuilder builder = new(uppercase);
+builder.AddEdge(uppercase, reverse).WithOutputFrom(reverse);
+var workflow = builder.Build();
+await using Run run = await InProcessExecution.RunAsync(
+workflow, "Hello, World!");
+foreach (WorkflowEvent evt in run.NewEvents)
+{
+if (evt is ExecutorCompletedEvent executorComplete)
+{
+Console.WriteLine(
+$"{executorComplete.ExecutorId}: {executorComplete.Data}");
+}
+}
+The text processing example keeps things simple, but the real power of workflows shines when you use agents as executors. Here are some of the patterns the framework supports:
+Sequential workflows
+— agents process one after another, where each agent’s output feeds the next
+Concurrent workflows
+— fan-out to multiple agents in parallel, then fan-in the results
+Conditional routing (“hand-off”)
+— dynamically route work to different agents based on the output of a previous step
+Feedback loops
+— a writer-critic pattern where one agent produces content and another evaluates it, looping until quality criteria are met
+Sub-workflows
+— compose workflows hierarchically by embedding one workflow inside another
+A writer-critic example
+One of the most practical patterns is the writer-critic workflow. Imagine you have one agent that writes marketing copy and another that reviews it for quality:
+WorkflowBuilder builder = new(writerAgent);
+builder
+.AddEdge(writerAgent, criticAgent)
+.AddEdge(criticAgent, writerAgent, condition: result => !result.IsApproved)
+.WithOutputFrom(criticAgent, condition: result => result.IsApproved);
+var workflow = builder.Build();
+The writer produces a draft, the critic evaluates it, and if it isn’t approved, the draft goes back to the writer for revision. This loop continues until the critic is satisfied. Of course, for safety, you probably want to provide a maximum iteration count.
+Human-in-the-loop
+AI doesn’t replace humans, and often may require human input. Think of agents as specialized workers that are directed by humans through code. The Agent Framework supports tool approval workflows where the agent proposes a tool call and waits for human approval before executing it. This is critical for production scenarios involving sensitive operations like database writes, financial transactions, or sending communications.
+The approval mechanism is built on
+FunctionApprovalRequestContent
+and
+FunctionApprovalResponseContent
+, content types that are part of MEAI’s content model that we introduced in Part 1. When the agent wants to call a tool that requires approval, it yields a request and waits. Your application code can present this to the user, and the response determines whether the tool call proceeds.
+Bringing it all together
+The beauty of the building blocks approach is that each piece composes naturally with the others. Here’s how they fit:
+MEAI
+(
+IChatClient
+) provides the foundation — the universal interface for talking to any model.
+VectorData
+enables RAG patterns — your agents can search through your organization’s knowledge base using semantic search to ground their responses in your data.
+Agent Framework
+orchestrates everything — agents use
+IChatClient
+under the hood, can incorporate vector search through context providers, and coordinate through workflows.
+For example, you could build an
+AIContextProvider
+that searches your VectorData store before each agent invocation, providing relevant documents as additional context — exactly like the RAG pattern from Part 2, but now running automatically as part of every agent interaction.
+Summary
+The Microsoft Agent Framework transforms the primitives from Parts 1 and 2 into autonomous, tool-using, memory-aware agents that can work alone or together in sophisticated workflows. We covered:
+Creating agents
+with
+AsAIAgent()
+and running them with
+RunAsync()
+Equipping agents with tools
+using
+AIFunctionFactory
+and
+Description
+attributes
+Managing conversations
+across turns with
+AgentSession
+Building memory
+with
+AIContextProvider
+for persistent, cross-session knowledge
+Orchestrating workflows
+with executors, edges, and patterns like writer-critic loops
+Human-in-the-loop
+approval for sensitive operations
+In the next and final post, we’ll explore the
+Model Context Protocol (MCP)
+and how it provides a standardized way for agents to discover and use external tools and resources — making your agents interoperable with the broader AI ecosystem.
+Until then, here are some resources to help you get started:
+Learn by code
+Agent Framework repository
+Agent Framework samples
+Learn by following tutorials
+Agent Framework documentation
+Quick start guide
+Migration from Semantic Kernel
+Learn by watching videos
+Agent Framework introduction (30 min)
+DevUI in action
+Happy coding!
+The post
+Microsoft Agent Framework – Building Blocks for AI Part 3
+appeared first on
+.NET Blog
+.
+
+KAYNAK : https://devblogs.microsoft.com/dotnet/microsoft-agent-framework-building-blocks-for-ai-part-3/
+
+--- mit_ai | Week one of the Musk v. Altman trial: What it was like in the room | score=71.55 ---
+This story originally appeared in The Algorithm, our weekly newsletter on AI. To get stories like this in your inbox first,
+sign up here
+.
+Two of the most powerful people in AI—Sam Altman and Elon Musk—began their face-off in court in Oakland, California, last week. Musk is suing OpenAI, alleging that the millions he spent to fund it around a decade ago were meant for a nonprofit, not a corporation, and that the company has reneged on that mission since.
+The stakes are high—even a partial win for Musk could set OpenAI back as it reportedly plans to
+go public
+this year. But most of the attention comes from the spectacle of a feud on X now playing out in federal court. “Cringey texts, raw diary entries, and endless scheming behind the founding and growth of OpenAI are expected to come to light,” my colleague Michelle Kim
+wrote
+before it began. And the trial unfolds as the cultural backlash against AI
+swells
+; some of the signs held by protesters outside the courthouse suggest that to a significant number of people, whatever the outcome of
+Musk v. Altman
+, we all lose.
+Most of us have had to observe the trial from afar, but Michelle, who also happens to be a lawyer, has been in court each day. I caught up with her to learn what’s unfolded thus far and what might come next.
+Can you give us the overview of what this case is actually about? What exactly is being decided, and who is favored right now?
+Elon Musk is arguing that Sam Altman and OpenAI president Greg Brockman have breached the company’s charitable trust by effectively converting OpenAI into a for-profit company. Musk alleges that is not what they promised him in the company’s early days. He has asked for several remedies, like a crazy amount of damages and removing Sam Altman. But the main remedy he wants is unwinding OpenAI’s restructuring. [In October 2025 OpenAI
+struck deals
+with the attorneys general of California and Delaware that would essentially allow its nonprofit portion to have less day-to-day control of OpenAI. It’s a compromise from what OpenAI originally proposed, but Musk still wants to stop it.]
+OpenAI argues that Elon Musk actually
+agreed
+to have the company operate a for-profit arm, because he knew building AI is very expensive. So it’s about proving what Musk knew, what he didn’t know, and whether he really was deceived by Altman and Brockman.
+There’s a big debate about
+when
+exactly Musk found out about this alleged misconduct. Musk founded OpenAI with Altman and Brockman in 2015, and he brought the suit in 2024. There’s a statute of limitations for charitable trust claims; you need to have brought a claim within three to four years after you find out about the alleged misconduct. So Musk tries to paint a picture that back in the day he was a little suspicious, but that it was really only in 2022 that he realized OpenAI was no longer committed to its original charitable mission, and that he had been scammed. It’s only the first week of trial, but I’m not sure Musk has proved this to the judge and jury.
+What were some standout moments thus far?
+At one point one of Elon Musk’s lawyers said, “We could all die as a result of AI.” I think a lot of the people in the room were really shaken by this comment, and the judge told Musk’s lawyer:
+You talk about all these safety risks that OpenAI has when building AI, but Musk is also creating a company that’s in the same exact space.
+She basically said,
+I’m sure there’s plenty of people who also don’t want to put the future of humanity in Elon Musk’s hands.
+And then the lawyers just kept going on and on about the catastrophic risks of AI and whether Elon Musk or OpenAI was in the better position to steward AI safety. And the judge sort of snapped. She said very sternly that this trial was not about whether or not artificial intelligence has damaged humanity. And I thought that was a really striking standout moment of the trial that pointed at how even though it is technically just about whether Elon Musk was really deceived by OpenAI, it’s also become a huge discussion about AI safety and some of the practices that the labs are engaging in when building AI.
+Can you give us a look behind the curtain at how getting into this trial works?
+There are tons of reporters. This is a very high-profile suit, so I have to wake up around 4:30 a.m. and show up to the Oakland courthouse at 6 a.m. sharp to get in line. And on some days, even 6 a.m. doesn’t get you into the courtroom. There are lots of photographers in front of the courthouse, especially on days when you know Musk or Altman and Brockman are present. And there’s also some concerned citizens who want to watch the trial. I usually have to wait, like, two hours in line to get in to be one of the 30 people who claim the unreserved seats in the courtroom.
+What has it felt like to see Elon Musk testify? How would you describe his demeanor?
+He shows up in a crisp black suit. He can be this inflammatory person on X, but in the courtroom, he is calm, cool, collected, and looks very comfortable. He has been in a lot of lawsuits. He knows how to talk to the jury and how to present himself in front of them and the judge. He’s also cracking jokes with his lawyer and even the opposing party’s lawyer and the judge.
+And he can be witty. There was this one moment when OpenAI’s lawyer was asking Musk a question and sort of fed him an answer. And Musk said “That’s not a leading question, that’s a leading answer.” The judge intervened and said, “You’re not a lawyer, Elon.” And then he was like, “Well, I did take Law 101.”
+That said, he does get flustered and uncomfortable when OpenAI’s lawyer asks tough, piercing questions. Which he’s been doing.
+What are the biggest things we’ve learned that weren’t clear in the earlier phases of this case?
+On the fourth day of the trial, Musk
+admitted
+during cross-examination that xAI distills OpenAI’s models to train its own models, which was shocking. Musk followed up by saying that this is standard practice among all the labs now and that xAI wasn’t doing anything beyond what others were already doing. But a lot of the journalists started typing away at their laptops as soon as Musk made this comment.
+I also learned that there’s just so much scheming among Big Tech executives. You know about it vaguely, but to hear firsthand accounts and read their emails and text messages is fascinating.
+For example, there was a text message between Musk and Mark Zuckerberg of Meta, where they’re kind of teaming up to stop OpenAI’s restructuring. They’re even trying to make a bid to buy all the assets of OpenAI’s nonprofit. The level of scheming that goes on among these executives is mind-blowing.
+What happens next?
+OpenAI’s president, Greg Brockman, who was meticulously taking notes during some of Elon Musk’s testimony, is expected to testify next week. And Stuart Russell, a computer scientist at UC Berkeley, will testify about AI safety. I’m expecting that to open the floodgates to this crazy discussion about who can be trusted to build AI.
+A bunch of other high-profile people are expected to testify, like former OpenAI chief scientist Ilya Sutskever, former CTO Mira Murati, and Microsoft CEO Satya Nadella.
+The trial is supposed to last around three weeks. The nine jurors will deliver an advisory verdict that guides the judge on how to decide Musk’s claims against OpenAI. The judge doesn’t have to listen to the jury and can decide however she wants. If she decides OpenAI is liable, then she’ll decide what sort of remedies are appropriate.
+MIT Technology Review
+will have ongoing coverage of
+Musk v. Altman
+until its conclusion. Follow @techreview or @michelletomkim on X for up-to-the-minute reporting.
+
+KAYNAK : https://www.technologyreview.com/2026/05/04/1136826/week-one-of-the-musk-v-altman-trial-what-it-was-like-in-the-room/
+
+--- nextjs | v16.3.0-canary.10 | score=53.84 ---
+Core Changes
+Upgrade React from
+da9325b5-20260417
+to
+f4e0d4ed-20260429
+:
+#93457
+Bump
+@vercel/ncc
+:
+#93459
+Include deployment id in
+cacheHandlers
+keys:
+#93453
+fix(next/image): Improve error message for private IP (SSRF) rejections:
+#91686
+Misc Changes
+Upgrade to swc 65:
+#93325
+[test] Ensure target page is compiled before navigation in instant-navs-devtools:
+#93365
+[ci] Allow configuring the base URL for preview builds:
+#93464
+turbo-tasks-backend: fix snapshot coordination races + extract SnapshotCoordinator:
+#93416
+Credits
+Huge thanks to
+@mischnic
+,
+@vercel-release-bot
+,
+@eps1lon
+,
+@rishishanbhag
+, and
+@lukesandberg
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.10
+
+--- openai | OpenAI and PwC collaborate to reimagine the office of the CFO | score=49.49 ---
+OpenAI and PwC are partnering to help enterprises use AI agents to automate finance workflows, improve forecasting, strengthen controls, and modernize the CFO function.
+
+KAYNAK : https://openai.com/index/openai-pwc-finance-collaboration
+
+--- google_ai | Reduce friction and latency for long-running jobs with Webhooks in Gemini API | score=45.76 ---
+Event-Driven Webhooks are a push-based notification system that eliminates the need for inefficient polling.
+
+KAYNAK : https://blog.google/innovation-and-ai/technology/developers-tools/event-driven-webhooks/
+
+--- claude | Elevated errors on Claude Opus 4.5 | score=29.16 ---
+May
+4
+,
+09:49
+UTC
+Resolved
+- This incident has been resolved.
 May
 4
 ,
@@ -1495,4 +1956,54 @@ Investigating
 - We are currently investigating this issue.
 
 KAYNAK : https://status.claude.com/incidents/zxv1xv501678
+
+--- claude | Elevated errors on Claude Opus 4.5 and Sonnet 4.5 | score=28.33 ---
+May
+4
+,
+14:45
+UTC
+Resolved
+- This incident has been resolved.
+May
+4
+,
+14:27
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+May
+4
+,
+14:08
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+May
+4
+,
+13:59
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/77j6yv8kc0vn
+
+--- claude | Elevated errors on Claude Opus 4.7 | score=25.15 ---
+May
+4
+,
+14:33
+UTC
+Resolved
+- This incident has been resolved.
+May
+4
+,
+14:07
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+
+KAYNAK : https://status.claude.com/incidents/89vbl7qk5dqp
 

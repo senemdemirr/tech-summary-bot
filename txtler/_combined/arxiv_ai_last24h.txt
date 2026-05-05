@@ -1,4 +1,4 @@
---- arxiv_ai | Linking Behaviour and Perception to Evaluate Meaningful Human Control over Partially Automated Driving | score=102.43 ---
+--- arxiv_ai | Linking Behaviour and Perception to Evaluate Meaningful Human Control over Partially Automated Driving | score=102.72 ---
 Linking Behaviour and Perception to Evaluate Meaningful Human Control over Partially Automated Driving
 Abstract
 Partial driving automation creates a tension: drivers remain legally responsible for vehicle behaviour, yet their active control is significantly reduced. This reduction undermines the engagement and sense of agency needed to intervene safely. Meaningful human control (MHC) has been proposed as a normative framework to address this tension. However, empirical methods for evaluating whether existing systems actually provide MHC remain underdeveloped. In this study, we investigated the extent to which drivers experience MHC when interacting with partially automated driving systems. Twenty-four drivers completed a simulator study involving silent automation failures under two modes - haptic shared control (HSC) and traded control (TC). We derived behavioural metrics from telemetry data, subjective perception scores from post-trial surveys and used them to test hypothesised relations between them derived from the properties of systems under MHC. The confirmatory analysis showed a significant negative correlation between the perception of the automated vehicle (AV) understanding the driver and conflict in steering torques. An exploratory analysis also revealed a surprising positive correlation between reaction times and the perception of sufficient control. Qualitative feedback from open-ended post-experiment questionnaires revealed that mismatches in intentions between the driver and automation, lack of safety, and resistance to driver inputs contribute to the reduction of perceived MHC, while subtle haptic guidance aligned with driver intent had a positive effect. These findings suggest that future designs should prioritise effortless driver interventions, transparent communication of automation intent, and context-sensitive authority allocation to strengthen meaningful human control in partially automated driving.
@@ -202,7 +202,7 @@ This research was funded by the TU Delft AI Initiative and Indonesia Endowment F
 
 KAYNAK : https://arxiv.org/abs/2605.00556
 
---- arxiv_ai | Directed Social Regard: Surfacing Targeted Advocacy, Opposition, Aid, Harms, and Victimization in Online Media | score=102.43 ---
+--- arxiv_ai | Directed Social Regard: Surfacing Targeted Advocacy, Opposition, Aid, Harms, and Victimization in Online Media | score=102.72 ---
 [1]\fnmScott \surFriedman
 [1]\orgnameSIFT, \orgaddress\street319 N 1st Ave, \cityMinneapolis, \postcode55401, \stateMN, \countryUSA
 2]\orgdivDepartment of Computer & Information Science & Engineering, \orgnameUniversity of Florida, \orgaddress\street432 Newell Drive, \cityGainesville, \postcode32611, \stateFL, \countryUSA
@@ -353,7 +353,7 @@ The online media used for annotation, training, and validation (Table 3) is comp
 
 KAYNAK : https://arxiv.org/abs/2605.00776
 
---- arxiv_ai | AI Inference as Relocatable Electricity Demand: A Latency-Constrained Energy-Geography Framework | score=102.43 ---
+--- arxiv_ai | AI Inference as Relocatable Electricity Demand: A Latency-Constrained Energy-Geography Framework | score=102.72 ---
 AI Inference as Relocatable Electricity Demand:
 A Latency-Constrained Energy-Geography Framework
 Abstract
@@ -1022,7 +1022,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2604.27855
 
---- arxiv_ai | Smart Ensemble Learning Framework for Predicting Groundwater Heavy Metal Pollution | score=102.20 ---
+--- arxiv_ai | Smart Ensemble Learning Framework for Predicting Groundwater Heavy Metal Pollution | score=102.49 ---
 2022
 [1]\fnmG. Y. \surAfrifa
 1]\orgdivGhana Space Science and Technology Institute, \orgnameGhana Atomic Energy Commission, \orgaddress \postcodeP. O. Box LG 80, \stateAccra, \countryGhana
@@ -1338,7 +1338,7 @@ References
 
 KAYNAK : https://arxiv.org/abs/2605.00056
 
---- arxiv_ai | Smart Profit-Aware Crop Advisory System: Kisan AI | score=102.20 ---
+--- arxiv_ai | Smart Profit-Aware Crop Advisory System: Kisan AI | score=102.49 ---
 VIT-AP University, Amaravati, Andhra Pradesh, India
 11email: d.dwibedy@vitap.ac.in
 avyay.22bce9292@vitapstudent.ac.in

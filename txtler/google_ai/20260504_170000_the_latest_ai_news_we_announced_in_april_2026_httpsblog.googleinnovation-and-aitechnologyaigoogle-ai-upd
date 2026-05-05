@@ -1,4 +1,3 @@
---- google_ai | The latest AI news we announced in April 2026 | score=94.41 ---
 The latest AI news we announced in April 2026
 For more than 20 years, we’ve invested in machine learning and AI research, tools and infrastructure to build products that make everyday life better for more people. Teams across Google are working on ways to unlock AI’s benefits in fields as wide-ranging as healthcare, crisis response and education. To keep you posted on our progress, we're doing a regular roundup of Google's most recent AI news.
 Here’s a look back at some of our AI announcements from April.
@@ -21,9 +20,3 @@ Google.org and Johnson & Johnson Foundation launch a rural healthcare initiative
 Fitbit's personal health coach is now even more personalized. The update makes the health coach even more intuitive, using Gemini to analyze biometrics and provide tailored advice that feels human.
 
 KAYNAK : https://blog.google/innovation-and-ai/technology/ai/google-ai-updates-april-2026/
-
---- google_ai | Reduce friction and latency for long-running jobs with Webhooks in Gemini API | score=45.76 ---
-Event-Driven Webhooks are a push-based notification system that eliminates the need for inefficient polling.
-
-KAYNAK : https://blog.google/innovation-and-ai/technology/developers-tools/event-driven-webhooks/
-
