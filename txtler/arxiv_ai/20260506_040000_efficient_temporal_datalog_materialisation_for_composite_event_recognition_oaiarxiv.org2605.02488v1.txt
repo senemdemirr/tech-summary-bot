@@ -1,0 +1,253 @@
+Efficient Temporal Datalog Materialisation for Composite Event Recognition
+Abstract
+Several applications demand the timely detection of critical situations, such as threats to safety and transparency, over high-velocity streams of symbolic events. This demand has motivated the development of (i) event specification languages, which define composite events via temporal patterns over simpler events, and (ii) stream reasoning frameworks, evaluating patterns expressed in these languages. However, event specification languages are typically studied in isolation, complicating their comparison in terms of expressivity and obscuring the scope of their associated stream reasoners. To mitigate this issue, we map practical fragments of prominent event specification languages into Temporal Datalog, a temporal Datalog with stratified negation and no future dependencies. To support efficient stream reasoning over Temporal Datalog, we propose Streaming Trigger Graphs, an extension of a state-of-the-art technique for Datalog materialisation. Our approach yields a uniform composite event recognition mechanism that has the potential to generalise across a wide range of practical event specification languages.
+1 Introduction
+Composite event recognition (CER) frameworks detect instances of situations of interest, such as safety and transparency threats, over streams of symbolic events (?). Effective CER is critical in various domains, such as smart cities (?), health systems (?), and fleet management (?). A CER solution typically involves two components: an event specification language (ESL), defining a class of composite event patterns via syntactic constructs and operators, and a reasoner evaluating these patterns with minimal latency over unbounded event streams. This separation enables a principled study of the trade-offs between ESL expressivity and reasoning tractability, avoiding ad-hoc solutions, and is thus prominent in CER (?; ?; ?; ?; ?; ?).
+Although there are various formal studies on specific ESLs (?; ?; ?; ?), a unifying approach is lacking, complicating ESL comparisons and obscuring the scope of the associated stream reasoners. This also leads to practical issues as composite event patterns expressed in one ESL often cannot be translated into another ESL in a faithful and optimised manner, which may prohibit the use of the reasoner that is best suited to a specific CER problem while also complicating comparisons between reasoners.
+Towards addressing this issue, we compile two prominent logic-based ESLs—based on the Event Calculus (?) and LARS (?)—into a variant of Temporal Datalog (?) with stratified negation and no future dependencies, which we term Temporal Datalog. The Event Calculus has been used in ESLs for large-scale CER (?; ?; ?; ?; ?; ?; ?), while LARS features practical fragments for CER (?; ?), along with extensions for increased expressivity (?; ?), and distribution (?).
+Temporal Datalog has been studied extensively in the context of stream reasoning (?; ?; ?; ?; ?), while being closely related to expressive ESLs with dedicated stream reasoners, such as DatalogMTL (?; ?; ?). Thus, Temporal Datalog serves as a natural formalism for embedding and studying ESLs. To support efficient CER over such embedded specifications, we propose Streaming Trigger Graphs (STGs), an extension of a state-of-the-art materialisation method for Datalog (?) that supports Temporal Datalog programs. An STG leverages a so-called incremental stratification of the program to enable delta model updates over streaming data and optimisations that reduce redundant computations.
+Our contributions may be summarised as follows. First, we provide mappings from practical Event Calculus and LARS fragments to Temporal Datalog, and prove that they are equivalence-preserving with respect to query answering. Second, we propose STG-based materialisation as a novel reasoning algorithm for Temporal Datalog, demonstrate its correctness and discuss reasoning optimisations. Through the use of Temporal Datalog and STGs, we provide a uniform CER solution for two prominent ESLs, facilitating their formal analysis and comparison. Our contributions apply to ESLs with stratified negation and no future dependencies, commonly required in stream reasoning (?), helping to further consolidate and advance CER.
+2 Background
+2.1 Logic Programming
+We investigate ESLs that are based on logic programming. Logic programs include variables, constants, predicates, and functors. Variables start with an upper-case letter, whereas predicates, functors and constants start with a lower-case letter. A term is either a variable, a constant, or an expression , where is a functor and is a term tuple. An expression , where is a predicate and is a term tuple, is called an atom. A fact is a variable-free atom. A literal is an atom optionally preceded by “not”, expressing negation-by-failure (?). Arity means number of arguments.
+A logic program is a set of rules , where denotes implication, atom is the head of the rule and its body is a conjunction of conditions. All variables in a rule are implicitly universally quantified. In definite (resp. normal) logic programs, all body conditions are atoms (literals). An expression is called ground if it contains no variables. A substitution is a mapping of the terms in an expression to constants. A predicate is called intensional if it appears in the head of a rule with non-empty body, and extensional otherwise. A database is a set of facts with extensional predicates. A Datalog program is a definite logic program without functors. Every Datalog program can be rewritten into an equivalent program partitioned into extensional rules (with only extensional body predicates) and intensional rules (with only intensional body predicates).
+An interpretation of a logic program is a set of facts from . To define the semantics of , we identify its models, i.e., interpretations satisfying all rules in . Definite logic programs have a unique minimal model, while normal logic programs (which include negation) may have multiple minimal models, complicating their semantic characterisation. To interpret such programs, the closed world assumption (CWA) allows us to infer “” if cannot be finitely proven (?). Thus, for a program with rule “” and fact , model is preferred over model , because, since it is impossible to prove , the CWA infers “”, leading to the derivation of via the rule. When the program does not include cyclic dependencies via not, i.e., it is stratified, we can derive an intended interpretation for it by applying the CWA to negated atoms following rule dependencies bottom-up (?).
+Definition 1 (Global Stratification and Local Stratification).
+Consider a normal logic program with the predicates in set and the ground atoms in set . A rule in is:
+is globally stratified if can be decomposed into disjoint sets (strata) , …, , so that, for every in , we have that, if , where , then: (i) , where and , and (ii) , where and . Such a decomposition is a global stratification of .
+is locally stratified if can be split into (possibly infinite) strata , so that, for every ground instance of a rule in , if then: (i) , where and , and (ii) , where and . Such a decomposition is a local stratification of .
+Based on Definition 1, every globally stratified program is also locally stratified. Local stratification, however, is undecidable in the general case, while global stratification can be decided in polynomial time (?). A stratified program admits a unique perfect model (?), derived by (i) computing a stratification, and (ii) evaluating its rules in a bottom-up order based on the stratum of their head while applying the CWA to negative conditions.
+2.2 Temporal Datalog
+A temporal program is a logic program where constants are split into objects and time-points, variables are split into object variables and time variables, and time-points are positive integers. An object term is an object or an object variable. A temporal fact is a fact including exactly one time-point. The model of a temporal program is evaluated over a stream, i.e., an unbounded database of temporal facts.
+Datalog programs have been studied extensively (?; ?), and several temporal extensions have been proposed (?; ?; ?). Such an extension is Datalog1S where each predicate is augmented with an additional argument featuring a time term (?). A time term is , where is a time variable and is an integer called the time offset. Integer addition is silently applied when is grounded. We focus on Temporal Datalog, i.e., a fragment of Datalog1S where each rule may include at most one time variable (?).
+To formalise Temporal Datalog, i.e., the Temporal Datalog variant we use for embedding ESLs, we make two modifications on Temporal Datalog: (i) we introduce a restricted form of negation, and (ii) we disallow derivations towards the past. A Temporal Datalog rule has the following form:
+We restrict negation in Temporal Datalog by requiring programs to be temporally stratified (?).
+Definition 2 (Temporal Stratification).
+Consider a program with rules (4), and the program produced by removing all object terms from and reducing predicate arity to . is called temporally stratified if is locally stratified.
+For a local stratification of , the sequence , where iff , is a temporal stratification of .
+According to Definition 2, if, in a temporally stratified program , depends on through negation, then . Thus, such dependencies are not cyclic in the grounded program, and can be resolved by unfolding (i.e., grounding) time. As a result, all temporally stratified programs are locally stratified, and thus have a unique perfect model. Temporal stratification can be decided in polynomial time, while local stratification is co-NP hard on Temporal Datalog with negation (?).
+To formalise our second modification on Temporal Datalog, we define a forward-propagating program.
+Definition 3 (Forward-Propagating Program).
+A program with rules of the form (4) is forward-propagating if, for every time term in the body of a rule in , is non-negative.
+Definition 4 (Temporal Datalog Program).
+A Temporal Datalog program is a set of forward-propagating rules of the form (4), such that is temporally stratified.
+Example 1 (Temporal Datalog Program).
+The following program evaluates the safety status of a device over a stream of and temporal facts.
+Rules (6)–(9) state that a device is considered at the current time-point if there was a fact with time-stamp or it was proven to be at and no was produced at . Rule (12) expresses that a device is considered if it was proven to be for three consecutive time-points (including ). is forward-propagating and defines a temporal stratification. Thus, is a Temporal Datalog program.
+2.3 Trigger Graphs
+Trigger Graphs (TGs) were proposed as a technique to steer Datalog materialisation away from redundant computations (?), complementing classical semi-naive evaluation and the chase-based approaches (?; ?; ?). Towards defining TGs, we start with Execution Graphs (EGs).
+Definition 5 (Execution Graph).
+An Execution Graph (EG) for a Datalog program is an acyclic, node- and edge-labeled digraph , where and are the set of nodes and the set of edges of the graph, while and are the node- and edge-labeling functions. maps each node in to a rule in . There can be a labeled edge of the form , i.e., and , only if the -th predicate in the body of equals the head predicate of . For each non-leaf node , the EG includes exactly one edge for each body atom of .
+Each node of an EG denotes a plan for executing by specifying the node that will be used for the evaluation of its -th body condition through an edge . To enable plan execution, each node is populated with facts produced by applying on the facts in the nodes specified by its incoming edges.
+Definition 6 (Facts in EG).
+Let be a Datalog program, a database, an EG for , a node in and a substitution for the variables in . The rules in are partitioned into extensional and intensional, while and denote the head and the body of . , i.e., the set of facts in node given , contains a fact if:
+-
+•
+is an extensional rule and for each atom in we have , or
+-
+•
+is an intensional rule and for each atom in we have , where is an edge in .
+contains all facts derived by materialising EG on database .
+If contains all facts that follow from , and no other facts, then we say that EG is a TG.
+Definition 7 (Trigger Graph).
+Considering a Datalog program , a database , and an EG for , we say that is a Trigger Graph (TG) for if for each fact we have iff . is a TG for if, for each database , is a TG for .
+-compatibility determines which nodes of an EG contain facts that may be combined to derive new facts.
+Definition 8 (-compatibility).
+Let be a program, an intensional rule in and an EG for . A tuple of nodes from is -compatible with if:
+-
+•
+the predicate in the head of is equal to the predicate in the -th body atom of ;
+-
+•
+the depth of each , i.e., the length of the longest path in that ends at , is less than ; and
+-
+•
+at least one node in has depth .
+Algorithm 1 outlines the process of building a TG for program and database . In the first iteration (), we add one node in for each extensional rule that fires based on (lines 5–6). In all subsequent iterations (), we use -compatibility to determine whether a node for rule and incoming edges from nodes , …, will be constructed (lines 8–9). The third requirement in Definition 8 ensures that node combinations used in previous iterations are not -compatible, thereby preventing redundant node constructions, in line with semi-naïve evaluation (?). After each iteration, we remove the nodes of depth that are subsumed by another node with respect to the query they express (line 11), and then populate set with the facts in the remaining nodes of depth (line 12). denotes an optimised materialisation strategy for these facts, restricting attention to tuples that have not been derived at a previous step, i.e., they are not in . We terminate if no new facts were added in the last iteration (line 14).
+3 Event Specification Languages
+We focus on two prominent logical ESLs based on LARS and the Event Calculus. A thorough review of ESLs with informative comparisons is provided in Section 6.
+3.1 LARS
+LARS extends ASP with window operators and temporal modalities for stream reasoning (?). A window operator over formula uses window function to restrict its evaluation on a particular subset of a stream . For example, time windows restrict attention to the events that took place over the last time-points. Temporal modalities express the temporal validity of a formula . (resp. ) requires that holds at some (every) time-point in . requires that holds when the evaluation time is shifted to , granted that . In practice, it is used to express that holds at some time-point in (i.e., same as ), but also to bind to such a time-point.
+The main LARS-based stream reasoners are Ticker (?) and Laser (?). Both are based on the “plain LARS” fragment, whose core building blocks are the so-called extended atoms.
+Definition 9 (Extended atom).
+Let be an atom , where is a predicate and is a sequence of object terms, a time variable and a positive integer. An extended atom is defined by the following grammar:
+We focus on time windows and rules without operators in the head, leading to forward-propagating programs.
+Definition 10 (Plain LARS).
+A plain LARS program is a set of rules of the form “”, where is an atom, , , is a (possibly negated) extended atom, and all window operators are time windows.
+In plain LARS, if a rule includes condition , then must be grounded earlier in the body of , in order to avoid evaluating over arbitrary future time-points. Therefore, every such condition is preceded by a positive condition, which constrains to the window , where is the rule evaluation time.
+While both Ticker and Laser employ plain LARS, they differ on their support for negation. Ticker allows non-stratified negation, while Laser is restricted to globally stratified programs. We focus on globally stratified plain LARS programs, motivated by the superior reasoning efficiency of Laser (?), as well as by the common assumption in CER that there is a single, implicit model of the world expressing the actual composite event occurrences (?).
+Example 2 (Plain LARS Program).
+The following plain LARS program monitors safety in a network of devices.
+Rules (14)–(16) state that device is if a occurred in a two time-step window, and if it has been over a six time-step window. Rule (18) marks as if no occurred in a two time-step window, while rule (22) reports that a device poses an integrity threat to a trusted device if was unverified and connected to at some time-point within a two time-step window. A global stratification places in the first stratum and the remaining predicates in the second stratum.
+3.2 Event Calculus with Delayed Effects
+The Event Calculus (EC) is a temporal logic programming formalism where the functors are classified as event types and fluent types, expressing time-varying properties, and a constant sort is reserved for the possible values of each fluent type (?). An event (resp. fluent ) is a term where () is an event (fluent) type and contains only objects and variables. Expression states that fluent has value and is often used in CER to denote composite events (?; ?). We focus on an EC variant where events may have delayed effects on fluent values—which we term ECDE—as it is employed in a state-of-the-art CER framework (?). The predicates in ECDE and their meaning are as follows.
+-
+•
+: event occurs at time .
+-
+•
+: fluent has value at .
+-
+•
+/: a time period where is initiated/terminated at .
+-
+•
+: an initiation of leads to a future initiation of after time-points, unless is terminated in the meantime.
+-
+•
+: the above future initiation of is postponed by intermediate initiations of .
+In ECDE, fluents are classified as simple or statically determined. The values of a simple fluent change based on the satisfaction of initiation and termination conditions and persist via the law of inertia. A statically determined fluent is defined as a Boolean combination of other fluents.
+Simple fluent definitions. The rules defining based on immediate effects of events have this form:
+We use “” to denote optional parts of the rule, i.e., only the first positive happensAt atom is necessary. Rules with head have the same form.
+fi and p facts express future initiations as follows:
+and express that is initiated or terminated, respectively, at some time-point strictly between and . In rules (27)–(33), is a variable spanning over fluents, while and span over its possible values. This abstraction emphasises that these rules are included regardless of the domain being modelled. However, they may only fire if fi—and possibly p—facts are included, expressing the dynamics of delayed fluent value changes in the domain.
+ECDE also uses the following rules regardless of domain.
+Rules (35)–(39) express the law of inertia, i.e., holds at if it was initiated at the previous time-point or held at and it was not terminated at . Rule (42) terminates when is initiated with a value other than , restricting fluents to at most one value at a time.
+Statically determined fluent definitions. Such a definition for contains rules where the -th rule is:
+Together, these rules define as a DNF formula on the values held by the fluents in their bodies. This definition has proven to be equivalent to the interval-based analog used for practical CER (?).
+ECDE programs are locally stratified, and thus admit a unique perfect model (?). The reasoning task in ECDE is to compute holdsAt, i.e., the values of fluents at each time-point.
+Example 3 (ECDE Program).
+An ECDE program monitoring device safety may include the following rules.
+Rule (46) (resp. rule (49)) states that a device is considered () after a () event occurs. Rule (54) expresses that an device poses an integrity threat to a device if they are connected. Fact (56) expresses that becomes after being for three consecutive time-points.
+4 Embedding ESLs in Temporal Datalog
+Plain LARS to Temporal Datalog. A plain LARS program is not Temporal Datalog because it includes temporal operators (Definition 10). We propose a translation of into a Temporal Datalog program that is equivalent with respect to query evaluation for any input stream.
+Algorithm 2 outlines our translation. To construct , we first introduce predicates that denote the atoms in . For each predicate with arity in , we introduce a predicate with arity in , where the extra argument is reserved for a time term (see line 2). In order for to be Temporal Datalog, each rule in must contain one time variable , reflecting its evaluation time (see rule schema (4)). To cater for this, we need to map, in each rule of , each time variable appearing in operators to time terms . In plain LARS, is grounded based on the first positive body condition of . Thus, we replace with rules such that in the -th rule, where , is mapped to , denoted via a mapping (see lines 3–11). This reflects the semantics of as an existential quantifier that also maintains via the time-points in the window where holds.
+Example 4 (Plain LARS to Temporal Datalog).
+Afterwards, we iterate over each discovered pair and substitute each atom in with a Temporal Datalog atom (lines 12–27). For the head of , we append to a time variable denoting the rule evaluation time (line 13). Then, we iterate over each body condition in . If contains negation, we implicitly replace “” with “not”, as their semantics coincide for globally stratified plain LARS programs (?). Then, setting negation aside, we distinguish the following cases. If is (resp. ), then we replace with () in (lines 15–16). If is , then we distinguish two cases. If falls within , then we replace with (line 18). Otherwise, if , then we cannot satisfy , and thus disable the rule by replacing with (line 19). If is (resp. ), we introduce predicate () with arity and replace with () (lines 20–27). Then, we add rules in that define () as the disjunction (conjunction) of .
+Example 5 (Example 4 cont’d).
+To translate rule (14), Algorithm 2 replaces its head with , its body with and introduces three rules of the form: “”, for . Rules (16)–(18) are translated similarly by mapping the operators they contain according to lines 24–27. Rule (22) is translated into three rules, one for each mapping of (see Example 4). For , e.g., we construct this rule:
+Theorem 1 ( Correctness).
+Consider a plain LARS program , a stream and let Algorithm 2 map to . is Temporal Datalog, and given that is the perfect model of , at time-point , derives:
+-
+•
+iff
+-
+•
+iff
+-
+•
+iff and .
+-
+•
+iff
+-
+•
+iff .
+Proof Sketch.
+Rules in each contain one time variable, are forward-propagating (see, e.g., lines 22, 26 and 10), and is temporally stratified since is globally stratified and Algorithm 2 introduces no negative dependencies. Thus, is Temporal Datalog (Definition 4). For model equivalence, we follow an inductive proof on the global stratification of . For extensional predicates, correctness follows from the faithfulness of the translation: e.g., holds iff holds now or at least once over the last time-points, matching the definition of (line 22). For the inductive step at , negative body conditions in any rule defining refer to lower strata and are thus evaluated identically by and . Correctness then reduces to the faithfulness of the translation of the temporal operators, which guarantees that the positive conditions are also evaluated equivalently. ∎
+ECDE to Temporal Datalog. We consider an ECDE program consisting of rules (27)–(42), as well as rules following schemata (23) and (43), and possibly fi and p facts. contains functors, in the form of event and fluent types, atoms with multiple time terms (see rules (27)–(33)), and an inequality comparison in rule (42). These elements are not in Temporal Datalog and thus we need to translate into a Temporal Datalog program .
+Algorithm 3 outlines the translation steps. Towards an equivalent program without functors, for each event type in , we introduce to one predicate , adding one more argument to express time (see line 2). Similarly, for each fluent type in we introduce a predicate in , denoting when the fluent holds, and equip it with a value argument and a time argument (lines 3–4). If is a simple fluent type, then we additionally introduce predicates and to denote its initiations and terminations (line 5). As denoted by the function (lines 20–24), these new predicates correspond to ECDE predicates for particular events and fluents.
+Next, we compile each domain rule, following schema (23) or schema (43), by mapping its head and body atoms to the introduced Temporal Datalog predicates (lines 6–7). Rules (35)–(42) involve fluent variables, while the predicates we introduced are fluent-specific. To cater for this, we add in one such rule for each fluent type in , while grounding variable according to the possible values of (lines 8–12). We follow a similar route for rules (27)–(33), while additionally compiling away the predicates with two time terms by explicitly adding a body condition referring to each time-point in the range they define (lines 13–18).
+Example 6 (ECDE to Temporal Datalog).
+Consider the ECDE program in Example 3. Algorithm 3 translates rules (46)–(54) by mapping their atoms using . Rule (46), e.g., is translated into: “”. Fact (56) is expressed in Temporal Datalog using the following rule:
+Moreover, for each value of , we construct rules expressing its default persistence and its incompatibility with other values. For value , e.g., we have:
+Theorem 2 ( Correctness).
+Consider an ECDE program , a stream and let Algorithm 3 map to . is Temporal Datalog, and, for each fluent , value of and time-point , derives iff , where is the perfect model of .
+Proof sketch.
+All rules added by Algorithm 3 contain one time variable and are forward-propagating. Negation appears (i) on conditions with a positive temporal offset (e.g., line 10), (ii) in a globally stratified statically determined fluent definition, lacking cyclic dependencies (?), and (iii) in an condition of a rule defining or (). Case (iii) preserves temporal stratification as may depend negatively on or only via a positive time offset. Therefore, is Temporal Datalog (Definition 4). Semantic equivalence follows from the faithfulness of the translation up to predicate renaming. ∎
+5 Streaming Trigger Graphs
+We cannot use TGs to materialise Temporal Datalog programs because (i) they do not support negation and (ii) they do not support variables with countably infinite groundings, such as time variables. The presence of such variables makes the order of rule evaluation crucial, as materialisation can become trapped in an infinite chain of derivations for one predicate, thereby preventing the derivation of facts for other predicates. Tackling this issue by generating a TG that materialises the program up to the latest time point is problematic because incrementally updating in the presence of new data may lead to incorrect results, while recomputing a TG from scratch at every time step is prohibitively expensive in the streaming setting. To address these issues, we propose Streaming Trigger Graphs (STGs), which constitute an optimised computational model for Temporal Datalog.
+We start with Streaming Execution Graphs (SEGs), which extend EGs with negation and time. Mirroring the relationship between EGs and TGs, we then define STGs as SEGs that materialise Temporal Datalog programs correctly.
+Definition 11 (Streaming Execution Graph).
+A Streaming Execution Graph (SEG) for a Temporal Datalog program is a graph , where:
+-
+•
+is a set of nodes.
+-
+•
+is a set of directed edges called p-edges.
+-
+•
+is a set of n-edges, i.e., labelled directed hyperedges , where .
+-
+•
+is a function mapping each node in to a rule in .
+-
+•
+is a mapping of each node in to a time-point.
+-
+•
+is a function labelling each p-edge in and each n-edge in with a positive integer , denoted respectively as and . We have (resp. , where ), only if:
+-
+–
+the predicate of the -th positive (negative) condition of equals the head predicate of , and
+-
+–
+is equal to minus the time offset of the -th positive (negative) body condition in .
+-
+–
+For each non-leaf node , there is exactly one p-edge or n-edge for the -th condition in .
+Considering a rule with head , and sets and , containing respectively the atoms in positive and in negative body conditions of , if there is a substitution on the variables in such that holds for all in , derives only if does not hold for any in . Intuitively, the atoms in act as filters that disqualify substitutions satisfying at least one such atom. To reflect this, Definition 11 uses an n-edge , where , to denote that if at least one node contains fact then fact should not be introduced in . Moreover, according to Definition 11, SEGs restrict body condition evaluation over facts with the appropriate time offset compared to the head predicate. This minimises the atoms considered in joins during materialisation without compromising correctness.
+Definition 12 (Facts in SEG).
+Let be a Temporal Datalog program, a stream, a SEG for , a node in and a substitution for . The rules in are partitioned into extensional and intensional. and (resp. ) are the head and the set of atoms in positive (negative) conditions of . contains a fact if:
+-
+•
+is extensional and for each atom in () we have (), or
+-
+•
+is intensional, for each atom in we have , where is a p-edge in , and for each atom in and each node , where is an n-edge in , we have .
+contains all facts derived by materialising SEG on stream .
+If contains all facts that follow from , and no other facts, then we say that SEG is an STG.
+Definition 13 (Streaming Trigger Graph).
+Considering a Temporal Datalog program , a stream and a SEG for , we say that is a Streaming Trigger Graph (STG) for if, for each fact , we have iff . is a STG for if, for each stream , is a STG for .
+Towards practical STG-based materialisation, we introduce a form of temporal stratification that allows us to materialise Temporal Datalog programs incrementally in time.
+Definition 14 (Incremental Stratification).
+Consider a Temporal Datalog program , and the program derived by removing from all body conditions with time offset . A temporal stratification of is called an incremental stratification of if, , all tuples in the strata of have time-point , and the predicate sets obtained from form a global stratification of .
+The following corollary holds due to our restriction on forward-propagating and temporally stratified programs.
+Corollary 1.
+Every Temporal Datalog program has an incremental stratification.
+To construct an incremental stratification for program , we compute a global stratification , …, for , and set and , where , for each . We may then compute the perfect model of over a stream by setting and processing bottom-up. For each , we substitute with in and evaluate its rules following the predicate stratification in , leading to interpretation . Crucially, is the perfect model of up to time-point , enabling the incremental materialisation of .
+For TGs, -compatibility ensures that, for each node , its incoming edges stem from nodes defining the predicates in the conditions of (see Definition 8). For STGs, we update -compatibility to ensure that the time labels of these nodes are also consistent with the conditions of .
+Definition 15 (-compatibility).
+Consider program with intensional rule and SEG G. Tuple of nodes from is -compatible with at time if:
+-
+•
+the predicate in the head of equals the predicate of the -th positive condition of ;
+-
+•
+is equal to minus the offset in the -th positive condition of ;
+-
+•
+each was constructed at an iteration prior to ; and
+-
+•
+at least one was constructed at iteration .
+Unfortunately, -compatibility is inadequate when all tuple nodes were constructed when processing a previous stratum. Consider, e.g., this traffic light monitoring program:
+Given and , we build an EG up to . In the first iteration, we build node for rule (59) with fact . In the second iteration, we add node for rule (57) with fact , completing materialisation up to . To update beyond , we need further iterations. However, since was computed two iterations ago, there are no -compatible nodes with rule (58) at , prohibiting the derivation of . To address this issue, we propose the notion of consistency.
+Definition 16 (Consistency).
+Consider program with intensional rule and SEG G. Tuple of nodes from is consistent with at time if:
+-
+•
+the predicate in the head of equals the predicate of the -th positive condition of ;
+-
+•
+is equal to minus the offset in the -th positive condition of ; and
+-
+•
+each was constructed at an iteration prior to .
+Algorithm 4 outlines the steps of STG-based materialisation for program and stream . First, we compute an incremental stratification for , with denoting the strata with time-point (line 2). Next, for each time-point , we (i) read the facts of occurring at (line 4); (ii) ground the time variable of to , leading to program (line 4); (iii) iterate over the strata in and update the STG constructed thus far with nodes computing the predicates in over (lines 5–26); (iv) output the facts computed at based on (line 27); and (v) remove from and —the stream read thus far—all nodes and extensional facts that cannot be used for derivations after according to (line 27).
+For step (iii), we materialise the predicates in in a process similar to TG-materialisation (compare lines 6–26 and Algorithm 1). The first key difference concerns negation: for each negative condition in the rule of a node, we add one incoming n-edge whose source is the set of nodes with the same predicate as and a time label corresponding to the time-point in (lines 12–16). The second difference is that we rely on node consistency—instead of -compatibility—for rules where all body conditions refer to a previous stratum, i.e., their predicate is not in or their time-point is earlier than the current one (lines 17–19).
+Optimisations. TGs reduce redundant computations via two optimisations (?): (i) after each round , nodes constructed at whose query is subsumed by another node, based on rewritings recursively replacing intensional predicates with extensional ones following TG dependencies, are removed; and (ii) joins during node materialisation are restricted to tuples that are not in the previous interpretation. Both optimisations extend to STGs. For (i), n-edges stem from nodes in previous strata, so their facts can be treated as extensional in query rewritings (line 24). Optimisation (ii) applies unchanged (line 25). We may further optimise STGs by forgetting nodes whose facts can no longer contribute to future derivations based on their time-stamps.
+Proposition 1 (Forgetting).
+Consider a Temporal Datalog program and an STG for with node where defines predicate . If is the maximum temporal offset of any body condition mentioning across all rules in , then can be removed from at evaluation time .
+Since can be derived offline from , forgetting adds no overhead to online materialisation.
+Example 7 ().
+Consider the following program , where , , , , and abbreviate , , , , and .
+and are extensional, while , and are intensional. Strata and incrementally stratify .
+Figure 1 presents the STG constructed by Algorithm 4 over a stream with and up to . Starting from and , we first construct nodes and for extensional rules and , defining and . These rules cannot fire at , since their conditions refer to the previous time-point, and thus and are empty. Moving to the next stratum , is consistent with intensional rule —defining —at time , leading to the creation of node , with incoming p-edge and n-edge . No further nodes can be constructed for rules defining predicates in , completing materialisation for . All conditions in for predicates and have temporal offset , while appears in conditions with offset . Thus, and are forgotten at the next time-step , while is forgotten when .
+For and , fires because of fact , populating node with . Since is not in the input, cannot be proven, and thus an empty node is constructed for . Moving to , there are two distinct proofs for : the former requires via , while the latter requires via . Node captures the former proof via p-edge , and is populated with , while captures the latter proof. Next, we construct nodes and , denoting the possible ways of proving . These proofs, however, are not distinct—given a proof of via , reducing via yields a subquery of the query produced through its reduction with —and thus is removed before materialisation.
+At , is derived via , and then follows from . At , leads to in node . The n-edge from then blocks the derivation of via both and , capturing their negative condition. The full trace up to is shown in Figure 1.
+Theorem 3 ( Correctness).
+Algorithm 4 builds an STG for Temporal Datalog program and stream .
+Proof Sketch.
+We show by induction on the strata in that iff . Correctness for follows from the correctness of (Algorithm 1), because the predicates in have no negative dependencies and their temporal dependencies are vacuous at . Assuming correctness up to , we prove it for : every negated condition “” in a rule defining a predicate where refers to a lower stratum, so iff by the inductive assumption, while lines 13–16 add n-edges from all nodes that may contain , ensuring correct evaluation. Assuming correctness up to , correctness for follows from the consistency criterion (lines 17–19), which correctly materialises rules whose conditions all refer to previous strata. The same arguments support the step from to , completing the proof. ∎
+6 Summary, Related and Further Work
+We proposed mappings from two prominent event specification languages (ESLs) for composite event recognition (CER), which are fragments of LARS and EC, to Temporal Datalog, i.e., a temporal Datalog with stratified negation and no future dependencies, and proved their correctness. We also proposed Streaming Trigger Graphs (STGs) as a computational model for Temporal Datalog, investigating formal properties and optimisations.
+Numerous ESLs have been proposed for CER (?; ?; ?; ?). DatalogMTL, e.g., combines Datalog with quantitative temporal modalities in a streaming setting (?; ?). Contrary to LARS and EC, DatalogMTL is defined over a rational time model and uses intervals to quantify temporal offsets. DatalogMTL variants with forward-propagating rules (?), negation (?) and an integer time model (?) have also been studied. We conjecture that such a restricted variant can be mapped to Temporal Datalog in a similar way to our plain LARS translation, due to similarities between their temporal operators. Another prominent CER system is CORE (?; ?). Contrary to Temporal Datalog, CORE is restricted to unary predicates, and thus cannot express relational composite events.
+A LARS-to-ASP translation has been proposed for incremental evaluation (?), but introduces multiple time variables per rule, producing programs outside Temporal Datalog. Furthermore, a “stream stratification” was proposed for LARS to prohibit recursion via window operators, facilitating efficient reasoning (?). Our approach does not make this restriction.
+Our work is motivated by earlier attempts to avoid “blocking queries”, requiring arbitrary wait times on new input data to be answered (?). Temporal Datalog prohibits such queries by construction. Streamlog is also a temporal Datalog without blocking queries (?; ?). It differs from our work as it allows equality constraints on time terms and restricts reasoning to time-points appearing in input facts.
+Several large-scale Datalog engines exist (?; ?; ?), and incremental evaluation has been studied for streaming data (?), but these approaches do not model temporal modalities. Temporal Vadalog supports temporal knowledge graph reasoning over existential rules (?). Such rules have also been studied in the context of LARS (?), DatalogMTL (?), and trigger graphs (?), thus constituting a natural future extension for STGs. Our work assumes ordered input, as is common in stream reasoning (?). Handling out-of-order streams (?; ?) via temporal delays in reasoning (?) is left for future work. Finally, we aim to leverage a probabilistic extension of trigger graphs (?) to support CER under uncertainty (?; ?; ?).
+Acknowledgements
+This work was supported by the Wallenberg AI, Autonomous Systems and Software Program (WASP) funded by the Knut and Alice Wallenberg Foundation.
+
+KAYNAK : https://arxiv.org/abs/2605.02488

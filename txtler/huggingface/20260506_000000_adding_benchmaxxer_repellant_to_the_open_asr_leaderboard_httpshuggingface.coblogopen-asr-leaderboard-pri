@@ -1,4 +1,3 @@
---- huggingface | Adding Benchmaxxer Repellant to the Open ASR Leaderboard | score=97.46 ---
 Adding Benchmaxxer Repellant to the Open ASR Leaderboard
 TLDR: Appen Inc. and DataoceanAI have provided high-quality English ASR datasets covering scripted and conversational speech over multiple accents. To prevent potential risks of benchmaxxing or test-set contamination, we will keep these datasets private for a high-quality measure of performance on multiple tasks.
 We’re not updating the average WER at this time: by default, the leaderboard’s Average WER remains computed on public datasets only. You can optionally include the private datasets using the toggle to see their impact 👀
@@ -37,4 +36,3 @@ We’re excited to hear the community’s feedback on how the new track and data
 While preparing the private evaluation sets, we took extra care to ensure consistent audio and transcript quality across datasets, including developing tooling to identify challenging cases such as low signal-to-noise conditions or transcript mismatches, since these factors can meaningfully affect WER. More on that in a future post!
 
 KAYNAK : https://huggingface.co/blog/open-asr-leaderboard-private-data
-
