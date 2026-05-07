@@ -1,5 +1,5 @@
---- google_ai | Google is partnering with XPRIZE and Range Media Partners on the $3.5 million Future Vision film competition. | score=32.76 ---
-Google is partnering with XPRIZE and Range Media Partners on the $3.5 million Future Vision film competition.
+--- google_ai | 5 gardening tips you can try right in Search | score=33.64 ---
+We’ve rounded up the top ways you can use Google’s AI Mode, Search Live and Shopping to help your plants thrive.
 
-KAYNAK : https://blog.google/innovation-and-ai/technology/ai/future-vision-film-competition-xprize/
+KAYNAK : https://blog.google/products-and-platforms/products/search/gardening-tips/
 

@@ -1,0 +1,34 @@
+<div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
+  <h1>Güvenlik Güncellemeleri: Next.js v15.5.16</h1>
+  <p>Yazılım dünyasında güvenlik, her zaman öncelikli bir konu olmuştur. Next.js'in son sürümü olan v15.5.16, bu bağlamda önemli güvenlik yamaları içermektedir. Bu güncellemeler, çeşitli güvenlik açıklarını hedef alarak kullanıcıların daha güvenli bir deneyim yaşamasını sağlamayı amaçlamaktadır.</p>
+  <p>Bu sürümde ele alınan güvenlik açıkları, farklı tehdit seviyelerine göre sınıflandırılmıştır. Hem yüksek hem de orta düzeyde tehdit oluşturan sorunlar, uygulama güvenliğini ve kullanıcı verilerini koruma altına almayı hedeflemektedir.</p>
+  
+  <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
+  <p>Next.js v15.5.16 sürümü, çeşitli güvenlik açıklarına yönelik düzeltmeler sunmaktadır. Bu açıklar, hizmet reddi saldırılarından sunucu tarafı istek sahteciliğine kadar geniş bir yelpazeyi kapsamaktadır. Güvenlik yamaları, uygulamaların daha güvenli çalışmasını sağlamak ve potansiyel tehditleri minimize etmek için kritik öneme sahiptir. Özellikle web uygulamaları geliştirenler için bu güncellemeler, uygulamalarının güvenlik seviyesini artırmak adına önemli bir fırsat sunmaktadır.</p>
+  
+  <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
+  <ul>
+    <li><strong>Denial of Service (DoS):</strong> Server bileşenleri ve önbellek bileşenleri kullanılarak hizmet reddi saldırılarına karşı önlemler alınmıştır.</li>
+    <li><strong>Middleware / Proxy Bypass:</strong> Dinamik rota parametre enjeksiyonu ve segment-prefetch rotaları üzerinden yapılan atlatmalar düzeltilmiştir.</li>
+    <li><strong>Server-side Request Forgery (SSRF):</strong> WebSocket yükseltmeleri kullanan uygulamalarda sunucu tarafı istek sahteciliği açıkları kapatılmıştır.</li>
+    <li><strong>Cross-site Scripting (XSS):</strong> App Router uygulamalarında CSP nonceleri ve güvenilmeyen girdilerle çalışan beforeInteractive scriptlerinde XSS açıkları giderilmiştir.</li>
+    <li><strong>Cache Poisoning:</strong> React Server Component yanıtlarında ve önbellek patlatma işlemlerinde önbellek zehirlenmesi sorunları ele alınmıştır.</li>
+  </ul>
+  
+  <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
+  <p>Bu güvenlik güncellemeleri, özellikle web uygulamaları geliştiren yazılım mühendislerini ve sistem yöneticilerini doğrudan etkilemektedir. Güncellemeler, uygulamaların daha güvenli hale gelmesini sağlayarak kullanıcı verilerinin korunmasına yardımcı olur. Ayrıca, bu güncellemeler, uygulamaların performansını ve güvenliğini artırarak son kullanıcı deneyimini iyileştirmeyi hedefler.</p>
+  
+  <h2>Kısa Özet</h2>
+  <ul>
+    <li>Next.js v15.5.16, çeşitli güvenlik açıkları için yamalar içerir.</li>
+    <li>Hizmet reddi saldırılarına karşı koruma sağlanmıştır.</li>
+    <li>Middleware ve proxy atlatma açıkları kapatılmıştır.</li>
+    <li>Sunucu tarafı istek sahteciliği ve XSS açıkları düzeltilmiştir.</li>
+    <li>Önbellek zehirlenmesi sorunları ele alınmıştır.</li>
+  </ul>
+  
+  <p>Metin, ön koşullar ve gerçekçi beklentiler gibi konularda detay vermiyor.</p>
+  
+  <h2>Kaynak</h2>
+  <p>Detaylı okumak için: <a href="https://github.com/vercel/next.js/releases/tag/v15.5.16" target="_blank" rel="noopener noreferrer">https://github.com/vercel/next.js/releases/tag/v15.5.16</a></p>
+</div>

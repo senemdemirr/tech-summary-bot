@@ -1,0 +1,17 @@
+Misc Changes
+perf(ecmascript): shrink JsValue 64→32 bytes:
+#93106
+Order loader tree imports by tree depth:
+#93537
+Turbopack: more strict vergen setup:
+#93541
+Credits
+Huge thanks to
+@mmastrac
+,
+@sokra
+, and
+@mischnic
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.14

@@ -1,0 +1,37 @@
+<div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
+  <h1>Resilient AI Süper Bilgisayar Ağları: MRC ve SRv6 Kullanımı</h1>
+  <p>Yapay zeka (AI) eğitim ağları, yüz binlerce GPU'ya ölçeklendikçe, en büyük eğitim iş yükleri için kabul edilebilir çalışma süresi ve performans sağlamak giderek zorlaşmaktadır. Bu makale, özellikle senkron ön eğitimde, her hesaplama adımının büyük sayıda GPU tarafından kilit adımda gerçekleştirildiği ve düğümler arasında iletişimle paralel işleme kombinasyonlarının yapıldığı bir ortamda, bu zorlukları ele alır.</p>
+  <p>Özellikle büyük ölçekli AI eğitim işlerinde, iletişim süreleri en yavaş transfer tarafından belirlendiğinden, ağ gürültüsü ve sistem hataları performansı olumsuz etkileyebilir. Bu bağlamda, Multipath RC (MRC) protokolü ve SRv6 kaynak yönlendirmesi, ağ hatalarını tolere edebilen ve yük dengelemesi yapabilen bir çözüm sunar.</p>
+  
+  <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
+  <p>MRC ve SRv6, büyük ölçekli AI eğitim ağlarının dayanıklılığını artırmayı hedefleyen yenilikçi bir yaklaşım sunar. MRC, yük dengelemesi ve hata toleransı sağlarken, SRv6 statik kaynak yönlendirmesi ile ağ hatalarını hızlı bir şekilde atlatabilir. Bu, OpenAI ve Microsoft gibi büyük ölçekli AI eğitim kümelerinde uygulanarak, eğitim işlerinin ağ hatalarından etkilenmeden devam etmesini sağlar.</p>
+  
+  <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
+  <ul>
+    <li>MRC, RoCEv2 protokolünü genişleterek çoklu yol operasyonunu destekler ve paket püskürtme tekniği ile yük dengelemesi yapar.</li>
+    <li>SRv6, statik kaynak yönlendirmesi kullanarak ağ hatalarını atlatır ve MRC'nin yük dengelemesi ile dinamik yönlendirmeye ihtiyaç duyulmaz.</li>
+    <li>MRC, paket kayıplarını hızlı bir şekilde telafi edebilmek için seçici yeniden iletim ve paket kırpma tekniklerini kullanır.</li>
+    <li>Çok düzlemli ağ tasarımı, daha düşük gecikme süreleri ve maliyet avantajları sunarken, ağ hatalarının etkisini minimize eder.</li>
+    <li>MRC, büyük ölçekli AI eğitim kümelerinde geniş çapta üretimde kullanılmış ve ChatGPT gibi öncü modellerin eğitiminde başarılı olmuştur.</li>
+  </ul>
+  
+  <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
+  <p>MRC ve SRv6, büyük ölçekli AI eğitim işlerini yöneten mühendisler ve araştırmacılar için önemli avantajlar sunar. Bu teknolojiler, ağ hatalarının neden olduğu eğitim kesintilerini minimize ederek, daha verimli ve kesintisiz bir eğitim süreci sağlar. Ayrıca, ağ yönetimini basitleştirerek, küçük ekiplerin büyük süper bilgisayar ağlarını etkin bir şekilde yönetmesine olanak tanır.</p>
+  
+  <h2>Kısa Özet</h2>
+  <ul>
+    <li>MRC, RoCEv2 protokolünü genişleterek çoklu yol operasyonunu destekler ve yük dengelemesi yapar.</li>
+    <li>SRv6, statik kaynak yönlendirmesi ile ağ hatalarını hızlı bir şekilde atlatabilir.</li>
+    <li>Çok düzlemli ağ tasarımı, daha düşük gecikme süreleri ve maliyet avantajları sunar.</li>
+    <li>MRC, büyük ölçekli AI eğitim kümelerinde geniş çapta üretimde kullanılmıştır.</li>
+    <li>Bu teknolojiler, ağ hatalarının eğitim işlerini kesintiye uğratmasını önler ve yönetimi basitleştirir.</li>
+  </ul>
+  
+  <p>Metin, eğitmenler ve bakış açısı konularında detay vermiyor.</p>
+  
+  <h2>Kapanış</h2>
+  <p>MRC ve SRv6, büyük ölçekli AI eğitim işlerinde ağ dayanıklılığını artıran ve operasyonel yükü azaltan yenilikçi çözümler sunar. Bu teknolojilerin uygulanması, eğitim işlerinin ağ hatalarından etkilenmeden devam etmesini sağlarken, yönetim süreçlerini de basitleştirir.</p>
+  
+  <h2>Kaynak</h2>
+  <p>Detaylı okumak için: <a href="https://arxiv.org/abs/2605.04333" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2605.04333</a></p>
+</div>

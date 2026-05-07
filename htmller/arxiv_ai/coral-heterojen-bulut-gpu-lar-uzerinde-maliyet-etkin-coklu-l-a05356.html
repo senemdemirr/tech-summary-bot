@@ -1,0 +1,29 @@
+<div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
+  <h1>Coral: Heterojen Bulut GPU'lar Üzerinde Maliyet Etkin Çoklu-LLM Sunumu</h1>
+  <p>Günümüzde büyük dil modellerinin (LLM'ler) kullanımı giderek daha parçalı hale gelmiştir ve hiçbir model bu alanda tek başına hakim değildir. Bulut sağlayıcıları, daha iyi erişilebilirlik ve dolar başına performans açısından üst düzey donanımlara kıyasla daha iyi performans sunan orta seviye ve eski nesil GPU'lar sunmaktadır. Bu heterojen kaynakları verimli bir şekilde kullanarak birden fazla LLM'yi eşzamanlı olarak sunmak için Coral adını verdiğimiz uyarlanabilir, heterojenliği farkında olan çoklu-LLM sunum sistemini tanıtıyoruz. Coral'ın temel fikri, tüm modeller arasında kaynak tahsisini ve her model replikasının sunum stratejisini ortaklaşa optimize etmektir.</p>
+  <p>Coral, değişen iş yükü talebi ve kaynak erişilebilirliği ile başa çıkmak için, çevrimiçi çözüm süresini saatlerden saniyelere düşürürken ortak optimaliteyi koruyan kayıpsız bir iki aşamalı ayrıştırma uygular. Altı model ve 20 GPU yapılandırması üzerinde yapılan değerlendirmemiz, Coral'ın sunum maliyetini en iyi temel çizgiye göre 2.79 kat azalttığını ve kıt kaynak erişilebilirliği altında 2.39 kat daha yüksek verim sağladığını göstermektedir.</p>
+
+  <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
+  <p>LLM'lerin kullanımı, çeşitli görevlerde giderek yaygınlaşmakta, ancak hiçbir model bu alanda tek başına üstünlük kuramamaktadır. Bu durum, hizmet sağlayıcıların birden fazla modeli aynı anda sunmasını gerektirmektedir. Aynı zamanda, bulut sağlayıcıları, farklı nesillerden ve donanım özelliklerinden oluşan GPU'lar sunmaktadır. Coral, bu heterojen kaynakları kullanarak maliyet etkin ve uyarlanabilir çoklu-LLM sunumu sağlamak için geliştirilmiştir. Coral, model replikası sunum stratejisini ve kaynak tahsisini optimize ederek bu zorluğun üstesinden gelmektedir.</p>
+
+  <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
+  <p>Coral, kaynak tahsisi ve model yerleşimi arasında sıkı bir bağ kurar ve her iki boyutta da üstel bir çözüm alanına sahiptir. Coral, model ve gecikme SLO'su belirlendikten sonra, bir düğüm kümesi üzerindeki en iyi yerleşimin yalnızca bu kümeye bağlı olduğunu gözlemleyerek bu sorunu çözmektedir. Bu sayede, model yerleşimi çevrimdışı olarak önceden hesaplanabilir ve çevrimiçi kaynak tahsisi için yeniden kullanılabilir. Coral, bu yaklaşımı kullanarak çevrimiçi çözüm süresini saniyelere indirir ve sistemin talep ve kaynak değişikliklerine sürekli uyum sağlamasına olanak tanır.</p>
+
+  <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
+  <p>Coral, bulut sağlayıcıları ve LLM hizmet sağlayıcıları için önemli bir yenilik sunar. Heterojen kaynakların maliyet etkin bir şekilde kullanılmasını sağlayarak, hizmet sağlayıcıların daha düşük maliyetlerle daha yüksek verim elde etmelerine olanak tanır. Ayrıca, kaynak erişilebilirliğinin kısıtlı olduğu durumlarda bile yüksek verim sağlaması, Coral'ı bu alanda önemli bir çözüm haline getirir.</p>
+
+  <h2>Kısa Özet</h2>
+  <ul>
+    <li>Coral, heterojen bulut GPU'lar üzerinde maliyet etkin çoklu-LLM sunumu sağlar.</li>
+    <li>Kaynak tahsisi ve model yerleşimini ortaklaşa optimize eder.</li>
+    <li>Çevrimdışı hesaplanan ve önbelleğe alınan sunum şablonları kullanır.</li>
+    <li>Çevrimiçi çözüm süresini saatlerden saniyelere indirir.</li>
+    <li>Kıt kaynak erişilebilirliği altında bile yüksek verim sağlar.</li>
+  </ul>
+
+  <h2>Kapanış</h2>
+  <p>Coral, heterojen bulut kaynakları üzerinde maliyet etkin çoklu-LLM sunumu için yenilikçi bir çözüm sunar. Kaynak tahsisi ve model yerleşimini optimize ederek, hizmet sağlayıcıların maliyetlerini düşürmesine ve verimliliği artırmasına olanak tanır. Coral, değişen iş yükü taleplerine ve kaynak erişilebilirliğine sürekli uyum sağlayarak, bu alanda önemli bir çözüm sunmaktadır.</p>
+
+  <h2>Kaynak</h2>
+  <p>Detaylı okumak için: <a href="https://arxiv.org/abs/2605.04357" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2605.04357</a></p>
+</div>

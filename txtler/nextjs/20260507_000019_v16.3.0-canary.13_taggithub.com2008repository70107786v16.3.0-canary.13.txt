@@ -1,0 +1,20 @@
+Core Changes
+Disable instant validations in draft mode:
+#93472
+Misc Changes
+Drop
+ReferencedAsset::from_resolve_result
+as a turbotask:
+#93297
+Turbopack: Cache effect errors, replace the write_lock Mutex with a lazily created Notify instance:
+#93476
+Credits
+Huge thanks to
+@samselikoff
+,
+@lukesandberg
+, and
+@bgw
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.13

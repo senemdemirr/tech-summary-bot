@@ -1,4 +1,3 @@
---- huggingface | vLLM V0 to V1: Correctness Before Corrections in RL | score=92.77 ---
 vLLM V0 to V1: Correctness Before Corrections in RL
 TL;DR. vLLM V1 matched our vLLM V0 reference after we fixed four things:
 processed rollout logprobs, V1-specific runtime defaults, the inflight
@@ -110,4 +109,3 @@ The current objective can still improve. After inference parity is restored, the
 The main lesson from this migration is narrower: fix backend correctness first, then add corrections for the mismatch that remains.
 
 KAYNAK : https://huggingface.co/blog/ServiceNow-AI/correctness-before-corrections
-

@@ -1,0 +1,30 @@
+May
+6
+,
+16:51
+UTC
+Resolved
+- This incident has been resolved.
+May
+6
+,
+16:32
+UTC
+Monitoring
+- A fix has been implemented and we are monitoring the results.
+May
+6
+,
+15:54
+UTC
+Identified
+- The issue has been identified and a fix is being implemented.
+May
+6
+,
+15:29
+UTC
+Investigating
+- We are currently investigating this issue.
+
+KAYNAK : https://status.claude.com/incidents/437swp24nrf4

@@ -1,0 +1,32 @@
+<div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
+  <h1>Lossless Context Management: Yeni Bir Yaklaşım</h1>
+  <p>Lossless Context Management (LCM), uzun bağlam görevlerinde Claude Code'u geride bırakan deterministik bir mimari olarak karşımıza çıkıyor. Opus 4.6 kullanılarak yapılan testlerde, LCM ile güçlendirilmiş Volt adlı kodlama ajanı, OOLONG uzun bağlam değerlendirmesinde Claude Code'dan daha yüksek puanlar elde etti. Bu başarı, LCM'nin Recursive Language Models (RLM) paradigmasını hem doğrulayan hem de genişleten bir yapı sunduğunu gösteriyor.</p>
+  <p>LCM, sembolik özyinelemeyi iki deterministik, motor tarafından yönetilen mekanizmaya ayırarak RLM'den ayrılıyor: bağlam sıkıştırma ve görev bölme. Bu yaklaşım, programlama dillerinde GOTO'dan yapılandırılmış kontrol akışına geçişe benzer bir şekilde, maksimum esnekliği terk ederek daha güvenilir ve kayıpsız bir bellek yönetimi sağlıyor.</p>
+  
+  <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
+  <p>LCM, büyük dil modellerinin (LLM) etkili bağlam penceresi sınırlamalarını aşmayı hedefliyor. Karmaşık ve uzun vadeli görevlerde, mevcut modellerin bağlam pencereleri yetersiz kalıyor. LCM, bu sınırlamaları aşmak için deterministik bir bellek yönetimi sunarak, daha uzun bağlamlarda daha iyi performans sağlıyor. Bu, özellikle üretim ortamlarında, daha güvenilir ve maliyet etkin çözümler sunma potansiyeline sahip.</p>
+  
+  <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
+  <p>LCM, kayıpsız geri alınabilirlik sağlayan çift durumlu bir bellek mimarisi kullanıyor: Değişmez Depo ve Aktif Bağlam. Değişmez Depo, her mesajı orijinal haliyle saklarken, Aktif Bağlam, LLM'ye gönderilen pencereyi oluşturuyor. Bu yapı, eski mesajları özet düğümlerine sıkıştırarak, orijinal içeriğe kayıpsız erişim sağlıyor.</p>
+  <p>LCM'nin çekirdek veri yapısı, kalıcı bir depoda tutulan Yönlendirilmiş Acyclic Graph (DAG) olarak tanımlanıyor. Bu yapı, eski mesajları özet düğümlerine sıkıştırarak, orijinal içeriğe kayıpsız erişim sağlıyor. LCM, büyük dosyaları ele alırken, dosya içeriklerini dışarıda saklayarak ve aktif bağlama yalnızca referans ekleyerek bağlam penceresini aşırı yüklenmeden koruyor.</p>
+  
+  <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
+  <p>LCM, özellikle uzun bağlam gerektiren görevlerde çalışan yapay zeka araştırmacıları ve mühendisleri için önem taşıyor. Bu mimari, daha uzun bağlamlarda daha iyi performans sunarak, üretim ortamlarında daha güvenilir ve maliyet etkin çözümler sağlama potansiyeline sahip. Ayrıca, LCM'nin deterministik yapısı, bellek yönetimi konusunda daha az hata yapma olasılığı sunuyor.</p>
+  
+  <h2>Kısa Özet</h2>
+  <ul>
+    <li>LCM, uzun bağlam görevlerinde Claude Code'u geride bırakan deterministik bir mimaridir.</li>
+    <li>Opus 4.6 ile yapılan testlerde, Volt adlı kodlama ajanı, OOLONG değerlendirmesinde daha yüksek puanlar elde etti.</li>
+    <li>LCM, sembolik özyinelemeyi deterministik mekanizmalara ayırarak daha güvenilir bir bellek yönetimi sağlıyor.</li>
+    <li>LCM, kayıpsız geri alınabilirlik sağlayan çift durumlu bir bellek mimarisi kullanıyor.</li>
+    <li>Bu mimari, uzun bağlam gerektiren görevlerde daha iyi performans sunma potansiyeline sahip.</li>
+  </ul>
+  
+  <p>Metin, eğitmenler ve bakış açıları hakkında detay vermiyor.</p>
+  
+  <h2>Kapanış</h2>
+  <p>LCM, uzun bağlam görevlerinde daha iyi performans sunarak, üretim ortamlarında daha güvenilir ve maliyet etkin çözümler sağlama potansiyeline sahip. Yapılandırılmış kontrol akışı sunarak, bellek yönetimi konusunda daha az hata yapma olasılığı sunuyor. Gelecekte, LCM'nin sunduğu avantajlar, daha geniş bir uygulama yelpazesinde değerlendirilebilir.</p>
+  
+  <h2>Kaynak</h2>
+  <p>Detaylı okumak için: <a href="https://arxiv.org/abs/2605.04050" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2605.04050</a></p>
+</div>

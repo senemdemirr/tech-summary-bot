@@ -1,52 +1,147 @@
---- nextjs | v16.3.0-canary.11 | score=62.64 ---
-Core Changes
-Fix dev mode reload and error on back navigation between Next.js pages:
-#93486
-Fix double-encoding of URL pathname parts in client param parsing:
-#93491
-Don't suppress usage of deprecated TypeScript
-compilerOptions
-:
-#93377
+--- nextjs | v16.2.5 | score=56.31 ---
+This release contains security fixes for the following advisories:
+High:
+GHSA-8h8q-6873-q5fj: Denial of Service with Server Components
+GHSA-267c-6grr-h53f: Middleware / Proxy bypass in App Router applications via segment-prefetch routes
+GHSA-mg66-mrh9-m8jx: Denial of Service via connection exhaustion in applications using Cache Components
+GHSA-492v-c6pp-mqqv: Middleware / Proxy bypass through dynamic route parameter injection
+GHSA-c4j6-fc7j-m34r: Server-side request forgery in applications using WebSocket upgrades
+GHSA-36qx-fr4f-26g5: Middleware / Proxy bypass in Pages Router applications using i18n
+Moderate:
+GHSA-ffhc-5mcf-pf4q: Cross-site scripting in App Router applications using CSP nonces
+GHSA-gx5p-jg67-6x7h: Cross-site scripting in beforeInteractive scripts with untrusted input
+GHSA-h64f-5h5j-jqjh: Denial of Service in the Image Optimization API
+GHSA-wfc6-r584-vfw7: Cache poisoning in React Server Component responses
+Low:
+GHSA-vfv6-92ff-j949: Cache poisoning via collisions in React Server Component cache-busting
+GHSA-3g8h-86w9-wvmq: Middleware / Proxy redirects can be cache-poisoned
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.2.5
+
+--- nextjs | v15.5.16 | score=56.30 ---
+This release contains security fixes for the following advisories:
+High:
+GHSA-8h8q-6873-q5fj: Denial of Service with Server Components
+GHSA-267c-6grr-h53f: Middleware / Proxy bypass in App Router applications via segment-prefetch routes
+GHSA-mg66-mrh9-m8jx: Denial of Service via connection exhaustion in applications using Cache Components
+GHSA-492v-c6pp-mqqv: Middleware / Proxy bypass through dynamic route parameter injection
+GHSA-c4j6-fc7j-m34r: Server-side request forgery in applications using WebSocket upgrades
+GHSA-36qx-fr4f-26g5: Middleware / Proxy bypass in Pages Router applications using i18n
+Moderate:
+GHSA-ffhc-5mcf-pf4q: Cross-site scripting in App Router applications using CSP nonces
+GHSA-gx5p-jg67-6x7h: Cross-site scripting in beforeInteractive scripts with untrusted input
+GHSA-h64f-5h5j-jqjh: Denial of Service in the Image Optimization API
+GHSA-wfc6-r584-vfw7: Cache poisoning in React Server Component responses
+Low:
+GHSA-vfv6-92ff-j949: Cache poisoning via collisions in React Server Component cache-busting
+GHSA-3g8h-86w9-wvmq: Middleware / Proxy redirects can be cache-poisoned
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v15.5.16
+
+--- nextjs | v16.3.0-canary.14 | score=53.35 ---
 Misc Changes
-[ci] Move Turbopack, Rspack and font data workflows off of
-RELEASE_BOT_GITHUB_TOKEN
-:
-#93455
-[ci] Migrate React sync off of
-RELEASE_BOT_GITHUB_TOKEN
-:
-#93456
-[ci] Create unique preview build versions for canary previews:
-#93490
-docs: clarify proxy runtime history:
-#93467
-Turbopack: fix import_usage for functions behind member expressions:
-#93504
-[ci] Ensure pnpm store cache is only filled when pnpm install runs:
-#93508
-Update
-unstable_prefetch
-and
-unstable_instant
-docs to reflect current API shape:
-#93514
-[ci] Remove unused
-setup-nextjs-build.yml
-workflow:
-#93512
+perf(ecmascript): shrink JsValue 64→32 bytes:
+#93106
+Order loader tree imports by tree depth:
+#93537
+Turbopack: more strict vergen setup:
+#93541
 Credits
 Huge thanks to
-@eps1lon
+@mmastrac
+,
+@sokra
+, and
+@mischnic
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.14
+
+--- nextjs | v16.3.0-canary.12 | score=51.02 ---
+Core Changes
+Refactor: Decouple request store creation from
+req
+/
+res
+:
+#93499
+Detect
+'use cache'
+module-scope deadlocks early in dev:
+#93500
+Bundle the
+'use cache'
+deadlock probe worker:
+#93538
+Support configuring a default instant validation level :
+#93301
+Upgrade React from
+f4e0d4ed-20260429
+to
+dd453071-20260506
+:
+#93547
+Misc Changes
+[turbopack] shrink the size of futures:
+#93474
+[turbopack] Simplify local task tracking:
+#93478
+[turbopack] correct a fencepost error in our inline string descision:
+#93524
+Turbopack: make rcstr! macro expansion const:
+#93516
+Turbopack: lazy aggregation optimize via persistent pending flag:
+#93454
+docs: remove unreachable forms and mutations:
+#93509
+docs: broken link from usePathname compat call out:
+#93528
+Turbopack: really fix MAX_INLINE_LEN:
+#93531
+[ci] Clarify new preview build flow:
+#93540
+Turbopack: simplify asset ident constructors:
+#93213
+Credits
+Huge thanks to
+@lukesandberg
 ,
 @unstubbable
 ,
-@armando-andre
-,
 @mischnic
-, and
+,
+@sokra
+,
+@icyJoseph
+,
+@eps1lon
+,
 @gnoff
+, and
+@vercel-release-bot
 for helping!
 
-KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.11
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.12
+
+--- nextjs | v16.3.0-canary.13 | score=42.99 ---
+Core Changes
+Disable instant validations in draft mode:
+#93472
+Misc Changes
+Drop
+ReferencedAsset::from_resolve_result
+as a turbotask:
+#93297
+Turbopack: Cache effect errors, replace the write_lock Mutex with a lazily created Notify instance:
+#93476
+Credits
+Huge thanks to
+@samselikoff
+,
+@lukesandberg
+, and
+@bgw
+for helping!
+
+KAYNAK : https://github.com/vercel/next.js/releases/tag/v16.3.0-canary.13
 

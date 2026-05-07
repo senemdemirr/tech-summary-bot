@@ -1,0 +1,31 @@
+<div style="max-width: 800px; margin: auto; padding: 20px; font-family: Arial, sans-serif;">
+  <h1>Regularized Centered Emphatic Temporal Difference Learning</h1>
+  <p>Off-policy temporal-difference (TD) learning with function approximation presents challenges due to the interplay between stability, projection geometry, and variance control. Emphatic TD (ETD) offers improvements in off-policy projection geometry through follow-on emphasis, yet this can result in high variance. This paper revisits these challenges by introducing Bellman-error centering, which naturally removes common drift terms from TD errors. However, naive centered emphatic extensions can introduce auxiliary couplings that may compromise the positive-definiteness of the ETD key matrix.</p>
+  <p>To address these issues, Regularized Emphatic Temporal-Difference Learning (RETD) is proposed. RETD maintains the follow-on trace while regularizing only the auxiliary centering recursion. This approach helps in preserving the emphatic geometry and stabilizes the learning process across various diagnostic tasks.</p>
+  
+  <h2>Büyük Resim: Bu İçerik Ne Anlatıyor ve Neden Önemli?</h2>
+  <p>Bu çalışma, off-policy TD öğrenmesinin karşılaştığı temel sorunları ele alıyor: stabilite, projeksiyon geometrisi ve varyans kontrolü. ETD, hedef-politika önyükleme yansımasını daha iyi yansıtan bir projeksiyon geometrisi sunarak bu sorunları ele alır. Ancak, bu yaklaşımın maliyeti, takip izinin yüksek varyansı olabilir. RETD, bu dengeyi yeniden değerlendirerek, Bellman hata merkezleme ile birlikte, takip izinin değişmeden kalmasını ve yalnızca yardımcı merkezleme yinelemesinin düzenlenmesini sağlar.</p>
+  
+  <h2>Teknik Detaylar / Öne Çıkan Noktalar</h2>
+  <p>RETD, Bellman hata merkezleme kavramını ETD çerçevesine entegre ederek, yardımcı merkezleme değişkeninin yalnızca düzenlenmesiyle takip izinin korunmasını sağlar. Bu, ETD'nin olumlu geometrik özelliklerini korurken, merkezleme ile gelen düşük dereceli eşleşmenin neden olduğu potansiyel dengesizlikleri önler. RETD'nin çekirdek matrisi türetilmiş ve standart Markovian stokastik-yaklaşım varsayımları altında yakınsama kanıtlanmıştır.</p>
+  
+  <h2>Etkiler: Kimleri Nasıl Etkiler?</h2>
+  <p>RETD, özellikle off-policy TD öğrenmesi ile uğraşan araştırmacılar ve uygulayıcılar için önemlidir. Bu yöntem, stabiliteyi artırırken, hedef politikaya daha uygun bir projeksiyon geometrisi sunar. Ayrıca, yüksek varyans sorunlarını ele alarak, daha güvenilir ve tutarlı sonuçlar elde edilmesini sağlar.</p>
+  
+  <h2>Kısa Özet</h2>
+  <ul>
+    <li>RETD, ETD'nin takip izini korurken, yalnızca yardımcı merkezleme yinelemesini düzenler.</li>
+    <li>Bu yaklaşım, Bellman hata merkezleme ile gelen düşük dereceli eşleşmeyi kontrol eder.</li>
+    <li>RETD, çeşitli tanısal görevlerde stabiliteyi korurken, olumlu geometrik özellikleri muhafaza eder.</li>
+    <li>Teorik analiz, RETD'nin yakınsama özelliklerini ve stabilitesini doğrular.</li>
+    <li>Deneyler, RETD'nin standart TD ve diğer vurgulayıcı tabanlı yöntemlerle rekabetçi olduğunu gösterir.</li>
+  </ul>
+  
+  <p>Metin, eğitmenler ve bakış açısı gibi konularda detay vermiyor.</p>
+  
+  <h2>Kapanış</h2>
+  <p>Bu çalışma, vurgulayıcı temporal-difference öğrenme yöntemlerinin merkezleme ile nasıl iyileştirilebileceğini gösteriyor. RETD, yalnızca yardımcı merkezleme yinelemesini düzenleyerek, ETD'nin olumlu yönlerini korurken, stabiliteyi artırır. Gelecekteki çalışmalar, bu yöntemin daha geniş ölçekli problemler ve farklı öğrenme senaryolarında uygulanabilirliğini araştırabilir.</p>
+  
+  <h2>Kaynak</h2>
+  <p>Detaylı okumak için: <a href="https://arxiv.org/abs/2605.04100" target="_blank" rel="noopener noreferrer">https://arxiv.org/abs/2605.04100</a></p>
+</div>
